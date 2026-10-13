@@ -145,7 +145,8 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None):
         if term in seen:
             continue
         seen.add(term)
-        if (term, surf, is_stop, in_or) in content and not in_or:
+        # intent words ("latest", "current", "news") steer freshness; they are scored but never required
+        if (term, surf, is_stop, in_or) in content and not in_or and (surf not in FRESH_WORDS or len(content) == 1):
             q.required.append(term)
         else:
             q.optional.append(term)

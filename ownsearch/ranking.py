@@ -57,13 +57,14 @@ def _has(p, local):
 
 
 class Candidate:
-    __slots__ = ("score", "doc_id", "ri", "local", "matched", "features", "final", "passages")
+    __slots__ = ("score", "doc_id", "ri", "local", "matched", "features", "final", "passages", "mask")
 
     def __init__(self, score, doc_id, ri, local, matched):
         self.score, self.doc_id, self.ri, self.local, self.matched = score, doc_id, ri, local, matched
         self.features = {}
         self.final = 0.0
         self.passages = None
+        self.mask = 0
 
 
 def _phrase_ok(reader, local, plists, phrase):
@@ -183,16 +184,19 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
             # ---- BM25F scoring
             L = r.lengths
             static = r.static
-            infos = [(idf[t] * (1.0 if t in req else 0.5), pl[t]) for t in scoring if pl[t] is not None]
+            infos = [(idf[t] * (1.0 if t in req else 0.5), pl[t], 1 << k) for k, t in enumerate(scoring)
+                     if pl[t] is not None]
             for d in cand:
                 base = d * NF
                 s = 0.0
                 matched = 0
-                for w_idf, p in infos:
+                mask = 0
+                for w_idf, p, bit in infos:
                     i = p.find(d)
                     if i < 0:
                         continue
                     matched += 1
+                    mask |= bit
                     n = p.n
                     tfs = p.tfs
                     w = 0.0
@@ -205,7 +209,9 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
                     continue
                 if not scoring:
                     s = static[d] / 255.0
-                out.append(Candidate(s, r.docids[d], ri, d, matched))
+                c = Candidate(s, r.docids[d], ri, d, matched)
+                c.mask = mask
+                out.append(c)
         return out
 
     if req:
@@ -223,6 +229,18 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
     else:
         info["mode"] = "filters_only"
         cands = run("filter", 0)
+    # importance of each query term = IDF; a term never seen in the index gets the maximum IDF
+    max_idf = math.log(1.0 + (snap.N + 0.5) / 0.5) if snap.N else 1.0
+    term_w = [idf[t] if idf[t] > 0 else max_idf for t in scoring]
+    total_w = sum(term_w) or 1.0
+    req_bits = sum(1 << k for k, t in enumerate(scoring) if t in req)
+    for c in cands:
+        c.features["_wcov"] = sum(w for k, w in enumerate(term_w) if c.mask >> k & 1) / total_w
+        c.features["_all"] = 1.0 if (c.mask & req_bits) == req_bits else 0.0
+    if info["mode"] in ("partial_terms", "all_terms+partial"):
+        # a partial match must contain the important (rare) words, not just the common ones
+        key_bit = 1 << max(range(len(scoring)), key=lambda k: term_w[k]) if scoring else 0
+        cands = [c for c in cands if c.features["_all"] or (c.features["_wcov"] >= 0.65 and c.mask & key_bit)]
     info["candidates"] = len(cands)
     top = heapq.nlargest(want, cands, key=lambda c: c.score)
     return top, info

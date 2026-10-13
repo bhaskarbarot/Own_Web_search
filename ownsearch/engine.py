@@ -119,7 +119,7 @@ class SearchEngine:
 
     # ------------------------------------------------------------ searching
     def search(self, query, limit=10, fetch_evidence=True, offset=0, freshness=None, site=None, filetype=None,
-               lang=None, timeout_ms=None, explain=False, agent=None, use_cache=True):
+               lang=None, timeout_ms=None, explain=False, agent=None, use_cache=True, live=False):
         t0 = time.perf_counter()
         query = " ".join(str(query or "").split())[:1000]
         try:
@@ -150,6 +150,16 @@ class SearchEngine:
                                timeout_ms or self.settings.search_timeout_ms, explain, t0)
         finally:
             self._slots.release()
+        if live and (not res["results"] or res["coverage"].get("low_confidence")):
+            # the index does not cover this well: discover pages now (Wikipedia / official sites), then retry
+            from .discover import discover
+            found = discover(self, query)
+            if any(r["result"] == "ok" for r in found):
+                self.index.maybe_reload(interval=0)
+                with self._slots:
+                    res = self._search(query, limit, offset, fetch_evidence, freshness, site, filetype, lang,
+                                       timeout_ms or self.settings.search_timeout_ms, explain, t0)
+            res["live_discovery"] = found
         if use_cache and not res.get("timed_out"):
             self.cache.put(key, res)
         self._log(agent, query, len(res["results"]), res["took_ms"])
@@ -220,7 +230,9 @@ class SearchEngine:
             fresh = math.exp(-age / half_life) if age is not None else 0.0
             if date_src == "discovered":
                 fresh *= 0.5
+            hidden = {k: v for k, v in c.features.items() if k.startswith("_")}
             c.features = {
+                **hidden,
                 "bm25": c.score / max_bm,
                 "coverage": c.matched / n_terms,
                 "title": sum(1 for t in terms if t in title_terms) / n_terms,
@@ -231,11 +243,12 @@ class SearchEngine:
                 "freshness": fresh,
                 "depth": 1.0 / (1 + url_depth(f["url"] or "")),
             }
-            c.final = linear_score(c.features, weights)
+            c.final = linear_score({k: v for k, v in c.features.items() if not k.startswith("_")}, weights)
             kept.append((c, f, date_iso, date_src))
         if not kept:
             return self._empty(query, q, t0, "Matches exist but all were filtered out (dates, duplicates or removed).")
-        kept.sort(key=lambda x: x[0].final, reverse=True)
+        # documents containing every query word always rank above partial matches
+        kept.sort(key=lambda x: (x[0].features.get("_all", 1.0), x[0].final), reverse=True)
 
         # ---------------- stage 3: positional + passage rerank
         k2 = min(len(kept), max(40, (offset + limit) * 3))
@@ -257,9 +270,12 @@ class SearchEngine:
                 c.features["proximity"] = prox
                 c.features["phrase"] = phrase
                 c.features["passage"] = min(1.0, ps[0]["score"] / 2.25) if ps else 0.0
+                # all words present but never near each other (aggregators, link lists): weaker than a real match
+                if len(q.required) >= 2 and c.features.get("_all") == 1.0 and prox < 0.02 and phrase == 0:
+                    c.features["_all"] = 0.5
                 c.passages = ps
-                c.final = linear_score(c.features, weights)
-            top.sort(key=lambda x: x[0].final, reverse=True)
+                c.final = linear_score({k: v for k, v in c.features.items() if not k.startswith("_")}, weights)
+            top.sort(key=lambda x: (x[0].features.get("_all", 1.0), x[0].final), reverse=True)
         else:
             timed_out = True
 
@@ -323,7 +339,8 @@ class SearchEngine:
                     "injection_risk": bool(flags), "injection_matches": flags[:3],
                 })
         top_cov = page[0][0].features.get("coverage", 0) if page else 0
-        low_conf = info["mode"] == "partial_terms" or not results or top_cov < 0.6
+        low_conf = (info["mode"] == "partial_terms" or not results or top_cov < 0.6
+                    or (page and page[0][0].features.get("_all", 1.0) < 1.0))
         message = None
         if info["mode"] == "partial_terms":
             message = "No document contains all query terms; showing partial matches."
@@ -375,7 +392,8 @@ _default_lock = threading.Lock()
 def web_search_handler(inp: dict) -> str:
     """Agent tool contract: dict in, JSON string out.
 
-    Accepts: query, limit, fetch_evidence, offset, freshness (recent|day|week|month|year), site, filetype, lang.
+    Accepts: query, limit, fetch_evidence, offset, freshness (recent|day|week|month|year), site, filetype, lang,
+    live (default true: fetch likely pages now when the index does not cover the query).
     """
     global _default_engine
     with _default_lock:
@@ -387,7 +405,8 @@ def web_search_handler(inp: dict) -> str:
         return _default_engine.search_json(
             str(inp.get("query", "")), inp.get("limit", 10), inp.get("fetch_evidence", True),
             offset=inp.get("offset", 0), freshness=inp.get("freshness"), site=inp.get("site"),
-            filetype=inp.get("filetype"), lang=inp.get("lang"), agent=inp.get("agent"))
+            filetype=inp.get("filetype"), lang=inp.get("lang"), agent=inp.get("agent"),
+            live=inp.get("live", True) not in (False, "false", "0", 0))
     except Busy as e:
         return json.dumps({"query": inp.get("query", ""), "results": [], "evidence": [],
                            "provider_errors": [{"provider": "ownsearch", "error": str(e)}]})

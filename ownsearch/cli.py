@@ -25,6 +25,9 @@ def _pretty(res):
           f"{cov.get('matched_documents', 0)} matches in {cov.get('index_documents', 0)} docs, mode={cov.get('mode')})")
     if cov.get("message"):
         print(f"  note: {cov['message']}")
+    found = [d for d in res.get("live_discovery", []) if d["result"] == "ok"]
+    if found:
+        print(f"  live discovery: fetched and indexed {len(found)} new page(s) for this query")
     for r in res["results"]:
         date = (r.get("published_at") or "")[:10]
         print(f"\n{r['rank']:>2}. {r['title']}")
@@ -53,6 +56,8 @@ def build_parser():
     s.add_argument("--no-evidence", action="store_true")
     s.add_argument("--explain", action="store_true", help="include ranking features per result")
     s.add_argument("--pretty", action="store_true", help="human readable output instead of JSON")
+    s.add_argument("--no-live", action="store_true",
+                   help="do not fetch new pages when the index does not cover the query")
 
     s = sub.add_parser("ingest-text", help="index a text string")
     s.add_argument("--title", required=True)
@@ -241,7 +246,8 @@ def main(argv=None):
         _print(st)
     elif cmd == "search":
         res = engine.search(args.query, args.limit, not args.no_evidence, offset=args.offset, freshness=args.freshness,
-                            site=args.site, filetype=args.filetype, lang=args.lang, explain=args.explain, agent="cli")
+                            site=args.site, filetype=args.filetype, lang=args.lang, explain=args.explain, agent="cli",
+                            live=not args.no_live)
         _pretty(res) if args.pretty else print(json.dumps(res, ensure_ascii=False, indent=2))
     elif cmd == "ingest-text":
         d = engine.add_document(args.title, args.text, args.url or "")

@@ -155,6 +155,14 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
                               {"Retry-After": str(max(1, int(retry + 0.999)))})
             return rec["agent"], None
 
+        def _can_fetch(self):
+            key = self.headers.get("X-API-Key") or ""
+            auth = self.headers.get("Authorization", "")
+            if auth.lower().startswith("bearer "):
+                key = auth[7:].strip()
+            rec = keys.authenticate(key)
+            return bool(rec) and bool({"fetch", "admin"} & set(rec.get("scopes", [])))
+
         def _dispatch(self, method):
             t0 = time.perf_counter()
             self._status = 500
@@ -219,6 +227,8 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
                                     freshness=src.get("freshness"), site=src.get("site"),
                                     filetype=src.get("filetype"), lang=src.get("lang"),
                                     timeout_ms=src.get("timeout_ms"), agent=agent,
+                                    live=str(src.get("live", "true")).lower() in ("1", "true", "yes")
+                                    and (not require_auth or self._can_fetch()),
                                     explain=str(src.get("explain", "")).lower() in ("1", "true", "yes"))
                 return self._send(200, res)
             if path == "/document":
