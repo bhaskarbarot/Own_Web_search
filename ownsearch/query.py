@@ -9,57 +9,19 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
-from .dates import parse_date
+from .dates import parse_date, parse_duration
+from .intent import get_model
 from .textproc import STOPWORDS, analyze, stem, tokenize
 from .util import iso_to_ts
 
-_LEX = re.compile(r'(-?)(?:(\w+):)?("([^"]*)"?|\S+)')
-FRESH_WORDS = {"latest", "newest", "recent", "recently", "today", "yesterday", "tonight", "current", "currently",
-               "news", "breaking", "update", "updates", "upcoming", "now", "live", "trending", "announced",
-               "released", "new"}
+_LEX = re.compile(r'(-?)(?:(\w+):)?("([^"]*)"?|\S+)')     # operator syntax: -x  site:y  "phrase"
 FRESHNESS_WINDOWS = {"day": 86400, "pd": 86400, "week": 7 * 86400, "pw": 7 * 86400, "month": 31 * 86400,
                      "pm": 31 * 86400, "year": 366 * 86400, "py": 366 * 86400}
 FILETYPE_ALIASES = {"doc": "docx", "word": "docx", "excel": "xlsx", "xls": "xlsx", "ppt": "pptx", "powerpoint": "pptx",
                     "htm": "web", "html": "web", "webpage": "web", "page": "web", "txt": "text", "image": "image",
                     "img": "image", "jpg": "image", "jpeg": "image", "png": "image"}
-
-FINANCIAL_WORDS = {
-    "stock", "stocks", "share", "shares", "price", "prices", "ticker", "tickers",
-    "quote", "quotes", "marketcap", "nasdaq", "nyse", "valuation", "earnings",
-    "dividend", "dividends", "crypto", "bitcoin", "ethereum", "btc", "eth"
-}
-
-NEWS_WORDS = {
-    "news", "breaking", "headline", "headlines", "update", "updates",
-    "today", "yesterday", "tonight", "latest", "announced", "reported",
-    "crisis", "election", "scandal", "war", "talks", "summit", "development",
-    "developments"
-}
-
-TECH_DOCS_WORDS = {
-    "documentation", "docs", "doc", "api", "tutorial", "tutorials", "guide",
-    "guides", "manual", "sdk", "reference", "cheatsheet", "install",
-    "installation", "setup", "example", "examples", "specification", "rfc"
-}
-
-TECH_TERMS = {
-    "python", "javascript", "typescript", "rust", "golang", "java", "c++",
-    "html", "css", "sql", "linux", "docker", "kubernetes", "git", "bash",
-    "fastapi", "flask", "django", "react", "vue", "angular", "node", "npm",
-    "pip", "requests", "httpx", "urllib", "sqlite", "postgres", "redis"
-}
-
-REFERENCE_PATTERNS = [
-    re.compile(r"^(what|who|where|when|why|how)\s+(is|are|was|were|do|does|did)\b", re.I),
-    re.compile(r"\b(history|biography|definition|meaning|overview|summary)\s+of\b", re.I),
-    re.compile(r"\bwikipedia\b", re.I),
-]
-
-OFFICIAL_PATTERNS = [
-    re.compile(r"\bofficial\s+(site|website|page|portal|homepage)\b", re.I),
-    re.compile(r"\babout\s+(us|company)\b", re.I),
-    re.compile(r"\b(headquarters|contact|careers)\b", re.I),
-]
+MODEL_LABELS = {"finance_quote": "financial", "finance_history": "financial"}   # model label -> engine intent
+MIN_INTENT_CONFIDENCE = 0.45
 
 
 @dataclass
@@ -83,6 +45,11 @@ class ParsedQuery:
     intent: str = "general"        # general | news | financial | tech_docs | company | reference
     intent_details: dict = field(default_factory=dict)
     surface: list = field(default_factory=list)       # surface words for snippets/highlighting
+    entity: list = field(default_factory=list)        # subject words (original case): not query-phrasing words
+    entity_terms: list = field(default_factory=list)  # analysed (stemmed) subject terms
+    context: list = field(default_factory=list)       # remaining content words (phrasing, intent cues)
+    intent_scores: dict = field(default_factory=dict)
+    entities: list = field(default_factory=list)      # linked knowledge-base entities (filled when live)
 
     @property
     def scoring_terms(self):
@@ -108,7 +75,9 @@ class ParsedQuery:
                 "filetypes": self.filetypes, "intitle": self.intitle, "inurl": self.inurl, "lang": self.lang,
                 "after": self.after, "before": self.before, "freshness": self.freshness,
                 "fresh_intent": self.fresh_intent, "intent": self.intent,
-                "intent_details": self.intent_details}
+                "intent_details": self.intent_details, "subject": " ".join(self.entity),
+                "intent_scores": {k: round(v, 3) for k, v in self.intent_scores.items()},
+                "entities": [e.to_dict() for e in self.entities]}
 
 
 def _date_ts(value):
@@ -116,8 +85,9 @@ def _date_ts(value):
     return iso_to_ts(iso) if iso else None
 
 
-def parse_query(raw, freshness=None, site=None, filetype=None, lang=None):
+def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_dir=None):
     q = ParsedQuery(raw=raw)
+    model = get_model(data_dir)
     tokens = list(_LEX.finditer(raw or ""))
     words = []                         # (term, surface, is_stop, or_group)
     or_next = False
@@ -187,7 +157,9 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None):
             continue
         seen.add(term)
         # intent words ("latest", "current", "news") steer freshness; they are scored but never required
-        if (term, surf, is_stop, in_or) in content and not in_or and (surf not in FRESH_WORDS or len(content) == 1):
+        # learned phrasing words ("give", "latest", "documentation", "price") are scored but never required
+        soft = model.is_query_language(surf) or (surf.isdigit() and len(surf) <= 2)
+        if (term, surf, is_stop, in_or) in content and not in_or and (not soft or len(content) == 1):
             q.required.append(term)
         else:
             q.optional.append(term)
@@ -201,41 +173,44 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None):
     if lang:
         q.lang = str(lang).lower()[:2]
     clean_raw = (raw or "").strip()
-    low = {t.lower() for t in tokenize(clean_raw)}
-    year = datetime.now(timezone.utc).year
-    if low & FRESH_WORDS or str(year) in low or str(year - 1) in low:
-        q.fresh_intent = True
-
-    # ---------------- Intent Classification
-    if (low & FINANCIAL_WORDS) and (low & {"price", "prices", "stock", "stocks", "share", "shares", "quote", "ticker", "marketcap", "nasdaq", "nyse"}):
-        q.intent = "financial"
-        entity_words = [w for w in q.surface if w.lower() not in FINANCIAL_WORDS and w.lower() not in FRESH_WORDS and w.lower() not in STOPWORDS]
-        q.intent_details = {
-            "entity": " ".join(entity_words[:3]),
-            "wants_live_quote": bool(low & {"current", "live", "today", "now", "price", "prices"}),
-        }
-        q.fresh_intent = True
-    elif "news" in low or "breaking" in low or (low & {"today", "yesterday", "tonight", "latest"} and not (low & TECH_DOCS_WORDS)):
-        q.intent = "news"
-        topic_words = [w for w in q.surface if w.lower() not in NEWS_WORDS and w.lower() not in FRESH_WORDS and w.lower() not in STOPWORDS]
-        q.intent_details = {
-            "topic": " ".join(topic_words[:4]),
-            "freshness": q.freshness or ("recent" if low & {"today", "latest", "breaking"} else None),
-        }
-        q.fresh_intent = True
-    elif (low & TECH_DOCS_WORDS and (low & TECH_TERMS or len(low) <= 5)) or any(w in low for w in ("documentation", "docs", "api", "tutorial")):
-        q.intent = "tech_docs"
-        q.intent_details = {"tech_terms": list(low & (TECH_TERMS | TECH_DOCS_WORDS))}
-    elif any(pat.search(clean_raw) for pat in REFERENCE_PATTERNS):
-        q.intent = "reference"
-        q.intent_details = {"encyclopedic": True}
-    elif any(pat.search(clean_raw) for pat in OFFICIAL_PATTERNS):
-        q.intent = "company"
-        q.intent_details = {"official": True}
+    label, probs = model.classify(clean_raw)
+    q.intent_scores = probs
+    if not probs or probs.get(label, 0) < MIN_INTENT_CONFIDENCE:
+        label = "general"
+    q.intent = MODEL_LABELS.get(label, label)
+    q.entity = [w for w in _words(clean_raw) if not model.is_query_language(w)]
+    q.entity_terms = list(dict.fromkeys(stem(t) for w in q.entity for t in tokenize(w)))
+    q.context = [w for w in _words(clean_raw) if w not in q.entity]
+    subject = " ".join(q.entity)
+    if q.intent == "financial":
+        days = parse_duration(clean_raw)
+        q.intent_details = {"entity": subject, "wants_history": label == "finance_history",
+                            "wants_live_quote": label == "finance_quote",
+                            "days": days or (183 if label == "finance_history" else None)}
+    elif q.intent == "news":
+        q.intent_details = {"topic": subject.lower(), "freshness": q.freshness or "recent"}
     else:
-        q.intent = "general"
-        q.intent_details = {}
-
+        q.intent_details = {"entity": subject} if subject else {}
+    q.fresh_intent = q.intent in ("news", "financial") or bool(q.freshness)
     if q.freshness in FRESHNESS_WINDOWS and not q.after:
         q.after = datetime.now(timezone.utc).timestamp() - FRESHNESS_WINDOWS[q.freshness]
     return q
+
+
+
+def _words(raw):
+    """Content words of the query in original case (operators, punctuation and stopwords removed)."""
+    out = []
+    for m in _LEX.finditer(raw or ""):
+        if m.group(1) or m.group(2):
+            continue
+        for w in tokenize(m.group(3).strip('"')):
+            if w not in STOPWORDS and not (w.isdigit() and len(w) <= 2):
+                out.append(_original_case(raw, w))
+    return out
+
+
+def _original_case(raw, word):
+    i = raw.lower().find(word)
+    return raw[i:i + len(word)] if i >= 0 else word
+

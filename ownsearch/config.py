@@ -26,7 +26,7 @@ class Settings:
     data_dir: Path = Path(DEFAULT_DATA_DIR)
 
     # Identity used when crawling. Put a real contact address in ownsearch.json.
-    user_agent: str = "OwnSearchBot/1.0 (+self-hosted search engine; contact: owner)"
+    user_agent: str = "OwnSearchBot/1.0 (+https://github.com/bhaskarbarot/Own_Web_search; self-hosted search engine)"
     robots_token: str = "ownsearchbot"
 
     # Fetching
@@ -82,6 +82,15 @@ class Settings:
     discovery_max_urls: int = 6
     financial_provider_url: str = ""    # optional live financial quote endpoint
     financial_timeout: float = 3.0
+    # Market data source (free, public). Templates: {q} search text, {symbol}, {period1}/{period2} unix seconds,
+    # {interval}. Set market_chart_url = "" to disable live market answers.
+    market_lookup_url: str = "https://query2.finance.yahoo.com/v1/finance/search?q={q}&quotesCount=6&newsCount=0"
+    market_chart_url: str = ("https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?period1={period1}"
+                             "&period2={period2}&interval={interval}&includePrePost=false")
+    market_quote_page: str = "https://finance.yahoo.com/quote/{symbol}"
+    market_source_name: str = "Yahoo Finance public chart feed"
+    # News feeds: file with one RSS/Atom URL per line (default: the bundled resources/news_feeds.txt)
+    news_feeds_file: str = ""
 
     @classmethod
     def load(cls, data_dir=None, **overrides):

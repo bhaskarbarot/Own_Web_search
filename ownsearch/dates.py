@@ -96,3 +96,18 @@ def date_from_url(url):
         except ValueError:
             return None
     return None
+
+
+_UNIT_DAYS = {"day": 1, "week": 7, "month": 30.44, "year": 365.25}     # calendar units (date-format grammar)
+
+
+def parse_duration(text):
+    """Span of time mentioned in text ("last 6 months", "past 2 years") -> days, or None."""
+    words = (text or "").lower().replace("-", " ").split()
+    for i, w in enumerate(words[:-1]):
+        if w.isdigit():
+            unit = words[i + 1].rstrip("s")
+            if unit in _UNIT_DAYS:
+                return max(1, round(int(w) * _UNIT_DAYS[unit]))
+    return None
+

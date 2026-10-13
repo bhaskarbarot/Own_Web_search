@@ -1,0 +1,147 @@
+# Training data for the query-intent classifier (label<TAB>example query).
+# Add lines to teach new phrasings; labels: news, finance_quote, finance_history, tech_docs, reference, company, general.
+# Learned examples from feedback are appended to <data_dir>/intent_examples.tsv and merged at load time.
+news	latest news about the election results
+news	breaking news on the earthquake in japan
+news	what happened today in parliament
+news	top headlines this morning
+news	today's headlines on climate talks
+news	recent updates on the war in ukraine
+news	elon musk latest news
+news	news about joe biden today
+news	show me the latest headlines about the olympics
+news	what is happening with the stock market crash today
+news	cricket world cup news today
+news	new announcements from apple this week
+news	latest developments in the israel gaza conflict
+news	give me news on the budget announcement
+news	todays top stories in india
+news	current events in europe
+news	breaking: flood warnings issued in kerala
+news	latest on the supreme court ruling
+news	what did the prime minister say yesterday
+news	headlines from the summit
+news	tell me the latest news of rahul gandhi
+news	recent news regarding taylor swift
+news	update on the hurricane today
+news	world news this week
+news	latest tech news
+finance_quote	apple stock price
+finance_quote	what is the share price of reliance industries
+finance_quote	current price of tesla shares
+finance_quote	microsoft stock quote today
+finance_quote	how much is one bitcoin worth right now
+finance_quote	infosys share price live
+finance_quote	what's amazon trading at
+finance_quote	google stock value now
+finance_quote	price of hdfc bank share
+finance_quote	market cap of meta
+finance_quote	tell me the current stock price of wipro
+finance_quote	how is the nifty doing today
+finance_quote	sensex today
+finance_quote	what is the stock price of samsung electronics
+finance_quote	ethereum price now
+finance_history	apple stock performance over the last year
+finance_history	show me tesla share price history for 3 months
+finance_history	analyse infosys stock for the past 6 months
+finance_history	reliance share price trend last year
+finance_history	microsoft stock chart last 5 years
+finance_history	how did amazon shares perform in the last month
+finance_history	historical prices of hdfc bank
+finance_history	give me analysis of wipro share price last 2 years
+finance_history	bitcoin price history this year
+finance_history	compare google stock movement over the past quarter
+finance_history	list prices of maruti over the past 6 months with analysis
+finance_history	returns of nifty over the last 12 months
+tech_docs	python requests library documentation
+tech_docs	how to set a timeout in python requests
+tech_docs	django rest framework serializer docs
+tech_docs	react useeffect hook documentation
+tech_docs	how to install docker on ubuntu
+tech_docs	git rebase tutorial
+tech_docs	how to connect to postgres from node
+tech_docs	fastapi dependency injection guide
+tech_docs	kubernetes deployment yaml example
+tech_docs	how to write a class in java
+tech_docs	what is polymorphism in object oriented programming
+tech_docs	how to use async await in javascript
+tech_docs	pandas read csv parameters
+tech_docs	how to build a rest api with flask
+tech_docs	openai api reference chat completions
+tech_docs	how to configure nginx reverse proxy
+tech_docs	rust ownership explained
+tech_docs	how to write a for loop in c
+tech_docs	typescript generics tutorial
+tech_docs	how do i create a virtual environment in python
+tech_docs	encapsulation example in c++
+tech_docs	langchain agents documentation
+tech_docs	how to build a slack bot
+tech_docs	sql join syntax examples
+tech_docs	how to deploy a model with aws sagemaker sdk
+tech_docs	check the docs and explain how to authenticate with the github api
+reference	who is albert einstein
+reference	what is photosynthesis
+reference	where was mahatma gandhi born
+reference	when did world war 2 end
+reference	who founded microsoft
+reference	what is the capital of brazil
+reference	how tall is mount everest
+reference	who was the first emperor of the maurya empire
+reference	population of tokyo
+reference	who is the ceo of google
+reference	what is quantum computing
+reference	history of the roman empire
+reference	when was the eiffel tower built
+reference	where is the taj mahal located
+reference	who wrote the ramayana
+reference	what does dna stand for
+reference	meaning of democracy
+reference	birthplace of rabindranath tagore
+reference	what is intel
+reference	tell me about the chola dynasty
+company	official website of infosys
+company	tesla headquarters address
+company	careers at google
+company	contact amazon customer care
+company	about tata motors company
+company	apple official site
+company	samsung customer support number
+company	where is the head office of wipro
+general	best laptops under 50000
+general	how to cook biryani
+general	weather in delhi
+general	cheap flights to goa
+general	tips for better sleep
+general	how to lose weight fast
+general	movies to watch this weekend
+general	good books for beginners in philosophy
+general	how to make tea
+general	places to visit in kerala
+news	can you check the news about the farmers protest
+news	show me what is new with spacex this week
+news	tell me today's top stories from bengaluru
+news	find latest reports on the train accident
+finance_quote	check the share price of tata motors
+finance_quote	tell me the stock price of adani ports right now
+finance_quote	show me the current price of netflix stock
+finance_history	check how itc shares moved in the last 3 months and explain
+finance_history	show me the price history of bajaj finance for one year
+tech_docs	check the documentation and explain how to paginate with the stripe api
+tech_docs	show me how to write a decorator in python
+tech_docs	explain how to build and deploy a docker image
+tech_docs	tell me how to connect mongodb with express
+tech_docs	find the docs for configuring eslint
+tech_docs	how to write unit tests with pytest
+reference	tell me the place where charles darwin was born
+reference	find out which city isaac newton was born in
+reference	explain what black holes are
+reference	who was akbar
+reference	show me information about the indus valley civilisation
+general	show me some good recipes for dinner
+general	tell me a joke
+general	find cheap hotels in jaipur
+news	say what the latest news is on the monsoon
+reference	can you say where the statue of unity is located
+reference	which place was the battle of plassey fought in
+finance_quote	what is the share price of the company infosys today
+tech_docs	can you see the docs and say how to install kafka
