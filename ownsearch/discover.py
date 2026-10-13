@@ -75,7 +75,8 @@ def discover(engine, query, frontier=None, max_urls=6, log=None):
                 return {"url": url, "result": f"http {res.status}"}
             out = crawler.processor.process(url, res.final_url, res.status, res.headers, res.body)
             frontier.complete(url, out)
-            return {"url": res.final_url, "result": out.get("result"), "title": out.get("title")}
+            return {"url": res.final_url, "result": out.get("result"), "title": out.get("title"),
+                    "doc_status": out.get("doc_status")}
         except Exception as e:
             return {"url": url, "result": f"error: {e}"[:200]}
 

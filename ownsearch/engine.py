@@ -215,8 +215,12 @@ class SearchEngine:
             f = feats.get(c.doc_id)
             if not f or not f["active"] or f["duplicate_of"] is not None:
                 continue
-            date_iso = f["published_at"] or f["modified_at"]
-            date_src = "published" if f["published_at"] else ("modified" if f["modified_at"] else None)
+            # page age = most recent of published / last modified (a 2002 article updated today is fresh)
+            pub, mod = f["published_at"], f["modified_at"]
+            if mod and (not pub or (iso_to_ts(mod) or 0) > (iso_to_ts(pub) or 0)):
+                date_iso, date_src = mod, "modified"
+            else:
+                date_iso, date_src = pub, ("published" if pub else None)
             ts = iso_to_ts(date_iso)
             if ts is None:
                 ts, date_src = iso_to_ts(f["discovered_at"]), "discovered"

@@ -26,8 +26,9 @@ def _pretty(res):
     if cov.get("message"):
         print(f"  note: {cov['message']}")
     found = [d for d in res.get("live_discovery", []) if d["result"] == "ok"]
+    new = [d for d in found if d.get("doc_status") in ("new", "updated")]
     if found:
-        print(f"  live discovery: fetched and indexed {len(found)} new page(s) for this query")
+        print(f"  live discovery: checked {len(found)} page(s) live, {len(new)} new/updated in the index")
     for r in res["results"]:
         date = (r.get("published_at") or "")[:10]
         print(f"\n{r['rank']:>2}. {r['title']}")
