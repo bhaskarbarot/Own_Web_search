@@ -23,6 +23,44 @@ FILETYPE_ALIASES = {"doc": "docx", "word": "docx", "excel": "xlsx", "xls": "xlsx
                     "htm": "web", "html": "web", "webpage": "web", "page": "web", "txt": "text", "image": "image",
                     "img": "image", "jpg": "image", "jpeg": "image", "png": "image"}
 
+FINANCIAL_WORDS = {
+    "stock", "stocks", "share", "shares", "price", "prices", "ticker", "tickers",
+    "quote", "quotes", "marketcap", "nasdaq", "nyse", "valuation", "earnings",
+    "dividend", "dividends", "crypto", "bitcoin", "ethereum", "btc", "eth"
+}
+
+NEWS_WORDS = {
+    "news", "breaking", "headline", "headlines", "update", "updates",
+    "today", "yesterday", "tonight", "latest", "announced", "reported",
+    "crisis", "election", "scandal", "war", "talks", "summit", "development",
+    "developments"
+}
+
+TECH_DOCS_WORDS = {
+    "documentation", "docs", "doc", "api", "tutorial", "tutorials", "guide",
+    "guides", "manual", "sdk", "reference", "cheatsheet", "install",
+    "installation", "setup", "example", "examples", "specification", "rfc"
+}
+
+TECH_TERMS = {
+    "python", "javascript", "typescript", "rust", "golang", "java", "c++",
+    "html", "css", "sql", "linux", "docker", "kubernetes", "git", "bash",
+    "fastapi", "flask", "django", "react", "vue", "angular", "node", "npm",
+    "pip", "requests", "httpx", "urllib", "sqlite", "postgres", "redis"
+}
+
+REFERENCE_PATTERNS = [
+    re.compile(r"^(what|who|where|when|why|how)\s+(is|are|was|were|do|does|did)\b", re.I),
+    re.compile(r"\b(history|biography|definition|meaning|overview|summary)\s+of\b", re.I),
+    re.compile(r"\bwikipedia\b", re.I),
+]
+
+OFFICIAL_PATTERNS = [
+    re.compile(r"\bofficial\s+(site|website|page|portal|homepage)\b", re.I),
+    re.compile(r"\babout\s+(us|company)\b", re.I),
+    re.compile(r"\b(headquarters|contact|careers)\b", re.I),
+]
+
 
 @dataclass
 class ParsedQuery:
@@ -42,6 +80,8 @@ class ParsedQuery:
     before: float = None
     freshness: str = None          # None | recent | day | week | month | year
     fresh_intent: bool = False
+    intent: str = "general"        # general | news | financial | tech_docs | company | reference
+    intent_details: dict = field(default_factory=dict)
     surface: list = field(default_factory=list)       # surface words for snippets/highlighting
 
     @property
@@ -67,7 +107,8 @@ class ParsedQuery:
                 "excluded": self.excluded, "sites": self.sites, "not_sites": self.not_sites,
                 "filetypes": self.filetypes, "intitle": self.intitle, "inurl": self.inurl, "lang": self.lang,
                 "after": self.after, "before": self.before, "freshness": self.freshness,
-                "fresh_intent": self.fresh_intent}
+                "fresh_intent": self.fresh_intent, "intent": self.intent,
+                "intent_details": self.intent_details}
 
 
 def _date_ts(value):
@@ -159,10 +200,42 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None):
                            for f in str(filetype).split(",") if f.strip())
     if lang:
         q.lang = str(lang).lower()[:2]
-    low = {t.lower() for t in tokenize(raw)}
+    clean_raw = (raw or "").strip()
+    low = {t.lower() for t in tokenize(clean_raw)}
     year = datetime.now(timezone.utc).year
     if low & FRESH_WORDS or str(year) in low or str(year - 1) in low:
         q.fresh_intent = True
+
+    # ---------------- Intent Classification
+    if (low & FINANCIAL_WORDS) and (low & {"price", "prices", "stock", "stocks", "share", "shares", "quote", "ticker", "marketcap", "nasdaq", "nyse"}):
+        q.intent = "financial"
+        entity_words = [w for w in q.surface if w.lower() not in FINANCIAL_WORDS and w.lower() not in FRESH_WORDS and w.lower() not in STOPWORDS]
+        q.intent_details = {
+            "entity": " ".join(entity_words[:3]),
+            "wants_live_quote": bool(low & {"current", "live", "today", "now", "price", "prices"}),
+        }
+        q.fresh_intent = True
+    elif "news" in low or "breaking" in low or (low & {"today", "yesterday", "tonight", "latest"} and not (low & TECH_DOCS_WORDS)):
+        q.intent = "news"
+        topic_words = [w for w in q.surface if w.lower() not in NEWS_WORDS and w.lower() not in FRESH_WORDS and w.lower() not in STOPWORDS]
+        q.intent_details = {
+            "topic": " ".join(topic_words[:4]),
+            "freshness": q.freshness or ("recent" if low & {"today", "latest", "breaking"} else None),
+        }
+        q.fresh_intent = True
+    elif (low & TECH_DOCS_WORDS and (low & TECH_TERMS or len(low) <= 5)) or any(w in low for w in ("documentation", "docs", "api", "tutorial")):
+        q.intent = "tech_docs"
+        q.intent_details = {"tech_terms": list(low & (TECH_TERMS | TECH_DOCS_WORDS))}
+    elif any(pat.search(clean_raw) for pat in REFERENCE_PATTERNS):
+        q.intent = "reference"
+        q.intent_details = {"encyclopedic": True}
+    elif any(pat.search(clean_raw) for pat in OFFICIAL_PATTERNS):
+        q.intent = "company"
+        q.intent_details = {"official": True}
+    else:
+        q.intent = "general"
+        q.intent_details = {}
+
     if q.freshness in FRESHNESS_WINDOWS and not q.after:
         q.after = datetime.now(timezone.utc).timestamp() - FRESHNESS_WINDOWS[q.freshness]
     return q

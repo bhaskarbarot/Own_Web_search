@@ -71,6 +71,18 @@ class Settings:
     search_timeout_ms: int = 8000
     log_queries: bool = True
 
+    # Live Discovery and External Providers
+    searxng_url: str = ""               # self-hosted SearXNG endpoint, e.g. "http://localhost:8080"
+    searxng_timeout: float = 3.0
+    searxng_categories: str = "general,news"
+    brave_api_key: str = ""             # optional Brave Search API key
+    brave_timeout: float = 3.0
+    news_feeds: str = ""                # comma/newline-separated list of RSS/Atom feed URLs
+    discovery_timeout: float = 5.0      # max seconds spent on live discovery
+    discovery_max_urls: int = 6
+    financial_provider_url: str = ""    # optional live financial quote endpoint
+    financial_timeout: float = 3.0
+
     @classmethod
     def load(cls, data_dir=None, **overrides):
         root = Path(data_dir or os.environ.get("OWNSEARCH_DATA_DIR", DEFAULT_DATA_DIR)).resolve()

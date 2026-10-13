@@ -19,6 +19,24 @@ def _valid(dt):
     return dt.astimezone(timezone.utc).isoformat(timespec="seconds")
 
 
+def is_valid_date(iso_str):
+    """Return True if iso_str represents a valid parsed ISO date within allowable bounds."""
+    if not iso_str:
+        return False
+    try:
+        dt = datetime.fromisoformat(str(iso_str).replace("Z", "+00:00"))
+        now = datetime.now(timezone.utc)
+        return 1990 <= dt.year and dt <= now + timedelta(days=2)
+    except (ValueError, TypeError):
+        return False
+
+
+def start_of_today_utc():
+    """Return the UNIX timestamp for the start of today (00:00:00 UTC)."""
+    now = datetime.now(timezone.utc)
+    return datetime(now.year, now.month, now.day, tzinfo=timezone.utc).timestamp()
+
+
 def parse_date(value):
     """Return an ISO-8601 UTC string or None."""
     if value is None:

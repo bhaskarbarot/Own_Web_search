@@ -86,31 +86,62 @@ def _match(keys, judgments):
 
 
 def run_queries(engine, qrels, depth=100, explain=False):
-    runs = []
+    runs, _ = run_queries_with_latencies(engine, qrels, depth, explain)
+    return runs
+
+
+def run_queries_with_latencies(engine, qrels, depth=100, explain=False):
+    runs, latencies = [], []
     for item in qrels:
         results = []
+        t_start = time.perf_counter()
         for off in range(0, depth, 50):
             res = engine.search(item["query"], limit=50, fetch_evidence=False, offset=off, explain=explain,
                                 use_cache=False, **item.get("params", {}))
             results.extend(res["results"])
             if not res.get("has_more"):
                 break
+        elapsed_ms = (time.perf_counter() - t_start) * 1000.0
         runs.append(results[:depth])
-    return runs
+        latencies.append(elapsed_ms)
+    return runs, latencies
 
 
 def evaluate(engine, qrels, depth=100):
     t0 = time.time()
-    runs = run_queries(engine, qrels, depth)
+    runs, latencies = run_queries_with_latencies(engine, qrels, depth)
     per = []
-    for item, results in zip(qrels, runs):
+    zero_results = 0
+    for item, results, lat_ms in zip(qrels, runs, latencies):
         keys = _match(_keys_for(results), item["judgments"])
-        per.append({"query": item["query"], "ndcg@10": round(ndcg(keys, item["judgments"]), 4),
-                    "recall@100": round(recall(keys, item["judgments"]), 4),
-                    "mrr@10": round(mrr(keys, item["judgments"]), 4), "p@10": round(precision(keys, item["judgments"]), 4),
-                    "results": len(results)})
+        if len(results) == 0:
+            zero_results += 1
+        per.append({
+            "query": item["query"],
+            "ndcg@10": round(ndcg(keys, item["judgments"]), 4),
+            "p@5": round(precision(keys, item["judgments"], k=5), 4),
+            "p@10": round(precision(keys, item["judgments"], k=10), 4),
+            "recall@10": round(recall(keys, item["judgments"], k=10), 4),
+            "recall@100": round(recall(keys, item["judgments"], k=100), 4),
+            "mrr@10": round(mrr(keys, item["judgments"]), 4),
+            "results": len(results),
+            "latency_ms": round(lat_ms, 2),
+        })
     n = max(1, len(per))
-    summary = {m: round(sum(p[m] for p in per) / n, 4) for m in ("ndcg@10", "recall@100", "mrr@10", "p@10")}
+    sorted_lat = sorted(latencies) if latencies else [0.0]
+    summary = {
+        "ndcg@10": round(sum(p["ndcg@10"] for p in per) / n, 4),
+        "p@5": round(sum(p["p@5"] for p in per) / n, 4),
+        "p@10": round(sum(p["p@10"] for p in per) / n, 4),
+        "recall@10": round(sum(p["recall@10"] for p in per) / n, 4),
+        "recall@100": round(sum(p["recall@100"] for p in per) / n, 4),
+        "mrr@10": round(sum(p["mrr@10"] for p in per) / n, 4),
+        "zero_result_rate": round(zero_results / n, 4),
+        "latency_p50_ms": round(sorted_lat[int(0.50 * len(sorted_lat))], 2),
+        "latency_p95_ms": round(sorted_lat[min(int(0.95 * len(sorted_lat)), len(sorted_lat) - 1)], 2),
+        "latency_p99_ms": round(sorted_lat[min(int(0.99 * len(sorted_lat)), len(sorted_lat) - 1)], 2),
+        "latency_mean_ms": round(sum(sorted_lat) / len(sorted_lat), 2),
+    }
     return {"queries": len(per), "summary": summary, "per_query": per, "seconds": round(time.time() - t0, 2)}
 
 

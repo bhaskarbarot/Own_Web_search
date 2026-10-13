@@ -1,5 +1,6 @@
 data/
 backup/
+repo/
 __pycache__/
 *.pyc
 *.tmp
