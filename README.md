@@ -49,3 +49,52 @@ Query syntax: `"phrase"  -exclude  site:x.org  filetype:pdf  intitle:x  after:20
 
 Limits: coverage is only what you crawl/import; one machine cannot match Brave's index size.
 v0.1 is archived in `backup/` (not committed).
+
+## Data-driven relevance and direct answers
+
+The relevance refactor is on `wip/data-driven-relevance`. Intent is learned from
+`ownsearch/resources/intent_templates.tsv`: `{subject}` slots are excluded from
+training, so repeated company or programming names never become phrasing words.
+Additional examples can be supplied in `<data_dir>/intent_examples.tsv`.
+
+Live searches link names and aliases through Wikidata/Wikipedia, discover URLs
+from entity records, and walk official-site links and bounded sitemaps. News
+feeds live in `ownsearch/resources/news_feeds.txt`; their headlines and publisher
+dates can be indexed even when the article itself is unavailable. Ranking uses
+lexical relevance, linked names, subject density and learned title phrasing.
+There are no per-topic domain guesses or domain-specific ranking overrides.
+
+```bash
+python3 main.py search "Nvidia live price" --pretty
+python3 main.py search "TCS 6-month analysis" --pretty
+python3 main.py search "Claude docs on MCP" --pretty
+python3 main.py search "python asyncio" --no-live --pretty
+python3 -m unittest discover -v
+```
+
+JSON search responses include `answer` (`fact`, `entity`, `stock_quote`,
+`stock_history`, or `null`). Answers carry sources; quotes carry market timestamps
+and a `regular_market` scope. History identifies adjusted/ordinary closes and
+whether the latest trading session is still in progress. An unavailable provider
+never becomes an estimated price or an invented fact.
+
+Settings in `<data_dir>/ownsearch.json` include:
+
+- `discovery_timeout` (20 seconds): shared network budget for live answers/linking/discovery.
+- `discovery_max_requests` (24): page requests, including robots and redirect hops.
+- `discovery_sitemap_limit` (500): URLs examined per verified-site walk.
+- `relevance_score_ratio` (0.30): reject scores below this fraction of the best score.
+- `knowledge_enabled`: enable/disable live entity linking.
+- `news_feeds_file`: feed list path; set this and `news_feeds` to empty strings to disable feeds.
+- `market_lookup_url` / `market_chart_url`: configurable source templates; empty strings disable market answers.
+- `searxng_url`: optional self-hosted SearXNG JSON endpoint. No paid provider is required.
+
+Live failures are returned in `provider_errors`, and discovery repeats are cached.
+Wikimedia requests are serialized within each process and cached on disk. Keep
+the public repository URL as the bot contact. Freshness `day` is a rolling
+24-hour window; `week` is seven days. Page discovery cannot expand the frontier
+through arbitrary sitemap/page links during a query.
+
+The tests use isolated indexes and mock services/local HTTP fixtures. The legacy
+50-query evaluation remains a manual corpus benchmark, rather than a test that
+reads or modifies your production index. See [the measured relevance report](docs/RELEVANCE_REPORT.md).

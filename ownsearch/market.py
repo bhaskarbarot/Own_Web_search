@@ -35,9 +35,9 @@ def _cached(key, ttl, fn):
     return val
 
 
-def _json(fetcher, url, max_bytes=8_000_000):
+def _json(fetcher, url, max_bytes=8_000_000, deadline=None):
     try:
-        res = fetcher.fetch(url, accept="application/json", max_bytes=max_bytes, retries=1)
+        res = fetcher.fetch(url, accept="application/json", max_bytes=max_bytes, retries=0, deadline=deadline)
     except FetchError:
         return None
     if res.status != 200:
@@ -53,8 +53,9 @@ def _day(ts):
 
 
 class Market:
-    def __init__(self, settings):
+    def __init__(self, settings, deadline=None):
         self.settings = settings
+        self.deadline = deadline
         self.fetcher = Fetcher(settings)
 
     @property
@@ -64,18 +65,18 @@ class Market:
     # ------------------------------------------------------------ data source
     def _lookup(self, text):
         url = self.settings.market_lookup_url.format(q=quote(text))
-        data = _cached(("lookup", text.lower()), 86400, lambda: _json(self.fetcher, url))
+        data = _cached(("lookup", self.settings.market_lookup_url, text.lower()), 86400, lambda: _json(self.fetcher, url, deadline=self.deadline))
         return [qd for qd in (data or {}).get("quotes", []) if qd.get("symbol") and qd.get("quoteType")]
 
-    def _chart(self, symbol, days=1):
+    def _chart(self, symbol, days=1, interval=None):
         now = int(time.time())
         days = max(1, days)
         period1 = now - int(max(days, 4) * 86400)          # cover weekends/holidays for short windows
-        interval = "5m" if days <= 1 else "30m" if days <= 5 else "1d" if days <= 400 else "1wk"
+        interval = interval or ("5m" if days <= 1 else "30m" if days <= 5 else "1d" if days <= 400 else "1wk")
         url = self.settings.market_chart_url.format(symbol=quote(symbol), period1=period1, period2=now,
                                                     interval=interval)
         ttl = 60 if days <= 5 else 1800
-        data = _cached(("chart", symbol, days), ttl, lambda: _json(self.fetcher, url))
+        data = _cached(("chart", self.settings.market_chart_url, symbol, days, interval), ttl, lambda: _json(self.fetcher, url, deadline=self.deadline))
         try:
             return data["chart"]["result"][0]
         except (TypeError, KeyError, IndexError):
@@ -116,15 +117,29 @@ class Market:
         price = m.get("regularMarketPrice")
         if price is None:
             return None
-        prev = m.get("chartPreviousClose") or m.get("previousClose")
         ts = m.get("regularMarketTime")
+        if not isinstance(ts, (int, float)) or not isinstance(price, (int, float)) or not math.isfinite(price):
+            return None
+        age = time.time() - ts
+        if age < -300 or age > 7 * 86400:
+            return None
+        # chartPreviousClose is the close before the whole requested range,
+        # which can span several sessions. It is not yesterday's close.
+        prev = m.get("previousClose")
+        if prev is None:
+            daily = self._chart(sym, 7, interval="1d") or {}
+            daily_closes = (((daily.get("indicators") or {}).get("quote") or [{}])[0].get("close") or [])
+            earlier = [(t, c) for t, c in zip(daily.get("timestamp") or [], daily_closes)
+                       if isinstance(t, (int, float)) and isinstance(c, (int, float))
+                       and math.isfinite(c) and c > 0 and _day(t) < _day(ts)]
+            prev = max(earlier)[1] if earlier else None
         as_of = datetime.fromtimestamp(ts, timezone.utc).isoformat(timespec="seconds") if ts else None
         cur = m.get("currency", "")
         change = (price - prev) if prev else None
         pct = (change / prev * 100) if prev else None
         name_out = m.get("longName") or m.get("shortName") or disp
         exch = m.get("fullExchangeName") or m.get("exchangeName") or ""
-        lines = [f"{name_out} ({sym}, {exch}): {price:,.2f} {cur}"]
+        lines = [f"{name_out} ({sym}, {exch}): {price:,.2f} {cur} (latest regular-market quote)"]
         if change is not None:
             lines[0] += f"  {change:+,.2f} ({pct:+.2f}%) vs previous close {prev:,.2f}"
         if m.get("regularMarketDayLow") and m.get("regularMarketDayHigh"):
@@ -134,33 +149,35 @@ class Market:
         if m.get("regularMarketVolume"):
             lines.append(f"Volume {m['regularMarketVolume']:,}")
         lines.append(f"As of {as_of} (market time reported by the data source)")
-        return {"type": "stock_quote", "symbol": sym, "name": name_out, "exchange": exch, "currency": cur,
+        return {"type": "stock_quote", "scope": "regular_market", "symbol": sym, "name": name_out, "exchange": exch, "currency": cur,
                 "price": price, "previous_close": prev, "change": change, "change_pct": pct,
                 "day_low": m.get("regularMarketDayLow"), "day_high": m.get("regularMarketDayHigh"),
                 "week52_low": m.get("fiftyTwoWeekLow"), "week52_high": m.get("fiftyTwoWeekHigh"),
-                "volume": m.get("regularMarketVolume"), "as_of": as_of, "text": "\n".join(lines),
+                "volume": m.get("regularMarketVolume"), "as_of": as_of, "delayed": True, "age_seconds": round(age), "text": "\n".join(lines),
                 "source": self._source(sym), "disclaimer": self._disclaimer()}
 
     def history(self, words, days=183, rarity=None):
         sym, disp = self.resolve(words, rarity)
         if not sym:
             return None
-        r = self._chart(sym, days)
+        r = self._chart(sym, days, interval="1d")
         if not r:
             return None
         m = r.get("meta") or {}
         ts = r.get("timestamp") or []
         ind = r.get("indicators") or {}
-        closes = ((ind.get("adjclose") or [{}])[0].get("adjclose")
-                  or (ind.get("quote") or [{}])[0].get("close") or [])
-        rows = [(t, c) for t, c in zip(ts, closes) if c is not None]
-        if len(rows) < 5:
+        adjusted = (ind.get("adjclose") or [{}])[0].get("adjclose")
+        closes = adjusted or (ind.get("quote") or [{}])[0].get("close") or []
+        price_basis = "adjusted close" if adjusted else "close"
+        rows = sorted((t, c) for t, c in zip(ts, closes) if isinstance(c, (int, float)) and math.isfinite(c) and c > 0
+                      and isinstance(t, (int, float)) and time.time() - (days + 4) * 86400 <= t <= time.time() + 300)
+        if len(rows) < 5 or time.time() - rows[-1][0] > 7 * 86400:
             return None
         cur = m.get("currency", "")
         name_out = m.get("longName") or m.get("shortName") or disp
         a = analyse(rows)
         lines = [
-            f"{name_out} ({sym}) — {_day(rows[0][0])} to {_day(rows[-1][0])}, {len(rows)} trading sessions, {cur}",
+            f"{name_out} ({sym}) — {_day(rows[0][0])} to {_day(rows[-1][0])}, {len(rows)} trading sessions, {cur}; {price_basis}",
             f"Start {a['start'][1]:,.2f}   End {a['end'][1]:,.2f}   Change {a['change']:+,.2f} ({a['change_pct']:+.2f}%)",
             f"High {a['high'][1]:,.2f} on {_day(a['high'][0])}   Low {a['low'][1]:,.2f} on {_day(a['low'][0])}   "
             f"Average {a['mean']:,.2f}",
@@ -169,7 +186,7 @@ class Market:
         ]
         if a.get("sma20") and a.get("sma50"):
             lines.append(f"20-day average {a['sma20']:,.2f}, 50-day average {a['sma50']:,.2f} → {a['trend']}")
-        lines.append("Monthly closes: " + ", ".join(
+        lines.append("Last available price in each month: " + ", ".join(
             f"{mo} {c:,.2f}" + (f" ({p:+.1f}%)" if p is not None else "") for mo, c, p in a["monthly"]))
         if a.get("best_month") and a.get("worst_month"):
             lines.append(f"Best month {a['best_month'][0]} ({a['best_month'][1]:+.1f}%), "
@@ -177,7 +194,13 @@ class Market:
         as_of = datetime.fromtimestamp(m.get("regularMarketTime") or rows[-1][0], timezone.utc).isoformat(
             timespec="seconds")
         lines.append(f"Data as of {as_of}")
+        regular = (m.get("currentTradingPeriod") or {}).get("regular") or {}
+        incomplete = bool(regular.get("end", 0) > time.time() and
+                          _day(rows[-1][0]) == _day(m.get("regularMarketTime") or rows[-1][0]))
+        if incomplete:
+            lines.append("The latest session is still in progress; its price and the current month's return are provisional.")
         return {"type": "stock_history", "symbol": sym, "name": name_out, "currency": cur, "days": days,
+                "price_basis": price_basis, "incomplete_last_session": incomplete,
                 "analysis": {k: v for k, v in a.items() if k not in ("start", "end", "high", "low", "drawdown_peak",
                                                                      "drawdown_trough")}
                 | {"start": [_day(a["start"][0]), a["start"][1]], "end": [_day(a["end"][0]), a["end"][1]],

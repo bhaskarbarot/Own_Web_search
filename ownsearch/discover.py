@@ -1,35 +1,23 @@
-"""Live discovery: find and index relevant pages at query time when the local index lacks coverage.
+"""Discover pages from linked entities, focused official-site walks and configured feeds.
 
-Supports a modular provider architecture:
-  * SearXNGProvider: self-hosted metasearch instance (configurable, optional)
-  * NewsFeedProvider: configured RSS/Atom/JSON news feeds
-  * WikipediaProvider: encyclopedic reference pages (strictly disabled for news and financial queries)
-  * OfficialSiteProvider: verified domains for official and tech documentation queries
-  * FinancialProvider: optional live financial data endpoint
-
-Candidate pages are fetched safely (robots.txt and politeness respected), indexed incrementally,
-and queued to the frontier for background exploration.
+All page requests use the safe fetcher, robots policies, one shared deadline and a
+request cap. No company domains, guessed encyclopedia titles or topic rules live here.
 """
 import json
-import re
 import time
-import urllib.error
-import urllib.parse
-import urllib.request
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from dataclasses import dataclass
-from typing import List, Optional, Tuple
-from urllib.parse import quote, urlparse
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Optional
+from urllib.parse import unquote, urlencode, urlparse
 
+from .dates import parse_date
+from .extract import extract
 from .extract.feeds import parse_feed
-from .query import FRESH_WORDS, ParsedQuery, parse_query
-from .textproc import STOPWORDS, tokenize
-from .util import normalize_url
-
-_DOMAIN = re.compile(r"\b((?:[a-z0-9-]+\.)+(?:com|org|net|io|in|co|ai|dev|gov|edu|uk|de|info|app))\b", re.I)
-_WORD = re.compile(r"[A-Za-z][A-Za-z0-9&.-]*")
-GENERIC = STOPWORDS | FRESH_WORDS | {"price", "stock", "share", "shares", "market", "best", "top", "how", "what",
-                                     "review", "reviews", "news", "today", "vs", "versus", "guide", "tutorial"}
+from .live import PageClient
+from .intent import get_model
+from .query import parse_query
+from .textproc import analyze, tokenize
+from .util import iso_to_ts, normalize_url, utc_now
 
 
 @dataclass
@@ -39,348 +27,332 @@ class CandidateItem:
     title: str = ""
     snippet: str = ""
     published_at: Optional[str] = None
+    source_url: Optional[str] = None
+    sources: list = field(default_factory=list)
 
 
 class BaseProvider:
-    name: str = "base"
+    name = "base"
 
-    def is_configured(self, settings) -> bool:
+    def is_configured(self, settings):
         return True
 
-    def discover(self, query: str, pq: ParsedQuery, settings, timeout: float = 3.0,
-                 log=None) -> Tuple[List[CandidateItem], List[str]]:
+    def discover(self, query, pq, settings, timeout=3.0, log=None, client=None):
         raise NotImplementedError
+
+
+def feed_urls(settings):
+    urls = settings.news_feeds.replace(",", "\n").splitlines()
+    if settings.news_feeds_file:
+        try:
+            urls += Path(settings.news_feeds_file).read_text(encoding="utf-8").splitlines()
+        except OSError:
+            pass
+    return list(dict.fromkeys(u.strip() for u in urls if u.strip() and not u.lstrip().startswith("#")))
+
+
+def _client(settings, timeout, client):
+    return client or PageClient(settings, time.monotonic() + timeout)
+
+
+def _json(client, url):
+    r = client.raw(url, accept="application/json", max_bytes=2_000_000)
+    if r.status != 200:
+        raise ValueError(f"HTTP {r.status}")
+    return json.loads(r.body.decode("utf-8", "replace"))
 
 
 class SearXNGProvider(BaseProvider):
     name = "searxng"
 
-    def is_configured(self, settings) -> bool:
-        return bool(settings and getattr(settings, "searxng_url", None) and settings.searxng_url.strip())
+    def is_configured(self, settings):
+        return bool(settings.searxng_url.strip())
 
-    def discover(self, query: str, pq: ParsedQuery, settings, timeout: float = 3.0,
-                 log=None) -> Tuple[List[CandidateItem], List[str]]:
+    def discover(self, query, pq, settings, timeout=3.0, log=None, client=None):
         if not self.is_configured(settings):
             return [], []
-        endpoint = settings.searxng_url.rstrip("/") + "/search"
-        categories = "news" if pq.intent == "news" else (settings.searxng_categories or "general")
-        params = {
-            "q": query,
-            "format": "json",
-            "categories": categories,
-        }
-        url = endpoint + "?" + urllib.parse.urlencode(params)
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": settings.user_agent,
-                "Accept": "application/json",
-            }
-        )
-        candidates, errors = [], []
-        eff_timeout = min(timeout, getattr(settings, "searxng_timeout", timeout) or timeout)
+        params = {"q": query, "format": "json", "categories": "news" if pq.intent == "news" else settings.searxng_categories}
+        # These parameters are supported by the self-hosted SearXNG API. A week
+        # uses a wider upstream window; OwnSearch still enforces its exact dates.
+        if pq.lang:
+            params["language"] = pq.lang
+        if pq.freshness in ("day", "month", "year", "week"):
+            params["time_range"] = "month" if pq.freshness == "week" else pq.freshness
+        url = settings.searxng_url.rstrip("/") + "/search?" + urlencode(params)
         try:
-            with urllib.request.urlopen(req, timeout=eff_timeout) as resp:
-                data = json.loads(resp.read().decode("utf-8", "replace"))
-            for item in data.get("results", [])[:settings.discovery_max_urls]:
-                u = item.get("url")
-                if u and u.startswith(("http://", "https://")):
-                    candidates.append(CandidateItem(
-                        url=u,
-                        provider=self.name,
-                        title=item.get("title", ""),
-                        snippet=item.get("content", ""),
-                        published_at=item.get("publishedDate")
-                    ))
-        except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError, ValueError) as e:
-            err_msg = f"SearXNG ({settings.searxng_url}) request failed: {e}"
-            errors.append(err_msg)
-            if log:
-                log(f"[discover] {err_msg}")
-        return candidates, errors
+            client = _client(settings, min(timeout, settings.searxng_timeout), client)
+            data = _json(client, url)
+            errors = [f"SearXNG upstream {e[0]}: {e[1]}" for e in data.get("unresponsive_engines", [])
+                      if isinstance(e, (list, tuple)) and len(e) >= 2]
+            return [CandidateItem(i["url"], self.name, i.get("title", ""), i.get("content", ""),
+                                  parse_date(i.get("publishedDate")))
+                    for i in data.get("results", [])[:settings.discovery_max_urls] if i.get("url")], errors
+        except (OSError, ValueError) as e:
+            return [], [f"SearXNG request failed: {e}"]
+        except Exception as e:
+            return [], [f"SearXNG request failed: {e}"]
 
 
 class NewsFeedProvider(BaseProvider):
     name = "news_feeds"
 
-    def is_configured(self, settings) -> bool:
-        return bool(settings and getattr(settings, "news_feeds", None) and settings.news_feeds.strip())
+    def is_configured(self, settings):
+        return bool(feed_urls(settings))
 
-    def discover(self, query: str, pq: ParsedQuery, settings, timeout: float = 3.0,
-                 log=None) -> Tuple[List[CandidateItem], List[str]]:
-        if not self.is_configured(settings):
+    def discover(self, query, pq, settings, timeout=3.0, log=None, client=None):
+        if pq.intent != "news" or not self.is_configured(settings):
             return [], []
-        # News feeds should be queried for news intent, fresh intent, or general queries
-        if pq.intent not in ("news", "general") and not pq.fresh_intent:
+        client = _client(settings, timeout, client)
+        subjects = [set(analyze(n)) for e in pq.entities for n in e.names] or [set(pq.entity_terms)]
+        subjects = [s for s in subjects if s]
+        if not subjects:
             return [], []
-        feeds = [f.strip() for f in re.split(r"[,\n]+", settings.news_feeds) if f.strip()]
         candidates, errors = [], []
-        query_terms = {t.lower() for t in tokenize(query) if t.lower() not in STOPWORDS}
-
-        for feed_url in feeds[:5]:
-            req = urllib.request.Request(feed_url, headers={"User-Agent": settings.user_agent})
+        now = time.time()
+        for url in feed_urls(settings)[:8]:
+            if time.monotonic() >= client.deadline:
+                break
             try:
-                with urllib.request.urlopen(req, timeout=timeout) as resp:
-                    raw = resp.read()
-                parsed = parse_feed(raw, base_url=feed_url)
-                if not parsed or not parsed.get("entries"):
-                    continue
-                for entry in parsed["entries"][:30]:
-                    title = entry.get("title", "")
-                    summary = entry.get("summary", "")
-                    text_terms = {t.lower() for t in tokenize(title + " " + summary)}
-                    if query_terms & text_terms:
-                        u = entry.get("url")
-                        if u and u.startswith(("http://", "https://")):
-                            candidates.append(CandidateItem(
-                                url=u,
-                                provider=self.name,
-                                title=title,
-                                snippet=summary[:300],
-                                published_at=entry.get("published_at")
-                            ))
+                r = client.fetch(url, max_bytes=2_000_000)
+                if r.status != 200:
+                    raise ValueError(f"HTTP {r.status}")
+                parsed = parse_feed(r.body, base_url=url) or {}
+                for entry in parsed.get("entries", [])[:200]:
+                    text = set(analyze(entry.get("title", "") + " " + entry.get("summary", "")))
+                    ts = iso_to_ts(entry.get("published_at"))
+                    # A shared generic word must never admit an unrelated feed entry.
+                    if not any(s <= text for s in subjects) or ts is None or ts > now + 300:
+                        continue
+                    if pq.after is not None and ts < pq.after or pq.before is not None and ts > pq.before:
+                        continue
+                    if entry.get("url"):
+                        candidates.append(CandidateItem(entry["url"], self.name, entry.get("title", ""),
+                                                        entry.get("summary", ""), entry.get("published_at"), url))
             except Exception as e:
-                err_msg = f"NewsFeed ({feed_url}) failed: {e}"
-                errors.append(err_msg)
-                if log:
-                    log(f"[discover] {err_msg}")
+                errors.append(f"NewsFeed ({url}) failed: {e}")
+        candidates.sort(key=lambda c: iso_to_ts(c.published_at) or 0, reverse=True)
         return candidates, errors
 
 
 class WikipediaProvider(BaseProvider):
     name = "wikipedia"
 
-    def is_configured(self, settings) -> bool:
-        return True
+    def is_configured(self, settings):
+        return settings.knowledge_enabled
 
-    def discover(self, query: str, pq: ParsedQuery, settings, timeout: float = 3.0,
-                 log=None) -> Tuple[List[CandidateItem], List[str]]:
-        # Strictly restrict Wikipedia to reference queries or explicit wikipedia queries (never news, financial, tech docs)
-        if pq.intent != "reference" and "wikipedia" not in query.lower():
+    def discover(self, query, pq, settings, timeout=3.0, log=None, client=None):
+        if pq.intent in ("news", "financial", "company"):
             return [], []
+        return [CandidateItem(e.wiki_url, self.name, e.label) for e in pq.entities if e.wiki_url], []
 
-        raw_words = _WORD.findall(query)
-        content = [w for w in raw_words if w.lower() not in GENERIC and len(w) > 1]
-        if not content:
-            return [], []
 
-        phrases = [" ".join(content[:4])]
-        if len(content) > 1:
-            phrases.append(" ".join(content[:2]))
-        candidates = []
-        seen = set()
-        for ph in phrases:
-            title = ph[:1].upper() + ph[1:]
-            key = title.lower()
-            if key not in seen:
-                seen.add(key)
-                u = "https://en.wikipedia.org/wiki/" + quote(title.replace(" ", "_"), safe="_()'-")
-                candidates.append(CandidateItem(url=u, provider=self.name, title=f"{title} - Wikipedia"))
-        return candidates[:2], []
+def _explicit_urls(query, pq):
+    urls = ["https://" + host + "/" for host in pq.sites]
+    for word in query.split():
+        value = word.strip('"\'(),')
+        parsed = urlparse(value if "://" in value else "https://" + value)
+        if parsed.hostname and "." in parsed.hostname and parsed.scheme in ("http", "https"):
+            urls.append(parsed.geturl())
+    return urls
+
+
+def _http_url(url):
+    normalized = normalize_url(url)
+    return normalized if normalized and urlparse(normalized).scheme in ("http", "https") else None
 
 
 class OfficialSiteProvider(BaseProvider):
     name = "official"
 
-    def is_configured(self, settings) -> bool:
-        return True
-
-    def discover(self, query: str, pq: ParsedQuery, settings, timeout: float = 3.0,
-                 log=None) -> Tuple[List[CandidateItem], List[str]]:
-        # Do not guess official domains for news queries
-        if pq.intent == "news":
+    def discover(self, query, pq, settings, timeout=3.0, log=None, client=None):
+        if pq.intent in ("news", "financial"):
             return [], []
-        candidates = []
-        # Explicit domains typed in query
-        for m in _DOMAIN.finditer(query):
-            candidates.append(CandidateItem(url=f"https://{m.group(1).lower()}/", provider=self.name))
+        roots = _explicit_urls(query, pq)
+        # Round-robin preserves sources for each linked entity, rather than
+        # letting one entity's many URL claims exhaust the entire crawl budget.
+        for i in range(max((len(e.urls) for e in pq.entities), default=0)):
+            roots.extend(e.urls[i] for e in pq.entities if i < len(e.urls))
+        roots = list(dict.fromkeys(_http_url(u) for u in roots if _http_url(u)))[:4]
+        client = _client(settings, timeout, client)
+        linked_terms = {t for e in pq.entities for t in analyze(e.span)}
+        terms = set(pq.entity_terms + pq.required + pq.intitle + pq.inurl) - linked_terms
+        candidates, errors = {}, []
+        model = get_model(settings.data_dir)
 
-        # Only guess official domain if query has company or tech docs intent
-        if pq.intent in ("company", "tech_docs"):
-            raw_words = _WORD.findall(query)
-            for w in raw_words:
-                if w[:1].isupper() and w.lower() not in GENERIC and w.isalnum() and 3 <= len(w) <= 20:
-                    candidates.append(CandidateItem(url=f"https://www.{w.lower()}.com/", provider=self.name))
-        return candidates[:2], []
+        def offer(url, anchor=""):
+            normalized = _http_url(url)
+            if normalized:
+                score = len(terms & set(analyze(unquote(normalized) + " " + anchor)))
+                words = " " + " ".join(tokenize(unquote(normalized) + " " + anchor)) + " "
+                host = "".join(tokenize(urlparse(normalized).hostname or ""))
+                score += sum(any(" " + " ".join(tokenize(name)) + " " in words or
+                                 (len("".join(tokenize(name))) >= 3 and "".join(tokenize(name)) in host)
+                                 for name in e.names) for e in pq.entities)
+                # Anchor phrasing supplies a generic intent signal. This ranks
+                # guides above incidental references without inspecting host names.
+                if anchor:
+                    affinity = model.classify(anchor)[1].get(pq.intent, 0)
+                    score += affinity if score or affinity >= 0.45 else 0
+                previous = candidates.get(normalized)
+                if previous is None or score > previous[0]:
+                    candidates[normalized] = (score, CandidateItem(normalized, self.name, anchor))
+
+        for root in roots:
+            if time.monotonic() >= client.deadline:
+                break
+            offer(root)
+            try:
+                r = client.fetch(root, max_bytes=2_000_000)
+                if r.status != 200:
+                    raise ValueError(f"HTTP {r.status}")
+                ext = extract(r.body, r.final_url, r.content_type, settings)
+                offer(root, ext.title)
+                host = urlparse(r.final_url).hostname
+                # Only follow links on the verified site. An unrelated outbound link is not official.
+                for url, anchor, nofollow in ext.links[:settings.discovery_sitemap_limit]:
+                    if not nofollow and urlparse(url).hostname == host:
+                        offer(url, anchor)
+                    elif not nofollow and pq.intent == "tech_docs" and model.classify(anchor)[1].get("tech_docs", 0) >= 0.45 and any(
+                            "".join(tokenize(name)) in "".join(tokenize(urlparse(url).hostname or ""))
+                            for e in pq.entities for name in e.names if len("".join(tokenize(name))) >= 3):
+                        # A docs link published by a verified site can establish
+                        # its external documentation host. Keep this walk bounded.
+                        normalized = _http_url(url)
+                        if normalized and normalized not in roots and len(roots) < 6:
+                            roots.insert(roots.index(root) + 1, normalized)
+                            offer(normalized, anchor)
+                origin = urlparse(r.final_url)._replace(path="", query="", fragment="").geturl()
+                maps = [(u, 0) for u in client.policy(r.final_url).sitemaps[:3]] or [(origin + "/sitemap.xml", 0)]
+                seen, examined = set(), 0
+                while maps and len(seen) < 2 and examined < settings.discovery_sitemap_limit and time.monotonic() < client.deadline:
+                    url, depth = maps.pop(0)
+                    if url in seen or depth > 2 or urlparse(url).hostname != host:
+                        continue
+                    seen.add(url)
+                    sr = client.fetch(url, max_bytes=2_000_000)
+                    if sr.status != 200:
+                        continue
+                    sm = extract(sr.body, sr.final_url, sr.content_type, settings)
+                    for loc, *_ in sm.sitemap_urls[:settings.discovery_sitemap_limit - examined]:
+                        examined += 1
+                        if urlparse(loc).hostname == host:
+                            offer(loc)
+                    maps.extend((u, depth + 1) for u, _ in sm.sitemaps[:3])
+            except Exception as e:
+                errors.append(f"Official site ({root}) failed: {e}")
+        ordered = sorted(candidates.values(), key=lambda x: (-x[0], len(x[1].url), x[1].url))
+        return [item for score, item in ordered if score or item.url in roots][:settings.discovery_max_urls], errors
 
 
 class FinancialProvider(BaseProvider):
     name = "financial"
 
-    def is_configured(self, settings) -> bool:
-        return bool(settings and getattr(settings, "financial_provider_url", None) and settings.financial_provider_url.strip())
+    def is_configured(self, settings):
+        return bool(settings.financial_provider_url.strip())
 
-    def discover(self, query: str, pq: ParsedQuery, settings, timeout: float = 3.0,
-                 log=None) -> Tuple[List[CandidateItem], List[str]]:
+    def discover(self, query, pq, settings, timeout=3.0, log=None, client=None):
         if not self.is_configured(settings) or pq.intent != "financial":
             return [], []
-        endpoint = settings.financial_provider_url.rstrip("/")
-        params = {"q": query}
-        url = endpoint + "?" + urllib.parse.urlencode(params)
-        req = urllib.request.Request(url, headers={"User-Agent": settings.user_agent})
-        candidates, errors = [], []
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                data = json.loads(resp.read().decode("utf-8", "replace"))
-            if isinstance(data, dict) and data.get("url"):
-                candidates.append(CandidateItem(
-                    url=data["url"],
-                    provider=self.name,
-                    title=data.get("title", ""),
-                    snippet=data.get("snippet", ""),
-                    published_at=data.get("timestamp")
-                ))
+            client = _client(settings, min(timeout, settings.financial_timeout), client)
+            data = _json(client, settings.financial_provider_url + "?" + urlencode({"q": query}))
+            return ([CandidateItem(data["url"], self.name, data.get("title", ""), data.get("snippet", ""),
+                                   parse_date(data.get("timestamp")))] if data.get("url") else []), []
         except Exception as e:
-            errors.append(f"Financial provider failed: {e}")
-        return candidates, errors
+            return [], [f"Financial provider failed: {e}"]
 
 
-def candidate_urls(query: str, max_urls: int = 6, intent: Optional[str] = None) -> List[str]:
-    """Compatibility helper returning a deduplicated list of candidate URLs."""
+def candidate_urls(query, max_urls=6, intent=None):
     pq = parse_query(query)
     if intent:
         pq.intent = intent
     items, _ = gather_candidates(None, query, pq, max_urls=max_urls)
-    return [item.url for item in items][:max_urls]
+    return [item.url for item in items]
 
 
-def gather_candidates(engine, query: str, pq: ParsedQuery, max_urls: int = 6,
-                      log=None) -> Tuple[List[CandidateItem], List[str]]:
-    """Query all configured providers based on query intent and return deduplicated candidates."""
+def gather_candidates(engine, query, pq, max_urls=6, log=None, client=None):
     from .config import Settings
-    settings = engine.settings if engine is not None else Settings()
-    timeout = getattr(settings, "discovery_timeout", 3.0) if settings else 3.0
-
-    providers: List[BaseProvider] = [
-        SearXNGProvider(),
-        NewsFeedProvider(),
-        FinancialProvider(),
-        WikipediaProvider(),
-        OfficialSiteProvider(),
-    ]
-
-    all_candidates: List[CandidateItem] = []
-    all_errors: List[str] = []
-
-    for prov in providers:
-        if not prov.is_configured(settings):
+    settings = engine.settings if engine else Settings()
+    client = _client(settings, settings.discovery_timeout, client)
+    items, errors = [], []
+    for provider in [SearXNGProvider(), NewsFeedProvider(), FinancialProvider(), OfficialSiteProvider(), WikipediaProvider()]:
+        if not provider.is_configured(settings) or time.monotonic() >= client.deadline:
             continue
-        try:
-            cands, errs = prov.discover(query, pq, settings, timeout=min(timeout, 3.0), log=log)
-            all_candidates.extend(cands)
-            all_errors.extend(errs)
-        except Exception as e:
-            all_errors.append(f"{prov.name} error: {e}")
+        cands, errs = provider.discover(query, pq, settings, timeout=max(0.01, client.deadline - time.monotonic()),
+                                       log=log, client=client)
+        items.extend(cands)
+        errors.extend(errs)
+    unique = {}
+    for item in items:
+        url = normalize_url(item.url)
+        if url and url.startswith(("http://", "https://")):
+            item.url = url
+            item.sources = [item.provider]
+            if url not in unique:
+                unique[url] = item
+            else:
+                prior = unique[url]
+                prior.sources = list(dict.fromkeys(prior.sources + item.sources))
+                if item.provider == "news_feeds" and item.published_at:
+                    prior.published_at = item.published_at
+                    prior.source_url = item.source_url
+                    prior.provider = item.provider
+                    prior.title = item.title or prior.title
+                    prior.snippet = item.snippet or prior.snippet
+                prior.title = prior.title or item.title
+                prior.snippet = prior.snippet or item.snippet
+    return list(unique.values())[:max_urls], errors
 
-    # Deduplicate by normalized URL
-    seen_urls = set()
-    deduped: List[CandidateItem] = []
-    for item in all_candidates:
-        u = normalize_url(item.url) or item.url
-        if u not in seen_urls:
-            seen_urls.add(u)
-            item.url = u
-            deduped.append(item)
-        if len(deduped) >= max_urls:
-            break
-    return deduped, all_errors
 
-
-def discover(engine, query: str, frontier=None, max_urls: int = 6, log=None) -> List[dict]:
-    """Fetch candidate pages for ``query`` now and index them.
-
-    Returns a list of dicts: ``[{"url", "result", "title", "doc_status", "provider"}]``.
-    """
-    from .crawler import Crawler
+def discover(engine, query, frontier=None, max_urls=None, log=None, pq=None, deadline=None):
     from .frontier import Frontier
-
+    from .pipeline import Processor
+    t0 = time.monotonic()
+    deadline = deadline or t0 + engine.settings.discovery_timeout
+    pq = pq or parse_query(query, data_dir=engine.root)
+    client = PageClient(engine.settings, deadline)
+    # Reserve time to fetch/index the selected pages. Finding URLs alone must
+    # not consume the entire query budget, leaving every candidate unfetched.
+    client.deadline = t0 + max(0, deadline - t0) * 0.6
+    items, errors = gather_candidates(engine, query, pq, max_urls=max_urls or engine.settings.discovery_max_urls,
+                                      log=log, client=client)
+    client.deadline = deadline
     frontier = frontier or Frontier(engine.settings)
-    crawler = Crawler(engine.settings, engine.store, frontier)
-    pq = parse_query(query)
-
-    items, errors = gather_candidates(engine, query, pq, max_urls=max_urls, log=log)
-    if not items:
-        # Record discovery run details
-        engine._last_discovery = {
-            "query": query,
-            "intent": pq.intent,
-            "candidates_found": 0,
-            "errors": errors,
-            "results": [],
-            "took_ms": 0.0,
-        }
-        return []
-
-    urls = [item.url for item in items]
-    frontier.add_seeds(urls, priority=8.0)
-
-    url_to_item = {item.url: item for item in items}
-    now = time.time()
+    processor = Processor(engine.settings, engine.store)
     results = []
-
-    def one(url: str) -> dict:
-        item = url_to_item.get(url)
-        prov_name = item.provider if item else "unknown"
+    # The publisher's feed is itself evidence for a headline. Store it even if
+    # the article cannot be fetched, and identify this shorter source explicitly.
+    for item in items:
+        existing = engine.store.get_by_url(item.url, with_text=False)
+        if item.provider == "news_feeds" and item.published_at and item.title and (
+                not existing or existing.get("source_type") == "news_feed"):
+            engine.store.upsert(item.url, item.title, item.snippet, source_type="news_feed",
+                                published_at=item.published_at,
+                                metadata={"publication_source": "news_feeds", "feed_url": item.source_url})
+    for item in items:
+        if time.monotonic() >= deadline:
+            errors.append("Discovery deadline reached; remaining pages were not fetched.")
+            break
         try:
-            # Check if recently fetched (cache/freshness guard to prevent redundant HTTP requests)
-            existing = engine.store.get_by_url(url)
-            if existing and existing.get("active") and existing.get("fetched_at"):
-                # If fetched within the last 15 minutes, don't re-download
-                from .util import iso_to_ts
-                fetched_ts = iso_to_ts(existing["fetched_at"]) or 0
-                if now - fetched_ts < 900:
-                    return {
-                        "url": url,
-                        "result": "cached",
-                        "title": existing.get("title"),
-                        "doc_status": "unchanged",
-                        "provider": prov_name,
-                    }
-
-            policy = crawler.robots_for(url)
-            if not policy.allowed(url):
-                return {"url": url, "result": "disallowed", "provider": prov_name}
-
-            res = crawler.fetcher.fetch(url, allow=lambda u: crawler.robots_for(u).allowed(u), retries=0)
-            if not 200 <= res.status < 300:
-                frontier.complete(url, {"result": "gone" if res.status in (404, 410) else "failed",
-                                        "status": res.status})
-                return {"url": url, "result": f"http {res.status}", "provider": prov_name}
-
-            out = crawler.processor.process(url, res.final_url, res.status, res.headers, res.body)
-            # If the provider provided verified publication date and processor did not extract one, attach it
-            if item and item.published_at and not out.get("published_at"):
-                out["published_at"] = item.published_at
-
-            frontier.complete(url, out)
-            return {
-                "url": res.final_url,
-                "result": out.get("result"),
-                "title": out.get("title"),
-                "doc_status": out.get("doc_status"),
-                "provider": prov_name,
-            }
+            existing = engine.store.get_by_url(item.url)
+            if existing and existing.get("active") and existing.get("source_type") != "news_feed" and time.time() - (iso_to_ts(existing.get("fetched_at")) or 0) < 900:
+                out = {"result": "cached", "doc_status": "unchanged", "title": existing["title"]}
+            else:
+                r = client.fetch(item.url)
+                if not 200 <= r.status < 300:
+                    raise ValueError(f"HTTP {r.status}")
+                out = processor.process(item.url, r.final_url, r.status, r.headers, r.body, enqueue=False,
+                                        published_at=item.published_at, publication_source=item.provider,
+                                        source_type="reference" if item.provider == "wikipedia" else None)
+                if out.get("result") == "ok":
+                    frontier.enqueue_many([{"url": r.final_url, "priority": 8.0, "source": "discovery", "depth": 0}])
+            results.append({"url": item.url, "provider": item.provider, "sources": item.sources or [item.provider],
+                            **{k: out[k] for k in ("result", "doc_status", "title") if k in out}})
         except Exception as e:
-            return {"url": url, "result": f"error: {e}"[:200], "provider": prov_name}
-
-    t0 = time.perf_counter()
-    with ThreadPoolExecutor(max_workers=min(6, len(urls))) as pool:
-        for fut in as_completed([pool.submit(one, u) for u in urls]):
-            r = fut.result()
-            results.append(r)
-            if log:
-                log(f"[discover] {r.get('provider', '')} {r['result']:10} {r['url']}")
-
-    if any(r["result"] == "ok" for r in results):
-        engine.rebuild_index()
-
-    discovery_took_ms = round((time.perf_counter() - t0) * 1000, 2)
-    engine._last_discovery = {
-        "query": query,
-        "intent": pq.intent,
-        "candidates_found": len(items),
-        "errors": errors,
-        "results": results,
-        "took_ms": discovery_took_ms,
-    }
+            errors.append(f"{item.provider} ({item.url}): {e}")
+            results.append({"url": item.url, "provider": item.provider, "result": f"error: {e}"[:200]})
+    engine.rebuild_index()
+    engine._last_discovery = {"query": query, "intent": pq.intent, "candidates_found": len(items),
+                              "errors": errors, "results": results, "requests": client.requests,
+                              "took_ms": round((time.monotonic() - t0) * 1000, 2)}
     return results

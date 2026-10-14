@@ -1,0 +1,12 @@
+{
+  "documents": [
+    {"url":"https://docs.example.org/library/asyncio", "title":"Python asyncio reference", "text":"Python asyncio supports cooperative coroutines, tasks and asynchronous event loops.", "lang":"en", "published_at":"2026-10-02T12:00:00+00:00"},
+    {"url":"https://docs.example.org/tutorial/lists", "title":"Python list comprehension tutorial", "text":"A list comprehension builds a new list by evaluating an expression for each item in Python.", "published_at":"2025-01-01T12:00:00+00:00"},
+    {"url":"https://guide.example.net/packaging", "title":"Python packaging guide", "text":"Python packaging uses metadata, wheels and source archives to distribute reusable packages."},
+    {"url":"https://files.example.net/tutorial.pdf", "title":"Python PDF tutorial", "text":"Learn Python functions, classes, loops and dictionaries in this printable tutorial.", "source_type":"pdf"},
+    {"url":"https://web.example.net/javascript", "title":"JavaScript language reference", "text":"JavaScript uses objects, promises and browser events to build interactive applications."},
+    {"url":"https://news.example.net/world", "title":"India election news", "text":"India election results were announced by the commission after the latest round of voting.", "published_at":"2026-10-13T12:00:00+00:00"},
+    {"url":"https://guide.example.net/gardens", "title":"Growing tomatoes", "text":"Tomatoes need warm soil and regular watering. Choose a sunny spot in your garden."},
+    {"url":"https://docs.example.org/asyncio-errors", "title":"Python asyncio exceptions", "text":"Python asyncio raises cancellation exceptions when a task is interrupted.", "published_at":"2024-01-01T12:00:00+00:00"}
+  ]
+}

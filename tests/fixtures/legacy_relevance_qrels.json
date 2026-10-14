@@ -1,0 +1,307 @@
+{
+  "queries": [
+    {
+      "query": "Python requests documentation",
+      "judgments": {
+        "https://pypi.org/project/requests/": 3,
+        "https://en.wikipedia.org/wiki/Python_requests": 2
+      }
+    },
+    {
+      "query": "Python requests timeout parameter documentation",
+      "judgments": {
+        "https://pypi.org/project/requests/": 3,
+        "https://en.wikipedia.org/wiki/Python_requests": 2
+      }
+    },
+    {
+      "query": "Python typing protocol spec",
+      "judgments": {
+        "https://typing.python.org/en/latest/spec/protocol.html": 3
+      }
+    },
+    {
+      "query": "Python typing dataclasses spec",
+      "judgments": {
+        "https://typing.python.org/en/latest/spec/dataclasses.html": 3
+      }
+    },
+    {
+      "query": "Typing Python Libraries guide",
+      "judgments": {
+        "https://typing.python.org/en/latest/guides/libraries.html": 3
+      }
+    },
+    {
+      "query": "Python packaging install virtual environment pip",
+      "judgments": {
+        "https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/": 3
+      }
+    },
+    {
+      "query": "PEP 846 Docstrings for Type Aliases",
+      "judgments": {
+        "https://peps.python.org/pep-0846/": 3
+      }
+    },
+    {
+      "query": "PEP 649 Deferred Evaluation Of Annotations",
+      "judgments": {
+        "https://peps.python.org/pep-0649/": 3
+      }
+    },
+    {
+      "query": "PEP 505 None-aware operators",
+      "judgments": {
+        "https://peps.python.org/pep-0505/": 3
+      }
+    },
+    {
+      "query": "PEP 671 Syntax for late-bound function argument defaults",
+      "judgments": {
+        "https://peps.python.org/pep-0671/": 3
+      }
+    },
+    {
+      "query": "PEP 823 None-aware access operators",
+      "judgments": {
+        "https://peps.python.org/pep-0823/": 3
+      }
+    },
+    {
+      "query": "PEP 824 None-coalescing operators",
+      "judgments": {
+        "https://peps.python.org/pep-0824/": 3
+      }
+    },
+    {
+      "query": "Python Developer Guide",
+      "judgments": {
+        "https://devguide.python.org/": 3
+      }
+    },
+    {
+      "query": "Python Developer Guide quick reference",
+      "judgments": {
+        "https://devguide.python.org/getting-started/quick-reference/": 3
+      }
+    },
+    {
+      "query": "Python Developer Guide pull request lifecycle",
+      "judgments": {
+        "https://devguide.python.org/getting-started/pull-request-lifecycle/": 3
+      }
+    },
+    {
+      "query": "Python Packaging User Guide",
+      "judgments": {
+        "https://packaging.python.org/en/latest/": 3
+      }
+    },
+    {
+      "query": "Contribute to Python Packaging guide",
+      "judgments": {
+        "https://packaging.python.org/en/latest/contribute/": 3
+      }
+    },
+    {
+      "query": "Python packaging glossary",
+      "judgments": {
+        "https://packaging.python.org/en/latest/glossary/": 3
+      }
+    },
+    {
+      "query": "Python Language Summit 2026 Memory Buffer Protocol",
+      "judgments": {
+        "https://blog.python.org/2026/09/language-summit-2026-memory-buffer-protocol/": 3
+      }
+    },
+    {
+      "query": "Python 3.12.14 release announcement",
+      "judgments": {
+        "https://blog.python.org/2026/08/python-31214-31116-31021/": 3
+      }
+    },
+    {
+      "query": "Accepting pull requests python core devguide",
+      "judgments": {
+        "https://devguide.python.org/core-team/committing/": 3
+      }
+    },
+    {
+      "query": "Python Wiki documentation page",
+      "judgments": {
+        "https://wiki.python.org/python/Documentation.html": 3
+      }
+    },
+    {
+      "query": "Python Software Foundation CVE Numbering Authority",
+      "judgments": {
+        "https://policies.python.org/python.org/CVE-Numbering-Authority/": 3
+      }
+    },
+    {
+      "query": "SSDF Request Response Python Software Foundation",
+      "judgments": {
+        "https://policies.python.org/reference/SSDF-Request-Response/": 3
+      }
+    },
+    {
+      "query": "What is Nvidia?",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Nvidia": 3,
+        "https://www.nvidia.com/en-in/": 2
+      }
+    },
+    {
+      "query": "What is Python requests?",
+      "judgments": {
+        "https://pypi.org/project/requests/": 3,
+        "https://en.wikipedia.org/wiki/Python_requests": 3
+      }
+    },
+    {
+      "query": "Who is Narendra Modi?",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Narendra_modi": 3
+      }
+    },
+    {
+      "query": "World Leader in Artificial Intelligence Computing NVIDIA",
+      "judgments": {
+        "https://www.nvidia.com/en-in/": 3
+      }
+    },
+    {
+      "query": "Nvidia Corporation Wikipedia",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Nvidia": 3
+      }
+    },
+    {
+      "query": "Static Typing with Python documentation",
+      "judgments": {
+        "https://typing.python.org/en/latest/": 3
+      }
+    },
+    {
+      "query": "Nvidia current stock price",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Nvidia": 2
+      }
+    },
+    {
+      "query": "Nvidia current stock price",
+      "params": {
+        "freshness": "week"
+      },
+      "judgments": {}
+    },
+    {
+      "query": "Narendra Modi news today",
+      "params": {
+        "freshness": "week"
+      },
+      "judgments": {}
+    },
+    {
+      "query": "Narendra Modi news today",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Narendra_modi": 1
+      }
+    },
+    {
+      "query": "Python job board computational fluid dynamics",
+      "judgments": {
+        "https://legacy.python.org/community/jobs/": 3
+      }
+    },
+    {
+      "query": "Python typing lambda guide",
+      "judgments": {
+        "https://typing.python.org/en/latest/guides/lambda.html": 3
+      }
+    },
+    {
+      "query": "\"Docstrings for Type Aliases\"",
+      "judgments": {
+        "https://peps.python.org/pep-0846/": 3
+      }
+    },
+    {
+      "query": "\"Deferred Evaluation Of Annotations\"",
+      "judgments": {
+        "https://peps.python.org/pep-0649/": 3
+      }
+    },
+    {
+      "query": "\"None-aware operators\"",
+      "judgments": {
+        "https://peps.python.org/pep-0505/": 3
+      }
+    },
+    {
+      "query": "\"Memory Buffer Protocol\"",
+      "judgments": {
+        "https://blog.python.org/2026/09/language-summit-2026-memory-buffer-protocol/": 3
+      }
+    },
+    {
+      "query": "\"Installing Requests\"",
+      "judgments": {
+        "https://pypi.org/project/requests/": 3
+      }
+    },
+    {
+      "query": "requests site:pypi.org",
+      "judgments": {
+        "https://pypi.org/project/requests/": 3
+      }
+    },
+    {
+      "query": "Type Aliases site:peps.python.org",
+      "judgments": {
+        "https://peps.python.org/pep-0846/": 3
+      }
+    },
+    {
+      "query": "Virtual environments site:packaging.python.org",
+      "judgments": {
+        "https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/": 3
+      }
+    },
+    {
+      "query": "Protocols site:typing.python.org",
+      "judgments": {
+        "https://typing.python.org/en/latest/spec/protocol.html": 3
+      }
+    },
+    {
+      "query": "Nvidia site:wikipedia.org",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Nvidia": 3
+      }
+    },
+    {
+      "query": "Narendra quantum computing robotics",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Narendra_modi": 1
+      }
+    },
+    {
+      "query": "Superconducting dark matter telescope unindexed",
+      "judgments": {}
+    },
+    {
+      "query": "Hypothetical nonexistent biology entity xyz",
+      "judgments": {}
+    },
+    {
+      "query": "Narendra",
+      "judgments": {
+        "https://en.wikipedia.org/wiki/Narendra_modi": 2,
+        "https://en.wikipedia.org/wiki/Narendra": 2
+      }
+    }
+  ]
+}

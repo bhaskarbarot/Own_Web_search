@@ -1,0 +1,12 @@
+{"query":"python asyncio", "expected_urls":["https://docs.example.org/library/asyncio","https://docs.example.org/asyncio-errors"]}
+{"query":"\"list comprehension\" site:docs.example.org", "expected_urls":["https://docs.example.org/tutorial/lists"]}
+{"query":"site:docs.example.org asyncio", "expected_urls":["https://docs.example.org/library/asyncio","https://docs.example.org/asyncio-errors"]}
+{"query":"python -packaging", "forbidden_urls":["https://guide.example.net/packaging"], "min_results":1}
+{"query":"intitle:asyncio python", "expected_urls":["https://docs.example.org/library/asyncio","https://docs.example.org/asyncio-errors"]}
+{"query":"filetype:pdf python tutorial", "expected_urls":["https://files.example.net/tutorial.pdf"]}
+{"query":"after:2026-10-01 python", "expected_urls":["https://docs.example.org/library/asyncio"]}
+{"query":"before:2026-01-01 python", "expected_urls":["https://docs.example.org/tutorial/lists","https://docs.example.org/asyncio-errors"]}
+{"query":"python OR javascript", "min_results":3}
+{"query":"lang:en asyncio", "expected_urls":["https://docs.example.org/library/asyncio"]}
+{"query":"\"list comprehension\" -site:docs.example.org", "expected_urls":[]}
+{"query":"unindexedzqtopic", "expected_urls":[]}

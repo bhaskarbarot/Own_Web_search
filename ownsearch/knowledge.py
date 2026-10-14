@@ -61,30 +61,38 @@ def _disk(settings):
         return _caches[key]
 
 
-def _get_json(fetcher, url, max_bytes=20_000_000, cache=None):
+def _get_json(fetcher, url, max_bytes=20_000_000, cache=None, deadline=None):
     if cache is not None:
         hit = cache.get(url)
         if hit is not None:
             return hit
-    with _net_lock:
+    remaining = None if deadline is None else max(0, deadline - time.monotonic())
+    acquired = _net_lock.acquire() if remaining is None else _net_lock.acquire(timeout=remaining)
+    if not acquired:
+        return None
+    try:
         now = time.time()
         if now < _state["blocked_until"]:
             return None                           # rate limited: degrade gracefully instead of hammering
         wait = MIN_INTERVAL - (now - _state["last"])
         if wait > 0:
+            if deadline is not None and time.monotonic() + wait >= deadline:
+                return None
             time.sleep(wait)
         try:
-            res = fetcher.fetch(url, accept="application/json", max_bytes=max_bytes, retries=1)
+            res = fetcher.fetch(url, accept="application/json", max_bytes=max_bytes, retries=0, deadline=deadline)
         except FetchError:
             return None
         finally:
             _state["last"] = time.time()
         if res.status == 429:
             try:
-                _state["blocked_until"] = time.time() + float(res.headers.get("retry-after") or 30)
+                _state["blocked_until"] = time.time() + float(res.headers.get("x-retry-after") or res.headers.get("retry-after") or 30)
             except ValueError:
                 _state["blocked_until"] = time.time() + 30
             return None
+    finally:
+        _net_lock.release()
     if res.status != 200:
         return None
     try:
@@ -133,18 +141,19 @@ class Entity:
 
 
 class Knowledge:
-    def __init__(self, settings):
+    def __init__(self, settings, deadline=None):
         self.settings = settings
+        self.deadline = deadline
         self.fetcher = Fetcher(settings)
         self._props_path = Path(settings.data_dir) / "wikidata_properties.json"
         self._props = None
         self.cache = _disk(settings)
 
     def _json(self, url, max_bytes=20_000_000):
-        return _get_json(self.fetcher, url, max_bytes, self.cache)
+        return _get_json(self.fetcher, url, max_bytes, self.cache, self.deadline)
 
     # ------------------------------------------------------------ lookups
-    def _wd_search(self, text, limit=7):
+    def _wd_search(self, text, limit=20):
         url = WIKIDATA_API + "?" + urlencode({"action": "wbsearchentities", "format": "json", "language": "en",
                                               "uselang": "en", "type": "item", "limit": limit, "search": text})
         return (self._json(url) or {}).get("search", [])
@@ -199,7 +208,7 @@ class Knowledge:
         return {p: self._props.get(p, {}) for p in pids}
 
     # ------------------------------------------------------------ entity linking
-    def link(self, words, context_words=(), max_entities=3):
+    def link(self, words, context_words=(), max_entities=3, load_claims=True, load_urls=True):
         """words: subject words of the query (original case, in order); context_words: all other content words."""
         words = [w for w in words if w and w.lower() not in STOPWORDS]
         if not words:
@@ -218,6 +227,8 @@ class Knowledge:
                     variants[s].append(st)
         wd, covered = [], set()
         for span, vs in variants.items():
+            if self.deadline is not None and time.monotonic() >= self.deadline:
+                break
             toks = set(span.lower().split())
             if toks <= covered:
                 continue                               # a longer span already matched these words exactly
@@ -226,8 +237,18 @@ class Knowledge:
                 wd.append((span, res))
                 if any((r.get("match") or {}).get("text", "").lower() in (span.lower(), v.lower()) for r in res):
                     covered |= toks
-                    break
+        # Inflection variants must still be checked when a surface form is itself
+        # an ambiguous name. Context, rather than the first label hit, decides.
         wp = self._wp_search(" ".join(words + list(context_words)))
+        context_qids = {qid for _, qid in wp}
+        if context_words:
+            wp += self._wp_search(" ".join(words))
+        # A stem is not generally a valid search word. Try inflection variants
+        # for plural surface forms while preserving the other subject words.
+        alternate = [stem(w.lower()) if w.lower().endswith("s") else w for w in words]
+        if alternate != words:
+            wp += self._wp_search(" ".join(alternate))
+        wp = list(dict.fromkeys(wp))
         wp_rank = {qid: i for i, (_title, qid) in enumerate(wp)}
         cand_spans = {}
         for span, results in wd:
@@ -240,11 +261,20 @@ class Knowledge:
                 prev = cand_spans.get(q)
                 if not prev or quality * len(span) > prev[1] * len(prev[0]):
                     cand_spans[q] = (span, quality)
-        for _title, qid in wp[:3]:
+        for _title, qid in wp:
             cand_spans.setdefault(qid, ("", 0.0))
         ents = self.entities(list(cand_spans))
         subj = {stem(w.lower()) for w in words}
         all_ctx = subj | {stem(w.lower()) for w in context_words if w.lower() not in STOPWORDS}
+        # Context search can name a related organization rather than the queried
+        # product. Use those data-provided names as additional disambiguation
+        # evidence when they occur in a candidate's own description or aliases.
+        context_names = []
+        for qid in context_qids:
+            record = ents.get(qid) or {}
+            names = [((record.get("labels") or {}).get("en") or {}).get("value", "")]
+            names += [a["value"] for a in (record.get("aliases") or {}).get("en", [])]
+            context_names.extend(_stems(n) for n in names if _stems(n))
         scored = []
         for qid, (span, quality) in cand_spans.items():
             e = ents.get(qid)
@@ -258,19 +288,25 @@ class Knowledge:
             agree = qid in wp_rank
             if not span:
                 # found only by the full-text lookup: its own name must be made of query words
-                label_stems = _stems(label)
+                matched_name = max([label] + aliases, key=lambda n: len(_stems(n) & subj) / max(1, len(_stems(n))))
+                label_stems = _stems(matched_name)
                 hit = label_stems & subj
-                if not hit or wp_rank[qid] > 2:
+                if not hit:
                     continue
                 span = " ".join(w for w in words if stem(w.lower()) in hit)
-                quality = 0.9 * len(hit) / len(label_stems)          # extra words in the name lower the match
+                quality = (0.9 if matched_name == label else 0.85) * len(hit) / len(label_stems)
+                if context_words and qid in context_qids:
+                    quality = (0.9 if matched_name == label else 0.85) * (0.5 + 0.5 * len(hit) / len(label_stems))
             span_stems = _stems(span)
             ctx = (all_ctx - span_stems) & _stems(desc + " " + " ".join(aliases) + " " + label)
+            related = any(name <= _stems(desc + " " + " ".join(aliases))
+                          for name in context_names if not name <= span_stems)
             specific = len(span.split()) >= 2 and quality >= 0.85    # exact multi-word name or alias
-            if not (ctx or agree or specific):
+            if not (ctx or agree or specific or related):
                 continue                                             # a lone word needs support from the query
             sitelinks = len(e.get("sitelinks") or {})
-            score = quality * (1 + 0.8 * len(ctx) + (1.0 if agree else 0.0)) + 0.25 * max(0, len(span.split()) - 1)
+            agreement = 1.0 if qid in context_qids else 0.25 if agree else 0.0
+            score = quality * (1 + 0.8 * (len(ctx) + int(related)) + agreement) + 0.25 * max(0, len(span.split()) - 1)
             score += 0.1 * math.log1p(sitelinks)
             ent = Entity(qid=qid, label=label, description=desc, aliases=aliases, span=span, score=score,
                          wiki_title=((e.get("sitelinks") or {}).get("enwiki") or {}).get("title"))
@@ -281,17 +317,33 @@ class Knowledge:
             toks = set(ent.span.lower().split()) if ent.span else set()
             if toks and toks & used:
                 continue                       # one entity per query span (best first)
-            if ent.score < 1.0:
+            if ent.score < 0.85:
                 continue
             chosen.append(ent)
             used |= toks
             if len(chosen) >= max_entities:
                 break
-        full = self.entities([c.qid for c in chosen], claims=True)
+        full = self.entities([c.qid for c in chosen], claims=True) if load_claims else {}
+        from .intent import get_model
+        model = get_model(self.settings.data_dir)
         for ent in chosen:
             ent.claims = (full.get(ent.qid) or {}).get("claims") or {}
             urls = []
-            for claims in ent.claims.values():
+            url_pids = [pid for pid, claims in ent.claims.items()
+                        if any((c.get("mainsnak") or {}).get("datatype") == "url" for c in claims)]
+            metadata = self._properties(url_pids) if load_urls else {}
+            ordered_pids = sorted(url_pids, key=lambda pid: max(
+                (2 * model.classify(name)[1].get("company", 0) + model.classify(name)[1].get("tech_docs", 0)
+                 for name in [metadata.get(pid, {}).get("label", "")] + metadata.get(pid, {}).get("aliases", [])),
+                default=0), reverse=True)
+            for pid in ordered_pids:
+                meta = metadata.get(pid, {})
+                property_names = [meta.get("label", "")] + meta.get("aliases", [])
+                affinity = max((model.classify(n)[1].get("company", 0) + model.classify(n)[1].get("tech_docs", 0)
+                                for n in property_names), default=0)
+                if load_urls and affinity < 0.45:
+                    continue
+                claims = ent.claims[pid]
                 for c in claims[:3]:
                     snak = c.get("mainsnak") or {}
                     if snak.get("datatype") == "url" and (snak.get("datavalue") or {}).get("value"):
@@ -348,6 +400,8 @@ class Knowledge:
     def _values(self, claims):
         claims = sorted((c for c in claims if c.get("rank") != "deprecated"),
                         key=lambda c: 0 if c.get("rank") == "preferred" else 1)
+        if any(c.get("rank") == "preferred" for c in claims):
+            claims = [c for c in claims if c.get("rank") == "preferred"]
         out, item_ids = [], []
         for c in claims[:4]:
             dv = (c.get("mainsnak") or {}).get("datavalue") or {}
@@ -386,7 +440,7 @@ class Knowledge:
         text = entity.label + (f" — {entity.description}" if entity.description else "")
         if extract:
             text += "\n" + extract
-        return {"type": "entity", "entity": entity.label, "text": text, "urls": entity.urls[:4],
+        return {"type": "entity", "entity": entity.label, "text": text, "verified_summary": bool(extract), "urls": entity.urls[:4],
                 "source": {"name": "Wikipedia / Wikidata", "url": entity.wiki_url or
                            f"https://www.wikidata.org/wiki/{entity.qid}"}}
 

@@ -1,0 +1,117 @@
+# Topic-free phrasing examples. {subject} is a slot, excluded from model features.
+news	{subject} news
+news	latest news about {subject}
+news	breaking news on {subject}
+news	today's {subject} headlines
+news	{subject} headlines today
+news	current events in {subject}
+news	show me the latest headlines about {subject}
+news	what happened today in {subject}
+news	what is happening with {subject} today
+news	recent updates on {subject}
+news	give me news on {subject}
+news	top stories from {subject} today
+news	{subject} announcements this week
+news	latest developments in {subject}
+news	{subject} news yesterday
+news	new reports on {subject}
+news	{subject} news this morning
+finance_quote	{subject} live price
+finance_quote	live quote for {subject}
+finance_quote	{subject} price right now
+finance_quote	current stock price of {subject}
+finance_quote	{subject} share price
+finance_quote	what is the share price of {subject}
+finance_quote	{subject} stock quote today
+finance_quote	what is {subject} trading at
+finance_quote	show me the current price of {subject} stock
+finance_quote	{subject} market cap
+finance_quote	how much is {subject} worth right now
+finance_quote	check the share price of {subject}
+finance_history	{subject} 6 month analysis
+finance_history	{subject} 3 month analysis
+finance_history	{subject} 12 month analysis
+finance_history	{subject} performance over the last year
+finance_history	show me {subject} share price history for 3 months
+finance_history	analyse {subject} stock for the past 6 months
+finance_history	{subject} share price trend last year
+finance_history	{subject} stock chart last 5 years
+finance_history	historical prices of {subject}
+finance_history	give me analysis of {subject} share price last 2 years
+finance_history	compare {subject} stock movement over the past quarter
+finance_history	list prices of {subject} over the past 6 months with analysis
+finance_history	{subject} returns over the last 12 months
+tech_docs	{subject} docs on {subject}
+tech_docs	{subject} docs for {subject}
+tech_docs	{subject} docs
+tech_docs	{subject} documentation
+tech_docs	{subject} library documentation
+tech_docs	how to set {subject} in {subject}
+tech_docs	how to install {subject} on {subject}
+tech_docs	{subject} tutorial
+tech_docs	how to connect {subject} to {subject}
+tech_docs	{subject} guide
+tech_docs	how to write {subject} in {subject}
+tech_docs	{subject} api reference
+tech_docs	{subject} examples
+tech_docs	{subject} explained
+tech_docs	how to configure {subject}
+tech_docs	find the docs for {subject}
+tech_docs	check the documentation and explain {subject}
+tech_docs	can you see the docs and say how to install {subject}
+reference	who is {subject}
+reference	what is {subject}
+reference	what is {subject}
+reference	what is {subject}
+reference	where was {subject} born
+reference	{subject} birthplace
+reference	birthplace of {subject}
+reference	find {subject} birthplace
+reference	when did {subject} end
+reference	who founded {subject}
+reference	capital of {subject}
+reference	population of {subject}
+reference	who was {subject}
+reference	history of {subject}
+reference	where is {subject} located
+reference	who wrote {subject}
+reference	what does {subject} stand for
+reference	meaning of {subject}
+reference	tell me about {subject}
+reference	which place was {subject} fought in
+company	official website of {subject}
+company	{subject} official website
+company	{subject} official site
+company	{subject} headquarters address
+company	careers at {subject}
+company	contact {subject} customer care
+company	about {subject} company
+company	{subject} customer support number
+company	where is the head office of {subject}
+general	best {subject} under 50000
+general	how to cook {subject}
+general	weather in {subject}
+general	cheap flights to {subject}
+general	tips for better {subject}
+general	good {subject} for beginners
+general	how to make {subject}
+general	places to visit in {subject}
+general	find cheap {subject} in {subject}
+general	show me some good {subject}
+finance_quote	show {subject} live price
+finance_quote	{subject} live stock price
+finance_quote	{subject} live share price
+tech_docs	build a {subject}
+tech_docs	build {subject}
+tech_docs	build with {subject}
+tech_docs	connect to {subject}
+tech_docs	connect with {subject}
+tech_docs	{subject} source code repository
+tech_docs	source repository of {subject}
+tech_docs	{subject} code repository
+tech_docs	official documentation of {subject}
+tech_docs	{subject} official docs
+news	{subject} headlines
+news	headlines about {subject}
+news	headlines for {subject}
+news	latest {subject} headlines

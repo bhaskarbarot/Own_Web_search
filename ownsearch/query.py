@@ -172,15 +172,16 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
                            for f in str(filetype).split(",") if f.strip())
     if lang:
         q.lang = str(lang).lower()[:2]
-    clean_raw = (raw or "").strip()
+    # Operators and exclusions are syntax, not evidence for the intent classifier.
+    clean_raw = " ".join(q.surface)
     label, probs = model.classify(clean_raw)
     q.intent_scores = probs
     if not probs or probs.get(label, 0) < MIN_INTENT_CONFIDENCE:
         label = "general"
     q.intent = MODEL_LABELS.get(label, label)
-    q.entity = [w for w in _words(clean_raw) if not model.is_query_language(w)]
+    q.entity = [w for w in _words(raw) if not model.is_query_language(w)]
     q.entity_terms = list(dict.fromkeys(stem(t) for w in q.entity for t in tokenize(w)))
-    q.context = [w for w in _words(clean_raw) if w not in q.entity]
+    q.context = [w for w in _words(raw) if w not in q.entity]
     subject = " ".join(q.entity)
     if q.intent == "financial":
         days = parse_duration(clean_raw)
@@ -192,6 +193,14 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
     else:
         q.intent_details = {"entity": subject} if subject else {}
     q.fresh_intent = q.intent in ("news", "financial") or bool(q.freshness)
+    if q.intent != "news" and not q.freshness and any(w not in STOPWORDS and model.is_query_language(w) and model.cue_strength(w, "news") >= 3
+                              for w in tokenize(clean_raw)):
+        q.fresh_intent = True
+        q.freshness = "recent"
+    if q.intent == "news" and not q.freshness and q.after is None:
+        # Match temporal grammar learned from examples; this is a rolling day/week window.
+        from .intent import temporal_window
+        q.freshness = temporal_window(clean_raw, model) or "week"
     if q.freshness in FRESHNESS_WINDOWS and not q.after:
         q.after = datetime.now(timezone.utc).timestamp() - FRESHNESS_WINDOWS[q.freshness]
     return q

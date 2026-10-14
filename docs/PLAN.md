@@ -9,6 +9,18 @@ Status 2026-10-13: v1.0 plus fixes pushed to GitHub `bhaskarbarot/Own_Web_search
 
 ---
 
+## Relevance refactor update — 2026-10-14
+
+Discovery, ranking, answers and CLI display have been migrated on
+`wip/data-driven-relevance`. Tests now use isolated indexes and disabled live
+services. Before/after URL and host measurements plus the six live query
+comparisons are saved in [RELEVANCE_REPORT.md](RELEVANCE_REPORT.md).
+
+The six queries return sourced output in the warmed acceptance run. An overall
+green flag remains withheld: MRR/host ranking do not all improve, cold-start
+coverage remains unproven, and market-window comparisons need matching timestamps.
+The remaining production phases below are unchanged.
+
 ## Phase A — Safety and reproducibility (P0)
 
 ### A1. Credentials (PM §3)

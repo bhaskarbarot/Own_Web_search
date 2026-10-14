@@ -19,6 +19,7 @@ from ownsearch.discover import (
     gather_candidates,
 )
 from ownsearch.engine import SearchEngine
+from ownsearch.knowledge import Entity
 from ownsearch.query import parse_query
 
 from tests.helpers import make_engine, test_settings
@@ -126,6 +127,7 @@ class QualityAndProviderTests(unittest.TestCase):
         self.assertEqual(q.intent, "reference")
 
         prov = WikipediaProvider()
+        q.entities = [Entity("Q182477", "Nvidia", wiki_title="Nvidia")]
         cands, _ = prov.discover("What is Nvidia?", q, self.e.settings)
         self.assertTrue(any("wikipedia.org/wiki/Nvidia" in c.url for c in cands))
 

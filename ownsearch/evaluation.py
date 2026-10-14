@@ -11,6 +11,7 @@ import math
 import random
 import time
 from collections import defaultdict
+from urllib.parse import urlparse
 
 from .ranking import DEFAULT_WEIGHTS, FEATURES, linear_score
 from .util import normalize_url
@@ -41,6 +42,8 @@ def _key(k):
     k = str(k).strip()
     if k.startswith("doc:"):
         return k
+    if k.startswith("host:"):
+        return "host:" + k[5:].lower().removeprefix("www.").strip("/")
     return normalize_url(k) or k
 
 
@@ -77,12 +80,23 @@ def precision(ranked_keys, judgments, k=10):
 def _keys_for(results):
     out = []
     for r in results:
-        out.append((_result_key(r), f"doc:{r['id']}"))
+        host = (urlparse(r["url"]).hostname or "").lower().removeprefix("www.")
+        out.append((_result_key(r), f"doc:{r['id']}", "host:" + host))
     return out
 
 
 def _match(keys, judgments):
-    return [k1 if k1 in judgments else k2 for k1, k2 in keys]
+    # Host judgments are matched on exact hosts; subdomains can be judged explicitly.
+    # Multiple pages from one host earn relevance only once in a host evaluation.
+    host_mode = any(k.startswith("host:") for k in judgments)
+    out, seen = [], set()
+    for url, doc, host in keys:
+        key = url if url in judgments else doc if doc in judgments else host if host_mode else doc
+        if host_mode and key in seen:
+            continue
+        seen.add(key)
+        out.append(key)
+    return out
 
 
 def run_queries(engine, qrels, depth=100, explain=False):

@@ -1,0 +1,307 @@
+{
+  "queries": [
+    {
+      "query": "Python requests documentation",
+      "judgments": {
+        "host:pypi.org": 3,
+        "host:en.wikipedia.org": 2
+      }
+    },
+    {
+      "query": "Python requests timeout parameter documentation",
+      "judgments": {
+        "host:pypi.org": 3,
+        "host:en.wikipedia.org": 2
+      }
+    },
+    {
+      "query": "Python typing protocol spec",
+      "judgments": {
+        "host:typing.python.org": 3
+      }
+    },
+    {
+      "query": "Python typing dataclasses spec",
+      "judgments": {
+        "host:typing.python.org": 3
+      }
+    },
+    {
+      "query": "Typing Python Libraries guide",
+      "judgments": {
+        "host:typing.python.org": 3
+      }
+    },
+    {
+      "query": "Python packaging install virtual environment pip",
+      "judgments": {
+        "host:packaging.python.org": 3
+      }
+    },
+    {
+      "query": "PEP 846 Docstrings for Type Aliases",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "PEP 649 Deferred Evaluation Of Annotations",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "PEP 505 None-aware operators",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "PEP 671 Syntax for late-bound function argument defaults",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "PEP 823 None-aware access operators",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "PEP 824 None-coalescing operators",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "Python Developer Guide",
+      "judgments": {
+        "host:devguide.python.org": 3
+      }
+    },
+    {
+      "query": "Python Developer Guide quick reference",
+      "judgments": {
+        "host:devguide.python.org": 3
+      }
+    },
+    {
+      "query": "Python Developer Guide pull request lifecycle",
+      "judgments": {
+        "host:devguide.python.org": 3
+      }
+    },
+    {
+      "query": "Python Packaging User Guide",
+      "judgments": {
+        "host:packaging.python.org": 3
+      }
+    },
+    {
+      "query": "Contribute to Python Packaging guide",
+      "judgments": {
+        "host:packaging.python.org": 3
+      }
+    },
+    {
+      "query": "Python packaging glossary",
+      "judgments": {
+        "host:packaging.python.org": 3
+      }
+    },
+    {
+      "query": "Python Language Summit 2026 Memory Buffer Protocol",
+      "judgments": {
+        "host:blog.python.org": 3
+      }
+    },
+    {
+      "query": "Python 3.12.14 release announcement",
+      "judgments": {
+        "host:blog.python.org": 3
+      }
+    },
+    {
+      "query": "Accepting pull requests python core devguide",
+      "judgments": {
+        "host:devguide.python.org": 3
+      }
+    },
+    {
+      "query": "Python Wiki documentation page",
+      "judgments": {
+        "host:wiki.python.org": 3
+      }
+    },
+    {
+      "query": "Python Software Foundation CVE Numbering Authority",
+      "judgments": {
+        "host:policies.python.org": 3
+      }
+    },
+    {
+      "query": "SSDF Request Response Python Software Foundation",
+      "judgments": {
+        "host:policies.python.org": 3
+      }
+    },
+    {
+      "query": "What is Nvidia?",
+      "judgments": {
+        "host:en.wikipedia.org": 3,
+        "host:nvidia.com": 2
+      }
+    },
+    {
+      "query": "What is Python requests?",
+      "judgments": {
+        "host:pypi.org": 3,
+        "host:en.wikipedia.org": 3
+      }
+    },
+    {
+      "query": "Who is Narendra Modi?",
+      "judgments": {
+        "host:en.wikipedia.org": 3
+      }
+    },
+    {
+      "query": "World Leader in Artificial Intelligence Computing NVIDIA",
+      "judgments": {
+        "host:nvidia.com": 3
+      }
+    },
+    {
+      "query": "Nvidia Corporation Wikipedia",
+      "judgments": {
+        "host:en.wikipedia.org": 3
+      }
+    },
+    {
+      "query": "Static Typing with Python documentation",
+      "judgments": {
+        "host:typing.python.org": 3
+      }
+    },
+    {
+      "query": "Nvidia current stock price",
+      "judgments": {
+        "host:en.wikipedia.org": 2
+      }
+    },
+    {
+      "query": "Nvidia current stock price",
+      "params": {
+        "freshness": "week"
+      },
+      "judgments": {}
+    },
+    {
+      "query": "Narendra Modi news today",
+      "params": {
+        "freshness": "week"
+      },
+      "judgments": {}
+    },
+    {
+      "query": "Narendra Modi news today",
+      "judgments": {
+        "host:en.wikipedia.org": 1
+      }
+    },
+    {
+      "query": "Python job board computational fluid dynamics",
+      "judgments": {
+        "host:legacy.python.org": 3
+      }
+    },
+    {
+      "query": "Python typing lambda guide",
+      "judgments": {
+        "host:typing.python.org": 3
+      }
+    },
+    {
+      "query": "\"Docstrings for Type Aliases\"",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "\"Deferred Evaluation Of Annotations\"",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "\"None-aware operators\"",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "\"Memory Buffer Protocol\"",
+      "judgments": {
+        "host:blog.python.org": 3
+      }
+    },
+    {
+      "query": "\"Installing Requests\"",
+      "judgments": {
+        "host:pypi.org": 3
+      }
+    },
+    {
+      "query": "requests site:pypi.org",
+      "judgments": {
+        "host:pypi.org": 3
+      }
+    },
+    {
+      "query": "Type Aliases site:peps.python.org",
+      "judgments": {
+        "host:peps.python.org": 3
+      }
+    },
+    {
+      "query": "Virtual environments site:packaging.python.org",
+      "judgments": {
+        "host:packaging.python.org": 3
+      }
+    },
+    {
+      "query": "Protocols site:typing.python.org",
+      "judgments": {
+        "host:typing.python.org": 3
+      }
+    },
+    {
+      "query": "Nvidia site:wikipedia.org",
+      "judgments": {
+        "host:en.wikipedia.org": 3
+      }
+    },
+    {
+      "query": "Narendra quantum computing robotics",
+      "judgments": {
+        "host:en.wikipedia.org": 1
+      }
+    },
+    {
+      "query": "Superconducting dark matter telescope unindexed",
+      "judgments": {}
+    },
+    {
+      "query": "Hypothetical nonexistent biology entity xyz",
+      "judgments": {}
+    },
+    {
+      "query": "Narendra",
+      "judgments": {
+        "host:en.wikipedia.org": 2
+      }
+    }
+  ],
+  "description": "Host projection of the original 50 query judgments, retained for source-level before/after comparison. Legacy judgments include dated and incorrect targets; this is not answer validation."
+}

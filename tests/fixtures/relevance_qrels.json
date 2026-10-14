@@ -1,0 +1,13 @@
+{"queries":[
+ {"query":"python asyncio", "judgments":{"https://docs.example.org/library/asyncio":3,"https://docs.example.org/asyncio-errors":2}},
+ {"query":"\"list comprehension\" site:docs.example.org", "judgments":{"https://docs.example.org/tutorial/lists":3}},
+ {"query":"site:docs.example.org asyncio", "judgments":{"https://docs.example.org/library/asyncio":3,"https://docs.example.org/asyncio-errors":2}},
+ {"query":"python -packaging", "judgments":{"https://docs.example.org/library/asyncio":3,"https://docs.example.org/tutorial/lists":3,"https://files.example.net/tutorial.pdf":3,"https://docs.example.org/asyncio-errors":3}},
+ {"query":"intitle:asyncio python", "judgments":{"https://docs.example.org/library/asyncio":3,"https://docs.example.org/asyncio-errors":2}},
+ {"query":"filetype:pdf python tutorial", "judgments":{"https://files.example.net/tutorial.pdf":3}},
+ {"query":"after:2026-10-01 python", "judgments":{"https://docs.example.org/library/asyncio":3}},
+ {"query":"before:2026-01-01 python", "judgments":{"https://docs.example.org/tutorial/lists":3,"https://docs.example.org/asyncio-errors":3}},
+ {"query":"python OR javascript", "judgments":{"https://docs.example.org/library/asyncio":3,"https://docs.example.org/asyncio-errors":3,"https://docs.example.org/tutorial/lists":3,"https://guide.example.net/packaging":3,"https://files.example.net/tutorial.pdf":3,"https://web.example.net/javascript":3}},
+ {"query":"India election", "judgments":{"https://news.example.net/world":3}},
+ {"query":"growing tomatoes", "judgments":{"host:guide.example.net":3}}
+]}

@@ -25,6 +25,16 @@ def _pretty(res):
           f"{cov.get('matched_documents', 0)} matches in {cov.get('index_documents', 0)} docs, mode={cov.get('mode')})")
     if cov.get("message"):
         print(f"  note: {cov['message']}")
+    answer = res.get("answer")
+    if answer:
+        print(f"\n  {answer.get('text', '')}")
+        source = answer.get("source", {})
+        if source.get("url"):
+            print(f"  Source: {source.get('name', '')} — {source['url']}")
+        if answer.get("disclaimer"):
+            print(f"  {answer['disclaimer']}")
+    for error in res.get("provider_errors", []):
+        print(f"  provider: {error}")
     found = [d for d in res.get("live_discovery", []) if d["result"] == "ok"]
     new = [d for d in found if d.get("doc_status") in ("new", "updated")]
     if found:

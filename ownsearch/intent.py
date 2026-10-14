@@ -1,6 +1,6 @@
 """Query-intent classifier learned from data (multinomial naive Bayes over word unigrams and bigrams).
 
-Training data lives in ``resources/intent_examples.tsv`` plus ``<data_dir>/intent_examples.tsv`` (examples
+Training data lives in ``resources/intent_templates.tsv`` plus ``<data_dir>/intent_examples.tsv`` (examples
 learned later, e.g. from agent feedback). Nothing about specific topics is written in code.
 
 The same statistics separate *query-language* words from *subject* words: a word that appears in many
@@ -16,7 +16,7 @@ from pathlib import Path
 
 from .textproc import stem, tokenize
 
-RESOURCE = Path(__file__).with_name("resources") / "intent_examples.tsv"
+RESOURCE = Path(__file__).with_name("resources") / "intent_templates.tsv"
 _models = {}
 _lock = threading.Lock()
 
@@ -34,7 +34,7 @@ def _read(path):
                 if not line.strip() or line.startswith("#") or "\t" not in line:
                     continue
                 label, text = line.rstrip("\n").split("\t", 1)
-                out.append((label.strip(), text.strip()))
+                out.append((label.strip(), text.replace("{subject}", "").strip()))
     except OSError:
         pass
     return out
@@ -115,3 +115,15 @@ def learn(data_dir, label, text):
     path = Path(data_dir) / "intent_examples.tsv"
     with open(path, "a", encoding="utf-8") as f:
         f.write(f"{label}\t{' '.join(text.split())}\n")
+
+
+def temporal_window(text, model):
+    """Date grammar from a resource, applied only to learned query-language words."""
+    path = Path(__file__).with_name("resources") / "temporal_phrasing.tsv"
+    rules = _read(path)
+    words = set(tokenize(text))
+    for window, phrase in rules:
+        tokens = set(tokenize(phrase))
+        if tokens <= words and all(model.is_query_language(w) for w in tokens):
+            return window
+    return None

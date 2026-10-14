@@ -1,47 +1,25 @@
-"""Automated Search Quality Evaluation and Benchmark Suite.
-
-Evaluates 50 representative queries covering:
-- News (with and without freshness)
-- Financial queries (with and without freshness)
-- Technical documentation (entity-specific, parameters, guides)
-- Reference / Encyclopedic queries
-- Navigational queries
-- Exact phrase queries
-- Scoped site queries
-- Partial match and unindexed edge queries
-
-Measures:
-- NDCG@10, P@5, P@10, Recall@10, Recall@100, MRR@10
-- Zero-result rate
-- Latency percentiles (p50, p95, p99)
-"""
-import os
+"""Reproducible offline ranking benchmark; never depends on the developer's index."""
+import json
 import unittest
-from ownsearch.engine import SearchEngine
+from pathlib import Path
+
 from ownsearch.evaluation import evaluate, load_qrels
+from tests.helpers import make_engine
 
 
 class BenchmarkEvaluationTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.engine = SearchEngine()
-        cls.eval_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "eval_50_queries.json")
-
-    def test_50_query_quality_metrics(self):
-        self.assertTrue(os.path.exists(self.eval_path), "Benchmark dataset eval_50_queries.json must exist")
-        qrels = load_qrels(self.eval_path)
-        self.assertGreaterEqual(len(qrels), 50, "Evaluation dataset must contain at least 50 queries")
-
-        report = evaluate(self.engine, qrels)
-        summary = report["summary"]
-
-        # Quality assertions
-        self.assertGreaterEqual(summary["ndcg@10"], 0.70, f"NDCG@10 {summary['ndcg@10']} below threshold 0.70")
-        self.assertGreaterEqual(summary["mrr@10"], 0.70, f"MRR@10 {summary['mrr@10']} below threshold 0.70")
-        self.assertGreaterEqual(summary["recall@10"], 0.75, f"Recall@10 {summary['recall@10']} below threshold 0.75")
-
-        # Latency assertions (local search p50 must be under 200ms)
-        self.assertLess(summary["latency_p50_ms"], 200.0, f"Latency p50 {summary['latency_p50_ms']}ms exceeds 200ms")
+    def test_quality_metrics_on_versioned_corpus(self):
+        engine, _ = make_engine()
+        corpus = json.loads(Path(__file__).with_name("fixtures").joinpath("relevance_corpus.json").read_text())
+        for doc in corpus["documents"]:
+            engine.store.upsert(**doc)
+        engine.rebuild_index()
+        qrels = load_qrels(Path(__file__).with_name("fixtures") / "relevance_qrels.json")
+        report = evaluate(engine, qrels)
+        self.assertGreaterEqual(report["summary"]["ndcg@10"], 0.90)
+        self.assertGreaterEqual(report["summary"]["mrr@10"], 0.90)
+        self.assertGreaterEqual(report["summary"]["recall@10"], 0.90)
+        self.assertLess(report["summary"]["latency_p50_ms"], 200)
 
 
 if __name__ == "__main__":

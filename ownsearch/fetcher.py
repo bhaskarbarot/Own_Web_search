@@ -173,11 +173,15 @@ class Fetcher:
         return (v4 or addrs)[0]
 
     # ------------------------------------------------------------ requests
-    def _request_once(self, url, headers, max_bytes, method="GET"):
+    def _request_once(self, url, headers, max_bytes, method="GET", deadline=None):
         p = self.check_url(url)
         port = p.port or (443 if p.scheme == "https" else 80)
         ip = self.resolve(p.hostname, port)
         timeout = self.settings.fetch_timeout
+        if deadline is not None:
+            timeout = min(timeout, deadline - time.monotonic())
+            if timeout <= 0:
+                raise FetchError("Request budget exhausted", "timeout")
         if p.scheme == "https":
             conn = _PinnedHTTPSConnection(p.hostname, port, ip, timeout, self.context)
         else:
@@ -197,6 +201,12 @@ class Fetcher:
                 if declared.isdigit() and int(declared) > max_bytes * 4:
                     raise FetchError(f"Declared body too large ({declared} bytes)", "too_large")
                 while True:
+                    if deadline is not None:
+                        remaining = deadline - time.monotonic()
+                        if remaining <= 0:
+                            raise FetchError("Request budget exhausted", "timeout")
+                        if conn.sock:
+                            conn.sock.settimeout(min(timeout, remaining))
                     chunk = resp.read(min(65536, max_bytes + 1 - size))
                     if not chunk:
                         break
@@ -221,7 +231,7 @@ class Fetcher:
             conn.close()
 
     def fetch(self, url, *, etag=None, last_modified=None, max_bytes=None, accept=None,
-              allow=None, extra_headers=None, retries=None, method="GET"):
+              allow=None, extra_headers=None, retries=None, method="GET", deadline=None, before_request=None):
         """GET a URL safely. ``allow(url) -> bool`` vetoes redirect hops (robots.txt)."""
         max_bytes = int(max_bytes or self.settings.max_page_bytes)
         retries = self.settings.fetch_retries if retries is None else retries
@@ -248,12 +258,19 @@ class Fetcher:
             attempt = 0
             while True:
                 try:
-                    status, hdrs, body, truncated = self._request_once(current, headers, max_bytes, method)
+                    if deadline is not None and time.monotonic() >= deadline:
+                        raise FetchError("Request budget exhausted", "timeout")
+                    if before_request is not None:
+                        before_request(current)
+                    status, hdrs, body, truncated = self._request_once(current, headers, max_bytes, method, deadline)
                     break
                 except FetchError as e:
                     if e.transient and attempt < retries:
                         attempt += 1
-                        time.sleep(min(8.0, 0.75 * 2 ** attempt))
+                        delay = min(8.0, 0.75 * 2 ** attempt)
+                        if deadline is not None and time.monotonic() + delay >= deadline:
+                            raise
+                        time.sleep(delay)
                         continue
                     raise
             if status in REDIRECT_CODES and hdrs.get("location"):

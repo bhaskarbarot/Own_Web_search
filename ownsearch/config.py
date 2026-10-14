@@ -78,8 +78,13 @@ class Settings:
     brave_api_key: str = ""             # optional Brave Search API key
     brave_timeout: float = 3.0
     news_feeds: str = ""                # comma/newline-separated list of RSS/Atom feed URLs
-    discovery_timeout: float = 5.0      # max seconds spent on live discovery
+    discovery_timeout: float = 20.0     # shared budget for live linking, answers and page discovery
     discovery_max_urls: int = 6
+    discovery_max_requests: int = 24    # includes robots, sitemaps and focused links
+    discovery_sitemap_limit: int = 500
+    discovery_cache_ttl: float = 900.0
+    relevance_score_ratio: float = 0.30
+    knowledge_enabled: bool = True
     financial_provider_url: str = ""    # optional live financial quote endpoint
     financial_timeout: float = 3.0
     # Market data source (free, public). Templates: {q} search text, {symbol}, {period1}/{period2} unix seconds,
@@ -90,7 +95,7 @@ class Settings:
     market_quote_page: str = "https://finance.yahoo.com/quote/{symbol}"
     market_source_name: str = "Yahoo Finance public chart feed"
     # News feeds: file with one RSS/Atom URL per line (default: the bundled resources/news_feeds.txt)
-    news_feeds_file: str = ""
+    news_feeds_file: str = str(Path(__file__).with_name("resources") / "news_feeds.txt")
 
     @classmethod
     def load(cls, data_dir=None, **overrides):

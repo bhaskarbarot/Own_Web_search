@@ -1,0 +1,5 @@
+# RSS/Atom sources. Replace this file through news_feeds_file; add URLs via news_feeds.
+https://feeds.bbci.co.uk/news/world/rss.xml
+https://www.theguardian.com/world/rss
+https://www.thehindu.com/news/national/feeder/default.rss
+https://indianexpress.com/section/india/feed/

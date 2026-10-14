@@ -1,0 +1,11 @@
+{
+ "description":"Host judgments for the six acceptance queries. These assess sources, not the correctness of a direct answer. A separate live review must verify answers and dates.",
+ "queries":[
+  {"query":"Nvidia live price","judgments":{"host:finance.yahoo.com":3,"host:nasdaq.com":3}},
+  {"query":"today's Trump headlines","judgments":{"host:reuters.com":3,"host:apnews.com":3,"host:bbc.com":2,"host:theguardian.com":2}},
+  {"query":"Samrat Ashok birthplace","judgments":{"host:en.wikipedia.org":2,"host:wikidata.org":2}},
+  {"query":"TCS 6-month analysis","judgments":{"host:finance.yahoo.com":3,"host:nseindia.com":3,"host:bseindia.com":3}},
+  {"query":"inheritance in OOPS","judgments":{"host:docs.oracle.com":3,"host:learn.microsoft.com":3,"host:en.wikipedia.org":2}},
+  {"query":"Claude docs on MCP","judgments":{"host:docs.claude.com":3,"host:platform.claude.com":3,"host:modelcontextprotocol.io":3,"host:docs.anthropic.com":3}}
+ ]
+}

@@ -28,7 +28,7 @@ class Processor:
         self.settings, self.store, self.frontier = settings, store, frontier
 
     def process(self, url, final_url, status, headers, body, *, depth=0, fetched_at=None, previous_hash=None,
-                enqueue=True, source_type=None):
+                enqueue=True, source_type=None, published_at=None, publication_source=None):
         headers = headers or {}
         final_url = normalize_url(final_url or url) or final_url or url
         content_type = headers.get("content-type", "")
@@ -108,6 +108,11 @@ class Processor:
                 out.update(result="skipped", changed=False, extraction_status="non-canonical duplicate")
                 return out
         meta = dict(ext.metadata)
+        if published_at and not ext.published_at:
+            from .dates import parse_date
+            ext.published_at = parse_date(published_at)
+            if ext.published_at:
+                meta["publication_source"] = publication_source or "provider"
         meta["http_status"] = status
         if ext.canonical:
             meta["canonical"] = ext.canonical

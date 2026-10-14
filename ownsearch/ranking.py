@@ -29,6 +29,9 @@ DEFAULT_WEIGHTS = {
     "bm25": 1.00,            # normalised BM25F (score / best score in the candidate set)
     "coverage": 0.45,        # fraction of query terms matched
     "title": 0.35,           # fraction of query terms in the title
+    "subject": 0.70,         # rarity-weighted, unstemmed subject names in title/URL
+    "intent": 0.35,          # learned title phrasing when the subject is linked
+    "entity_density": 0.60,  # linked subjects occupy the content, rather than appearing incidentally
     "url": 0.12,             # fraction of query terms in the URL
     "phrase": 0.30,          # whole query appears as a phrase
     "proximity": 0.30,       # 1 / (1 + extra words in the minimal window covering all terms)

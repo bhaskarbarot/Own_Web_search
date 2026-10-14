@@ -1,0 +1,6 @@
+# Temporal grammar, independent of topics. Windows are rolling UTC durations.
+day	today
+day	todays
+day	yesterday
+day	morning
+week	week
