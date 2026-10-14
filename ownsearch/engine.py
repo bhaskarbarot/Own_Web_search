@@ -103,6 +103,29 @@ def _entity_density(entities, text):
     return min(1.0, 40 * min(counts, default=0) / max(1, len(words)))
 
 
+def _about_entity(entity, title, url, text):
+    if _mentions_entity(entity, title + " " + url):
+        return True
+    # A body-only name must introduce the subject and recur through its content.
+    # One incidental short alias in another person's biography is insufficient.
+    intro = " ".join(tokenize(text)[:120])
+    return _mentions_entity(entity, intro) and _entity_density([entity], text) >= 0.10 and any(
+        (" " + " ".join(tokenize(text)) + " ").count(" " + " ".join(tokenize(n)) + " ") >= 2
+        for n in entity.names)
+
+
+def _official_scope(url, entities):
+    from urllib.parse import urlparse
+    target = urlparse(url)
+    for e in entities:
+        for root in e.urls:
+            source = urlparse(root)
+            path = source.path.rstrip("/")
+            if target.hostname == source.hostname and (not path or target.path == path or target.path.startswith(path + "/")):
+                return True
+    return False
+
+
 class SearchEngine:
     def __init__(self, root=None, settings=None):
         self.settings = settings or Settings.load(root)
@@ -112,6 +135,7 @@ class SearchEngine:
         self.index = IndexManager(self.settings.index_dir, self.settings.merge_factor, self.settings.postings_cache_mb)
         self.indexer = Indexer(self.store, self.index, self.settings)
         self.cache = QueryCache(self.settings.cache_entries, self.settings.cache_ttl)
+        self._discovery_cache = QueryCache(512, self.settings.discovery_cache_ttl)
         self.weights = load_weights(self.settings.ranker_path)
         self._weights_mtime = self._mtime(self.settings.ranker_path)
         n = self.settings.max_concurrent_searches or 2 * (os.cpu_count() or 2)
@@ -180,14 +204,22 @@ class SearchEngine:
                 res = dict(hit)
                 res["cached"] = True
                 res["took_ms"] = round((time.perf_counter() - t0) * 1000, 2)
+                res["timing"] = {"total_ms": res["took_ms"], "discovery_ms": 0.0,
+                                 "cached_response_original_ms": hit.get("took_ms")}
+                if (hit.get('answer') or {}).get('type') == 'stock_quote':
+                    res['answer'] = dict(hit['answer'])
+                    stamp = iso_to_ts(res['answer'].get('as_of'))
+                    if stamp is not None:
+                        res['answer']['age_seconds'] = round(time.time()-stamp)
                 self._log(agent, query, len(res["results"]), res["took_ms"])
                 return res
         q = parse_query(query, freshness=freshness, site=site, filetype=filetype, lang=lang, data_dir=self.root)
         answer, provider_errors, found = None, [], []
         disc_ms = 0.0
+        deadline = time.monotonic() + (self.settings.discovery_timeout if live else
+                                      (timeout_ms or self.settings.search_timeout_ms) / 1000)
         if live:
             t_disc = time.perf_counter()
-            deadline = time.monotonic() + self.settings.discovery_timeout
             if q.intent == "financial":
                 from .market import Market
                 market = Market(self.settings, deadline=deadline)
@@ -199,19 +231,48 @@ class SearchEngine:
                     except Exception as exc:
                         provider_errors.append(f"Market data unavailable: {exc}")
                     if not answer:
+                        provider_errors.extend(market.errors)
                         provider_errors.append("Market data unavailable: instrument or dated prices could not be verified.")
             elif self.settings.knowledge_enabled and q.entity:
                 from .knowledge import Knowledge
-                knowledge_deadline = min(deadline, time.monotonic() + self.settings.discovery_timeout * 0.5) if q.intent in ("news", "tech_docs") else deadline
+                knowledge_deadline = min(deadline, time.monotonic() + self.settings.knowledge_timeout)
                 knowledge = Knowledge(self.settings, deadline=knowledge_deadline)
                 try:
                     q.entities = knowledge.link(q.entity, q.context, load_claims=q.intent != "news",
                                                 load_urls=q.intent in ("tech_docs", "company", "general"))
+                    if not q.entities and q.intent == 'tech_docs' and time.monotonic() < deadline - 1:
+                        # Existing reference titles can identify the subject of
+                        # a long query that the remote full-text lookup missed.
+                        from urllib.parse import unquote, urlparse
+                        hints = []
+                        subject = set(q.entity_terms)
+                        snap = self.index.snapshot()
+                        official_hints = []
+                        item_hints = []
+                        from .intent import get_model
+                        model = get_model(self.root)
+                        for row in self.store.db.query("SELECT id,title,url FROM documents WHERE active=1 AND (source_type='reference' OR url LIKE 'https://en.wikipedia.org/wiki/%')"):
+                            hit = subject & set(analyze(row['title']))
+                            score = sum(snap.idf(t) for t in hit)
+                            if score > 0.5 and urlparse(row['url']).hostname == 'en.wikipedia.org':
+                                hints.append((score, unquote(urlparse(row['url']).path.rsplit('/',1)[-1]).replace('_',' ')))
+                                q.reference_roots.append(row['url'])
+                                for link in self.store.db.query('SELECT dst_key,anchor FROM links WHERE src_id=? AND nofollow=0', (row['id'],)):
+                                    host = urlparse(link['dst_key']).hostname or ''
+                                    item = urlparse(link['dst_key']).path.rsplit('/',1)[-1]
+                                    if host == 'www.wikidata.org' and item.startswith('Q') and item[1:].isdigit():
+                                        item_hints.append((row['title'],item))
+                                    probs = model.classify(link['anchor'] or '')[1]
+                                    if any(t in host for t in hit if len(t) >= 3) and max(probs.get('company',0),probs.get('tech_docs',0)) >= 0.45:
+                                        official_hints.append(link['dst_key'])
+                        q.reference_roots = list(dict.fromkeys(official_hints + q.reference_roots))
+                        if hints:
+                            knowledge.deadline = min(deadline - 0.5, time.monotonic() + 1.5)
+                            q.entities = knowledge.link(q.entity, q.context, candidate_titles=[t for _, t in sorted(hints,reverse=True)[:3]],
+                                                        candidate_ids=list(dict.fromkeys(item_hints))[:3], load_urls=True)
                     for entity in q.entities:
                         span_terms = set(analyze(entity.span))
                         q.required = [t for t in q.required if t not in span_terms]
-                        q.optional = list(dict.fromkeys(q.optional + list(span_terms) +
-                                                       [t for name in entity.names for t in analyze(name)]))
                     if q.entities and q.intent not in ("news", "tech_docs"):
                         answer = knowledge.answer(q.entities[0], q.entity + q.context)
                         # A description card cannot answer an unresolved factual qualifier.
@@ -226,45 +287,61 @@ class SearchEngine:
         if answer and not _answer_allowed(answer, q):
             answer = None
             provider_errors.append("The direct answer does not satisfy the requested source, format or date filters.")
-        if not self._slots.acquire(timeout=10):
+        if not self._slots.acquire(timeout=max(0, deadline - time.monotonic())):
             raise Busy("Too many concurrent searches")
         try:
             res = self._search(query, limit, offset, fetch_evidence, freshness, site, filetype, lang,
-                               timeout_ms or self.settings.search_timeout_ms, explain, t0, q=q)
+                               timeout_ms or self.settings.search_timeout_ms, explain, t0, q=q, request_deadline=deadline)
         finally:
             self._slots.release()
-        if live and (q.intent in ("news", "tech_docs") or not res["results"] or res["coverage"].get("low_confidence")) and not answer:
+        useful = len(res["results"]) >= self.settings.discovery_min_results and not res["coverage"].get("low_confidence")
+        if live and not useful and time.monotonic() < deadline and (not answer or answer.get("verification") == "unverified"):
             from .discover import discover
             t_disc = time.perf_counter()
-            discovery_key = json.dumps(q.normalized(), sort_keys=True)
-            discovery_cache = getattr(self, "_discovery_cache", None)
-            if discovery_cache is None:
-                self._discovery_cache = discovery_cache = QueryCache(512, self.settings.discovery_cache_ttl)
+            normalized = q.normalized()
+            if q.freshness and normalized.get("after"):
+                normalized["after"] = int(normalized["after"] // 300) * 300
+            discovery_key = json.dumps(normalized, sort_keys=True)
+            discovery_cache = self._discovery_cache
             previous = discovery_cache.get(discovery_key)
+            generation_before = self.index.generation
             if previous is None:
-                found = discover(self, query, pq=q, deadline=deadline)
-                details = dict(getattr(self, "_last_discovery", {}))
+                details = {}
+                found = discover(self, query, pq=q, deadline=max(time.monotonic(), deadline - 0.35), details=details)
                 discovery_cache.put(discovery_key, (found, details.get("errors", [])))
             else:
                 found, errors = previous
                 details = {"errors": errors}
             provider_errors.extend(details.get("errors", []))
             disc_ms += round((time.perf_counter() - t_disc) * 1000, 2)
-            if any(r["result"] in ("ok", "cached") for r in found):
+            if self.index.generation != generation_before or any(r["result"] in ("ok", "cached") for r in found):
                 self.index.maybe_reload(interval=0)
-                with self._slots:
-                    res = self._search(query, limit, offset, fetch_evidence, freshness, site, filetype, lang,
-                                       timeout_ms or self.settings.search_timeout_ms, explain, t0, q=q)
+                if self._slots.acquire(timeout=max(0, deadline-time.monotonic())):
+                    try:
+                        updated = self._search(query, limit, offset, fetch_evidence, freshness, site, filetype, lang,
+                                               timeout_ms or self.settings.search_timeout_ms, explain, t0, q=q, request_deadline=deadline)
+                    finally:
+                        self._slots.release()
+                    if not res['results'] or (updated['results'] and not updated.get('timed_out')):
+                        res = updated
+                    elif updated.get('timed_out'):
+                        res['timed_out'] = True
+                else:
+                    res['timed_out'] = True
+                    provider_errors.append('Local reranking skipped: the request deadline expired while waiting for search capacity.')
             res["live_discovery"] = found
         res["answer"] = answer
         if answer:
             res["coverage"].update(answer_available=True)
             # A timestamped provider answer or a matched fact can satisfy a query without indexed pages.
-            if answer["type"] in ("fact", "stock_quote", "stock_history") or answer.get("verified_summary"):
+            if answer["type"] in ("stock_quote", "stock_history") or answer.get("verification") == "corroborated" or answer.get("verified_summary"):
                 res["coverage"].update(low_confidence=False, message="Direct answer from the cited data source.")
+            elif answer.get("verification") == "unverified":
+                res["coverage"].update(low_confidence=True, message=answer["verification_note"])
         res["provider_errors"] = list(dict.fromkeys(res.get("provider_errors", []) + provider_errors))
         res["took_ms"] = round((time.perf_counter() - t0) * 1000, 2)
-        res["timing"] = {"total_ms": res["took_ms"], "discovery_ms": round(disc_ms, 2)}
+        res["timing"] = {"total_ms": res["took_ms"], "discovery_ms": round(disc_ms, 2),
+                         "local_ms": round(max(0, res["took_ms"] - disc_ms), 2)}
         key = json.dumps([self.index.generation, query, limit, offset, bool(fetch_evidence), freshness, site, filetype,
                           lang, bool(explain), bool(live), self._mtime(self.root / "intent_examples.tsv")])
         if use_cache and not res.get("timed_out"):
@@ -299,8 +376,10 @@ class SearchEngine:
                 "retrieved_at": utc_now(), "took_ms": round((time.perf_counter() - t0) * 1000, 2),
                 "answer": None, "notice": UNTRUSTED_NOTICE}
 
-    def _search(self, query, limit, offset, fetch_evidence, freshness, site, filetype, lang, timeout_ms, explain, t0, q=None):
+    def _search(self, query, limit, offset, fetch_evidence, freshness, site, filetype, lang, timeout_ms, explain, t0, q=None, request_deadline=None):
         deadline = time.monotonic() + timeout_ms / 1000.0
+        if request_deadline is not None:
+            deadline = min(deadline, request_deadline)
         q = q or parse_query(query, freshness=freshness, site=site, filetype=filetype, lang=lang, data_dir=self.root)
         if not q.has_text and not q.has_filters:
             return self._empty(query, q, t0, "Empty query.")
@@ -314,6 +393,7 @@ class SearchEngine:
             msg += " The local index may not cover this topic yet: crawl relevant sites or feeds to add coverage."
             res = self._empty(query, q, t0, msg)
             res["coverage"].update(mode=info["mode"], missing_terms=info.get("missing_terms", []))
+            res["timed_out"] = bool(info.get("timed_out"))
             return res
 
         # ---------------- stage 2: document features
@@ -340,7 +420,7 @@ class SearchEngine:
         weights = dict(self.weights)
         weights["freshness"] = weights["freshness"] * fresh_w_mult
         kept = []
-        texts_for_entities = self.store.texts(c.doc_id for c in cands) if q.entities else {}
+        texts_for_entities = self.store.texts(c.doc_id for c in cands)
 
         for c in cands:
             f = feats.get(c.doc_id)
@@ -355,10 +435,30 @@ class SearchEngine:
             is_ref = f["source_type"] == "reference"
             if q.intent == "news" and (ts_pub is None or ts_pub > now + 300 or is_ref):
                 continue
-            if q.entities and not all(_mentions_entity(e, (f["title"] or "") + " " +
-                                       (f["url"] or "") + " " + texts_for_entities.get(c.doc_id, ""))
+            if q.entities and not all(_about_entity(e, f["title"] or "", f["url"] or "", texts_for_entities.get(c.doc_id, ""))
                                       for e in q.entities):
                 continue
+            if q.entities and q.intent == "reference" and q.context and not all(
+                    _mentions_entity(e, (f["title"] or "") + " " + (f["url"] or "")) for e in q.entities):
+                continue
+            if q.entities and q.intent == 'reference' and q.context:
+                from urllib.parse import urlparse
+                if urlparse(f['url'] or '').hostname == 'en.wikipedia.org':
+                    topics = set()
+                    for link in self.store.db.query('SELECT dst_key FROM links WHERE src_id=?', (c.doc_id,)):
+                        target = urlparse(link['dst_key'])
+                        item = target.path.rsplit('/',1)[-1]
+                        if target.hostname == 'www.wikidata.org' and item.startswith('Q') and item[1:].isdigit():
+                            topics.add(item)
+                    # Reference pages publish their own topic id. A monument,
+                    # fictional portrayal or relative has a different identity.
+                    if len(topics) == 1 and not topics & {e.qid for e in q.entities}:
+                        continue
+            if q.intent == "financial" and q.entity:
+                subject = set(tokenize(" ".join(q.entity)))
+                prominent = set(tokenize((f["title"] or "") + " " + (f["url"] or "")))
+                if not subject <= prominent:
+                    continue
             if q.intent == "news" and q.entities:
                 title = set(analyze(f["title"] or ""))
                 if not all(_mentions_entity(e, f["title"] or "") or (set(analyze(e.span)) and set(analyze(e.span)) <= title)
@@ -411,6 +511,7 @@ class SearchEngine:
                                if word in set(tokenize((f["title"] or "") + " " + (f["url"] or "")))) / subject_total,
                 "intent": intent_model.classify(f["title"] or "")[1].get(q.intent, 0) if q.entities else 0.0,
                 "entity_density": _entity_density(q.entities, texts_for_entities.get(c.doc_id, "")) if q.entities else 0.0,
+                "authority": float(q.intent == "tech_docs" and _official_scope(f["url"] or "", q.entities)),
                 "url": sum(1 for t in terms if t in url_terms) / n_terms,
                 "phrase": 0.0, "proximity": 0.0, "passage": 0.0,
                 "pagerank": f["pagerank"] or 0.0,
@@ -446,16 +547,30 @@ class SearchEngine:
             texts = self.store.texts(c.doc_id for c, *_ in top)
             surface = surface_words(query)
             idf = {t: snap.idf(t) for t in terms}
-            full_phrase = [t for t in q.required + q.optional if t]
+            full_phrase = analyze(" ".join(q.entity)) or q.required
+            # Ubiquitous background terms should not force a relevant passage
+            # to span the whole page (e.g. a language name in every sidebar).
+            max_idf = max(idf.values(), default=0)
+            focus_terms = [t for t in terms if idf[t] >= max_idf * 0.2]
             for c, f, *_ in top:
                 if time.monotonic() > deadline:
                     timed_out = True
                     break
-                prox, phrase = positional_features(snap, c, terms, full_phrase)
+                prox, phrase = positional_features(snap, c, focus_terms, full_phrase)
+                for name in q.named_phrases:
+                    _, named_match = positional_features(snap, c, analyze(name), analyze(name))
+                    phrase = max(phrase, named_match)
                 text = texts.get(c.doc_id, "")
                 ps = passages(text, terms, surface, idf, max_passages=3 if fetch_evidence else 1)
                 c.features["proximity"] = prox
                 c.features["phrase"] = phrase
+                # Content spread through an aggregator is not document-level relevance.
+                passage_terms = set(analyze(ps[0]['text'])) if ps else set()
+                focus_weight = sum(idf[t] for t in focus_terms) or 1
+                passage_coverage = sum(idf[t] for t in focus_terms if t in passage_terms) / focus_weight
+                if (len(q.required) >= 2 and prox < 0.025 and c.features["subject"] < 0.5
+                        and not phrase and passage_coverage < 0.75):
+                    c.features["_irrelevant"] = True
                 c.features["passage"] = min(1.0, ps[0]["score"] / 2.25) if ps else 0.0
 
                 # all words present but never near each other (aggregators, link lists): weaker than a real match
@@ -480,9 +595,11 @@ class SearchEngine:
 
         # ---------------- stage 4: diversification
         accepted, deferred, per_host = [], [], {}
-        best_score = max(item[0].final for item in top + kept[k2:])
+        eligible = [item for item in top + kept[k2:] if not item[0].features.get("_irrelevant")]
+        best_score = max((item[0].final for item in eligible), default=0)
+        eligible = [item for item in eligible if item[0].final >= best_score * self.settings.relevance_score_ratio]
         host_cap = 1000 if q.sites else 2
-        for item in top + kept[k2:]:
+        for item in eligible:
             c, f = item[0], item[1]
             if c.final < best_score * self.settings.relevance_score_ratio:
                 continue
@@ -570,7 +687,7 @@ class SearchEngine:
             "provider_errors": [], "providers_configured": self._providers_configured(),
             "total_candidates": info["candidates"], "offset": offset, "limit": limit,
             "has_more": len(ranked) > offset + limit,
-            "coverage": {"index_documents": snap.N, "matched_documents": info["candidates"], "mode": info["mode"],
+            "coverage": {"index_documents": snap.N, "matched_documents": len(eligible), "retrieval_candidates": info["candidates"], "mode": info["mode"],
                          "missing_terms": info.get("missing_terms", []), "low_confidence": bool(low_conf),
                          "intent": q.intent, "message": message},
             "query_understanding": q.normalized(),

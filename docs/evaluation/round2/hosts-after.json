@@ -1,0 +1,97 @@
+{
+  "queries": 7,
+  "summary": {
+    "ndcg@10": 0.0302,
+    "p@5": 0.0286,
+    "p@10": 0.0143,
+    "recall@10": 0.0357,
+    "recall@100": 0.0357,
+    "mrr@10": 0.1429,
+    "zero_result_rate": 0.2857,
+    "latency_p50_ms": 24.96,
+    "latency_p95_ms": 128.0,
+    "latency_p99_ms": 128.0,
+    "latency_mean_ms": 40.13
+  },
+  "per_query": [
+    {
+      "query": "Nvidia live price",
+      "ndcg@10": 0.0,
+      "p@5": 0.0,
+      "p@10": 0.0,
+      "recall@10": 0.0,
+      "recall@100": 0.0,
+      "mrr@10": 0.0,
+      "results": 2,
+      "latency_ms": 54.12
+    },
+    {
+      "query": "today's Trump headlines",
+      "ndcg@10": 0.2111,
+      "p@5": 0.2,
+      "p@10": 0.1,
+      "recall@10": 0.25,
+      "recall@100": 0.25,
+      "mrr@10": 1.0,
+      "results": 3,
+      "latency_ms": 11.77
+    },
+    {
+      "query": "Samrat Ashok birthplace",
+      "ndcg@10": 0.0,
+      "p@5": 0.0,
+      "p@10": 0.0,
+      "recall@10": 0.0,
+      "recall@100": 0.0,
+      "mrr@10": 0.0,
+      "results": 0,
+      "latency_ms": 24.03
+    },
+    {
+      "query": "TCS 6-month analysis",
+      "ndcg@10": 0.0,
+      "p@5": 0.0,
+      "p@10": 0.0,
+      "recall@10": 0.0,
+      "recall@100": 0.0,
+      "mrr@10": 0.0,
+      "results": 0,
+      "latency_ms": 1.24
+    },
+    {
+      "query": "inheritance in OOPS",
+      "ndcg@10": 0.0,
+      "p@5": 0.0,
+      "p@10": 0.0,
+      "recall@10": 0.0,
+      "recall@100": 0.0,
+      "mrr@10": 0.0,
+      "results": 2,
+      "latency_ms": 36.77
+    },
+    {
+      "query": "Claude docs on MCP",
+      "ndcg@10": 0.0,
+      "p@5": 0.0,
+      "p@10": 0.0,
+      "recall@10": 0.0,
+      "recall@100": 0.0,
+      "mrr@10": 0.0,
+      "results": 1,
+      "latency_ms": 24.96
+    },
+    {
+      "query": "Python requests timeout parameter documentation",
+      "ndcg@10": 0.0,
+      "p@5": 0.0,
+      "p@10": 0.0,
+      "recall@10": 0.0,
+      "recall@100": 0.0,
+      "mrr@10": 0.0,
+      "results": 2,
+      "latency_ms": 128.0
+    }
+  ],
+  "seconds": 0.28,
+  "index_documents": 799
+}

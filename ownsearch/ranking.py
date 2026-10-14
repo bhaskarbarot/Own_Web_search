@@ -1,8 +1,8 @@
 """Retrieval and ranking.
 
 Stage 1  candidate retrieval per segment: conjunctive (AND) over required terms, driven by the rarest term;
-         very common terms use champion (top-k) lists so cost stays bounded; falls back to OR with a
-         minimum-should-match when AND finds too little. Hidden meta terms implement site:/filetype:/lang:.
+         very common terms use champion (top-k) lists so cost stays bounded. Alternative entity names
+         are atomic phrases; query-language words never generate candidates.
 Stage 1b BM25F scoring over title / headings / url / anchor text / body with per-field length normalisation.
 Stage 2  static and query-dependent features (pagerank, quality, freshness, title coverage, URL depth).
 Stage 3  positional rerank: exact phrase, term proximity (minimal covering window), best passage score.
@@ -32,6 +32,7 @@ DEFAULT_WEIGHTS = {
     "subject": 0.70,         # rarity-weighted, unstemmed subject names in title/URL
     "intent": 0.35,          # learned title phrasing when the subject is linked
     "entity_density": 0.60,  # linked subjects occupy the content, rather than appearing incidentally
+    "authority": 0.40,       # entity-provided official URL scope, gated on content relevance
     "url": 0.12,             # fraction of query terms in the URL
     "phrase": 0.30,          # whole query appears as a phrase
     "proximity": 0.30,       # 1 / (1 + extra words in the minimal window covering all terms)
@@ -87,7 +88,7 @@ def _phrase_ok(reader, local, plists, phrase):
 def retrieve(snap, q, want=400, deadline=None, need=10):
     """Returns (candidates sorted by score desc, info dict)."""
     req = list(dict.fromkeys(q.required + [t for p in q.phrases for t in p] + q.intitle + q.inurl))
-    opt = [t for t in q.optional if t not in req]
+    opt = [t for t in q.scoring_terms if t not in req]
     scoring = list(dict.fromkeys(req + opt))
     idf = {t: snap.idf(t) for t in scoring}
     missing = [t for t in req if snap.df(t) == 0]
@@ -104,7 +105,7 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
         for ri, r in enumerate(snap.readers):
             if r.live == 0:
                 continue
-            if deadline and time.monotonic() > deadline and out:
+            if deadline and time.monotonic() > deadline:
                 info["timed_out"] = True
                 break
             pl = {t: snap.postings(ri, t) for t in scoring}
@@ -116,15 +117,26 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
             neg = [p for t in q.excluded if (p := snap.postings(ri, t))]
             neg_site = [p for t in nosite_terms if (p := snap.postings(ri, t))]
             # ---- candidate generation
+            entity_sets = []
+            for group in q.entity_groups:
+                matches = set()
+                for name in group:
+                    if any(pl.get(t) is None for t in name):
+                        continue
+                    lead = min((pl[t] for t in name), key=lambda p: p.n)
+                    docs = lead.docs[:CAND_LIMIT]
+                    matches.update(d for d in docs if _phrase_ok(r, d, pl, name))
+                entity_sets.append(matches)
             if scoring:
                 if mode == "and":
-                    if any(pl[t] is None for t in req) or not req:
+                    if any(pl[t] is None for t in req):
                         continue
                     order = sorted(req, key=lambda t: pl[t].n)
-                    lead = pl[order[0]]
-                    if lead.n <= CAND_LIMIT:
+                    cand = sorted(set.intersection(*entity_sets)) if entity_sets else []
+                    lead = pl[order[0]] if order else None
+                    if lead is not None and lead.n <= CAND_LIMIT:
                         cand = lead.docs
-                    else:
+                    elif lead is not None:
                         cs = set()
                         for t in order:
                             ch = snap.champions(ri, t)
@@ -159,6 +171,10 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
                 for p in base:
                     cs.update(p.docs[:200000])
                 cand = sorted(cs)
+            for matches in entity_sets:
+                cand = sorted(set(cand).intersection(matches))
+            if q.alternatives:
+                cand = [d for d in cand if any(pl.get(t) and _has(pl[t], d) for t in q.alternatives)]
             # ---- filters
             if filt_site:
                 cand = [d for d in cand if any(_has(p, d) for p in filt_site)]
@@ -217,17 +233,17 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
                 out.append(c)
         return out
 
-    if req:
+    if req or q.entities:
         cands = run("and", 0)
         info["and_matches"] = len(cands)
-        if len(cands) < need and (len(req) > 1 or opt):
-            n_terms = len(req) + len(opt)
-            info["mode"] = "all_terms+partial" if cands else "partial_terms"
-            seen = {c.doc_id for c in cands}
-            min_match = max(1, math.ceil(0.5 * n_terms)) if n_terms > 2 else 1
-            cands += [c for c in run("or", min_match) if c.doc_id not in seen]
-    elif scoring:
-        info["mode"] = "any_terms"
+        # Relax a long query only when it has no complete matches. Retain its
+        # rarest content term and 75% of content words; phrasing and aliases
+        # cannot meet this threshold. This never pads a short result list.
+        if not cands and not q.entities and len(req) >= 3 and not q.phrases and not q.intitle and not q.inurl:
+            cands = run("or", math.ceil(0.75 * len(req)))
+            info["mode"] = "partial_terms"
+    elif q.alternatives:
+        info["mode"] = "explicit_or"
         cands = run("or", 1)
     else:
         info["mode"] = "filters_only"
@@ -243,7 +259,7 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
     if info["mode"] in ("partial_terms", "all_terms+partial"):
         # a partial match must contain the important (rare) words, not just the common ones
         key_bit = 1 << max(range(len(scoring)), key=lambda k: term_w[k]) if scoring else 0
-        cands = [c for c in cands if c.features["_all"] or (c.features["_wcov"] >= 0.65 and c.mask & key_bit)]
+        cands = [c for c in cands if c.features["_all"] or (c.features["_wcov"] >= 0.70 and c.mask & key_bit)]
     info["candidates"] = len(cands)
     top = heapq.nlargest(want, cands, key=lambda c: c.score)
     return top, info

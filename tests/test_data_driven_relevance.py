@@ -281,7 +281,7 @@ class RelevanceTests(unittest.TestCase):
         data={"meta":{"currency":"USD","regularMarketTime":now,"currentTradingPeriod":{"regular":{"end":now+3600}}},
               "timestamp":[now-i*86400 for i in range(5,-1,-1)],"indicators":{"adjclose":[{"adjclose":[100,101,102,103,104,105]}],"quote":[{"close":[110,111,112,113,114,115]}]}}
         with patch.object(market,"resolve",return_value=("OR","Orion")),patch.object(market,"_chart",return_value=data) as chart:
-            answer=market.history(["Orion"],183)
+            answer=market.history(["Orion"],7)
         self.assertEqual(answer["price_basis"],"adjusted close")
         self.assertAlmostEqual(answer["analysis"]["change_pct"],5)
         self.assertTrue(answer["incomplete_last_session"])

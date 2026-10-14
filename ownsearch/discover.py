@@ -168,14 +168,25 @@ class OfficialSiteProvider(BaseProvider):
         if pq.intent in ("news", "financial"):
             return [], []
         roots = _explicit_urls(query, pq)
+        roots.extend(pq.reference_roots)
         # Round-robin preserves sources for each linked entity, rather than
         # letting one entity's many URL claims exhaust the entire crawl budget.
         for i in range(max((len(e.urls) for e in pq.entities), default=0)):
             roots.extend(e.urls[i] for e in pq.entities if i < len(e.urls))
-        roots = list(dict.fromkeys(_http_url(u) for u in roots if _http_url(u)))[:4]
+        # A reference page can publish the official/docs link even when its
+        # Wikidata URL record is unavailable. Read that link rather than guess
+        # a host from the query name.
+        roots.extend(e.wiki_url for e in pq.entities if not e.urls and e.wiki_url)
+        roots = list(dict.fromkeys(_http_url(u) for u in roots if _http_url(u)))
+        if pq.intent == "tech_docs":
+            # A narrowly scoped entity source should get a turn before a
+            # related product's many general/legal URL properties consume time.
+            roots.sort(key=lambda u: min((len(e.urls) for e in pq.entities
+                                         if any(_http_url(v) == u for v in e.urls)), default=100))
+        roots = roots[:4]
         client = _client(settings, timeout, client)
         linked_terms = {t for e in pq.entities for t in analyze(e.span)}
-        terms = set(pq.entity_terms + pq.required + pq.intitle + pq.inurl) - linked_terms
+        terms = set(pq.entity_terms + pq.required + pq.intitle + pq.inurl)
         candidates, errors = {}, []
         model = get_model(settings.data_dir)
 
@@ -198,6 +209,8 @@ class OfficialSiteProvider(BaseProvider):
                     candidates[normalized] = (score, CandidateItem(normalized, self.name, anchor))
 
         for root in roots:
+            offer(root)
+        for root in roots:
             if time.monotonic() >= client.deadline:
                 break
             offer(root)
@@ -212,15 +225,22 @@ class OfficialSiteProvider(BaseProvider):
                 for url, anchor, nofollow in ext.links[:settings.discovery_sitemap_limit]:
                     if not nofollow and urlparse(url).hostname == host:
                         offer(url, anchor)
-                    elif not nofollow and pq.intent == "tech_docs" and model.classify(anchor)[1].get("tech_docs", 0) >= 0.45 and any(
+                    elif not nofollow and pq.intent == "tech_docs" and model.classify(anchor)[1].get("tech_docs", 0) >= 0.45 and (any(
                             "".join(tokenize(name)) in "".join(tokenize(urlparse(url).hostname or ""))
-                            for e in pq.entities for name in e.names if len("".join(tokenize(name))) >= 3):
+                            for e in pq.entities for name in e.names if len("".join(tokenize(name))) >= 3) or
+                            (not pq.entities and any(w.lower() in (urlparse(url).hostname or '').lower()
+                                                    for w in pq.entity if len(w) >= 3))):
                         # A docs link published by a verified site can establish
                         # its external documentation host. Keep this walk bounded.
                         normalized = _http_url(url)
                         if normalized and normalized not in roots and len(roots) < 6:
                             roots.insert(roots.index(root) + 1, normalized)
                             offer(normalized, anchor)
+                            if normalized not in [u for e in pq.entities for u in e.urls]:
+                                for entity in pq.entities:
+                                    if any("".join(tokenize(name)) in "".join(tokenize(urlparse(normalized).hostname or ""))
+                                           for name in entity.names if len("".join(tokenize(name))) >= 3):
+                                        entity.urls.append(normalized)
                 origin = urlparse(r.final_url)._replace(path="", query="", fragment="").geturl()
                 maps = [(u, 0) for u in client.policy(r.final_url).sitemaps[:3]] or [(origin + "/sitemap.xml", 0)]
                 seen, examined = set(), 0
@@ -278,10 +298,18 @@ def gather_candidates(engine, query, pq, max_urls=6, log=None, client=None):
     for provider in [SearXNGProvider(), NewsFeedProvider(), FinancialProvider(), OfficialSiteProvider(), WikipediaProvider()]:
         if not provider.is_configured(settings) or time.monotonic() >= client.deadline:
             continue
-        cands, errs = provider.discover(query, pq, settings, timeout=max(0.01, client.deadline - time.monotonic()),
-                                       log=log, client=client)
+        global_deadline = client.deadline
+        provider_timeout = getattr(settings, provider.name + "_timeout", settings.discovery_provider_timeout)
+        client.deadline = min(global_deadline, time.monotonic() + provider_timeout)
+        try:
+            cands, errs = provider.discover(query, pq, settings, timeout=max(0.01, client.deadline - time.monotonic()),
+                                           log=log, client=client)
+        finally:
+            client.deadline = global_deadline
         items.extend(cands)
         errors.extend(errs)
+        if len(cands) >= settings.discovery_min_results and provider.name == "news_feeds":
+            break
     unique = {}
     for item in items:
         url = normalize_url(item.url)
@@ -304,7 +332,7 @@ def gather_candidates(engine, query, pq, max_urls=6, log=None, client=None):
     return list(unique.values())[:max_urls], errors
 
 
-def discover(engine, query, frontier=None, max_urls=None, log=None, pq=None, deadline=None):
+def discover(engine, query, frontier=None, max_urls=None, log=None, pq=None, deadline=None, details=None):
     from .frontier import Frontier
     from .pipeline import Processor
     t0 = time.monotonic()
@@ -348,11 +376,20 @@ def discover(engine, query, frontier=None, max_urls=None, log=None, pq=None, dea
                     frontier.enqueue_many([{"url": r.final_url, "priority": 8.0, "source": "discovery", "depth": 0}])
             results.append({"url": item.url, "provider": item.provider, "sources": item.sources or [item.provider],
                             **{k: out[k] for k in ("result", "doc_status", "title") if k in out}})
+            if sum(r.get("result") in ("ok", "cached") for r in results) >= engine.settings.discovery_min_results:
+                engine.rebuild_index()
+                check = engine._search(query, 5, 0, False, None, None, None, None,
+                                       200, False, time.perf_counter(), q=pq, request_deadline=deadline)
+                if len(check["results"]) >= engine.settings.discovery_min_results and not check["coverage"]["low_confidence"]:
+                    break
         except Exception as e:
             errors.append(f"{item.provider} ({item.url}): {e}")
             results.append({"url": item.url, "provider": item.provider, "result": f"error: {e}"[:200]})
     engine.rebuild_index()
-    engine._last_discovery = {"query": query, "intent": pq.intent, "candidates_found": len(items),
+    report = {"query": query, "intent": pq.intent, "candidates_found": len(items),
                               "errors": errors, "results": results, "requests": client.requests,
                               "took_ms": round((time.monotonic() - t0) * 1000, 2)}
+    engine._last_discovery = report
+    if details is not None:
+        details.update(report)
     return results

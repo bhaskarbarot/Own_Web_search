@@ -24,7 +24,7 @@ def load_qrels(path):
         data = json.loads(raw)
         items = data["queries"] if isinstance(data, dict) else data
         return [{"query": it["query"], "judgments": {_key(k): int(v) for k, v in it["judgments"].items()},
-                 "params": it.get("params", {})} for it in items]
+                 "params": it.get("params", {})} for it in items if it.get('review_status') != 'unreviewed']
     except (ValueError, KeyError, TypeError):
         pass
     grouped = defaultdict(dict)
@@ -44,6 +44,8 @@ def _key(k):
         return k
     if k.startswith("host:"):
         return "host:" + k[5:].lower().removeprefix("www.").strip("/")
+    if k.startswith('prefix:'):
+        return 'prefix:' + (normalize_url(k[7:]) or k[7:]).rstrip('/')
     return normalize_url(k) or k
 
 
@@ -91,7 +93,9 @@ def _match(keys, judgments):
     host_mode = any(k.startswith("host:") for k in judgments)
     out, seen = [], set()
     for url, doc, host in keys:
-        key = url if url in judgments else doc if doc in judgments else host if host_mode else doc
+        scopes = [k for k in judgments if k.startswith('prefix:') and
+                  (url == k[7:] or url.startswith(k[7:] + '/'))]
+        key = url if url in judgments else doc if doc in judgments else max(scopes,key=len) if scopes else host if host_mode else doc
         if host_mode and key in seen:
             continue
         seen.add(key)
@@ -122,6 +126,9 @@ def run_queries_with_latencies(engine, qrels, depth=100, explain=False):
 
 
 def evaluate(engine, qrels, depth=100):
+    if not qrels:
+        return {'queries':0,'summary':{},'per_query':[],
+                'message':'No reviewed judgments are available; relevance accuracy was not measured.'}
     t0 = time.time()
     runs, latencies = run_queries_with_latencies(engine, qrels, depth)
     per = []

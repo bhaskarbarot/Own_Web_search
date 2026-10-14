@@ -78,7 +78,10 @@ class Settings:
     brave_api_key: str = ""             # optional Brave Search API key
     brave_timeout: float = 3.0
     news_feeds: str = ""                # comma/newline-separated list of RSS/Atom feed URLs
-    discovery_timeout: float = 20.0     # shared budget for live linking, answers and page discovery
+    discovery_timeout: float = 8.0      # request budget shared with linking and local ranking
+    discovery_provider_timeout: float = 3.0
+    knowledge_timeout: float = 2.5
+    discovery_min_results: int = 1     # one strong match is enough; do not fill a list with weak pages
     discovery_max_urls: int = 6
     discovery_max_requests: int = 24    # includes robots, sitemaps and focused links
     discovery_sitemap_limit: int = 500

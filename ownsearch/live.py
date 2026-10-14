@@ -18,7 +18,8 @@ class PageClient:
         self.failures = {}
 
     def raw(self, url, **kwargs):
-        return self.fetcher.fetch(url, deadline=self.deadline, retries=0,
+        deadline = min(self.deadline, time.monotonic() + self.settings.discovery_provider_timeout)
+        return self.fetcher.fetch(url, deadline=deadline, retries=0,
                                   before_request=self._reserve, **kwargs)
 
     def _reserve(self, url):

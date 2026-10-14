@@ -9,7 +9,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
-from .dates import parse_date, parse_duration
+from .dates import parse_date, parse_duration, parse_month_period, start_of_today_utc
 from .intent import get_model
 from .textproc import STOPWORDS, analyze, stem, tokenize
 from .util import iso_to_ts
@@ -29,6 +29,7 @@ class ParsedQuery:
     raw: str
     required: list = field(default_factory=list)      # analysed terms that must match (AND)
     optional: list = field(default_factory=list)      # OR-group terms / stopwords: scored, not required
+    alternatives: list = field(default_factory=list) # explicit OR syntax, never inferred from phrasing
     phrases: list = field(default_factory=list)       # [[term, ...]] must appear as phrases
     excluded: list = field(default_factory=list)
     excluded_phrases: list = field(default_factory=list)
@@ -50,19 +51,29 @@ class ParsedQuery:
     context: list = field(default_factory=list)       # remaining content words (phrasing, intent cues)
     intent_scores: dict = field(default_factory=dict)
     entities: list = field(default_factory=list)      # linked knowledge-base entities (filled when live)
+    named_phrases: list = field(default_factory=list) # capitalization evidence, used until linking succeeds
+    reference_roots: list = field(default_factory=list) # source-provided lookup hints from the local index
 
     @property
     def scoring_terms(self):
         seen, out = set(), []
-        for t in self.required + self.optional + [t for p in self.phrases for t in p] + self.intitle:
+        aliases = [t for group in self.entity_groups for name in group for t in name]
+        for t in self.required + self.alternatives + aliases + [t for p in self.phrases for t in p] + self.intitle:
             if t not in seen:
                 seen.add(t)
                 out.append(t)
         return out
 
     @property
+    def entity_groups(self):
+        # Each entity is required; its alternative names are complete phrases.
+        if self.entities:
+            return [list(dict.fromkeys(tuple(analyze(n)) for n in e.names if analyze(n))) for e in self.entities]
+        return []
+
+    @property
     def has_text(self):
-        return bool(self.required or self.optional or self.phrases or self.intitle or self.inurl)
+        return bool(self.scoring_terms or self.optional or self.inurl)
 
     @property
     def has_filters(self):
@@ -70,7 +81,7 @@ class ParsedQuery:
                     in FRESHNESS_WINDOWS)
 
     def normalized(self):
-        return {"required": self.required, "optional": self.optional, "phrases": self.phrases,
+        return {"required": self.required, "optional": self.optional, "alternatives": self.alternatives, "phrases": self.phrases,
                 "excluded": self.excluded, "sites": self.sites, "not_sites": self.not_sites,
                 "filetypes": self.filetypes, "intitle": self.intitle, "inurl": self.inurl, "lang": self.lang,
                 "after": self.after, "before": self.before, "freshness": self.freshness,
@@ -163,6 +174,11 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
             q.required.append(term)
         else:
             q.optional.append(term)
+            if in_or:
+                q.alternatives.append(term)
+    if not q.required and not q.alternatives and not q.phrases and content:
+        # A query made entirely of grammar words still has a literal meaning.
+        q.required = list(dict.fromkeys(w[0] for w in content))
     if freshness:
         q.freshness = str(freshness).lower()
     if site:
@@ -180,6 +196,19 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
         label = "general"
     q.intent = MODEL_LABELS.get(label, label)
     q.entity = [w for w in _words(raw) if not model.is_query_language(w)]
+    if q.intent == 'financial':
+        surface = tokenize(clean_raw)
+        duration_words = {w for i, w in enumerate(surface[:-1]) if parse_duration(w + ' ' + surface[i+1]) is not None}
+        q.entity = [w for w in q.entity if w.lower() not in duration_words]
+        q.required = [t for t in q.required if t not in {stem(w) for w in duration_words}]
+    run = []
+    for word in q.entity + [""]:
+        if word and word[0].isupper() and not word.isupper():
+            run.append(word)
+        else:
+            if len(run) >= 2:
+                q.named_phrases.append(" ".join(run))
+            run = []
     q.entity_terms = list(dict.fromkeys(stem(t) for w in q.entity for t in tokenize(w)))
     q.context = [w for w in _words(raw) if w not in q.entity]
     subject = " ".join(q.entity)
@@ -193,6 +222,9 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
     else:
         q.intent_details = {"entity": subject} if subject else {}
     q.fresh_intent = q.intent in ("news", "financial") or bool(q.freshness)
+    period = parse_month_period(clean_raw)
+    if period and q.intent == 'news' and q.after is None and q.before is None:
+        q.after, q.before = period
     if q.intent != "news" and not q.freshness and any(w not in STOPWORDS and model.is_query_language(w) and model.cue_strength(w, "news") >= 3
                               for w in tokenize(clean_raw)):
         q.fresh_intent = True
@@ -201,6 +233,16 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
         # Match temporal grammar learned from examples; this is a rolling day/week window.
         from .intent import temporal_window
         q.freshness = temporal_window(clean_raw, model) or "week"
+    if q.intent == 'news' and q.after is None:
+        from pathlib import Path
+        for row in (Path(__file__).with_name('resources') / 'calendar_days.tsv').read_text().splitlines():
+            if not row.strip() or row.startswith('#'):
+                continue
+            offset, word = row.split('\t', 1)
+            if word in tokenize(clean_raw):
+                q.after = start_of_today_utc() + int(offset) * 86400
+                q.before = q.after + 86400 - 0.001
+                break
     if q.freshness in FRESHNESS_WINDOWS and not q.after:
         q.after = datetime.now(timezone.utc).timestamp() - FRESHNESS_WINDOWS[q.freshness]
     return q

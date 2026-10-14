@@ -1,0 +1,250 @@
+For OwnSearch, you should test all major categories of search queries that people use in everyday life, work, education, and research.
+Don't test only simple questions. A proper search engine must handle short keywords, complete questions, technical documentation, current news, financial information, comparisons, troubleshooting, and many other query types.
+I've prepared a comprehensive testing checklist with 30 categories and 150 queries. You can run these queries against your existing search engine and evaluate its results.
+OwnSearch: Complete Search Engine Testing Checklist
+Category 1: General Knowledge
+Tests whether OwnSearch can find reliable answers to common questions.
+1. Who invented the telephone?
+2. What is the largest ocean in the world?
+3. Why is the sky blue?
+4. What is the difference between weather and climate?
+5. How does the internet work?
+Check: Are the results directly related to the question, and do they come from trustworthy sources?
+Category 2: Current News and Breaking News
+Tests live search, freshness, and news providers.
+6. Latest AI news today
+7. Today's major headlines in India
+8. Latest technology news
+9. Latest US political news
+10. Latest news about OpenAI
+Check: Are the results genuinely recent? Are publication dates visible? Does OwnSearch avoid presenting old articles as today's news?
+These queries must be tested when live news is available.
+Category 3: Programming and Software Development
+Tests programming-related retrieval.
+11. Python requests timeout parameter documentation
+12. Difference between Python list and tuple
+13. JavaScript async await examples
+14. How to handle exceptions in Python
+15. Python dictionary methods with examples
+Check: Does OwnSearch find useful explanations, examples, and technical documentation instead of unrelated programming pages?
+Category 4: Official Technical Documentation
+Tests whether official documentation is ranked above secondary sources.
+16. OpenAI API authentication documentation
+17. Claude API documentation
+18. LangGraph agent state management documentation
+19. PostgreSQL indexing documentation
+20. React hooks official documentation
+Check: Are official documentation pages among the first results when they genuinely match the query?
+Category 5: AI, Machine Learning, and LLMs
+Tests modern AI terminology and technical subjects.
+21. What is retrieval augmented generation?
+22. Best practices for RAG chunking strategies
+23. Difference between RAG and fine-tuning
+24. How does an AI agent work?
+25. What is a reranker in information retrieval?
+Check: Are the results technically accurate, relevant, and sufficiently detailed?
+Category 6: Company Information
+Tests company searches and official website discovery.
+26. NVIDIA official website
+27. Tata Consultancy Services company profile
+28. Microsoft investor relations
+29. Infosys annual report
+30. OpenAI company information
+Check: Does OwnSearch prioritize the correct company's official website rather than pages that merely mention its name?
+Category 7: Finance and Stock Markets
+Tests financial data, company identification, and freshness.
+31. NVIDIA live stock price
+32. TCS share price today
+33. Reliance Industries stock performance
+34. Microsoft stock price
+35. TCS six-month stock analysis
+Check: Verify the ticker, exchange, currency, timestamp, calculation accuracy, and delayed-data disclaimers.
+A financial direct answer should be evaluated separately from ordinary web-result relevance.
+Category 8: Business and Market Research
+Tests searches used by founders, managers, and business professionals.
+36. Best CRM software for small businesses
+37. AI automation tools for accounting
+38. Market trends in Indian SaaS companies
+39. Competitors of Salesforce
+40. Best lead generation strategies for B2B companies
+Check: Are the results useful for business decisions? Are comparisons supported by sources rather than unsupported claims?
+Category 9: Education and Learning
+Tests educational content and explanations.
+41. Explain photosynthesis in simple words
+42. What is Newton's second law of motion?
+43. Difference between mitosis and meiosis
+44. Explain object-oriented programming with examples
+45. Best resources to learn data structures and algorithms
+Check: Does OwnSearch find understandable explanations and educational resources appropriate to the topic?
+Category 10: History and Geography
+Tests historical facts and geographical knowledge.
+46. When did the Mughal Empire begin?
+47. Where was Emperor Ashoka born?
+48. Who built the Taj Mahal?
+49. What is the capital of Australia?
+50. Causes of the French Revolution
+Check: Are the results historically reliable? Does the engine acknowledge uncertainty or disagreement when historical evidence is inconclusive?
+Category 11: Science and Research
+Tests scientific and research-oriented retrieval.
+51. How does CRISPR gene editing work?
+52. What causes earthquakes?
+53. Latest research on solid-state batteries
+54. James Webb Space Telescope discoveries
+55. Scientific evidence for climate change
+Check: Does OwnSearch distinguish scientific evidence from speculation and prioritize credible research institutions or publications?
+Category 12: Health and Medical Information
+Tests searches involving sensitive, potentially high-impact information.
+56. What is the difference between a virus and a bacterium?
+57. Common symptoms of iron deficiency
+58. What causes seasonal allergies?
+59. What are the common side effects of ibuprofen?
+60. When should someone seek medical attention for chest pain?
+Check: Are results from credible medical institutions? Does the engine avoid presenting general information as a personal diagnosis?
+For urgent symptoms such as chest pain, results should clearly direct users to emergency medical care when appropriate.
+Category 13: Cybersecurity
+Tests security-related technical information.
+61. How to enable two-factor authentication
+62. What is SQL injection?
+63. OWASP Top 10 official documentation
+64. How to secure a Linux server
+65. How to recognize a phishing email
+Check: Does OwnSearch prioritize authoritative security guidance and legitimate defensive resources?
+Category 14: Linux and Troubleshooting
+Tests practical problem-solving queries.
+66. Ubuntu Wi-Fi not working after restart
+67. How to check disk usage in Linux
+68. How to fix permission denied in Linux
+69. How to find which process uses a port in Ubuntu
+70. How to fix a full C drive in Windows
+Check: Are the results actionable, relevant to the named operating system, and supported by appropriate documentation?
+Category 15: Product Research and Shopping
+Tests product discovery and comparisons.
+71. Best Android phones under ₹70,000
+72. Best laptops for software development
+73. Compare OLED and AMOLED displays
+74. Best monitors for programming
+75. Compare iPhone and Vivo camera quality
+Check: Are the results relevant to the requested budget and product category? Are prices and specifications current?
+Category 16: Travel and Places
+Tests destination discovery and travel information.
+76. Best places to visit in Rajasthan
+77. Things to do in Kyoto
+78. Best time to visit Kerala
+79. Direct flights from Ahmedabad to Delhi
+80. Tourist attractions near the Statue of Unity
+Check: Are the locations correct? For flights and travel schedules, is the information current rather than outdated?
+Category 17: Food and Recipes
+Tests everyday lifestyle searches.
+81. How to make authentic Gujarati dhokla
+82. Easy high-protein vegetarian breakfast recipes
+83. Difference between baking soda and baking powder
+84. How to store fresh coriander for longer
+85. Traditional South Indian breakfast recipes
+Check: Are the recipes relevant, complete, and practical?
+Category 18: Sports
+Tests current scores, schedules, and historical sports information.
+86. Latest India cricket news
+87. Upcoming India cricket matches
+88. FIFA World Cup winners
+89. Latest tennis rankings
+90. Today's football results
+Check: Are scores, rankings, and schedules current? These queries require reliable live data when the user asks for today's information.
+Category 19: Government and Public Services
+Tests official public information.
+91. How to apply for a PAN card in India
+92. Indian passport renewal process
+93. GST registration official portal
+94. Income tax filing due dates in India
+95. Official Indian government scholarship schemes
+Check: Does OwnSearch prioritize official government websites and distinguish current rules from outdated information?
+Category 20: Legal Information
+Tests legal-document retrieval and jurisdiction awareness.
+96. What is the difference between a trademark and a copyright?
+97. Indian Information Technology Act official text
+98. How does small claims court work in the United States?
+99. Indian consumer protection law
+100. What is a non-disclosure agreement?
+Check: Does OwnSearch identify the relevant jurisdiction and prioritize official legal sources? It should not present general information as personalized legal advice.
+Category 21: Comparisons and Alternatives
+Tests queries where the user expects several options to be compared.
+101. PostgreSQL vs MySQL
+102. Selenium vs Playwright
+103. LangChain vs LangGraph
+104. AWS vs Microsoft Azure
+105. Open-source search engines vs commercial search APIs
+Check: Are both sides represented fairly? Do results explain meaningful differences rather than simply mentioning both products?
+Category 22: How-To and Step-by-Step Queries
+Tests practical instructional searches.
+106. How to create a GitHub repository
+107. How to deploy a Python application
+108. How to connect a custom domain to a website
+109. How to create an API key
+110. How to back up an Ubuntu system
+Check: Do results provide actual instructions, not just definitions? Are steps compatible with the requested platform?
+Category 23: Definitions and Short Queries
+Tests very short searches, which are common in search engines.
+111. RAG
+112. OAuth 2.0
+113. Vector database
+114. PageRank algorithm
+115. Refresh token
+Check: Can OwnSearch infer the likely meaning of a short query and retrieve relevant introductory material without returning overly broad results?
+Category 24: Exact-Phrase and Named-Entity Queries
+Tests whether the engine understands phrases as a unit.
+116. "Model Context Protocol" official documentation
+117. "Tata Consultancy Services" annual report
+118. "Ashoka the Great" birthplace
+119. "Python requests" timeout documentation
+120. "The Linux kernel" official repository
+Check: Does the engine preserve phrase meaning? Does it avoid ranking a page simply because it contains one word from the query?
+For command-line testing, remove the quotation marks when you want to test ordinary unquoted search. Keep them when explicitly testing phrase-search support, if your engine implements it.
+Category 25: Long, Detailed Questions
+Tests natural-language queries containing several constraints.
+121. Which open-source search engine can I run locally without paying for a commercial search API?
+122. How can I reduce website loading time without changing the website's design?
+123. What is the most effective way to improve search relevance in a small document collection?
+124. Which AI models can I use for a RAG application with a limited budget?
+125. How can a small IT company generate B2B leads by auditing company websites?
+Check: Does OwnSearch understand the main intent and constraints, or does it match isolated words?
+Category 26: Ambiguous Queries
+Tests how the engine handles words with multiple meanings.
+126. Apple
+127. Java
+128. Mercury
+129. Python
+130. Jaguar
+Check: Does OwnSearch return a reasonable mix of meanings, identify the most likely intent, or provide ways to refine the search?
+For example, Java could refer to a programming language or an Indonesian island.
+Category 27: Recent Events and Date-Specific Queries
+Tests temporal understanding and current-data handling.
+131. AI developments this week
+132. Major technology news in September 2026
+133. Latest RBI policy announcement
+134. Recent NVIDIA earnings report
+135. Latest changes in Python releases
+Check: Are dates interpreted correctly? Are results within the requested period? Does the engine distinguish the publication date from the event date?
+Because these queries are time-sensitive, evaluate them using the date on which you run the test.
+Category 28: PDF, Reports, and Research Documents
+Tests discovery of long-form documents.
+136. NVIDIA annual report PDF
+137. India's Economic Survey official PDF
+138. Research paper on retrieval augmented generation
+139. PostgreSQL documentation PDF
+140. World Bank India economic report
+Check: Can OwnSearch find the actual report or research paper instead of only articles discussing it?
+Category 29: Local Search and Nearby Services
+Tests geographical relevance.
+141. Best restaurants in Rajkot
+142. Hospitals in Rajkot
+143. Computer repair services near me
+144. Coworking spaces in Ahmedabad
+145. Internet service providers in Gujarat
+Check: Are the businesses real, in the requested location, and supported by reliable information? For near me, verify that your engine uses the user's location only when it has permission and reliable location data.
+Category 30: Difficult Queries and Search Quality Edge Cases
+These are particularly valuable for identifying weaknesses in your retrieval and ranking system.
+146. Best search engine for privacy without user tracking
+147. Python timeout AND retry logic
+148. Difference between 401 Unauthorized and 403 Forbidden
+149. TCS share price versus Infosys over the last six months
+150. Claude MCP documentation examples for connecting tools to an AI agent
+Check: Does OwnSearch handle technical operators, similar concepts, comparisons, multiple constraints, and multi-part questions?

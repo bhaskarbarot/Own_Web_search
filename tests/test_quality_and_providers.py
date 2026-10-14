@@ -68,7 +68,7 @@ class QualityAndProviderTests(unittest.TestCase):
         # Real news article with verified recent date
         up("https://news.example.com/modi-summit-2026", "Narendra Modi addresses global green energy summit",
            "Prime Minister Narendra Modi today addressed the global green energy summit in New Delhi. "
-           "Modi outlined India's targets for renewable infrastructure.", published_at=iso_date(0.5))
+           "Modi outlined India's targets for renewable infrastructure.", published_at=datetime.now(timezone.utc).isoformat())
         # Old historical article about Modi
         up("https://history.example.com/modi-early-years", "Narendra Modi: An early biography",
            "A look back at Narendra Modi early political career in Gujarat.", published_at=iso_date(1500))

@@ -1,0 +1,28 @@
+{
+  "description": "Synthetic regression content; URLs identify source scopes, not fetched or independently verified claims. Runtime code never reads this file.",
+  "documents": [
+    {"url":"https://finance.yahoo.com/quote/NVDA/","title":"NVIDIA (NVDA) stock price","text":"NVIDIA stock price quotes report the latest market price and delayed trading data for Nvidia shares."},
+    {"url":"https://news.example/trump","title":"Trump announces a new policy","text":"Donald Trump announced a policy today. Trump addressed questions from reporters.","recent":true},
+    {"url":"https://history.example/ashoka","title":"Ashoka the Great: early life evidence","text":"Ashoka's birthplace evidence requires careful historical review. Samrat Ashok is also called Ashoka the Great. Ashoka's early life is poorly documented."},
+    {"url":"https://finance.yahoo.com/quote/TCS.NS/history/","title":"Tata Consultancy Services (TCS) historical prices","text":"TCS share price history and analysis of Tata Consultancy Services trading sessions and returns."},
+    {"url":"https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html","title":"Inheritance in object-oriented programming","text":"Inheritance in OOP allows a subclass to extend a superclass. Object-oriented programming uses inheritance to share behavior. Inheritance examples define base and derived classes."},
+    {"url":"https://modelcontextprotocol.io/docs/develop/connect-local-servers","title":"Claude and MCP: connect local servers","text":"Claude connects to MCP servers. Model Context Protocol lets Claude access tools. Configure Claude with MCP permissions and restart Claude. MCP server connections support tool calls."},
+    {"url":"https://docs.anthropic.com/en/docs/agents-and-tools/mcp","title":"Claude MCP documentation","text":"Claude supports Model Context Protocol (MCP) tools. Claude uses MCP connections to access external services. MCP configuration examples describe permissions and tool calls."},
+    {"url":"https://github.com/modelcontextprotocol/modelcontextprotocol","title":"Model Context Protocol repository for Claude integrations","text":"MCP integrates tools with Claude clients. Model Context Protocol provides the specification. Claude applications implement MCP using the SDK and protocol."},
+    {"url":"https://requests.readthedocs.io/en/latest/user/quickstart/","title":"Python Requests timeout parameter documentation","text":"The Python requests timeout parameter controls how long a request waits. Pass timeout to requests.get. Python Requests raises a Timeout exception if the server does not respond."},
+    {"url":"https://python.example/planet","title":"Planet Python community news","text":"Python projects and programming announcements. Nvidia GPUs appeared once in a discussion. Many articles describe inheritance, classes and objects, and use the words the and great. Ashok contributed a package. Claude was mentioned once along with MCP."},
+    {"url":"https://en.wikipedia.org/wiki/Narendra_Modi","title":"Narendra Modi biography","text":"Narendra Modi is a political leader. He discussed Ashok with a colleague. The article is about Modi rather than Ashoka."},
+    {"url":"https://history.example/buddha","title":"Lumbini and the birthplace of Buddha","text":"Ashoka erected a pillar at Lumbini, the birthplace of Buddha. Ashoka's pillar marks Buddha's birthplace. These events describe the Buddha rather than the emperor's birth."},
+    {"url":"https://docs.anthropic.com/en/docs/writing","title":"Claude writing guide","text":"Claude helps with writing and summarization. Claude can draft paragraphs and edit essays. A footer mentions MCP once."},
+    {"url":"https://github.com/other/modelcontextprotocol","title":"Unrelated project","text":"An archive mentions MCP. A single contributor named Claude left a comment."}
+  ],
+  "queries": [
+    {"query":"Nvidia live price","entities":[],"judgments":{"https://finance.yahoo.com/quote/NVDA/":3}},
+    {"query":"today's Trump headlines","entities":[{"qid":"Q1","label":"Donald Trump","aliases":["Trump"],"span":"Trump"}],"judgments":{"https://news.example/trump":3}},
+    {"query":"Samrat Ashok birthplace","entities":[{"qid":"Q2","label":"Ashoka","aliases":["Ashok","Ashoka the Great","Samrat Ashok"],"span":"Samrat Ashok"}],"judgments":{"https://history.example/ashoka":3}},
+    {"query":"TCS 6-month analysis","entities":[],"judgments":{"https://finance.yahoo.com/quote/TCS.NS/history/":3}},
+    {"query":"inheritance in OOPS","entities":[{"qid":"Q3","label":"inheritance","span":"inheritance"},{"qid":"Q4","label":"object-oriented programming","aliases":["OOP"],"span":"OOPS"}],"judgments":{"https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html":3}},
+    {"query":"Claude docs on MCP","entities":[{"qid":"Q5","label":"Claude","span":"Claude","urls":["https://docs.anthropic.com/"]},{"qid":"Q6","label":"Model Context Protocol","aliases":["MCP"],"span":"MCP","urls":["https://modelcontextprotocol.io/","https://github.com/modelcontextprotocol/modelcontextprotocol"]}],"judgments":{"https://modelcontextprotocol.io/docs/develop/connect-local-servers":3,"https://docs.anthropic.com/en/docs/agents-and-tools/mcp":3,"https://github.com/modelcontextprotocol/modelcontextprotocol":3}},
+    {"query":"Python requests timeout parameter documentation","entities":[{"qid":"Q7","label":"Requests","span":"requests","urls":["https://requests.readthedocs.io/"]}],"judgments":{"https://requests.readthedocs.io/en/latest/user/quickstart/":3}}
+  ]
+}

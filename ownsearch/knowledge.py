@@ -36,7 +36,15 @@ class _DiskCache:
 
     def __init__(self, path):
         from .db import Database
-        self.db = Database(path, "CREATE TABLE IF NOT EXISTS kv(key TEXT PRIMARY KEY, ts REAL, value TEXT);")
+        self.db = Database(path, """CREATE TABLE IF NOT EXISTS kv(key TEXT PRIMARY KEY, ts REAL, value TEXT);
+            CREATE TABLE IF NOT EXISTS records(qid TEXT, full INTEGER, ts REAL, value TEXT, PRIMARY KEY(qid,full));""")
+        if not self.db.one("SELECT 1 FROM records LIMIT 1"):
+            with self.db.tx() as c:
+                c.execute("""INSERT OR REPLACE INTO records SELECT e.key,
+                    json_type(e.value,'$.claims') IS NOT NULL, k.ts, e.value
+                    FROM kv k, json_each(k.value,'$.entities') e
+                    WHERE e.type='object' AND json_type(e.value,'$.labels')='object'
+                    ORDER BY k.ts""")
 
     def get(self, key):
         row = self.db.one("SELECT ts, value FROM kv WHERE key=?", (key,))
@@ -46,8 +54,13 @@ class _DiskCache:
 
     def put(self, key, value):
         with self.db.tx() as c:
+            now = time.time()
             c.execute("INSERT OR REPLACE INTO kv(key, ts, value) VALUES(?,?,?)",
-                      (key, time.time(), json.dumps(value)))
+                      (key, now, json.dumps(value)))
+            for qid, record in value.get('entities', {}).items() if isinstance(value, dict) else []:
+                if isinstance(record, dict) and record.get('labels'):
+                    c.execute("INSERT OR REPLACE INTO records VALUES(?,?,?,?)",
+                              (qid, int('claims' in record), now, json.dumps(record)))
 
 
 _caches = {}
@@ -128,7 +141,10 @@ class Entity:
     def names(self):
         """Label + aliases, longest first (used to recognise the entity in documents)."""
         seen, out = set(), []
-        for n in [self.label] + list(self.aliases):
+        names = [self.label] + list(self.aliases)
+        if self.span and _stems(self.span) and any(_stems(self.span) <= _stems(n) for n in names):
+            names.append(self.span)
+        for n in names:
             k = n.lower().strip()
             if k and k not in seen and len(k) > 1:
                 seen.add(k)
@@ -148,12 +164,32 @@ class Knowledge:
         self._props_path = Path(settings.data_dir) / "wikidata_properties.json"
         self._props = None
         self.cache = _disk(settings)
+        self.cached_only = False
 
     def _json(self, url, max_bytes=20_000_000):
+        if self.cached_only or (self.deadline is not None and time.monotonic() >= self.deadline):
+            return self.cache.get(url)
         return _get_json(self.fetcher, url, max_bytes, self.cache, self.deadline)
 
     # ------------------------------------------------------------ lookups
+    def _local_search(self, text, limit=20):
+        local = []
+        for row in self.cache.db.query("SELECT qid,value FROM records WHERE ts>?", (time.time() - CACHE_TTL,)):
+            if not row['qid'].startswith('Q') or not row['qid'][1:].isdigit():
+                continue
+            record = json.loads(row['value'])
+            label = (record.get('labels', {}).get('en') or {}).get('value', '')
+            names = [(label, 'label')] + [(a['value'], 'alias') for a in record.get('aliases', {}).get('en', [])]
+            for name, kind in names:
+                if name.lower() == text.lower():
+                    local.append({'id': row['qid'], 'match': {'text': name, 'type': kind}})
+                    break
+        return list({r['id']: r for r in local}.values())[:limit]
+
     def _wd_search(self, text, limit=20):
+        local = self._local_search(text, limit)
+        if local:
+            return local
         url = WIKIDATA_API + "?" + urlencode({"action": "wbsearchentities", "format": "json", "language": "en",
                                               "uselang": "en", "type": "item", "limit": limit, "search": text})
         return (self._json(url) or {}).get("search", [])
@@ -168,10 +204,38 @@ class Knowledge:
         return [(p["title"], (p.get("pageprops") or {}).get("wikibase_item")) for p in ranked
                 if (p.get("pageprops") or {}).get("wikibase_item")]
 
+    def _wp_titles(self, titles):
+        url = WIKIPEDIA_API + '?' + urlencode({'action':'query','format':'json','redirects':1,
+            'titles':'|'.join(titles[:3]),'prop':'pageprops','ppprop':'wikibase_item'})
+        pages = ((self._json(url) or {}).get('query') or {}).get('pages') or {}
+        return [(p['title'],p['pageprops']['wikibase_item']) for p in pages.values()
+                if p.get('pageprops', {}).get('wikibase_item')]
+
     def entities(self, qids, claims=False):
         """Wikidata records. Without claims the records are small (names, descriptions, sitelinks)."""
         qids = [q for q in dict.fromkeys(qids) if q]
         out = {}
+        # Reuse records independently of the order/batch in which they were
+        # fetched. URL-only caching previously missed the same entity whenever
+        # another query changed the batch of candidate ids.
+        for qid in qids:
+            rows = self.cache.db.query("SELECT value AS record FROM records WHERE qid=? AND ts>? AND full>=? ORDER BY full DESC,ts DESC LIMIT 1",
+                                       (qid, time.time() - CACHE_TTL, int(claims)))
+            for row in rows:
+                record = json.loads(row['record'])
+                if record.get('labels') and (not claims or 'claims' in record):
+                    out[qid] = record
+                    break
+        qids = [qid for qid in qids if qid not in out]
+        if claims:
+            for qid in list(qids):
+                # EntityData is a small, cacheable public record endpoint and
+                # remains useful when the query API is unavailable.
+                data = self._json("https://www.wikidata.org/wiki/Special:EntityData/" + quote(qid) + ".json") or {}
+                record = data.get('entities', {}).get(qid)
+                if record and 'claims' in record:
+                    out[qid] = record
+            qids = [qid for qid in qids if qid not in out]
         props = "labels|descriptions|aliases|sitelinks" + ("|claims" if claims else "")
         step = 4 if claims else 40                 # full records can be several MB each
         for i in range(0, len(qids), step):
@@ -208,7 +272,7 @@ class Knowledge:
         return {p: self._props.get(p, {}) for p in pids}
 
     # ------------------------------------------------------------ entity linking
-    def link(self, words, context_words=(), max_entities=3, load_claims=True, load_urls=True):
+    def link(self, words, context_words=(), max_entities=3, load_claims=True, load_urls=True, candidate_titles=(), candidate_ids=()):
         """words: subject words of the query (original case, in order); context_words: all other content words."""
         words = [w for w in words if w and w.lower() not in STOPWORDS]
         if not words:
@@ -226,21 +290,32 @@ class Knowledge:
                 if st != s.lower() and len(st) > 1:      # plural / inflected form ("oops" -> "oop")
                     variants[s].append(st)
         wd, covered = [], set()
+        known_spans = any(self._local_search(span) for span in spans)
+        # Full-query context first: do not spend the entire network budget on
+        # unlikely word spans before obtaining any usable entity records.
+        self.cached_only = known_spans
+        try:
+            wp = list(candidate_ids) if candidate_ids else self._wp_titles(list(candidate_titles)) if candidate_titles else self._wp_search(" ".join(words + list(context_words)))
+        finally:
+            self.cached_only = False
+        context_qids = {qid for _, qid in wp}
+        context_records = self.entities(list(context_qids), claims=bool(candidate_ids)) if context_qids else {}
         for span, vs in variants.items():
-            if self.deadline is not None and time.monotonic() >= self.deadline:
-                break
+            # Cached spans remain usable after the network budget expires.
             toks = set(span.lower().split())
             if toks <= covered:
                 continue                               # a longer span already matched these words exactly
             for v in vs:
-                res = self._wd_search(v)
+                self.cached_only = bool(context_records) or known_spans
+                try:
+                    res = self._wd_search(v)
+                finally:
+                    self.cached_only = False
                 wd.append((span, res))
                 if any((r.get("match") or {}).get("text", "").lower() in (span.lower(), v.lower()) for r in res):
                     covered |= toks
         # Inflection variants must still be checked when a surface form is itself
         # an ambiguous name. Context, rather than the first label hit, decides.
-        wp = self._wp_search(" ".join(words + list(context_words)))
-        context_qids = {qid for _, qid in wp}
         if context_words:
             wp += self._wp_search(" ".join(words))
         # A stem is not generally a valid search word. Try inflection variants
@@ -263,7 +338,10 @@ class Knowledge:
                     cand_spans[q] = (span, quality)
         for _title, qid in wp:
             cand_spans.setdefault(qid, ("", 0.0))
-        ents = self.entities(list(cand_spans))
+        ents = dict(context_records)
+        remaining = [qid for qid in cand_spans if qid not in ents]
+        if remaining:
+            ents.update(self.entities(remaining))
         subj = {stem(w.lower()) for w in words}
         all_ctx = subj | {stem(w.lower()) for w in context_words if w.lower() not in STOPWORDS}
         # Context search can name a related organization rather than the queried
@@ -337,6 +415,10 @@ class Knowledge:
                  for name in [metadata.get(pid, {}).get("label", "")] + metadata.get(pid, {}).get("aliases", [])),
                 default=0), reverse=True)
             for pid in ordered_pids:
+                names = [metadata.get(pid, {}).get('label', '')] + metadata.get(pid, {}).get('aliases', [])
+                if max((max(model.classify(name)[1].get('company', 0), model.classify(name)[1].get('tech_docs', 0))
+                        for name in names), default=0) < 0.45:
+                    continue
                 meta = metadata.get(pid, {})
                 property_names = [meta.get("label", "")] + meta.get("aliases", [])
                 affinity = max((model.classify(n)[1].get("company", 0) + model.classify(n)[1].get("tech_docs", 0)
@@ -378,7 +460,18 @@ class Knowledge:
                 break
             values = self._values(entity.claims.get(pid, []))
             if values:
-                facts.append({"property": pid, "label": meta.get("label"), "values": values})
+                references = []
+                for claim in entity.claims.get(pid, []):
+                    if claim.get("rank") == "deprecated":
+                        continue
+                    for reference in claim.get("references", []):
+                        for snaks in reference.get("snaks", {}).values():
+                            for snak in snaks:
+                                value = (snak.get("datavalue") or {}).get("value")
+                                if snak.get("datatype") == "url" and isinstance(value, str):
+                                    references.append(value)
+                facts.append({"property": pid, "label": meta.get("label"), "values": values,
+                              "references": list(dict.fromkeys(references))})
         if not facts:
             return None
         lines = []
@@ -393,7 +486,9 @@ class Knowledge:
                 vals.append(txt)
             lines.append(f"{f['label'][:1].upper() + f['label'][1:]}: " + "; ".join(vals))
         return {"type": "fact", "entity": entity.label, "entity_description": entity.description,
-                "text": "\n".join(lines), "facts": facts,
+                "text": "Wikidata reports (not independently verified):\n" + "\n".join(lines), "facts": facts,
+                "verification": "unverified",
+                "verification_note": "This claim has not been corroborated against an independent reliable source; it is not a confirmed answer.",
                 "source": {"name": "Wikidata", "url": f"https://www.wikidata.org/wiki/{entity.qid}",
                            "page": entity.wiki_url}}
 

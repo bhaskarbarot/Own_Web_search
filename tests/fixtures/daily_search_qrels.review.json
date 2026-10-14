@@ -1,0 +1,1055 @@
+{
+  "description": "Fill judgments with reviewed URL grades 0\u20133, then set review_status to reviewed. Empty unreviewed cases are not accuracy measurements.",
+  "queries": [
+    {
+      "number": 1,
+      "category": "General Knowledge",
+      "query": "Who invented the telephone?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 2,
+      "category": "General Knowledge",
+      "query": "What is the largest ocean in the world?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 3,
+      "category": "General Knowledge",
+      "query": "Why is the sky blue?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 4,
+      "category": "General Knowledge",
+      "query": "What is the difference between weather and climate?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 5,
+      "category": "General Knowledge",
+      "query": "How does the internet work?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 6,
+      "category": "Current News and Breaking News",
+      "query": "Latest AI news today",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 7,
+      "category": "Current News and Breaking News",
+      "query": "Today's major headlines in India",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 8,
+      "category": "Current News and Breaking News",
+      "query": "Latest technology news",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 9,
+      "category": "Current News and Breaking News",
+      "query": "Latest US political news",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 10,
+      "category": "Current News and Breaking News",
+      "query": "Latest news about OpenAI",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 11,
+      "category": "Programming and Software Development",
+      "query": "Python requests timeout parameter documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 12,
+      "category": "Programming and Software Development",
+      "query": "Difference between Python list and tuple",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 13,
+      "category": "Programming and Software Development",
+      "query": "JavaScript async await examples",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 14,
+      "category": "Programming and Software Development",
+      "query": "How to handle exceptions in Python",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 15,
+      "category": "Programming and Software Development",
+      "query": "Python dictionary methods with examples",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 16,
+      "category": "Official Technical Documentation",
+      "query": "OpenAI API authentication documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 17,
+      "category": "Official Technical Documentation",
+      "query": "Claude API documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 18,
+      "category": "Official Technical Documentation",
+      "query": "LangGraph agent state management documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 19,
+      "category": "Official Technical Documentation",
+      "query": "PostgreSQL indexing documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 20,
+      "category": "Official Technical Documentation",
+      "query": "React hooks official documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 21,
+      "category": "AI, Machine Learning, and LLMs",
+      "query": "What is retrieval augmented generation?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 22,
+      "category": "AI, Machine Learning, and LLMs",
+      "query": "Best practices for RAG chunking strategies",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 23,
+      "category": "AI, Machine Learning, and LLMs",
+      "query": "Difference between RAG and fine-tuning",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 24,
+      "category": "AI, Machine Learning, and LLMs",
+      "query": "How does an AI agent work?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 25,
+      "category": "AI, Machine Learning, and LLMs",
+      "query": "What is a reranker in information retrieval?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 26,
+      "category": "Company Information",
+      "query": "NVIDIA official website",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 27,
+      "category": "Company Information",
+      "query": "Tata Consultancy Services company profile",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 28,
+      "category": "Company Information",
+      "query": "Microsoft investor relations",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 29,
+      "category": "Company Information",
+      "query": "Infosys annual report",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 30,
+      "category": "Company Information",
+      "query": "OpenAI company information",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 31,
+      "category": "Finance and Stock Markets",
+      "query": "NVIDIA live stock price",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 32,
+      "category": "Finance and Stock Markets",
+      "query": "TCS share price today",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 33,
+      "category": "Finance and Stock Markets",
+      "query": "Reliance Industries stock performance",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 34,
+      "category": "Finance and Stock Markets",
+      "query": "Microsoft stock price",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 35,
+      "category": "Finance and Stock Markets",
+      "query": "TCS six-month stock analysis",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 36,
+      "category": "Business and Market Research",
+      "query": "Best CRM software for small businesses",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 37,
+      "category": "Business and Market Research",
+      "query": "AI automation tools for accounting",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 38,
+      "category": "Business and Market Research",
+      "query": "Market trends in Indian SaaS companies",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 39,
+      "category": "Business and Market Research",
+      "query": "Competitors of Salesforce",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 40,
+      "category": "Business and Market Research",
+      "query": "Best lead generation strategies for B2B companies",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 41,
+      "category": "Education and Learning",
+      "query": "Explain photosynthesis in simple words",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 42,
+      "category": "Education and Learning",
+      "query": "What is Newton's second law of motion?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 43,
+      "category": "Education and Learning",
+      "query": "Difference between mitosis and meiosis",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 44,
+      "category": "Education and Learning",
+      "query": "Explain object-oriented programming with examples",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 45,
+      "category": "Education and Learning",
+      "query": "Best resources to learn data structures and algorithms",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 46,
+      "category": "History and Geography",
+      "query": "When did the Mughal Empire begin?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 47,
+      "category": "History and Geography",
+      "query": "Where was Emperor Ashoka born?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 48,
+      "category": "History and Geography",
+      "query": "Who built the Taj Mahal?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 49,
+      "category": "History and Geography",
+      "query": "What is the capital of Australia?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 50,
+      "category": "History and Geography",
+      "query": "Causes of the French Revolution",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 51,
+      "category": "Science and Research",
+      "query": "How does CRISPR gene editing work?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 52,
+      "category": "Science and Research",
+      "query": "What causes earthquakes?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 53,
+      "category": "Science and Research",
+      "query": "Latest research on solid-state batteries",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 54,
+      "category": "Science and Research",
+      "query": "James Webb Space Telescope discoveries",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 55,
+      "category": "Science and Research",
+      "query": "Scientific evidence for climate change",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 56,
+      "category": "Health and Medical Information",
+      "query": "What is the difference between a virus and a bacterium?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 57,
+      "category": "Health and Medical Information",
+      "query": "Common symptoms of iron deficiency",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 58,
+      "category": "Health and Medical Information",
+      "query": "What causes seasonal allergies?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 59,
+      "category": "Health and Medical Information",
+      "query": "What are the common side effects of ibuprofen?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 60,
+      "category": "Health and Medical Information",
+      "query": "When should someone seek medical attention for chest pain?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 61,
+      "category": "Cybersecurity",
+      "query": "How to enable two-factor authentication",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 62,
+      "category": "Cybersecurity",
+      "query": "What is SQL injection?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 63,
+      "category": "Cybersecurity",
+      "query": "OWASP Top 10 official documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 64,
+      "category": "Cybersecurity",
+      "query": "How to secure a Linux server",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 65,
+      "category": "Cybersecurity",
+      "query": "How to recognize a phishing email",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 66,
+      "category": "Linux and Troubleshooting",
+      "query": "Ubuntu Wi-Fi not working after restart",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 67,
+      "category": "Linux and Troubleshooting",
+      "query": "How to check disk usage in Linux",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 68,
+      "category": "Linux and Troubleshooting",
+      "query": "How to fix permission denied in Linux",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 69,
+      "category": "Linux and Troubleshooting",
+      "query": "How to find which process uses a port in Ubuntu",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 70,
+      "category": "Linux and Troubleshooting",
+      "query": "How to fix a full C drive in Windows",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 71,
+      "category": "Product Research and Shopping",
+      "query": "Best Android phones under \u20b970,000",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 72,
+      "category": "Product Research and Shopping",
+      "query": "Best laptops for software development",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 73,
+      "category": "Product Research and Shopping",
+      "query": "Compare OLED and AMOLED displays",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 74,
+      "category": "Product Research and Shopping",
+      "query": "Best monitors for programming",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 75,
+      "category": "Product Research and Shopping",
+      "query": "Compare iPhone and Vivo camera quality",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 76,
+      "category": "Travel and Places",
+      "query": "Best places to visit in Rajasthan",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 77,
+      "category": "Travel and Places",
+      "query": "Things to do in Kyoto",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 78,
+      "category": "Travel and Places",
+      "query": "Best time to visit Kerala",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 79,
+      "category": "Travel and Places",
+      "query": "Direct flights from Ahmedabad to Delhi",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 80,
+      "category": "Travel and Places",
+      "query": "Tourist attractions near the Statue of Unity",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 81,
+      "category": "Food and Recipes",
+      "query": "How to make authentic Gujarati dhokla",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 82,
+      "category": "Food and Recipes",
+      "query": "Easy high-protein vegetarian breakfast recipes",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 83,
+      "category": "Food and Recipes",
+      "query": "Difference between baking soda and baking powder",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 84,
+      "category": "Food and Recipes",
+      "query": "How to store fresh coriander for longer",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 85,
+      "category": "Food and Recipes",
+      "query": "Traditional South Indian breakfast recipes",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 86,
+      "category": "Sports",
+      "query": "Latest India cricket news",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 87,
+      "category": "Sports",
+      "query": "Upcoming India cricket matches",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 88,
+      "category": "Sports",
+      "query": "FIFA World Cup winners",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 89,
+      "category": "Sports",
+      "query": "Latest tennis rankings",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 90,
+      "category": "Sports",
+      "query": "Today's football results",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 91,
+      "category": "Government and Public Services",
+      "query": "How to apply for a PAN card in India",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 92,
+      "category": "Government and Public Services",
+      "query": "Indian passport renewal process",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 93,
+      "category": "Government and Public Services",
+      "query": "GST registration official portal",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 94,
+      "category": "Government and Public Services",
+      "query": "Income tax filing due dates in India",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 95,
+      "category": "Government and Public Services",
+      "query": "Official Indian government scholarship schemes",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 96,
+      "category": "Legal Information",
+      "query": "What is the difference between a trademark and a copyright?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 97,
+      "category": "Legal Information",
+      "query": "Indian Information Technology Act official text",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 98,
+      "category": "Legal Information",
+      "query": "How does small claims court work in the United States?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 99,
+      "category": "Legal Information",
+      "query": "Indian consumer protection law",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 100,
+      "category": "Legal Information",
+      "query": "What is a non-disclosure agreement?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 101,
+      "category": "Comparisons and Alternatives",
+      "query": "PostgreSQL vs MySQL",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 102,
+      "category": "Comparisons and Alternatives",
+      "query": "Selenium vs Playwright",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 103,
+      "category": "Comparisons and Alternatives",
+      "query": "LangChain vs LangGraph",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 104,
+      "category": "Comparisons and Alternatives",
+      "query": "AWS vs Microsoft Azure",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 105,
+      "category": "Comparisons and Alternatives",
+      "query": "Open-source search engines vs commercial search APIs",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 106,
+      "category": "How-To and Step-by-Step Queries",
+      "query": "How to create a GitHub repository",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 107,
+      "category": "How-To and Step-by-Step Queries",
+      "query": "How to deploy a Python application",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 108,
+      "category": "How-To and Step-by-Step Queries",
+      "query": "How to connect a custom domain to a website",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 109,
+      "category": "How-To and Step-by-Step Queries",
+      "query": "How to create an API key",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 110,
+      "category": "How-To and Step-by-Step Queries",
+      "query": "How to back up an Ubuntu system",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 111,
+      "category": "Definitions and Short Queries",
+      "query": "RAG",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 112,
+      "category": "Definitions and Short Queries",
+      "query": "OAuth 2.0",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 113,
+      "category": "Definitions and Short Queries",
+      "query": "Vector database",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 114,
+      "category": "Definitions and Short Queries",
+      "query": "PageRank algorithm",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 115,
+      "category": "Definitions and Short Queries",
+      "query": "Refresh token",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 116,
+      "category": "Exact-Phrase and Named-Entity Queries",
+      "query": "\"Model Context Protocol\" official documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 117,
+      "category": "Exact-Phrase and Named-Entity Queries",
+      "query": "\"Tata Consultancy Services\" annual report",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 118,
+      "category": "Exact-Phrase and Named-Entity Queries",
+      "query": "\"Ashoka the Great\" birthplace",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 119,
+      "category": "Exact-Phrase and Named-Entity Queries",
+      "query": "\"Python requests\" timeout documentation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 120,
+      "category": "Exact-Phrase and Named-Entity Queries",
+      "query": "\"The Linux kernel\" official repository",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 121,
+      "category": "Long, Detailed Questions",
+      "query": "Which open-source search engine can I run locally without paying for a commercial search API?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 122,
+      "category": "Long, Detailed Questions",
+      "query": "How can I reduce website loading time without changing the website's design?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 123,
+      "category": "Long, Detailed Questions",
+      "query": "What is the most effective way to improve search relevance in a small document collection?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 124,
+      "category": "Long, Detailed Questions",
+      "query": "Which AI models can I use for a RAG application with a limited budget?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 125,
+      "category": "Long, Detailed Questions",
+      "query": "How can a small IT company generate B2B leads by auditing company websites?",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 126,
+      "category": "Ambiguous Queries",
+      "query": "Apple",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 127,
+      "category": "Ambiguous Queries",
+      "query": "Java",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 128,
+      "category": "Ambiguous Queries",
+      "query": "Mercury",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 129,
+      "category": "Ambiguous Queries",
+      "query": "Python",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 130,
+      "category": "Ambiguous Queries",
+      "query": "Jaguar",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 131,
+      "category": "Recent Events and Date-Specific Queries",
+      "query": "AI developments this week",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 132,
+      "category": "Recent Events and Date-Specific Queries",
+      "query": "Major technology news in September 2026",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 133,
+      "category": "Recent Events and Date-Specific Queries",
+      "query": "Latest RBI policy announcement",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 134,
+      "category": "Recent Events and Date-Specific Queries",
+      "query": "Recent NVIDIA earnings report",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 135,
+      "category": "Recent Events and Date-Specific Queries",
+      "query": "Latest changes in Python releases",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 136,
+      "category": "PDF, Reports, and Research Documents",
+      "query": "NVIDIA annual report PDF",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 137,
+      "category": "PDF, Reports, and Research Documents",
+      "query": "India's Economic Survey official PDF",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 138,
+      "category": "PDF, Reports, and Research Documents",
+      "query": "Research paper on retrieval augmented generation",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 139,
+      "category": "PDF, Reports, and Research Documents",
+      "query": "PostgreSQL documentation PDF",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 140,
+      "category": "PDF, Reports, and Research Documents",
+      "query": "World Bank India economic report",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 141,
+      "category": "Local Search and Nearby Services",
+      "query": "Best restaurants in Rajkot",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 142,
+      "category": "Local Search and Nearby Services",
+      "query": "Hospitals in Rajkot",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 143,
+      "category": "Local Search and Nearby Services",
+      "query": "Computer repair services near me",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 144,
+      "category": "Local Search and Nearby Services",
+      "query": "Coworking spaces in Ahmedabad",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 145,
+      "category": "Local Search and Nearby Services",
+      "query": "Internet service providers in Gujarat",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 146,
+      "category": "Difficult Queries and Search Quality Edge Cases",
+      "query": "Best search engine for privacy without user tracking",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 147,
+      "category": "Difficult Queries and Search Quality Edge Cases",
+      "query": "Python timeout AND retry logic",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 148,
+      "category": "Difficult Queries and Search Quality Edge Cases",
+      "query": "Difference between 401 Unauthorized and 403 Forbidden",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 149,
+      "category": "Difficult Queries and Search Quality Edge Cases",
+      "query": "TCS share price versus Infosys over the last six months",
+      "judgments": {},
+      "review_status": "unreviewed"
+    },
+    {
+      "number": 150,
+      "category": "Difficult Queries and Search Quality Edge Cases",
+      "query": "Claude MCP documentation examples for connecting tools to an AI agent",
+      "judgments": {},
+      "review_status": "unreviewed"
+    }
+  ]
+}
