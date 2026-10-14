@@ -67,6 +67,7 @@ reference	where was {subject} born
 reference	{subject} birthplace
 reference	birthplace of {subject}
 reference	find {subject} birthplace
+reference	show me the birthplace of {subject}
 reference	when did {subject} end
 reference	who founded {subject}
 reference	capital of {subject}
@@ -98,6 +99,13 @@ general	how to make {subject}
 general	places to visit in {subject}
 general	find cheap {subject} in {subject}
 general	show me some good {subject}
+general	give me {subject}
+general	give me {subject} names
+general	give me a list of {subject}
+general	list {subject} names
+general	show me {subject} names
+general	what are the names of {subject}
+general	name the {subject}
 finance_quote	show {subject} live price
 finance_quote	{subject} live stock price
 finance_quote	{subject} live share price

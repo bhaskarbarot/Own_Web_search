@@ -121,6 +121,17 @@ def _stems(text):
     return {stem(t) for t in tokenize(text) if t not in STOPWORDS}
 
 
+def _one_edit(a, b):
+    """Conservative spelling grammar; candidate text must come from the source."""
+    if a == b or min(len(a), len(b)) < 5 or abs(len(a) - len(b)) > 1:
+        return False
+    if len(a) == len(b):
+        return sum(x != y for x, y in zip(a, b)) == 1
+    shorter, longer = sorted((a, b), key=len)
+    i = next((i for i, (x, y) in enumerate(zip(shorter, longer)) if x != y), len(shorter))
+    return shorter[i:] == longer[i + 1:]
+
+
 @dataclass
 class Entity:
     qid: str
@@ -165,6 +176,8 @@ class Knowledge:
         self._props = None
         self.cache = _disk(settings)
         self.cached_only = False
+        self.spelling_corrections = {}
+        self.search_records = {}
 
     def _json(self, url, max_bytes=20_000_000):
         if self.cached_only or (self.deadline is not None and time.monotonic() >= self.deadline):
@@ -197,10 +210,34 @@ class Knowledge:
     def _wp_search(self, text, limit=5):
         """Wikipedia full-text lookup + Wikidata ids in one request (generator=search)."""
         url = WIKIPEDIA_API + "?" + urlencode({"action": "query", "format": "json", "generator": "search",
-                                               "gsrsearch": text, "gsrlimit": limit, "prop": "pageprops",
-                                               "ppprop": "wikibase_item"})
-        pages = ((self._json(url) or {}).get("query") or {}).get("pages") or {}
+                                               "gsrsearch": text, "gsrlimit": limit, "prop": "pageprops|pageterms",
+                                               "wbptterms": "label|description|alias",
+                                               "ppprop": "wikibase_item", "list": "search", "srsearch": text,
+                                               "srlimit": 1, "srinfo": "suggestion|rewrittenquery"})
+        query = (self._json(url) or {}).get("query") or {}
+        info = query.get("searchinfo") or {}
+        # The generator omits searchinfo; the accompanying one-result list
+        # supplies the search engine's correction without another HTTP request.
+        original = tokenize(text)
+        suggested = tokenize(info.get("suggestion") or info.get("rewrittenquery") or "")
+        if len(original) == len(suggested):
+            changes = [(a, b) for a, b in zip(original, suggested) if a != b]
+            if changes and all(_one_edit(a, b) for a, b in changes):
+                self.spelling_corrections.update(changes)
+        pages = query.get("pages") or {}
         ranked = sorted(pages.values(), key=lambda p: p.get("index", 99))
+        for page in ranked:
+            qid = (page.get("pageprops") or {}).get("wikibase_item")
+            terms = page.get("terms") or {}
+            if not qid or not terms.get("label"):
+                continue
+            self.search_records[qid] = {
+                "labels": {"en": {"value": terms["label"][0]}},
+                "descriptions": {"en": {"value": (terms.get("description") or [""])[0]}},
+                "aliases": {"en": [{"value": alias} for alias in terms.get("alias", [])]},
+                "sitelinks": {"enwiki": {"title": page["title"]}}}
+        if self.search_records:
+            self.cache.put("search-records:" + url, {"entities": self.search_records})
         return [(p["title"], (p.get("pageprops") or {}).get("wikibase_item")) for p in ranked
                 if (p.get("pageprops") or {}).get("wikibase_item")]
 
@@ -299,7 +336,17 @@ class Knowledge:
         finally:
             self.cached_only = False
         context_qids = {qid for _, qid in wp}
-        context_records = self.entities(list(context_qids), claims=bool(candidate_ids)) if context_qids else {}
+        # Search pageterms already contain source-provided labels, aliases and
+        # descriptions. Missing a second API call must not cause a cached,
+        # unrelated candidate to displace the source's primary subject.
+        context_records = {qid: self.search_records[qid] for qid in context_qids if qid in self.search_records}
+        missing_context = [qid for _, qid in wp if qid not in context_records]
+        if missing_context:
+            context_records.update(self.entities(missing_context, claims=bool(candidate_ids)))
+        for span in spans:
+            corrected = " ".join(self.spelling_corrections.get(w.lower(), w) for w in span.split())
+            if corrected != span:
+                variants[span].append(corrected)
         for span, vs in variants.items():
             # Cached spans remain usable after the network budget expires.
             toks = set(span.lower().split())
@@ -316,7 +363,7 @@ class Knowledge:
                     covered |= toks
         # Inflection variants must still be checked when a surface form is itself
         # an ambiguous name. Context, rather than the first label hit, decides.
-        if context_words:
+        if context_words and not context_records:
             wp += self._wp_search(" ".join(words))
         # A stem is not generally a valid search word. Try inflection variants
         # for plural surface forms while preserving the other subject words.
@@ -331,8 +378,10 @@ class Knowledge:
                 matched = (r.get("match") or {}).get("text", "")
                 kind = (r.get("match") or {}).get("type", "")
                 exact = matched.lower() in (span.lower(), stem(span.lower()))
+                corrected_span = " ".join(self.spelling_corrections.get(w.lower(), w.lower()) for w in span.split())
+                corrected = corrected_span != span.lower() and matched.lower() == corrected_span
                 q = r["id"]
-                quality = (1.0 if kind == "label" else 0.85) if exact else 0.25
+                quality = (1.0 if kind == "label" else 0.85) if exact else (0.9 if corrected else 0.25)
                 prev = cand_spans.get(q)
                 if not prev or quality * len(span) > prev[1] * len(prev[0]):
                     cand_spans[q] = (span, quality)
@@ -342,7 +391,8 @@ class Knowledge:
         remaining = [qid for qid in cand_spans if qid not in ents]
         if remaining:
             ents.update(self.entities(remaining))
-        subj = {stem(w.lower()) for w in words}
+        corrected_stem = lambda w: stem(self.spelling_corrections.get(w.lower(), w.lower()))
+        subj = {corrected_stem(w) for w in words}
         all_ctx = subj | {stem(w.lower()) for w in context_words if w.lower() not in STOPWORDS}
         # Context search can name a related organization rather than the queried
         # product. Use those data-provided names as additional disambiguation
@@ -371,11 +421,11 @@ class Knowledge:
                 hit = label_stems & subj
                 if not hit:
                     continue
-                span = " ".join(w for w in words if stem(w.lower()) in hit)
+                span = " ".join(w for w in words if corrected_stem(w) in hit)
                 quality = (0.9 if matched_name == label else 0.85) * len(hit) / len(label_stems)
                 if context_words and qid in context_qids:
                     quality = (0.9 if matched_name == label else 0.85) * (0.5 + 0.5 * len(hit) / len(label_stems))
-            span_stems = _stems(span)
+            span_stems = {corrected_stem(w) for w in tokenize(span) if w not in STOPWORDS}
             ctx = (all_ctx - span_stems) & _stems(desc + " " + " ".join(aliases) + " " + label)
             related = any(name <= _stems(desc + " " + " ".join(aliases))
                           for name in context_names if not name <= span_stems)

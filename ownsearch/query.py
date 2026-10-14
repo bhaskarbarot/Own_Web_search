@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 from .dates import parse_date, parse_duration, parse_month_period, start_of_today_utc
-from .intent import get_model
+from .intent import get_model, requested_format
 from .textproc import STOPWORDS, analyze, stem, tokenize
 from .util import iso_to_ts
 
@@ -53,6 +53,8 @@ class ParsedQuery:
     entities: list = field(default_factory=list)      # linked knowledge-base entities (filled when live)
     named_phrases: list = field(default_factory=list) # capitalization evidence, used until linking succeeds
     reference_roots: list = field(default_factory=list) # source-provided lookup hints from the local index
+    spelling_corrections: dict = field(default_factory=dict) # accepted source suggestions, never a topic dictionary
+    result_format: str = None
 
     @property
     def scoring_terms(self):
@@ -87,6 +89,8 @@ class ParsedQuery:
                 "after": self.after, "before": self.before, "freshness": self.freshness,
                 "fresh_intent": self.fresh_intent, "intent": self.intent,
                 "intent_details": self.intent_details, "subject": " ".join(self.entity),
+                "spelling_corrections": self.spelling_corrections,
+                "result_format": self.result_format,
                 "intent_scores": {k: round(v, 3) for k, v in self.intent_scores.items()},
                 "entities": [e.to_dict() for e in self.entities]}
 
@@ -190,6 +194,7 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
         q.lang = str(lang).lower()[:2]
     # Operators and exclusions are syntax, not evidence for the intent classifier.
     clean_raw = " ".join(q.surface)
+    q.result_format = requested_format(clean_raw)
     label, probs = model.classify(clean_raw)
     q.intent_scores = probs
     if not probs or probs.get(label, 0) < MIN_INTENT_CONFIDENCE:

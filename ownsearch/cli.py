@@ -25,6 +25,9 @@ def _pretty(res):
           f"{cov.get('matched_documents', 0)} matches in {cov.get('index_documents', 0)} docs, mode={cov.get('mode')})")
     if cov.get("message"):
         print(f"  note: {cov['message']}")
+    corrections = res.get("query_understanding", {}).get("spelling_corrections", {})
+    if corrections:
+        print("  spelling: " + ", ".join(f"{old} → {new}" for old, new in corrections.items()))
     answer = res.get("answer")
     if answer:
         print(f"\n  {answer.get('text', '')}")

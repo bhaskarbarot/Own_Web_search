@@ -127,3 +127,13 @@ def temporal_window(text, model):
         if tokens <= words and all(model.is_query_language(w) for w in tokens):
             return window
     return None
+
+
+def requested_format(text):
+    """Recognize output grammar from data, independently of subject and topic."""
+    tokens = tokenize(text)
+    for form, phrase in _read(Path(__file__).with_name("resources") / "result_formats.tsv"):
+        cue = tokenize(phrase)
+        if cue and any(tokens[i:i + len(cue)] == cue for i in range(len(tokens) - len(cue) + 1)):
+            return form
+    return None

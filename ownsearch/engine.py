@@ -238,8 +238,9 @@ class SearchEngine:
                 knowledge_deadline = min(deadline, time.monotonic() + self.settings.knowledge_timeout)
                 knowledge = Knowledge(self.settings, deadline=knowledge_deadline)
                 try:
-                    q.entities = knowledge.link(q.entity, q.context, load_claims=q.intent != "news",
-                                                load_urls=q.intent in ("tech_docs", "company", "general"))
+                    reference_list = q.result_format == "list" and q.intent in ("general", "reference")
+                    q.entities = knowledge.link(q.entity, q.context, load_claims=q.intent != "news" and not reference_list,
+                                                load_urls=q.intent in ("tech_docs", "company", "general") and not reference_list)
                     if not q.entities and q.intent == 'tech_docs' and time.monotonic() < deadline - 1:
                         # Existing reference titles can identify the subject of
                         # a long query that the remote full-text lookup missed.
@@ -273,10 +274,20 @@ class SearchEngine:
                     for entity in q.entities:
                         span_terms = set(analyze(entity.span))
                         q.required = [t for t in q.required if t not in span_terms]
+                    linked_words = set(tokenize(" ".join(e.span for e in q.entities)))
+                    q.spelling_corrections = {w: corrected for w, corrected in knowledge.spelling_corrections.items()
+                                              if w in linked_words}
+                    if q.spelling_corrections:
+                        q.entity = [q.spelling_corrections.get(w.lower(), w) for w in q.entity]
+                        q.entity_terms = analyze(" ".join(q.entity))
+                        if "entity" in q.intent_details:
+                            q.intent_details["entity"] = " ".join(q.entity)
                     if q.entities and q.intent not in ("news", "tech_docs"):
                         answer = knowledge.answer(q.entities[0], q.entity + q.context)
                         # A description card cannot answer an unresolved factual qualifier.
-                        unresolved = set(q.entity_terms) - set(analyze(" ".join(e.span for e in q.entities)))
+                        linked_subject = " ".join(q.spelling_corrections.get(w, w)
+                                                  for e in q.entities for w in tokenize(e.span))
+                        unresolved = set(q.entity_terms) - set(analyze(linked_subject))
                         if not answer and not unresolved and not q.context and q.intent in ("reference", "company", "general"):
                             answer = knowledge.card(q.entities[0])
                     if not q.entities:
@@ -403,7 +414,7 @@ class SearchEngine:
         n_terms = max(1, len(terms))
         subject_weights = {w.lower(): snap.idf(stem(w.lower())) for w in q.entity}
         subject_total = sum(subject_weights.values()) or 1.0
-        from .intent import get_model
+        from .intent import get_model, requested_format
         intent_model = get_model(self.root)
         max_bm = max(c.score for c in cands) or 1.0
         fresh_w_mult, half_life = 1.0, 365.0
@@ -512,6 +523,7 @@ class SearchEngine:
                 "intent": intent_model.classify(f["title"] or "")[1].get(q.intent, 0) if q.entities else 0.0,
                 "entity_density": _entity_density(q.entities, texts_for_entities.get(c.doc_id, "")) if q.entities else 0.0,
                 "authority": float(q.intent == "tech_docs" and _official_scope(f["url"] or "", q.entities)),
+                "format": float(bool(q.result_format and requested_format(f["title"] or "") == q.result_format)),
                 "url": sum(1 for t in terms if t in url_terms) / n_terms,
                 "phrase": 0.0, "proximity": 0.0, "passage": 0.0,
                 "pagerank": f["pagerank"] or 0.0,
@@ -569,12 +581,13 @@ class SearchEngine:
                 focus_weight = sum(idf[t] for t in focus_terms) or 1
                 passage_coverage = sum(idf[t] for t in focus_terms if t in passage_terms) / focus_weight
                 if (len(q.required) >= 2 and prox < 0.025 and c.features["subject"] < 0.5
-                        and not phrase and passage_coverage < 0.75):
+                        and not phrase and passage_coverage < 0.75 and not c.features["format"]):
                     c.features["_irrelevant"] = True
                 c.features["passage"] = min(1.0, ps[0]["score"] / 2.25) if ps else 0.0
 
                 # all words present but never near each other (aggregators, link lists): weaker than a real match
-                if len(q.required) >= 2 and c.features.get("_all") == 1.0 and prox < 0.02 and phrase == 0:
+                if (len(q.required) >= 2 and c.features.get("_all") == 1.0 and prox < 0.02 and phrase == 0
+                        and not c.features["format"]):
                     c.features["_all"] = 0.5
 
                 c.passages = ps
@@ -586,7 +599,7 @@ class SearchEngine:
                 # Compute tier for principled ranking:
                 tier = 0.0
                 if c.features.get("_all") == 1.0:
-                    tier = 1.0 if (prox >= 0.02 or phrase > 0 or len(q.required) < 2) else 0.4
+                    tier = 1.0 if (prox >= 0.02 or phrase > 0 or len(q.required) < 2 or c.features["format"]) else 0.4
                 c.features["_tier"] = tier
 
             top.sort(key=lambda x: (x[0].features.get("_tier", 0.0), x[0].final), reverse=True)
@@ -634,7 +647,12 @@ class SearchEngine:
             snippet = snippet_from(ps[0]["text"], surface) if ps else truncate(f["description"] or "", 320)
             if f["description"] and (not ps or ps[0]["matched_terms"] == 0):
                 snippet = truncate(f["description"], 320)
-            flags = injection_flags((f["title"] or "") + "\n" + "\n".join(p["text"] for p in ps))
+            if c.features.get("format"):
+                metadata = self.store.get(c.doc_id, with_text=False) or {}
+                headings = [h.strip() for h in (metadata.get("headings") or "").split(" | ") if h.strip()]
+                if headings:
+                    snippet = truncate("Sections: " + "; ".join(headings[:12]) + " — " + snippet, 320)
+            flags = injection_flags((f["title"] or "") + "\n" + snippet + "\n" + "\n".join(p["text"] for p in ps))
             r = {
                 "rank": rank, "id": c.doc_id, "title": f["title"] or f["url"], "url": f["url"],
                 "snippet": snippet, "score": round(c.final, 6), "source_type": f["source_type"],

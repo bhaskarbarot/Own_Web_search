@@ -14,7 +14,7 @@ from .dates import parse_date
 from .extract import extract
 from .extract.feeds import parse_feed
 from .live import PageClient
-from .intent import get_model
+from .intent import get_model, requested_format
 from .query import parse_query
 from .textproc import analyze, tokenize
 from .util import iso_to_ts, normalize_url, utc_now
@@ -143,7 +143,37 @@ class WikipediaProvider(BaseProvider):
     def discover(self, query, pq, settings, timeout=3.0, log=None, client=None):
         if pq.intent in ("news", "financial", "company"):
             return [], []
-        return [CandidateItem(e.wiki_url, self.name, e.label) for e in pq.entities if e.wiki_url], []
+        items = [CandidateItem(e.wiki_url, self.name, e.label) for e in pq.entities if e.wiki_url]
+        # A subject page can link a more specific list or explanation. Follow
+        # actual article links, never synthesize a title from the user's words.
+        if pq.intent not in ("general", "reference") or not pq.required:
+            return items, []
+        client = _client(settings, timeout, client)
+        focus = set(pq.required)
+        focused, errors = [], []
+        for entity in pq.entities[:2]:
+            if not entity.wiki_url or time.monotonic() >= client.deadline:
+                continue
+            try:
+                r = client.fetch(entity.wiki_url, max_bytes=4_000_000)
+                if r.status != 200:
+                    raise ValueError(f"HTTP {r.status}")
+                page = extract(r.body, r.final_url, r.content_type, settings)
+                host = urlparse(r.final_url).hostname
+                for url, anchor, nofollow in page.links[:settings.discovery_sitemap_limit]:
+                    target = urlparse(url)
+                    text = unquote(target.path) + " " + anchor
+                    score = len(focus & set(analyze(text)))
+                    names = " " + " ".join(tokenize(text)) + " "
+                    if (not nofollow and target.hostname == host and target.path.startswith("/wiki/")
+                            and score and any(" " + " ".join(tokenize(name)) + " " in names for name in entity.names)):
+                        if pq.result_format and requested_format(text) == pq.result_format:
+                            score += len(focus) + 1
+                        focused.append((score, CandidateItem(url, self.name, anchor)))
+            except Exception as exc:
+                errors.append(f"Wikipedia ({entity.wiki_url}) failed: {exc}")
+        focused.sort(key=lambda row: (-row[0], len(row[1].url), row[1].url))
+        return [item for _, item in focused[:settings.discovery_max_urls]] + items, errors
 
 
 def _explicit_urls(query, pq):
@@ -176,7 +206,8 @@ class OfficialSiteProvider(BaseProvider):
         # A reference page can publish the official/docs link even when its
         # Wikidata URL record is unavailable. Read that link rather than guess
         # a host from the query name.
-        roots.extend(e.wiki_url for e in pq.entities if not e.urls and e.wiki_url)
+        if pq.intent == "tech_docs":
+            roots.extend(e.wiki_url for e in pq.entities if not e.urls and e.wiki_url)
         roots = list(dict.fromkeys(_http_url(u) for u in roots if _http_url(u)))
         if pq.intent == "tech_docs":
             # A narrowly scoped entity source should get a turn before a
@@ -295,7 +326,10 @@ def gather_candidates(engine, query, pq, max_urls=6, log=None, client=None):
     settings = engine.settings if engine else Settings()
     client = _client(settings, settings.discovery_timeout, client)
     items, errors = [], []
-    for provider in [SearXNGProvider(), NewsFeedProvider(), FinancialProvider(), OfficialSiteProvider(), WikipediaProvider()]:
+    reference = WikipediaProvider()
+    official = OfficialSiteProvider()
+    focused = [reference, official] if pq.intent in ("general", "reference") else [official, reference]
+    for provider in [SearXNGProvider(), NewsFeedProvider(), FinancialProvider()] + focused:
         if not provider.is_configured(settings) or time.monotonic() >= client.deadline:
             continue
         global_deadline = client.deadline
@@ -308,6 +342,8 @@ def gather_candidates(engine, query, pq, max_urls=6, log=None, client=None):
             client.deadline = global_deadline
         items.extend(cands)
         errors.extend(errs)
+        if provider.name == "wikipedia" and cands and pq.intent in ("general", "reference"):
+            break
         if len(cands) >= settings.discovery_min_results and provider.name == "news_feeds":
             break
     unique = {}

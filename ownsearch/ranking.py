@@ -33,6 +33,7 @@ DEFAULT_WEIGHTS = {
     "intent": 0.35,          # learned title phrasing when the subject is linked
     "entity_density": 0.60,  # linked subjects occupy the content, rather than appearing incidentally
     "authority": 0.40,       # entity-provided official URL scope, gated on content relevance
+    "format": 0.60,          # requested list/output grammar in a content-matching title
     "url": 0.12,             # fraction of query terms in the URL
     "phrase": 0.30,          # whole query appears as a phrase
     "proximity": 0.30,       # 1 / (1 + extra words in the minimal window covering all terms)
