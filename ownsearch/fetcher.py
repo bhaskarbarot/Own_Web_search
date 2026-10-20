@@ -246,7 +246,8 @@ class Fetcher:
             conn.close()
 
     def fetch(self, url, *, etag=None, last_modified=None, max_bytes=None, accept=None,
-              allow=None, extra_headers=None, retries=None, method="GET", deadline=None, before_request=None, max_decompressed_bytes=None):
+              allow=None, extra_headers=None, retries=None, method="GET", deadline=None, before_request=None, max_decompressed_bytes=None,
+              preserve_query=False):
         """GET a URL safely. ``allow(url) -> bool`` vetoes redirect hops (robots.txt)."""
         max_bytes = int(max_bytes or self.settings.max_page_bytes)
         retries = self.settings.fetch_retries if retries is None else retries
@@ -265,7 +266,9 @@ class Fetcher:
         if extra_headers:
             headers.update(extra_headers)
         start = time.monotonic()
-        current = normalize_url(url) or url
+        self.check_url(url)
+        canonicalize = (lambda value: urlsplit(value)._replace(fragment='').geturl()) if preserve_query else normalize_url
+        current = canonicalize(url) or url
         redirects = []
         for hop in range(self.settings.max_redirects + 1):
             if hop and allow is not None and not allow(current):
@@ -289,12 +292,22 @@ class Fetcher:
                         continue
                     raise
             if status in REDIRECT_CODES and hdrs.get("location"):
-                target = normalize_url(urljoin(current, hdrs["location"].strip()))
+                raw_target = urljoin(current, hdrs["location"].strip())
+                self.check_url(raw_target)
+                target = canonicalize(raw_target)
                 if not target or not target.startswith(("http://", "https://")):
                     raise FetchError("Invalid redirect target", "redirect")
                 redirects.append({"from": current, "to": target, "status": status})
                 if target == current or any(r["from"] == target for r in redirects):
                     raise FetchError("Redirect loop", "redirect")
+                old_origin = urlsplit(current)
+                new_origin = urlsplit(target)
+                if (old_origin.scheme, old_origin.netloc) != (new_origin.scheme, new_origin.netloc):
+                    # API tokens, cookies and other caller headers must never
+                    # travel to a different origin through a redirect.
+                    sensitive = {k.lower() for k in (extra_headers or {})}
+                    sensitive.update(("authorization", "cookie", "proxy-authorization"))
+                    headers = {k: v for k, v in headers.items() if k.lower() not in sensitive}
                 current = target
                 headers.pop("If-None-Match", None)
                 headers.pop("If-Modified-Since", None)

@@ -16,13 +16,20 @@ def _print(obj):
 def _engine(args):
     from .config import Settings
     from .engine import SearchEngine
-    return SearchEngine(settings=Settings.load(args.data_dir))
+    settings = Settings.load(args.data_dir)
+    if args.command in ('search', 'serve') and not getattr(args, 'no_live', False):
+        from .coordinator import search_engine
+        return search_engine(settings)
+    return SearchEngine(settings=settings)
 
 
 def _pretty(res):
     cov = res.get("coverage", {})
-    print(f"\n{len(res['results'])} results for {res['query']!r}  ({res['took_ms']} ms, "
-          f"{cov.get('matched_documents', 0)} matches in {cov.get('index_documents', 0)} docs, mode={cov.get('mode')})")
+    if cov.get('mode') == 'live_web':
+        print(f"\n{len(res['results'])} web results for {res['query']!r}  ({res['took_ms']} ms, mode=live_web)")
+    else:
+        print(f"\n{len(res['results'])} results for {res['query']!r}  ({res['took_ms']} ms, "
+              f"{cov.get('matched_documents', 0)} matches in {cov.get('index_documents', 0)} docs, mode={cov.get('mode')})")
     if cov.get("message"):
         print(f"  note: {cov['message']}")
     corrections = res.get("query_understanding", {}).get("spelling_corrections", {})
@@ -38,6 +45,8 @@ def _pretty(res):
             print(f"  {answer['disclaimer']}")
     for error in res.get("provider_errors", []):
         print(f"  provider: {error}")
+    if res.get('answer_status') == 'insufficient_evidence':
+        print('  answer: Insufficient evidence for a supported answer.')
     found = [d for d in res.get("live_discovery", []) if d["result"] == "ok"]
     new = [d for d in found if d.get("doc_status") in ("new", "updated")]
     if found:
@@ -48,6 +57,10 @@ def _pretty(res):
         print(f"    {r['url']}" + (f"  [{date}]" if date else "") + (f"  page {r['page']}" if r.get("page") else "")
               + ("  ⚠ injection-like text" if r.get("injection_risk") else ""))
         print(f"    {r['snippet']}")
+        if res.get('coverage', {}).get('mode') == 'live_web':
+            print(f"    Source: {r.get('source_provider', '')}; page: {r.get('fetch_status', 'not_fetched')}")
+    for item in res.get('images', []):
+        print(f"    Image: {item.get('image_url') or item.get('thumbnail_url')} (source: {item['page_url']})")
     print()
 
 
@@ -68,7 +81,7 @@ def build_parser():
     s.add_argument('--margins',help='JSON containing held-out minimum_margin per language')
     sub.add_parser("reindex",help="rebuild analysis fields from stored documents (back up data first)")
 
-    s = sub.add_parser("search", help="search the index")
+    s = sub.add_parser("search", help="search live web sources; optional local index")
     s.add_argument("query")
     s.add_argument("--limit", type=int, default=10)
     s.add_argument("--offset", type=int, default=0)
@@ -82,7 +95,15 @@ def build_parser():
     s.add_argument("--explain", action="store_true", help="include ranking features per result")
     s.add_argument("--pretty", action="store_true", help="human readable output instead of JSON")
     s.add_argument("--no-live", action="store_true",
-                   help="do not fetch new pages when the index does not cover the query")
+                   help="search the existing local index only (no network discovery)")
+    s.add_argument('--no-fetch', action='store_true', help='return provider results without page enrichment (live mode)')
+    s.add_argument('--images', action='store_true', help='request image results from configured providers (live mode)')
+    s.add_argument('--answer', action='store_true', help='include a cited source excerpt when evidence is sufficient (live mode)')
+    s = sub.add_parser('discovery', help='set up and run the bundled searxxxing source')
+    s.add_argument('action', choices=['setup', 'serve', 'status'])
+    s.add_argument('--port', type=int, default=8888, help='localhost port used by setup')
+    s = sub.add_parser('providers', help='show live provider configuration without secrets')
+    s.add_argument('--check', action='store_true', help='send a diagnostic search to configured general providers')
 
     s = sub.add_parser("ingest-text", help="index a text string")
     s.add_argument("--title", required=True)
@@ -238,6 +259,26 @@ def main(argv=None):
         return 0
     cmd = args.command
 
+    if cmd == 'discovery':
+        from . import bundled
+        from .config import Settings
+        try:
+            if args.action == 'serve':
+                bundled.serve()
+            else:
+                _print(bundled.setup(Settings.load(args.data_dir).data_dir, args.port)
+                       if args.action == 'setup' else bundled.status())
+        except (OSError, ValueError) as exc:
+            _print({'error': str(exc)})
+            return 1
+        return 0
+
+    if cmd == 'providers':
+        from .coordinator import LiveSearch
+        from .config import Settings
+        _print(LiveSearch(Settings.load(args.data_dir)).diagnostics(args.check))
+        return 0
+
     if cmd in ("create-key", "list-keys", "revoke-key"):
         from .auth import KeyStore
         from .config import Settings
@@ -295,9 +336,13 @@ def main(argv=None):
         st["frontier"] = Frontier(s).stats()
         _print(st)
     elif cmd == "search":
+        extra = ({'fetch_pages': not args.no_fetch, 'search_type': 'images' if args.images else 'web',
+                  'answer_mode': args.answer} if getattr(engine, 'live_web_first', False) else {})
+        if not extra and (args.images or args.answer or args.no_fetch):
+            raise ValueError('--images, --answer and --no-fetch require live search mode')
         res = engine.search(args.query, args.limit, not args.no_evidence, offset=args.offset, freshness=args.freshness,
                             site=args.site, filetype=args.filetype, lang=args.lang, explain=args.explain, agent="cli",
-                            live=not args.no_live, preferred_language=args.prefer_lang, timezone_name=args.timezone, discovery_mode="inline")
+                            live=not args.no_live, preferred_language=args.prefer_lang, timezone_name=args.timezone, discovery_mode="inline", **extra)
         _pretty(res) if args.pretty else print(json.dumps(res, ensure_ascii=False, indent=2))
     elif cmd == "ingest-text":
         d = engine.add_document(args.title, args.text, args.url or "")

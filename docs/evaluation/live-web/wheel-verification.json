@@ -1,0 +1,8 @@
+{
+  "wheel_sha256": "e54aa97b51efc9dc4b473c1e4845af1cb1b117d10d9e13be9a9830cfdba07fea",
+  "runtime_modules_identical_to_checkout": 66,
+  "installed_import": "/tmp/ownsearch-live-installed-complete/ownsearch/coordinator.py",
+  "external_fixture_result_returned": true,
+  "data_directory_created": false,
+  "scope": "Installed final wheel smoke with mocked provider; not public internet validation."
+}

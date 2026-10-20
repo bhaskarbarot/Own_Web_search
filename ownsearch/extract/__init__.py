@@ -166,7 +166,8 @@ def extract(data, url, content_type="", settings=None, depth=0):
                          description=r["description"], lang=r["lang"],
                          published_at=r["published_at"] or date_from_url(url), modified_at=r["modified_at"],
                          canonical=r["canonical"], links=r["links"], feeds=r["feeds"], noindex=r["noindex"],
-                         nofollow=r["nofollow"], metadata=dict(r["metadata"], images=r["images"][:20]),
+                         nofollow=r["nofollow"], metadata=dict(r["metadata"], images=r["images"][:20],
+                         publication_date_source='page_metadata' if r['published_at'] else 'url_inferred'),
                          hidden_chars=r["hidden_chars"], text_chars=r["text_chars"],
                          status="ok" if r["text"] else "no_text", source_type="web")
     if kind == "pdf":

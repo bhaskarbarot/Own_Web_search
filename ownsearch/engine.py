@@ -957,20 +957,29 @@ def web_search_handler(inp: dict) -> str:
     """Agent tool contract: dict in, JSON string out.
 
     Accepts: query, limit, fetch_evidence, offset, freshness (recent|day|week|month|year), site, filetype, lang,
-    live (default true: fetch likely pages now when the index does not cover the query).
+    live (default true), fetch_pages, search_type (web|images), answer_mode.
+    The default agent facade uses the configured live coordinator; SearchEngine
+    remains the explicit persistent local-index class.
     """
     global _default_engine
     with _default_lock:
         if _default_engine is None:
-            _default_engine = SearchEngine()
+            from .coordinator import search_engine
+            _default_engine = search_engine()
     if not isinstance(inp, dict):
         inp = {"query": str(inp)}
     try:
+        extra = ({'fetch_pages': inp.get('fetch_pages', True) not in (False, 'false', '0', 0),
+                  'search_type': inp.get('search_type', 'web'),
+                  'answer_mode': inp.get('answer_mode', False) in (True, 'true', '1', 1)}
+                 if getattr(_default_engine, 'live_web_first', False) else {})
         return _default_engine.search_json(
             str(inp.get("query", "")), inp.get("limit", 10), inp.get("fetch_evidence", True),
             offset=inp.get("offset", 0), freshness=inp.get("freshness"), site=inp.get("site"),
             filetype=inp.get("filetype"), lang=inp.get("lang"), agent=inp.get("agent"),
-            live=inp.get("live", True) not in (False, "false", "0", 0))
+            live=inp.get("live", True) not in (False, "false", "0", 0),
+            preferred_language=inp.get('preferred_language'), timezone_name=inp.get('timezone'),
+            timeout_ms=inp.get('timeout_ms'), **extra)
     except Busy as e:
         return json.dumps({"query": inp.get("query", ""), "results": [], "evidence": [],
                            "provider_errors": [{"provider": "ownsearch", "error": str(e)}]})

@@ -1,14 +1,30 @@
 # OwnSearch — self-owned web search engine
 
-Python 3.10+. The standard-library fallback remains available; the base profile adds Unicode and date libraries. No paid API is required. Full-web providers and local model adapters are optional and configurable.
+The bundled discovery backend lives in [`searxxxing/`](searxxxing/OWNSEARCH_README.md).
+It reuses the copied SearXNG source rather than requiring a separately hosted instance:
+
+```sh
+python3 main.py discovery setup
+python3 main.py discovery serve
+# In another terminal:
+python3 main.py search "your query" --pretty
+```
+
+The copied backend still contacts external search engines. Its license and authorship
+are preserved; no broad-web accuracy or cold-latency target is certified by bundling it.
+
+
+Python 3.10+. Normal search is now **live-web-first**: configured search providers discover URLs, selected pages are inspected in memory, and no prebuilt document database or GPU is required. Configure a working SearXNG instance or optionally your own Brave API key. With neither configured, general web discovery is explicitly unavailable. No paid API is enabled automatically.
+
+See [live-web setup, flow, storage and limits](docs/LIVE_WEB.md) and [implementation/verification report](docs/LIVE_WEB_REPORT.md). Your old corpus and crawler are preserved as optional local capabilities; passing unit tests does not prove 90% internet accuracy.
 
 ## Quick start
 
 ```bash
-python3 main.py crawl https://example.org/ --max-pages 100        # polite crawl (robots.txt, sitemaps, feeds)
+python3 main.py providers --check                              # verify your configured provider
 python3 main.py search "your query" --pretty
-python3 main.py ingest ./my_documents                               # HTML, PDF, DOCX/XLSX/PPTX/ODT, EPUB, text, images
-python3 main.py serve                                               # HTTP API on 127.0.0.1:8765
+python3 main.py search "your query" --answer --pretty           # cited source excerpt when supported
+python3 main.py serve                                          # live API on 127.0.0.1:8765
 python3 -m unittest discover -s tests -t .                          # full regression suite
 ```
 
@@ -20,9 +36,9 @@ python3 main.py cluster --nodes 4 --crawl-threads 4  # gateway + 4 search nodes 
 ```
 
 `GET /search?q=...&limit=10&freshness=week&site=example.org&filetype=pdf` with `Authorization: Bearer <key>`.
-Responses include results, evidence passages (with PDF page numbers), dates, retrieval timestamps, a coverage
-report, and prompt-injection flags. Other endpoints: `/document`, `/fetch`, `/crawl`, `/ingest`, `/feedback`,
-`/stats`, `/metrics`. Python: `from ownsearch.engine import web_search_handler`.
+Responses include results, short evidence passages, dates when known, retrieval timestamps, source/fetch status, a coverage report, and prompt-injection flags. Live mode provides `/search`, transient `/fetch`, `/providers`, `/health`, `/stats`, `/metrics`. Persistent `/crawl`, `/ingest`, `/feedback` require an explicit local-mode service. Python: `from ownsearch.engine import web_search_handler` uses the same configured coordinator.
+
+For optional corpus ingestion/crawling, use the existing `crawl`/`ingest` commands. `search --no-live` searches that corpus offline; `OWNSEARCH_SEARCH_MODE=local python3 main.py serve` serves the legacy storage endpoints. Cluster/index benchmarks below concern this optional local-index capability.
 
 Query syntax: `"phrase"  -exclude  site:x.org  filetype:pdf  intitle:x  after:2025-01-01  a OR b`.
 
@@ -30,6 +46,7 @@ Query syntax: `"phrase"  -exclude  site:x.org  filetype:pdf  intitle:x  after:20
 
 | Area | Module |
 |---|---|
+| Database-free live search, provider coordination, temporary evidence and ranking | `coordinator.py`, `webproviders.py`, `webmodels.py`, `webfetch.py`, `webranking.py` |
 | Safe fetcher (SSRF/DNS-rebinding protection, gzip/deflate, retries, conditional GET) | `fetcher.py` |
 | robots.txt (RFC 9309), crawl-delay | `robots.py` |
 | Persistent frontier: per-host politeness, retries/backoff, adaptive recrawl, leases | `frontier.py` |
@@ -42,15 +59,17 @@ Query syntax: `"phrase"  -exclude  site:x.org  filetype:pdf  intitle:x  after:20
 | API, auth, rate limits, metrics, gateway/load balancer | `server.py`, `auth.py`, `gateway.py` |
 | Common Crawl / WARC bulk import, NDCG eval + ranker training, benchmarks | `warc.py`, `evaluation.py`, `bench.py` |
 
-## Measured on this machine
+## Historical local-index measurements
 - Local test site: 120+ pages crawled, readable text, no duplicate results (tests/test_crawl.py)
 - 60k docs: query p50 29 ms, p95 59 ms (single process)
 - 30k docs, 7 concurrent agents via `cluster --nodes 4`: ~102 queries/s uncached, p95 98 ms, 0 errors
 
-Limits: coverage is only what you crawl/import; one machine cannot match Brave's index size.
+These are local-index measurements, not cold live-web latency or open-web accuracy. Live coverage depends on configured providers; optional local coverage depends on what you crawl/import.
 v0.1 is archived in `backup/` (not committed).
 
-## Data-driven relevance and direct answers
+## Local-mode relevance and direct answers
+
+This section describes the preserved local-index pipeline. The default live-web path is documented in [LIVE_WEB.md](docs/LIVE_WEB.md); it does not ingest pages or depend on Wikimedia entity linking.
 
 The relevance refactor is on `wip/data-driven-relevance`. Intent is learned from
 `ownsearch/resources/intent_templates.tsv`: `{subject}` slots are excluded from
@@ -80,7 +99,7 @@ never becomes an estimated price or an invented fact.
 
 Settings in `<data_dir>/ownsearch.json` include:
 
-- `discovery_timeout` (20 seconds): shared network budget for live answers/linking/discovery.
+- `discovery_timeout` (8 seconds): shared request budget; live-web enrichment has additional conservative limits.
 - `discovery_max_requests` (24): page requests, including robots and redirect hops.
 - `discovery_sitemap_limit` (500): URLs examined per verified-site walk.
 - `relevance_score_ratio` (0.30): reject scores below this fraction of the best score.

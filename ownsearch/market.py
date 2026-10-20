@@ -69,11 +69,15 @@ def _day(ts, zone=None):
 
 
 class Market:
-    def __init__(self, settings, deadline=None):
+    def __init__(self, settings, deadline=None, persistent=True):
         self.settings = settings
         self.deadline = deadline
         self.fetcher = Fetcher(settings)
         self.errors = []
+        self.cache = None
+        self._request_cache = {}
+        if not persistent:
+            return
         from .db import Database
         key = str(settings.data_dir)
         with _lock:
@@ -83,6 +87,11 @@ class Market:
             self.cache = _disk_caches[key]
 
     def _cached(self, key, ttl, fetch):
+        if self.cache is None:
+            if key not in self._request_cache:
+                self._request_cache[key] = (time.time(), fetch())
+            self._last_cached_at, value = self._request_cache[key]
+            return value
         cache_key = json.dumps(key)
         row = self.cache.one('SELECT ts,value FROM responses WHERE key=?', (cache_key,))
         if row and time.time() - row[0] < ttl:

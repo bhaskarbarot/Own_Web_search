@@ -1,4 +1,8 @@
+Current bundled discovery setup and actual verification: [docs/BUNDLED_SOURCE_REPORT.md](docs/BUNDLED_SOURCE_REPORT.md).
+
 # OwnSearch Upgrade: Engineering Plan (main.md)
+
+> Current direction: live-web-first search defined in `pipeline.md`. See `docs/LIVE_WEB_PLAN.md`, `docs/LIVE_WEB.md` and `docs/LIVE_WEB_REPORT.md`. The prior index-focused stages below are preserved as historical/optional local capabilities. General provider configuration and independent accuracy measurement remain required.
 
 Goal: upgrade the EXISTING OwnSearch into a multilingual, high-relevance web search engine. Improve the current code; do not rebuild it.
 > 2026-10-20: the user authorized continuous implementation of stages 2–13. See `docs/progress.md` for delivered code and remaining acceptance gates; unchecked language/model gates are intentionally not certified.

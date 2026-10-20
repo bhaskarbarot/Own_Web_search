@@ -1,0 +1,269 @@
+{
+  "scope": "Actual local HTTP fixture provider plus on-demand HTML page enrichment. Deterministic test DNS and test-only intranet permission; no public internet or accuracy claim. Host delay is zero for the fixture, not production default. No result cache.",
+  "sample_size": 20,
+  "p50_ms": 110.85,
+  "p95_ms": 118.513,
+  "max_ms": 124.84,
+  "runs": [
+    {
+      "took_ms": 124.84,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 44.04,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 112.26,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 62.12,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 86.76,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 39.23,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 105.17,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 57.07,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 101.3,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 52.03,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 88.5,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 39.64,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 114.35,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 64.29,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 110.66,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 60.74,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 92.93,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 42.91,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 89.21,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 39.96,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 94.53,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 42.43,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 107.95,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 58.14,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 112.05,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 62.49,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 113.06,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 63.17,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 105.87,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 55.69,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 114.69,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 64.94,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 118.18,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 68.19,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 112.51,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 62.71,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 113.54,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 63.67,
+          "result_count": 1
+        }
+      ]
+    },
+    {
+      "took_ms": 111.04,
+      "pages_fetched": 1,
+      "persistent_pages_written": 0,
+      "provider_status": [
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 61.27,
+          "result_count": 1
+        }
+      ]
+    }
+  ]
+}

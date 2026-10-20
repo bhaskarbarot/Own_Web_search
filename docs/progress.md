@@ -1,3 +1,19 @@
+## Bundled discovery source — 2026-10-20
+
+The user requested copying the cloned SearXNG code into `searxxxing/` rather than
+writing replacement engine adapters. The tree preserves upstream source, license,
+authorship and per-file hashes. Added `discovery setup|serve|status` around the
+existing provider integration. No separate public SearXNG service is required;
+external upstream indexes and Python runtime libraries remain dependencies.
+This integration alone does not establish 90% accuracy or millisecond cold results.
+See `searxxxing/OWNSEARCH_README.md` for use and exact scope.
+
+# Latest direction: live-web-first
+
+User requirements in `pipeline.md` replace mandatory local-corpus search with a request-only coordinator. CLI/API/agent search defaults to live mode; persistent crawl/index tools remain explicit and existing user data is retained. General SearXNG/Brave discovery, safe bounded page inspection, provenance, images and extractive citation output are implemented and covered by deterministic/local-HTTP acceptance tests. No general provider is configured in this checkout; real public integration and 90% accuracy remain unverified. See [current report](LIVE_WEB_REPORT.md) and [setup/architecture](LIVE_WEB.md).
+
+The earlier checkpoint below describes local-index work.
+
 # OwnSearch checkpoint — 2026-10-20
 
 The user authorized continuous implementation of the remaining stages on `wip/data-driven-relevance`. Code has been applied to the actual checkout at `/home/pc-117/Documents/own_web_search_engine`; `main` was not merged or changed.

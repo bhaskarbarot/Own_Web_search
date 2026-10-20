@@ -1,0 +1,8 @@
+{"id": "example-1", "query": "Nvidia live price", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}
+{"id": "example-2", "query": "today's Trump headlines", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}
+{"id": "example-3", "query": "Samrat Ashok birthplace", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}
+{"id": "example-4", "query": "TCS 6-month analysis", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}
+{"id": "example-5", "query": "inheritance in OOPS", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}
+{"id": "example-6", "query": "Claude docs on MCP", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}
+{"id": "example-7", "query": "Python requests timeout parameter documentation", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}
+{"id": "example-8", "query": "give me ramayan serial by ramanand sagar character names", "language": "en", "category": "manual-regression", "review_status": "unreviewed", "judgments": {}, "answer_correct": null, "citations_supported": null}

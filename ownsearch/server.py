@@ -32,7 +32,7 @@ from .linkgraph import refresh as refresh_links
 from .metrics import Metrics
 
 MAX_BODY = 2_000_000
-ENDPOINT_SCOPE = {"/search": "search", "/document": "search", "/feedback": "search", "/fetch": "fetch",
+ENDPOINT_SCOPE = {"/search": "search", "/providers": "search", "/document": "search", "/feedback": "search", "/fetch": "fetch",
                   "/crawl": "crawl", "/ingest": "ingest", "/stats": "search", "/frontier": "search"}
 ENDPOINT_COST = {"/fetch": 5.0, "/crawl": 2.0, "/ingest": 1.0}
 
@@ -208,21 +208,35 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
 
         # ------------------------------------------------------------ routes
         def _route(self, method, path, qs, body, agent):
+            live_engine = getattr(engine, 'live_web_first', False)
             if path == "/health":
-                engine.index.maybe_reload()
+                if not live_engine:
+                    engine.index.maybe_reload()
+                index_stats = engine.stats() if live_engine else {'documents': engine.index.doc_count, 'generation': engine.index.generation}
                 return self._send(200, {"ok": True, "engine": f"OwnSearch {__version__}", "role": role,
-                                        "documents": engine.index.doc_count, "generation": engine.index.generation})
+                                        "documents": index_stats['documents'], "generation": index_stats['generation'],
+                                        "search_mode": 'live' if live_engine else 'local'})
             if path == "/":
                 return self._send(200, {"name": "OwnSearch", "version": __version__, "role": role,
                                         "auth_required": require_auth, "docs": __doc__})
             if path == "/metrics":
-                return self._send(200, metrics.prometheus({"index_documents": engine.index.doc_count,
-                                                           "index_generation": engine.index.generation}),
+                index_stats = engine.stats() if live_engine else {'documents': engine.index.doc_count, 'generation': engine.index.generation}
+                return self._send(200, metrics.prometheus({"index_documents": index_stats['documents'],
+                                                           "index_generation": index_stats['generation']}),
                                   "text/plain; version=0.0.4")
+            if path == '/providers':
+                if not live_engine:
+                    return self._send(200, {'mode': 'local', 'note': 'Use the providers CLI command to diagnose live sources.'})
+                return self._send(200, engine.diagnostics())
             if path == "/search":
                 src = body if method == "POST" else qs
                 query = src.get("query", src.get("q", ""))
                 ev = src.get("fetch_evidence", src.get("evidence", True))
+                can_fetch = not require_auth or self._can_fetch()
+                extra = ({'fetch_pages': can_fetch and str(src.get('fetch_pages', 'true')).lower() in ('true', '1', 'yes'),
+                          'search_type': src.get('search_type', 'web'),
+                          'answer_mode': str(src.get('answer_mode', 'false')).lower() in ('true', '1', 'yes')}
+                         if live_engine else {})
                 res = engine.search(query, src.get("limit", 10), ev, offset=src.get("offset", 0),
                                     freshness=src.get("freshness"), site=src.get("site"),
                                     filetype=src.get("filetype"), lang=src.get("lang"),
@@ -230,8 +244,8 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
                                     timezone_name=src.get("timezone"),
                                     timeout_ms=src.get("timeout_ms"), agent=agent,
                                     live=str(src.get("live", "true")).lower() in ("1", "true", "yes")
-                                    and (not require_auth or self._can_fetch()),
-                                    explain=str(src.get("explain", "")).lower() in ("1", "true", "yes"))
+                                    and (live_engine or can_fetch),
+                                    explain=str(src.get("explain", "")).lower() in ("1", "true", "yes"), **extra)
                 return self._send(200, res)
             if path == "/document":
                 src = body if method == "POST" else qs
@@ -253,6 +267,8 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
                                         "sample": frontier.list_urls(qs.get("status"), int(qs.get("limit", 50)))})
             if method != "POST":
                 return self._send(405 if path in ENDPOINT_SCOPE else 404, {"error": "Not found"})
+            if live_engine and path in ('/ingest', '/crawl', '/feedback'):
+                return self._send(409, {'error': 'Persistent storage endpoints are disabled in live mode. Use OWNSEARCH_SEARCH_MODE=local for the optional crawler/index service.'})
             if role == "node" and path in ("/fetch", "/crawl", "/ingest", "/feedback"):
                 return self._send(403, {"error": "Read-only search node"})
             if path == "/feedback":
@@ -279,6 +295,8 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
                                         "note": "Crawling runs in the background worker (serve --crawl-threads N "
                                                 "or `ownsearch worker`)."})
             if path == "/fetch":
+                if live_engine:
+                    return self._send(*engine.fetch_url(str(body.get('url', ''))))
                 return self._send(*live_fetch(engine, frontier, str(body.get("url", "")),
                                               index=body.get("index", True) is not False))
             return self._send(404, {"error": "Not found"})
@@ -312,7 +330,9 @@ def live_fetch(engine, frontier, url, index=True):
 
 def serve(host="127.0.0.1", port=8765, engine=None, require_auth=None, role="full", crawl_threads=0,
           allow_insecure=False, pagerank_interval=3600.0):
-    engine = engine or SearchEngine()
+    if engine is None:
+        from .coordinator import search_engine
+        engine = search_engine()
     keys = KeyStore(engine.settings.keys_path)
     if require_auth is None:
         require_auth = keys.enabled
@@ -321,8 +341,11 @@ def serve(host="127.0.0.1", port=8765, engine=None, require_auth=None, role="ful
         raise SystemExit("Refusing to listen on a non-loopback address without API keys. Create keys with "
                          "`ownsearch create-key --agent NAME` or pass --insecure if this network is trusted.")
     worker = None
-    frontier = Frontier(engine.settings) if role != "node" else None
-    if role == "full":
+    live_engine = getattr(engine, 'live_web_first', False)
+    if live_engine and crawl_threads:
+        raise ValueError('Background crawling requires OWNSEARCH_SEARCH_MODE=local; live mode does not persist pages.')
+    frontier = Frontier(engine.settings) if role != "node" and not live_engine else None
+    if role == "full" and not live_engine:
         worker = BackgroundWorker(engine, crawl_threads=crawl_threads, pagerank_interval=pagerank_interval).start()
     metrics = Metrics()
     handler = make_handler(engine, keys, RateLimiter(), metrics, frontier, require_auth, role)
@@ -330,7 +353,7 @@ def serve(host="127.0.0.1", port=8765, engine=None, require_auth=None, role="ful
     server.daemon_threads = True
     server.request_queue_size = 256
     print(f"OwnSearch {__version__} [{role}] listening on http://{host}:{port}  auth={'on' if require_auth else 'off'}"
-          f"  documents={engine.index.doc_count}", file=sys.stderr, flush=True)
+          f"  mode={'live' if live_engine else 'local'}", file=sys.stderr, flush=True)
     try:
         server.serve_forever(poll_interval=0.5)
     except KeyboardInterrupt:

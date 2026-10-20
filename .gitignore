@@ -9,3 +9,11 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+
+# Provider credentials remain local.
+.env
+.env.*
+!.env.example
+
+# Local SearXNG service environment, state, credentials and logs.
+.runtime/

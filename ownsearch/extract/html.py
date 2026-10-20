@@ -323,6 +323,6 @@ def extract_html(html, base_url=""):
         "hidden_chars": p.hidden_chars,
         "text_chars": p.text_chars,
         "metadata": {k: v[:500] for k, v in meta.items() if k in (
-            "description", "keywords", "author", "og:type", "og:site_name", "og:image", "generator",
+            "description", "keywords", "author", "og:type", "og:site_name", "og:image", "twitter:image", "generator",
             "article:section", "article:tag")} | ({"schema_type": ld["type"]} if ld.get("type") else {}),
     }

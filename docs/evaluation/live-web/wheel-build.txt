@@ -1,0 +1,13 @@
+Processing /tmp/ownsearch-live-first-s5hwedxr
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: ownsearch
+  Building wheel for ownsearch (pyproject.toml): started
+  Building wheel for ownsearch (pyproject.toml): finished with status 'done'
+  Created wheel for ownsearch: filename=ownsearch-1.1.0-py3-none-any.whl size=231683 sha256=e54aa97b51efc9dc4b473c1e4845af1cb1b117d10d9e13be9a9830cfdba07fea
+  Stored in directory: /home/pc-117/.cache/pip/wheels/d8/49/82/f04ea39a70462b733aabff9393f1e50a5e4bf477342a9ce6aa
+Successfully built ownsearch

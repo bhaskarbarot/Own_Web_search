@@ -11,7 +11,7 @@ from ..util import normalize_url,host_of,iso_to_ts
 @dataclass
 class Response:
     provider:str
-    results:list=field(default_factory=list)
+    results:object=field(default_factory=list)
     status:str='ok'
     error:str=None
     elapsed_ms:float=0

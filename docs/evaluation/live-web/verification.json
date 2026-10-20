@@ -1,0 +1,25 @@
+{
+  "scope": "Actual source; isolated working directory; no production corpus required or mutated by smoke.",
+  "stdlib_suite": {
+    "tests": 213,
+    "seconds": 50.512,
+    "status": "passed"
+  },
+  "base_suite": {
+    "tests": 213,
+    "seconds": 51.475,
+    "status": "passed"
+  },
+  "new_acceptance_tests": 41,
+  "general_provider_configured": false,
+  "public_live_integration": "not_run_missing_endpoint_or_key",
+  "independent_accuracy": "not_measured",
+  "green_flag": false,
+  "test_cwd": "/tmp/ownsearch-live-actual-verify-s5hwedxr",
+  "commands": [
+    "PYTHONPATH=/home/pc-117/Documents/own_web_search_engine python3 -m unittest discover -s /home/pc-117/Documents/own_web_search_engine/tests -t /home/pc-117/Documents/own_web_search_engine",
+    "PYTHONPATH=/home/pc-117/Documents/own_web_search_engine /tmp/ownsearch-all-steps-5j0h2onc/.venv/bin/python -m unittest discover -s /home/pc-117/Documents/own_web_search_engine/tests -t /home/pc-117/Documents/own_web_search_engine",
+    "python3 main.py providers",
+    "python3 main.py search \"give me ramayan serial by ramanand sagar character names\" --pretty"
+  ]
+}

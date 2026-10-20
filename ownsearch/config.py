@@ -93,6 +93,26 @@ class Settings:
     default_language: str = "en"
 
     # Live Discovery and External Providers
+    search_mode: str = "live"          # CLI/API default; explicit local mode keeps the existing index
+    live_local_enabled: bool = False   # optional corpus accelerator; never mandatory for live search
+    live_fetch_pages: int = 3
+    live_fetch_concurrency: int = 3
+    live_fetch_timeout: float = 4.0
+    live_max_page_bytes: int = 1_000_000
+    live_max_total_bytes: int = 4_000_000
+    live_max_text_chars: int = 60_000
+    live_max_requests: int = 16        # includes robots and redirects
+    live_max_candidates: int = 40
+    live_workers: int = 8
+    live_early_results: int = 3
+    live_provider_grace_ms: int = 150
+    live_cache_ttl: float = 0.0        # opt-in, memory-only; never persists pages
+    live_cache_entries: int = 32
+    provider_cooldown: float = 30.0
+    provider_min_interval: float = 1.0
+    searxng_allow_private: bool = False # only the explicitly configured instance, not result-page fetching
+    brave_search_url: str = "https://api.search.brave.com/res/v1/web/search"
+    brave_images_url: str = "https://api.search.brave.com/res/v1/images/search"
     provider_wait_ms: int = 500 # only when no useful local results; background workers have separate deadlines
     searxng_url: str = ""               # self-hosted SearXNG endpoint, e.g. "http://localhost:8080"
     searxng_timeout: float = 3.0
