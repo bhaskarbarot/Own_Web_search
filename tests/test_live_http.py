@@ -96,6 +96,34 @@ class LiveHTTPTests(unittest.TestCase):
             api.server_close()
             provider.server_close()
 
+    def test_ui_is_available_without_exposing_authenticated_search(self):
+        engine = LiveSearch(settings(), [])
+        with tempfile.TemporaryDirectory() as temp:
+            keys = KeyStore(Path(temp)/'keys.json')
+            api = ThreadingHTTPServer(('127.0.0.1', 0), make_handler(engine, keys, RateLimiter(), Metrics(), None, True, 'full'))
+            threading.Thread(target=api.serve_forever, daemon=True).start()
+            try:
+                import http.client
+                connection = http.client.HTTPConnection('127.0.0.1', api.server_port, timeout=3)
+                connection.request('GET', '/ui')
+                response = connection.getresponse()
+                page = response.read().decode()
+                self.assertEqual(response.status, 200)
+                self.assertIn('text/html', response.getheader('Content-Type'))
+                self.assertIn("connect-src 'self'", response.getheader('Content-Security-Policy'))
+                self.assertIn('id="search-form"', page)
+                connection.request('HEAD', '/ui')
+                response = connection.getresponse()
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.read(), b'')
+                connection.close()
+                self.assertEqual(call(api.server_port, 'GET', '/')[1]['name'], 'OwnSearch')
+                self.assertEqual(call(api.server_port, 'POST', '/search', {'query': 'Nebula'})[0], 401)
+                self.assertFalse(engine.settings.data_dir.exists())
+            finally:
+                api.shutdown()
+                api.server_close()
+
     def test_live_api_rejects_persistent_ingestion_explicitly(self):
         engine = LiveSearch(settings(), [])
         key_path = Path(tempfile.mkdtemp())/'api_keys.json'

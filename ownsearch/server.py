@@ -216,6 +216,13 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
                 return self._send(200, {"ok": True, "engine": f"OwnSearch {__version__}", "role": role,
                                         "documents": index_stats['documents'], "generation": index_stats['generation'],
                                         "search_mode": 'live' if live_engine else 'local'})
+            if path == "/ui" and method == "GET":
+                from importlib.resources import files
+                page = files("ownsearch").joinpath("resources/search.html").read_bytes()
+                return self._send(200, page, "text/html; charset=utf-8", extra_headers={
+                    "Content-Security-Policy": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src http: https:; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",
+                    "Referrer-Policy": "no-referrer",
+                    "X-Frame-Options": "DENY"})
             if path == "/":
                 return self._send(200, {"name": "OwnSearch", "version": __version__, "role": role,
                                         "auth_required": require_auth, "docs": __doc__})

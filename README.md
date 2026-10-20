@@ -159,3 +159,9 @@ python3 scripts/calibrate_intent.py --help
 ```
 
 Benchmarking uses a temporary corpus copy. Public evaluation requires the corresponding passage corpus and original judgments; missing judged passages are rejected. The bundled Hindi/Gujarati/temporal/output resources remain active fallbacks and are not removed prematurely.
+
+## Simple local search UI
+
+Run `./run.sh`, then open **http://127.0.0.1:8765/ui**. Use `./run.sh 8766` for another UI port. The launcher starts the bundled discovery service when needed, reuses compatible running services, and stops only processes it started when you press Ctrl+C. It runs the testing API on localhost without authentication. Existing authenticated servers retain their settings; enter a key under More filters if needed. First-time discovery setup installs its isolated requirements. Set `OWNSEARCH_OPEN_BROWSER=0` to skip opening a browser.
+
+The single HTML file (`ownsearch/resources/search.html`) offers query input, result count, web/images/video links, PDF/Office/text/custom extension filters, freshness, site and language, optional answers and page inspection, response timings, source notes and raw JSON. Video links use ordinary web search with a video qualifier; there is no dedicated video endpoint. Existing `/` JSON and authenticated API behavior remain available.

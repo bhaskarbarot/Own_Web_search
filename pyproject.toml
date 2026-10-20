@@ -21,4 +21,4 @@ ownsearch = "ownsearch.cli:main"
 include = ["ownsearch*"]
 
 [tool.setuptools.package-data]
-ownsearch = ["resources/*.txt", "resources/*.tsv", "resources/*.json"]
+ownsearch = ["resources/*.txt", "resources/*.tsv", "resources/*.json", "resources/*.html"]

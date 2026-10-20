@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>OwnSearch</title>
+<style>
+  *{box-sizing:border-box} body{margin:0;background:#f6f7f9;color:#20252b;font:16px/1.5 system-ui,sans-serif}
+  main{max-width:1040px;margin:36px auto;padding:0 20px} h1{margin:0;font-size:30px} h2{font-size:19px;margin:0 0 12px}
+  p{margin:8px 0} .muted,.meta{color:#626b76;font-size:14px} form,.answer{background:white;border:1px solid #dce0e6;border-radius:8px;padding:20px;margin:20px 0}
+  .searchbar{display:flex;gap:10px} .searchbar input{flex:1;min-width:0} input,select,button{font:inherit;border:1px solid #bdc5d0;border-radius:5px;padding:9px 10px}
+  input,select{background:white;color:inherit;width:100%} button{cursor:pointer;background:#1259b2;color:white;border-color:#1259b2;white-space:nowrap}
+  button:disabled{opacity:.55;cursor:default} #cancel{background:white;color:#444;border-color:#bdc5d0} label{display:block;font-size:14px} label>input,label>select{margin-top:5px}
+  .filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px} .checks{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px}
+  .checks label{display:flex;align-items:center;gap:7px}.checks input{width:auto;margin:0} details{margin-top:16px} summary{cursor:pointer;color:#475467}
+  #status{min-height:25px;margin:18px 0;font-weight:600} .error{color:#ad2525} article{padding:18px 0;border-bottom:1px solid #dce0e6}
+  article h2{margin:3px 0 7px;font-size:20px} a{color:#1259b2;text-decoration:none;overflow-wrap:anywhere} a:hover{text-decoration:underline}
+  .url{color:#39734a;font-size:13px;overflow-wrap:anywhere}.snippet,.answer-text{white-space:pre-wrap;overflow-wrap:anywhere}.answer{border-left:4px solid #1259b2}
+  .disclaimer{color:#79581f;font-size:14px}.warnings{background:#fff9e9;border:1px solid #eddda9;padding:12px 16px;border-radius:6px;font-size:14px;margin:16px 0}
+  .image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}.image-card{background:white;border:1px solid #dce0e6;border-radius:6px;padding:12px}
+  .image-card img{width:100%;height:170px;object-fit:contain;background:#f1f3f6}.image-card p{font-size:14px} pre{font:13px/1.5 monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#eef0f3;padding:15px;max-height:450px;overflow:auto}
+  [hidden]{display:none!important} @media(max-width:650px){main{margin:20px auto}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.searchbar{flex-wrap:wrap}.searchbar input{flex-basis:100%}}
+</style>
+</head>
+<body>
+<main>
+  <h1>OwnSearch</h1>
+  <p class="muted">Search the web and inspect results, sources and response time.</p>
+  <p id="connection" class="muted" role="status">Checking the search server…</p>
+  <button id="reconnect" type="button" hidden>Retry connection</button>
+  <form id="search-form">
+    <div class="searchbar">
+      <input id="query" aria-label="Search query" placeholder="What would you like to search?" maxlength="1000" required autofocus>
+      <button id="submit" type="submit">Search</button>
+      <button id="cancel" type="button" hidden>Cancel</button>
+    </div>
+    <div class="filters">
+      <label>Search type<select id="search-type"><option value="web">Web</option><option value="images">Images</option><option value="video">Video links</option></select></label>
+      <label>Results<input id="limit" type="number" min="1" max="50" value="10" required></label>
+      <label>File type<select id="filetype"><option value="">All types</option><option value="pdf">PDF</option><option value="web">HTML pages</option><option value="text">Plain text</option><option value="docx">Word (.docx)</option><option value="xlsx">Excel (.xlsx)</option><option value="pptx">PowerPoint (.pptx)</option><option value="custom">Other extension</option></select></label>
+      <label>Freshness<select id="freshness"><option value="">Any time</option><option value="day">Past day</option><option value="week">Past week</option><option value="month">Past month</option><option value="year">Past year</option></select></label>
+    </div>
+    <p id="mode-note" class="muted" hidden></p>
+    <details>
+      <summary>More filters</summary>
+      <div class="filters">
+        <label>Site<input id="site" placeholder="example.org"></label>
+        <label>Language code<input id="lang" placeholder="e.g. en, hi, gu" maxlength="20"></label>
+        <label>Time zone<input id="timezone" placeholder="Server default; e.g. Asia/Kolkata" maxlength="100"></label>
+        <label id="custom-wrap" hidden>File extension<input id="custom-filetype" placeholder="e.g. csv" maxlength="20"></label>
+        <label>API key, if required<input id="api-key" type="password" autocomplete="off" placeholder="Optional"></label>
+      </div>
+      <p class="muted">You can also use query operators such as site:example.org, filetype:pdf, after:2026-01-01 and quoted phrases. Files open at the source.</p>
+    </details>
+    <div class="checks">
+      <label><input id="answer-mode" type="checkbox" checked>Show answer when available</label>
+      <label><input id="fetch-pages" type="checkbox" checked>Inspect selected pages</label>
+      <label><input id="explain" type="checkbox">Include ranking details</label>
+    </div>
+  </form>
+  <div id="status" role="status" aria-live="polite">Ready.</div>
+  <section id="answer" class="answer" hidden></section>
+  <details id="warnings" class="warnings" hidden><summary>Source notes</summary><ul id="warning-list"></ul></details>
+  <section id="images" class="image-grid" aria-label="Image results" hidden></section>
+  <section id="results" aria-label="Search results"></section>
+  <details id="debug" hidden><summary>Response details and JSON</summary><pre id="raw"></pre></details>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+let controller = null;
+function connectionMessage(connected) {
+  $('connection').className = connected ? 'muted' : 'error';
+  $('reconnect').hidden = connected;
+  $('connection').textContent = connected
+    ? 'Connected to OwnSearch at ' + location.origin
+    : ['http:', 'https:'].includes(location.protocol)
+      ? 'OwnSearch is not reachable at ' + location.origin + '. Run ./run.sh ' + (location.port || '8765') + ' and keep that terminal open, then retry.'
+      : 'Open this page through the search server: run ./run.sh and visit http://127.0.0.1:8765/ui.';
+}
+async function checkConnection() {
+  if (!['http:', 'https:'].includes(location.protocol)) { connectionMessage(false); return; }
+  const ping = new AbortController();
+  const timer = setTimeout(() => ping.abort(), 2500);
+  $('reconnect').disabled = true;
+  try {
+    const response = await fetch('/health', {cache:'no-store', signal:ping.signal});
+    const health = await response.json();
+    connectionMessage(response.ok && health.ok === true && typeof health.engine === 'string' && health.engine.startsWith('OwnSearch '));
+  } catch { connectionMessage(false); }
+  finally { clearTimeout(timer); $('reconnect').disabled = false; }
+}
+$('reconnect').addEventListener('click', checkConnection);
+function node(tag, text, className) {
+  const item = document.createElement(tag);
+  if (text !== undefined && text !== null) item.textContent = String(text);
+  if (className) item.className = className;
+  return item;
+}
+function safeURL(value) {
+  if (typeof value !== 'string') return null;
+  try {
+    const url = new URL(value);
+    return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password ? url.href : null;
+  } catch { return null; }
+}
+function link(label, value) {
+  const url = safeURL(value);
+  if (!url) return node('span', label);
+  const a = node('a', label); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; return a;
+}
+function milliseconds(value) { return typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString(undefined, {maximumFractionDigits:2}) + ' ms' : 'not reported'; }
+function updateFilters() {
+  const mode = $('search-type').value;
+  $('filetype').disabled = mode !== 'web';
+  $('custom-wrap').hidden = mode !== 'web' || $('filetype').value !== 'custom';
+  $('custom-filetype').required = !$('custom-wrap').hidden;
+  if (!$('custom-wrap').hidden) $('custom-wrap').closest('details').open = true;
+  $('mode-note').hidden = mode === 'web';
+  $('mode-note').textContent = mode === 'video' ? 'Video links use web search with “video” added to your query. A dedicated video search is not available.' : 'Images use source-supplied image links. File filters do not apply.';
+}
+$('search-type').addEventListener('change', updateFilters);
+$('filetype').addEventListener('change', updateFilters);
+$('cancel').addEventListener('click', () => controller?.abort());
+function showAnswer(answer, status) {
+  const section = $('answer'); section.replaceChildren(); section.hidden = false;
+  if (!answer) {
+    if (status === 'insufficient_evidence') section.append(node('p', 'Insufficient evidence for a supported answer. Relevant links may still be available.'));
+    else section.hidden = true;
+    return;
+  }
+  const headings = {extractive:'Source excerpt — not independently verified', stock_quote:'Market quote', stock_history:'Price history', headlines:'Publisher-dated headlines'};
+  section.append(node('h2', headings[answer.type] || 'Answer'), node('div', answer.text || '', 'answer-text'));
+  const sources = [answer.source, ...(Array.isArray(answer.citations) ? answer.citations : [])];
+  const seen = new Set();
+  for (const source of sources) {
+    if (!source || !safeURL(source.url) || seen.has(source.url)) continue;
+    seen.add(source.url); const p = node('p'); p.append(link(source.title || source.name || source.url, source.url)); section.append(p);
+  }
+  if (answer.as_of) section.append(node('p', 'Data as of: ' + answer.as_of, 'meta'));
+  if (answer.disclaimer) section.append(node('p', answer.disclaimer, 'disclaimer'));
+}
+function render(data, elapsed, mode) {
+  const results = Array.isArray(data.results) ? data.results : [];
+  $('status').className = '';
+  $('status').textContent = results.length + ' results · Search: ' + milliseconds(data.took_ms) + ' · Browser round trip: ' + milliseconds(elapsed) + (data.timed_out ? ' · Partial response' : '');
+  $('results').replaceChildren(); $('images').replaceChildren(); $('images').hidden = mode !== 'images';
+  showAnswer(data.answer, data.answer_status);
+  if (!results.length) $('results').append(node('p', 'No results were returned. Check the source notes.', 'muted'));
+  for (const result of results) {
+    const article = node('article');
+    article.append(node('div', result.url, 'url'));
+    const heading = node('h2'); heading.append(link((result.rank ? result.rank + '. ' : '') + (result.title || result.url), result.url)); article.append(heading);
+    article.append(node('p', result.snippet || '', 'snippet'));
+    const meta = [result.source_provider || result.provider, result.fetch_status ? 'Page: ' + result.fetch_status : '', result.published_at ? 'Published: ' + result.published_at : '', result.lang ? 'Language: ' + result.lang : ''].filter(Boolean);
+    article.append(node('p', meta.join(' · '), 'meta'));
+    if (result.injection_risk) article.append(node('p', 'Source contains instruction-like text; inspect it carefully.', 'disclaimer'));
+    if (result.features) { const detail = node('details'); detail.append(node('summary', 'Ranking details'), node('pre', JSON.stringify(result.features, null, 2))); article.append(detail); }
+    $('results').append(article);
+  }
+  if (mode === 'images') {
+    const seen = new Set();
+    const images = [...(Array.isArray(data.images) ? data.images : []), ...results.flatMap(r => Array.isArray(r.images) ? r.images : [])];
+    for (const image of images) {
+      const url = safeURL(image.thumbnail_url) || safeURL(image.image_url);
+      if (!url || seen.has(url)) continue; seen.add(url);
+      const card = node('div', undefined, 'image-card'); const img = document.createElement('img');
+      img.src = url; img.alt = image.caption || 'Search image'; img.loading = 'lazy'; img.referrerPolicy = 'no-referrer';
+      img.addEventListener('error', () => { img.hidden = true; card.prepend(node('p', 'Preview unavailable', 'muted')); });
+      const anchor = link('', image.page_url || image.image_url); anchor.append(img); card.append(anchor);
+      const caption = node('p'); caption.append(link(image.caption || 'Open source page', image.page_url || image.image_url)); card.append(caption, node('p', 'Source-supplied image', 'meta'));
+      $('images').append(card);
+    }
+    if (!seen.size) $('images').append(node('p', 'No image previews are available from the returned sources.', 'muted'));
+  }
+  const notes = [...(Array.isArray(data.provider_errors) ? data.provider_errors : []), ...(Array.isArray(data.limitations) ? data.limitations : [])];
+  if (data.notice) notes.push(data.notice);
+  $('warning-list').replaceChildren(...[...new Set(notes.filter(v => typeof v === 'string' && v))].map(text => node('li', text)));
+  $('warnings').hidden = !$('warning-list').childElementCount;
+  $('raw').textContent = JSON.stringify(data, null, 2); $('debug').hidden = false;
+}
+$('search-form').addEventListener('submit', async event => {
+  event.preventDefault(); if (controller || !$('search-form').reportValidity()) return;
+  if (!['http:', 'https:'].includes(location.protocol)) { connectionMessage(false); return; }
+  const query = $('query').value.trim(); if (!query) { $('query').focus(); return; }
+  const mode = $('search-type').value;
+  const payload = {query: mode === 'video' ? query + ' video' : query, limit:Number($('limit').value), search_type:mode === 'images' ? 'images' : 'web', answer_mode:$('answer-mode').checked, fetch_pages:$('fetch-pages').checked, explain:$('explain').checked};
+  for (const id of ['freshness','site','lang','timezone']) if ($(id).value.trim()) payload[id] = $(id).value.trim();
+  if (mode === 'web' && $('filetype').value) payload.filetype = $('filetype').value === 'custom' ? $('custom-filetype').value.trim().toLowerCase() : $('filetype').value;
+  const headers = {'Content-Type':'application/json'};
+  if ($('api-key').value.trim()) headers.Authorization = 'Bearer ' + $('api-key').value.trim();
+  controller = new AbortController(); const started = performance.now(); let timeoutReached = false;
+  $('submit').disabled = true; $('cancel').hidden = false; $('status').className = '';
+  for (const id of ['answer','warnings','images','debug']) $(id).hidden = true;
+  $('results').replaceChildren();
+  const progress = () => { $('status').textContent = 'Searching… ' + ((performance.now()-started)/1000).toFixed(1) + ' s'; };
+  progress(); const ticker = setInterval(progress, 100);
+  const timeout = setTimeout(() => { timeoutReached = true; controller?.abort(); }, 30000);
+  let responseReceived = false;
+  try {
+    const response = await fetch('/search', {method:'POST', headers, body:JSON.stringify(payload), signal:controller.signal});
+    responseReceived = true; connectionMessage(true);
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Search failed (HTTP ' + response.status + ')');
+    clearInterval(ticker); render(data, performance.now()-started, mode);
+  } catch (error) {
+    clearInterval(ticker); $('status').className = 'error';
+    if (!responseReceived && error.name !== 'AbortError') {
+      connectionMessage(false);
+      $('status').textContent = 'Search could not connect to the local API. Restart it with ./run.sh ' + (location.port || '8765') + ', then search again.';
+    } else {
+      $('status').textContent = error.name === 'AbortError' ? (timeoutReached ? 'The browser stopped waiting after 30 seconds.' : 'Request cancelled in the browser.') : 'Search failed: ' + error.message;
+    }
+  } finally {
+    clearInterval(ticker); clearTimeout(timeout); controller = null; $('submit').disabled = false; $('cancel').hidden = true;
+  }
+});
+updateFilters();
+checkConnection();
+</script>
+</body>
+</html>

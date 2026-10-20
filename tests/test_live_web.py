@@ -318,6 +318,12 @@ class WebProviderTests(unittest.TestCase):
 
 
 class WebRankingAndSafetyTests(unittest.TestCase):
+    def test_plain_text_filter_uses_the_parsers_extension_alias(self):
+        from ownsearch.webranking import constraints
+        item = WebCandidate.from_row({'url': 'https://example.org/guide.txt', 'title': 'Nebula guide', 'snippet': 'Nebula guide'}, 'fixture', 1)
+        self.assertTrue(constraints(item, parse_query('Nebula', filetype='text'), final=False))
+        self.assertFalse(constraints(item, parse_query('Nebula', filetype='pdf'), final=False))
+
     def item(self, title='Nebula installation manual', snippet='Nebula installation steps.', url='https://docs.example/manual', **kw):
         item = WebCandidate.from_row(row(url, title, snippet), 'fixture', 1)
         for name, value in kw.items():

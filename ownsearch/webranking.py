@@ -10,6 +10,7 @@ from urllib.parse import unquote, urlsplit
 from .evidence import passages
 from .intent import get_model, requested_format
 from .quality import simhash, hamming
+from .query import FILETYPE_ALIASES
 from .ranking import FIELD_WEIGHTS, FIELD_B, K1, DEFAULT_WEIGHTS, linear_score
 from .textproc import analyze, exact_tokens
 from .util import iso_to_ts
@@ -60,6 +61,7 @@ def constraints(item, q, final=True):
             return False
     if q.filetypes:
         ext = urlsplit(item.url).path.rsplit('.', 1)[-1].lower()
+        ext = FILETYPE_ALIASES.get(ext, ext)
         kinds = ({'web' if item.detected_kind == 'html' else item.detected_kind}
                  if item.detected_kind else {'web' if item.kind == 'web' else item.kind, ext})
         if not set(q.filetypes) & kinds:
