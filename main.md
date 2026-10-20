@@ -1,3 +1,5 @@
+Current measured quality and remaining failures: [docs/SEARCH_QUALITY_REPORT.md](docs/SEARCH_QUALITY_REPORT.md). The 100-case recording is complete; independent general accuracy and subsecond cold search are not established.
+
 Current bundled discovery setup and actual verification: [docs/BUNDLED_SOURCE_REPORT.md](docs/BUNDLED_SOURCE_REPORT.md).
 
 # OwnSearch Upgrade: Engineering Plan (main.md)

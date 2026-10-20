@@ -98,8 +98,8 @@ class Settings:
     live_fetch_pages: int = 3
     live_fetch_concurrency: int = 3
     live_fetch_timeout: float = 4.0
-    live_max_page_bytes: int = 1_000_000
-    live_max_total_bytes: int = 4_000_000
+    live_max_page_bytes: int = 2_000_000
+    live_max_total_bytes: int = 6_000_000
     live_max_text_chars: int = 60_000
     live_max_requests: int = 16        # includes robots and redirects
     live_max_candidates: int = 40
@@ -116,7 +116,7 @@ class Settings:
     provider_wait_ms: int = 500 # only when no useful local results; background workers have separate deadlines
     searxng_url: str = ""               # self-hosted SearXNG endpoint, e.g. "http://localhost:8080"
     searxng_timeout: float = 3.0
-    searxng_categories: str = "general,news"
+    searxng_categories: str = "general"
     brave_api_key: str = ""             # optional Brave Search API key
     brave_timeout: float = 3.0
     news_feeds: str = ""                # comma/newline-separated list of RSS/Atom feed URLs

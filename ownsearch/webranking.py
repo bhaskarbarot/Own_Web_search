@@ -7,12 +7,13 @@ import time
 from collections import Counter
 from urllib.parse import unquote, urlsplit
 
-from .evidence import passages, snippet_from
-from .intent import get_model
+from .evidence import passages
+from .intent import get_model, requested_format
 from .quality import simhash, hamming
 from .ranking import FIELD_WEIGHTS, FIELD_B, K1, DEFAULT_WEIGHTS, linear_score
 from .textproc import analyze, exact_tokens
 from .util import iso_to_ts
+from .webquery import literal_identifiers, literal_names, documentation_affinity, relation_terms
 
 
 def _contains(text, tokens):
@@ -30,7 +31,7 @@ def constraints(item, q, final=True):
     exact = ' '+' '.join(exact_tokens(text))+' '
     if any(t in terms for t in q.excluded) or any(_contains(exact, p) for p in q.exact_excluded_phrases):
         return False
-    if any(not _contains(exact, p) for p in q.exact_phrases):
+    if final and any(not _contains(exact, p) for p in q.exact_phrases):
         return False
     if q.intitle and not set(q.intitle) <= set(analyze(item.title)):
         return False
@@ -38,6 +39,18 @@ def constraints(item, q, final=True):
         return False
     if q.alternatives and not set(q.alternatives) & terms:
         return False
+    # A snippet can omit an acronym that the actual page explains. Defer that
+    # check until after enrichment; invented alphanumeric identifiers stay strict.
+    expanded_terms = terms | {term.lstrip('0123456789') for term in terms if term[:1].isdigit()}
+    if any((final or any(ch.isdigit() for ch in ''.join(name)))
+           and not _contains(exact, name) and not set(analyze(' '.join(name))) <= expanded_terms
+           for name in literal_identifiers(q)):
+        return False
+    if final and q.intent == 'reference':
+        facets = set(relation_terms(q))
+        declared_focus = set(analyze(item.title+' '+item.snippet))
+        if facets and not facets & declared_focus:
+            return False
     if q.entities and not all(any(_contains(exact, exact_tokens(n)) for n in e.names) for e in q.entities):
         return False
     if q.lang:
@@ -108,7 +121,8 @@ def rank(candidates, q, final=True):
         # An incidental body mention cannot make an unrelated page about the query.
         if not bm25 or coverage < .5 or (not title and coverage < .8):
             continue
-        if q.named_phrases and not title:
+        focus = ' '+' '.join(exact_tokens(item.title+' '+' '.join(item.headings)))+' '
+        if any(not _contains(focus, name) for name in literal_names(q)):
             continue
         if q.intent == 'financial' and item.source_type != 'market_data':
             predicted, _ = get_model().classify(item.title)
@@ -117,7 +131,8 @@ def rank(candidates, q, final=True):
         if q.intent == 'tech_docs' and not (required & set(f[0]+f[2])):
             continue
         text = item.content if item.fetch_status == 'fetched' else item.snippet
-        ps = passages(text, terms, q.surface, idf=idf, max_passages=2, scan_chars=60_000)
+        evidence_terms = list(dict.fromkeys(terms + relation_terms(q)))
+        ps = passages(text, evidence_terms, q.surface, idf=idf, max_passages=3, scan_chars=60_000)
         item.evidence = [p for p in ps if p.get('matched_terms', 0)]
         exact_title = ' '+' '.join(exact_tokens(item.title))+' '
         phrase = max((float(_contains(exact_title, p)) for p in q.exact_phrases), default=0)
@@ -127,7 +142,8 @@ def rank(candidates, q, final=True):
         freshness = math.exp(-max(0, time.time()-stamp)/(7*86400)) if stamp else 0
         features = {'bm25': bm25/best, 'coverage': coverage, 'title': title,
                     'url': len(required & set(f[2]))/max(1, len(required)),
-                    'exact_title': max(phrase, exact_subject), 'phrase': phrase,
+                    'exact_title': max(phrase, .3*exact_subject), 'phrase': phrase,
+                    'format': float(bool(q.result_format) and requested_format(item.title) == q.result_format),
                     'passage': min(1, max((p['score'] for p in item.evidence), default=0)/3),
                     'quality': float(len(text) > 100),
                     'same_language': float(bool(item.language) and item.language.split('-')[0] == q.language_info.get('language')),
@@ -135,12 +151,24 @@ def rank(candidates, q, final=True):
         weights = dict(DEFAULT_WEIGHTS)
         if q.fresh_intent or q.freshness or q.intent == 'news':
             weights['freshness'] = .5
+        # Source order is useful evidence after relevance checks, not a substitute for them.
+        positions = [p.get('rank') for p in item.provenance if type(p.get('rank')) is int and p['rank'] > 0]
+        features['retrieval_rank'] = 1/math.sqrt(min(positions)) if positions else 0
+        weights['retrieval_rank'] = .25
+        location = urlsplit(item.url)
+        project_terms = required & set(analyze(location.hostname or ''))
+        inspected_project = item.fetch_status == 'fetched' and coverage >= .8 and len(project_terms) >= min(2, len(required))
+        if q.intent == 'tech_docs' and coverage >= .5 and (title > 0 or inspected_project):
+            segments = location.hostname.split('.') + location.path.strip('/').split('/')[:2]
+            features['documentation_structure'] = max((documentation_affinity(segment) for segment in segments if segment), default=0)
+            weights['documentation_structure'] = 1.2
+            features['project_host'] = len(required & set(analyze(location.hostname or '')))/max(1, len(required))
+            weights['project_host'] = .4
         # Inspected page text is a small evidence signal; content relevance dominates.
         features['fetched_evidence'] = float(item.fetch_status == 'fetched' and coverage >= .8)
         weights['fetched_evidence'] = .2
         item.features = features
         item.score = linear_score(features, weights)
-        item.snippet = snippet_from((item.evidence or [{'text': text}])[0]['text'], q.surface)
         kept.append(item)
     kept.sort(key=lambda i: (-i.score, i.url))
     seen_hashes, result = [], []

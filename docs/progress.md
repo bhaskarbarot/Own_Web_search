@@ -1,3 +1,7 @@
+## Search quality measurements — 2026-10-20
+
+Completed all 100 `query.md` table cases, kept code fixed during the final run, added generic relevance/discovery regressions, and passed 244 tests. The provisional developer review and cold latency still fail the requested release target. See [SEARCH_QUALITY_REPORT.md](SEARCH_QUALITY_REPORT.md); no general 90% accuracy or green flag is claimed.
+
 ## Bundled discovery source — 2026-10-20
 
 The user requested copying the cloned SearXNG code into `searxxxing/` rather than

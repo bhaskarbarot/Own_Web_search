@@ -7,4 +7,4 @@
 5. Review evidence for relevance/answer support separately, report sample size and uncertainty, and retain failures. Run all listed queries; ambiguous underspecified cases need explicit scope rather than invented facts. Broader 300–500-query independent accuracy remains separate.
 6. Run the existing regression suite, provide actual metrics/commands/limitations, and grant no green flag unless the requested real quality and speed checks pass.
 
-Source-copy integration and three live smoke queries are complete; see [BUNDLED_SOURCE_REPORT.md](BUNDLED_SOURCE_REPORT.md). Steps 3–5 are still pending. No full-benchmark accuracy is claimed.
+Source-copy integration and the full 100 table-case recording are complete. Eight M cases represent initial retrieval only, not completed workflows. A provisional developer review covers 20 cases; independent review, complete answer verification and a representative holdout remain pending. See [SEARCH_QUALITY_REPORT.md](SEARCH_QUALITY_REPORT.md) and the historical [BUNDLED_SOURCE_REPORT.md](BUNDLED_SOURCE_REPORT.md). The quality and cold-latency gates do not pass.

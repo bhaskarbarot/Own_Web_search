@@ -104,7 +104,7 @@ _NUMBER_WORDS = dict(zip("one two three four five six seven eight nine ten eleve
 
 def parse_duration(text):
     """Span of time mentioned in text ("last 6 months", "past 2 years") -> days, or None."""
-    words = (text or "").lower().replace("-", " ").split()
+    words = re.findall(r"\d+(?:\.\d+)?|[^\W\d_]+", (text or "").lower())
     for i, w in enumerate(words[:-1]):
         count = int(w) if w.isdigit() else _NUMBER_WORDS.get(w)
         if count is not None:

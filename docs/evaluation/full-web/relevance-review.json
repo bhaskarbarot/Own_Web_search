@@ -1,0 +1,591 @@
+{
+  "scope": "Provisional diagnostic page relevance on the first two cases in ten categories, not independent accuracy or a holdout.",
+  "independent_review": false,
+  "rating_scale": {
+    "0": "Unrelated or violates a decisive constraint",
+    "1": "Partial topic match; does not satisfy a decisive requested facet",
+    "2": "Directly relevant retrieval evidence",
+    "3": "Direct primary or particularly exact reference"
+  },
+  "limitations": [
+    "Titles/excerpts cannot establish factual correctness, current availability or successful task completion.",
+    "P@5 and MRR count grade 1 as relevant; strict P@5 below requires grade >=2.",
+    "Before has fetching disabled; after enables page enrichment. Source configuration/availability also changed. These observations are not a controlled causal comparison."
+  ],
+  "sample_ids": [
+    "C01",
+    "C02",
+    "R01",
+    "R02",
+    "A01",
+    "A02",
+    "B01",
+    "B02",
+    "N01",
+    "N02",
+    "T01",
+    "T02",
+    "P01",
+    "P02",
+    "E01",
+    "E02",
+    "S01",
+    "S02",
+    "L01",
+    "L02"
+  ],
+  "sample_selected": "First two IDs per C/R/A/B/N/T/P/E/S/L category; excludes ambiguous D cases and M workflow-retrieval cases.",
+  "reports": {
+    "before": {
+      "input": "before.json",
+      "input_sha256": "9c443834f13a4c71f0dba46bca5351af1574fe71f96c053fc96c1dc5216585b5",
+      "evaluation": {
+        "reviewed_queries": 20,
+        "metrics": {
+          "top5_useful": {
+            "value": 0.65,
+            "ci95": [
+              0.45,
+              0.85
+            ],
+            "queries": 20
+          },
+          "precision@5": {
+            "value": 0.52,
+            "ci95": [
+              0.32,
+              0.71
+            ],
+            "queries": 20
+          },
+          "recall@10": {
+            "value": 0.435495,
+            "ci95": [
+              0.282009,
+              0.58426
+            ],
+            "queries": 20
+          },
+          "mrr@10": {
+            "value": 0.625,
+            "ci95": [
+              0.425,
+              0.825
+            ],
+            "queries": 20
+          },
+          "ndcg@10": {
+            "value": 0.4638,
+            "ci95": [
+              0.288231,
+              0.637708
+            ],
+            "queries": 20
+          }
+        },
+        "answer_correctness": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "citation_support": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "abstention_correctness": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "task_success": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "judgment_coverage": {
+          "value": 0.7,
+          "ci95": [
+            0.5,
+            0.9
+          ],
+          "queries": 20
+        },
+        "per_query": [
+          {
+            "id": "C01",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 0.0
+          },
+          {
+            "id": "C02",
+            "top5_useful": 1,
+            "precision@5": 0.4,
+            "recall@10": 0.4,
+            "mrr@10": 0.5,
+            "ndcg@10": 0.38356636737133565,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "R01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.7142857142857143,
+            "mrr@10": 1.0,
+            "ndcg@10": 1.0,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "R02",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 0.0
+          },
+          {
+            "id": "A01",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 0.0
+          },
+          {
+            "id": "A02",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "B01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.6,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.6447430605915292,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "B02",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.5714285714285714,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.8701249883466592,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "N01",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 0.0
+          },
+          {
+            "id": "N02",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 0.0
+          },
+          {
+            "id": "T01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.7692307692307693,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.7006755064418649,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "T02",
+            "top5_useful": 1,
+            "precision@5": 0.4,
+            "recall@10": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@10": 1.0,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "P01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.6666666666666666,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.9368077570869662,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "P02",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.8333333333333334,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.8628185483899015,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "E01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.6,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.7239360576481743,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "E02",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 0.0
+          },
+          {
+            "id": "S01",
+            "top5_useful": 1,
+            "precision@5": 0.4,
+            "recall@10": 0.2857142857142857,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.18615343455741287,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "S02",
+            "top5_useful": 1,
+            "precision@5": 0.4,
+            "recall@10": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.42394720476936393,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "L01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.7692307692307693,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.773122735452171,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "L02",
+            "top5_useful": 1,
+            "precision@5": 0.8,
+            "recall@10": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.7700971468550297,
+            "judgment_coverage": 1.0
+          }
+        ]
+      },
+      "strict_precision@5": 0.39,
+      "reviewed_cases": 20,
+      "cases_with_full_task_verification": 0
+    },
+    "after": {
+      "input": "after.json",
+      "input_sha256": "839d2479fa205446cf740fc10a8c5987fde8554619ff7f755c83c5a00fd01c12",
+      "evaluation": {
+        "reviewed_queries": 20,
+        "metrics": {
+          "top5_useful": {
+            "value": 0.95,
+            "ci95": [
+              0.85,
+              1.0
+            ],
+            "queries": 20
+          },
+          "precision@5": {
+            "value": 0.67,
+            "ci95": [
+              0.51,
+              0.82025
+            ],
+            "queries": 20
+          },
+          "recall@10": {
+            "value": 0.672802,
+            "ci95": [
+              0.5545,
+              0.775542
+            ],
+            "queries": 20
+          },
+          "mrr@10": {
+            "value": 0.925,
+            "ci95": [
+              0.8,
+              1.0
+            ],
+            "queries": 20
+          },
+          "ndcg@10": {
+            "value": 0.747877,
+            "ci95": [
+              0.617287,
+              0.865757
+            ],
+            "queries": 20
+          }
+        },
+        "answer_correctness": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "citation_support": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "abstention_correctness": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "task_success": {
+          "value": null,
+          "ci95": null,
+          "queries": 0
+        },
+        "judgment_coverage": {
+          "value": 0.95,
+          "ci95": [
+            0.85,
+            1.0
+          ],
+          "queries": 20
+        },
+        "per_query": [
+          {
+            "id": "C01",
+            "top5_useful": 0,
+            "precision@5": 0.0,
+            "recall@10": 0.0,
+            "mrr@10": 0.0,
+            "ndcg@10": 0.0,
+            "judgment_coverage": 0.0
+          },
+          {
+            "id": "C02",
+            "top5_useful": 1,
+            "precision@5": 0.6,
+            "recall@10": 0.6,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.6992148198508501,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "R01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.7142857142857143,
+            "mrr@10": 1.0,
+            "ndcg@10": 1.0,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "R02",
+            "top5_useful": 1,
+            "precision@5": 0.2,
+            "recall@10": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.1310456303875653,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "A01",
+            "top5_useful": 1,
+            "precision@5": 0.4,
+            "recall@10": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@10": 1.0,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "A02",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.9818693001155414,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "B01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.7,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.5651058448084103,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "B02",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.6428571428571429,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.9363792118010482,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "N01",
+            "top5_useful": 1,
+            "precision@5": 0.2,
+            "recall@10": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@10": 1.0,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "N02",
+            "top5_useful": 1,
+            "precision@5": 0.8,
+            "recall@10": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.6348734152918568,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "T01",
+            "top5_useful": 1,
+            "precision@5": 0.8,
+            "recall@10": 0.6153846153846154,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.7128943238712617,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "T02",
+            "top5_useful": 1,
+            "precision@5": 0.2,
+            "recall@10": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.9173194127129571,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "P01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.6666666666666666,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.92663607790064,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "P02",
+            "top5_useful": 1,
+            "precision@5": 0.8,
+            "recall@10": 0.6666666666666666,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.8702419565023113,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "E01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.6666666666666666,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.8708334548527367,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "E02",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 1.0,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.9482964793501012,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "S01",
+            "top5_useful": 1,
+            "precision@5": 0.8,
+            "recall@10": 0.7142857142857143,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.9027922886061118,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "S02",
+            "top5_useful": 1,
+            "precision@5": 0.4,
+            "recall@10": 0.5,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.7170533846952881,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "L01",
+            "top5_useful": 1,
+            "precision@5": 1.0,
+            "recall@10": 0.7692307692307693,
+            "mrr@10": 1.0,
+            "ndcg@10": 0.8804804479112671,
+            "judgment_coverage": 1.0
+          },
+          {
+            "id": "L02",
+            "top5_useful": 1,
+            "precision@5": 0.2,
+            "recall@10": 0.2,
+            "mrr@10": 0.5,
+            "ndcg@10": 0.2625111813898523,
+            "judgment_coverage": 1.0
+          }
+        ]
+      },
+      "strict_precision@5": 0.56,
+      "reviewed_cases": 20,
+      "cases_with_full_task_verification": 0
+    }
+  },
+  "full_recording": {
+    "queries": 100,
+    "completed_at": "2026-10-20T13:17:42.701318+00:00",
+    "summary": {
+      "queries": 100,
+      "nonempty_queries": 92,
+      "queries_with_answers": 66,
+      "p50_ms": 6406.54,
+      "p95_ms": 8262.9135,
+      "reviewed_queries": 0,
+      "accuracy": null,
+      "green_flag": false
+    }
+  },
+  "release_gate": {
+    "passed": false,
+    "scope": "The recorded and independently reviewed benchmark only.",
+    "minimum_reviewed": 100,
+    "task_success_target": 0.9,
+    "cold_p95_limit_ms": 1000,
+    "reasons": [
+      "Insufficient complete task-level judgments for the recorded query set.",
+      "Independent review is missing; developer/AI self-review cannot certify the target.",
+      "Reviewed task success does not meet the declared target.",
+      "Recorded cold p95 latency does not meet the declared limit."
+    ]
+  }
+}

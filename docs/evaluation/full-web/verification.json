@@ -1,0 +1,32 @@
+{
+  "tests": {
+    "passed": 244,
+    "seconds": 47.28,
+    "log": "tests.txt",
+    "profile": "Existing base-profile virtualenv; local HTTP fixture sockets allowed. Tests make no public service requests."
+  },
+  "upstream_integrity": {
+    "checked_regular_files": 1007,
+    "mismatches": []
+  },
+  "stable_code_during_final_benchmark": {
+    "checked_files": 81,
+    "mismatches": []
+  },
+  "ast_parsed_modules": 69,
+  "no_query_overrides_audit": "Reviewed changed runtime files: no branch, answer table or result-URL table keyed to evaluation queries. Generic lexical and structural heuristics remain; regex is used for syntax/token/date parsing. This is a scoped code review, not a proof of general intelligence.",
+  "empty_case_ids": [
+    "C01",
+    "N03",
+    "N05",
+    "L08",
+    "D05",
+    "D07",
+    "D11",
+    "D12"
+  ],
+  "workflow_scope_counts": {
+    "single_query": 92,
+    "workflow_retrieval_only": 8
+  }
+}

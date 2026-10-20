@@ -79,6 +79,7 @@ class WebCandidate:
     language: str = None
     content: str = ''
     headings: list = field(default_factory=list)
+    links: list = field(default_factory=list)
     fetch_status: str = 'not_fetched'
     provenance: list = field(default_factory=list)
     images: list = field(default_factory=list)
@@ -108,6 +109,10 @@ class WebCandidate:
         item.provenance = [{'provider': provider, 'rank': rank, 'url': url,
                             'evidence_level': item.source_type, 'retrieved_at': utc_now(),
                             'snippet': snippet, 'published_at': item.published_at}]
+        if isinstance(row.get('source_query'), str):
+            item.provenance[0]['query'] = row['source_query'][:1000]
+        if isinstance(row.get('upstream_engines'), list):
+            item.provenance[0]['upstream_engines'] = [v[:80] for v in row['upstream_engines'] if isinstance(v, str)][:20]
         image = row.get('image_url')
         thumb = row.get('thumbnail_url')
         if isinstance(thumb, dict):
@@ -126,7 +131,8 @@ class WebCandidate:
     def result(self, rank, explain=False):
         host = urlsplit(self.url).hostname
         result = {'rank': rank, 'id': None, 'title': self.title, 'url': self.url,
-                  'display_url': self.url, 'host': host, 'snippet': self.snippet,
+                  'display_url': self.url, 'host': host,
+                  'snippet': self.evidence[0]['text'][:600] if self.evidence else self.snippet,
                   'score': round(self.score, 6), 'provider': self.provider,
                   'source_provider': self.provider,
                   'providers': sorted({p['provider'] for p in self.provenance}),

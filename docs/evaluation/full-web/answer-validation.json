@@ -1,0 +1,157 @@
+{
+  "input": "priority-verified.json",
+  "input_sha256": "005ede671cf674fabb43c378066959299ddeacea897bc2782e9e796e070e5729",
+  "checked_at": "2026-10-20T13:17:57.630359+00:00",
+  "scope": "Answer checks separate from webpage relevance. Internal arithmetic/source consistency is not an independent market audit or general answer accuracy.",
+  "checks": [
+    {
+      "id": "example-1",
+      "query": "Nvidia live price",
+      "answer_type": "stock_quote",
+      "answer_sha256": "3ae29e8cd1c16048c1b892b0d5dea20c5a15053ccac927686380c337030fa96c",
+      "fresh_source_check": {
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=1792156677&period2=1792502277&interval=5m&includePrePost=false",
+        "http_status": 200,
+        "checked_at": "2026-10-20T13:17:57.620027+00:00",
+        "symbol": "NVDA",
+        "currency": "USD",
+        "regularMarketPrice": 217.09,
+        "regularMarketTime": 1792440001,
+        "same_timestamp_as_recording": true,
+        "price_agrees_at_same_timestamp": true
+      },
+      "status": "arithmetic_and_timestamp_checks",
+      "checks": {
+        "finite_positive_price": true,
+        "nonfuture_as_of": true,
+        "explicit_market_scope": true,
+        "delayed_label": true,
+        "disclaimer": true,
+        "change_arithmetic": true,
+        "percent_arithmetic": true
+      },
+      "all_internal_checks_pass": true,
+      "independent_market_verification": false
+    },
+    {
+      "id": "example-2",
+      "query": "today's Trump headlines",
+      "answer_type": "headlines",
+      "answer_sha256": "bf087bf9efefd4097c240005b75896925a88cd66a590ada20447838bcd22d923",
+      "status": "publisher_timestamp_check",
+      "headlines": 1,
+      "published_at": [
+        "2026-10-20T12:40:50+00:00"
+      ],
+      "correctness": null,
+      "notes": "Publisher metadata and citations are present; headline truth and completeness were not independently verified."
+    },
+    {
+      "id": "example-3",
+      "query": "Samrat Ashok birthplace",
+      "answer_type": null,
+      "answer_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "status": "abstained",
+      "correctness": null,
+      "notes": "Abstention is not a completed answer. No birthplace is certified."
+    },
+    {
+      "id": "example-4",
+      "query": "TCS 6-month analysis",
+      "answer_type": "stock_history",
+      "answer_sha256": "e0aad1131585aff49f9a1b7ddb23341ebe617971708dad03c6470045e3427fed",
+      "status": "recomputed_from_returned_series",
+      "checks": {
+        "finite_positive_prices": true,
+        "unique_chronological_dates": true,
+        "within_requested_range": true,
+        "observations": true,
+        "missing_prices": true,
+        "reported_as_of_nonfuture": true,
+        "disclaimer": true,
+        "change_pct": true,
+        "max_drawdown_pct": true,
+        "mean": true,
+        "sma20": true,
+        "sma50": true,
+        "volatility_pct": true
+      },
+      "recomputed": {
+        "change_pct": -3.417897458288166,
+        "max_drawdown_pct": -23.023087829120048,
+        "mean": 2235.4869656,
+        "sma20": 2152.24514,
+        "sma50": 2232.532388,
+        "volatility_pct": 34.80630827854625
+      },
+      "all_internal_checks_pass": true,
+      "rounding_tolerance": 0.001,
+      "observations": 125,
+      "requested_range": [
+        "2026-04-20",
+        "2026-10-20"
+      ],
+      "returned_range": [
+        "2026-04-21",
+        "2026-10-19"
+      ],
+      "independent_market_verification": false,
+      "limitations": "Returned prices are rounded to four decimals. Weekday coverage is not a holiday-aware exchange calendar. This is descriptive history, not a forecast."
+    },
+    {
+      "id": "example-5",
+      "query": "inheritance in OOPS",
+      "answer_type": "extractive",
+      "answer_sha256": "601c3fa2015d085dda8550ddbb2ebbd342b7ec88b269dc0e028cf910ea4a29ec",
+      "status": "unverified_source_excerpt",
+      "correctness": null,
+      "notes": "Source excerpt may be incomplete or provider supplied. It is not a verified factual answer."
+    },
+    {
+      "id": "example-6",
+      "query": "Claude docs on MCP",
+      "answer_type": "extractive",
+      "answer_sha256": "6d1ec1bf2a3881f7f47dbc1f1d69d4cac688fe8a699ea669274925310ad9356a",
+      "status": "unverified_source_excerpt",
+      "correctness": null,
+      "notes": "Source excerpt may be incomplete or provider supplied. It is not a verified factual answer."
+    },
+    {
+      "id": "example-7",
+      "query": "Python requests timeout parameter documentation",
+      "answer_type": "extractive",
+      "answer_sha256": "40b5cf09cb239a1fb888813cb3699b4a0ff09d0aa51abc17aed72c3f9100460d",
+      "status": "unverified_source_excerpt",
+      "correctness": null,
+      "notes": "Source excerpt may be incomplete or provider supplied. It is not a verified factual answer."
+    },
+    {
+      "id": "example-8",
+      "query": "give me ramayan serial by ramanand sagar character names",
+      "answer_type": "extractive",
+      "answer_sha256": "8a93b81d0a81e43766bd9388abbddb8fc14ac1ca425b24e4256cf31a13cd4c10",
+      "status": "unverified_source_excerpt",
+      "correctness": null,
+      "notes": "Source excerpt may be incomplete or provider supplied. It is not a verified factual answer."
+    },
+    {
+      "id": "example-9",
+      "query": "give me doremon cartoon character names",
+      "answer_type": null,
+      "answer_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "status": "abstained",
+      "correctness": null,
+      "notes": "Abstention is not a completed answer. No birthplace is certified."
+    },
+    {
+      "id": "docs-react",
+      "query": "Find the official documentation for React's useEffect hook and explain when cleanup is required.",
+      "answer_type": "extractive",
+      "answer_sha256": "3e42882e8895c85df0bc6a19dba2d7fae3ad35ad4192d8c7a7903b8c6edbf96f",
+      "status": "unverified_source_excerpt",
+      "correctness": null,
+      "notes": "Source excerpt may be incomplete or provider supplied. It is not a verified factual answer."
+    }
+  ],
+  "green_flag": false
+}

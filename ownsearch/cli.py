@@ -37,6 +37,8 @@ def _pretty(res):
         print("  spelling: " + ", ".join(f"{old} → {new}" for old, new in corrections.items()))
     answer = res.get("answer")
     if answer:
+        if answer.get('type') == 'extractive':
+            print('\n  Source excerpt (not independently verified):')
         print(f"\n  {answer.get('text', '')}")
         source = answer.get("source", {})
         if source.get("url"):

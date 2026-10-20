@@ -1,0 +1,1084 @@
+[
+  {
+    "id": "C01",
+    "query": "Find open-source Ruby on Rails projects that use React and TypeScript and have open issues suitable for a first-time contributor.",
+    "criteria": "Correct language, framework, and issue status",
+    "pool": [
+      {
+        "url": "https://dev.to/gavrilarails/ruby-on-rails-with-react-on-typescript-using-importmaps-5082",
+        "title": "Ruby on Rails with React on Typescript using importmaps - DEV Community",
+        "snippet": "source, filename) => { let code = ''; nodo.debug(`Compiling component ${filename}`); const result = babelCore.transformSync(source, { plugins: [ [\"@babel/plugin-transform-react-jsx\", { \"runtime\": \"automatic\" } ], [\"@babel/plugin-transform-typescript\", { \"isTSX\": true, \"allExtensions\": true } ] ] } ); return result.code; } JS end Sprockets.register_mime_type 'text/tsx', extensions: %w[.tsx .ts], charset: :unicode Sprockets.register_transformer 'text/tsx', 'application/javascript', TSXCompiler\nLets make a universal table we can reuse later. First of all lets create a method for user model that r",
+        "index": 0
+      },
+      {
+        "url": "https://developer.auth0.com/resources/code-samples/full-stack/hello-world/basic-role-based-access-control/spa/react-typescript/rails-ruby",
+        "title": "React with React Router 6 (TypeScript) + Rails (Ruby) Code Sample: Basic Role-Based Access Control (RBAC) for Hello World Full-Stack App",
+        "snippet": "Set Up and Run the Ruby on Rails Project\nSet Up the React TypeScript Project\nSet Up Role-Based Access Control (RBAC)\n1\nUse case\nHello World\n2\nSecurity level\nBasic Role-Based Access Control (RBAC)\n3\nClient type\nSingle-Page App\n4\nClient framework\nReact + TypeScript\n5\nServer framework\nRails + Ruby\nreact logo\ntypescript logo\nrails logo\nruby logo\nHello World Full-Stack Security: React/TypeScript + Rails/Ruby\nUpdated on January 27, 2023\nDevelopers can easily secure a full-stack application using Auth0. This code sample demonstrates how to implement authentication in a client application built with R",
+        "index": 1
+      },
+      {
+        "url": "https://www.ruby-toolbox.com/projects/react-rails",
+        "title": "Project: react-rails - The Ruby Toolbox",
+        "snippet": "React-Rails, including instructional articles and answers to the most frequently asked questions.\nRelated Projects\nreact_on_rails: Integration of React with Rails utilizing Webpack, Redux, React-Router.\nReact on Rails Pro:React on Rails with Node rendering and many other performance enhancements.\nreact-rails-benchmark_renderer adds performance instrumentation to server rendering.\nRuby Hyperstack: Use Ruby to build reactive user interfaces with React.\nContributing\n🎉 Thanks for taking the time to contribute! 🎉 See CONTRIBUTING.md for more details.\nSupporters\nThe following companies provide licen",
+        "index": 2
+      }
+    ]
+  },
+  {
+    "id": "C02",
+    "query": "Find GitHub repositories with open bugs related to PostgreSQL connection pooling.",
+    "criteria": "Relevant repositories and actual open issues",
+    "pool": [
+      {
+        "url": "https://pkg.go.dev/github.com/jackc/pgx/v5/pgxpool",
+        "title": "pgxpool package - github.com/jackc/pgx/v5/pgxpool - Go Packages",
+        "snippet": "Creating a Pool\nPackage pgxpool is a concurrency-safe connection pool for pgx.\npgxpool implements a nearly identical interface to pgx connections.\nCreating a Pool ¶\nThe primary way of creating a pool is with pgxpool.New:\npool, err := pgxpool.New(context.Background(), os.Getenv(\"DATABASE_URL\"))\nThe database connection string can be in URL or keyword/value format. PostgreSQL settings, pgx settings, and pool settings can be specified here. In addition, a config struct can be created by ParseConfig.\nconfig, err := pgxpool.ParseConfig(os.Getenv(\"DATABASE_URL\")) if err != nil { // ... } config.After",
+        "index": 0
+      },
+      {
+        "url": "https://github.com/ryanleem/github-bug-finder",
+        "title": "GitHub - ryanleem/github-bug-finder: Search GitHub issues using ...",
+        "snippet": "GitHub issues using PostgreSQL, semantic embeddings, and live GitHub search to find similar bugs faster. - ryanleem/github-bug-finder",
+        "index": 1
+      },
+      {
+        "url": "https://github.com/topics/postgresql?o=desc&s=updated",
+        "title": "postgresql · GitHub Topics · GitHub",
+        "snippet": "PostgreSQL is a database management system that is object-relational. PostgreSQL originated from the Ingres project at the University of California, Berkeley.",
+        "index": 2
+      }
+    ]
+  },
+  {
+    "id": "R01",
+    "query": "Compare traditional keyword search with semantic search and hybrid search.",
+    "criteria": "Accurate technical distinctions",
+    "pool": [
+      {
+        "url": "https://medium.com/google-cloud/hybrid-search-combining-semantic-and-keyword-approaches-for-enhanced-information-retrieval-6a7c046c89ea",
+        "title": "Hybrid Search: Combining Semantic and Keyword Approaches for ... - Medium",
+        "snippet": "hybrid search comes in. By combining semantic search with traditional keyword search, you can cover more ground and get better results.",
+        "index": 0
+      },
+      {
+        "url": "https://stackviv.ai/blog/hybrid-search-guide",
+        "title": "Hybrid Search: How to Combine Semantic + Keyword",
+        "snippet": "Hybrid search combines keyword-based matching (using algorithms like BM25) with semantic vector search (using embeddings) to improve retrieval accuracy.",
+        "index": 1
+      },
+      {
+        "url": "https://medium.com/@prasadsawant1107/hybrid-search-combining-the-best-of-keyword-and-semantic-search-6ccbc92f5aa4",
+        "title": "Hybrid Search: Combining the Best of Keyword and Semantic search",
+        "snippet": "Hybrid Search Let's go through both of these approaches, Keyword Search: The Traditional Approach Keyword search works largely by matching the exact words in a query with those in your documents ...",
+        "index": 2
+      },
+      {
+        "url": "https://www.wickedsmartdata.com/articles/hybrid-search-combining-keyword-and-semantic-search-for-better-results",
+        "title": "Hybrid Search: Combining Keyword and Semantic Search for Better Results ...",
+        "snippet": "hybrid search by combining keyword and semantic search. Learn implementation, optimization, and real-world applications for AI-powered search systems.",
+        "index": 3
+      },
+      {
+        "url": "https://www.fluidtopics.com/keyword-search-vs-semantic-search/",
+        "title": "Keyword vs Semantic Search & Why Hybrid is the Way to Go",
+        "snippet": "keyword, semantic, and hybrid—and why understanding their differences can transform the way you work.",
+        "index": 4
+      },
+      {
+        "url": "https://mixpeek.com/blog/keyword-vs-semantic-vs-hybrid-search",
+        "title": "Keyword vs Semantic vs Hybrid Search Explained (2025) | Mixpeek",
+        "snippet": "keyword search, semantic search, and hybrid search. Learn when to use each approach with practical code examples.",
+        "index": 5
+      },
+      {
+        "url": "https://www.systemoverflow.com/learn/ml-nlp-systems/semantic-search-nlp/semantic-vs-keyword-search-when-to-use-each-and-hybrid-approaches",
+        "title": "Semantic vs Keyword Search: When to Use Each and Hybrid Approaches",
+        "snippet": "keywords but works perfectly with semantic search. Most production systems use hybrid search: semantic results merged with keyword results via reciprocal rank fusion or re-ranking. The hybrid approach captures both exact matches and conceptual relevance.",
+        "index": 6
+      },
+      {
+        "url": "https://ryshe.com/blog/semantic-search-vs-keyword-search",
+        "title": "Semantic Search vs. Keyword Search: When to Use Each (And Why Hybrid ...",
+        "snippet": "Semantic search understands meaning. Keyword search matches terms. Most enterprise systems need both.",
+        "index": 7
+      },
+      {
+        "url": "https://stackviv.ai/blog/semantic-search-vs-keyword-search",
+        "title": "Semantic Search vs Keyword Search: Key Differences",
+        "snippet": "semantic search vs keyword search? Learn how meaning-based search works, when to use each approach, and why hybrid search delivers the best results.",
+        "index": 8
+      },
+      {
+        "url": "https://redis.io/blog/semantic-search-vs-keyword-search/",
+        "title": "Semantic search vs. keyword search: When to use each - Redis",
+        "snippet": "semantic search and keyword search work, where each excels, and why apps combine both into hybrid search.",
+        "index": 9
+      },
+      {
+        "url": "https://www.techment.com/blogs/traditional-search-vs-semantic-search/",
+        "title": "Traditional Search vs Semantic Search Explained - techment.com",
+        "snippet": "traditional search vs semantic search comparison helps you with right implementation approaches, enterprise use cases, and why AI-powered search is transforming digital experiences.",
+        "index": 10
+      },
+      {
+        "url": "https://www.webbycrown.com/hybrid-search-for-rag/",
+        "title": "Hybrid Search for RAG: Semantic vs Keyword Search Strategy",
+        "snippet": "hybrid search strategy for RAG systems, when semantic search works best, when keyword search still wins, and how to improve retrieval quality.",
+        "index": 11
+      },
+      {
+        "url": "https://www.unite.ai/what-is-hybrid-search-combining-keywords-and-vectors-for-better-retrieval/",
+        "title": "What Is Hybrid Search? Combining Keywords and Vectors for Better Retrieval",
+        "snippet": "Hybrid search combines lexical matching with vector similarity so retrieval can respect exact terms while recognizing semantic equivalents. This guide explains the mechanism, trade-offs, evaluation, and controls that",
+        "index": 12
+      },
+      {
+        "url": "https://appscale.blog/en/blog/semantic-search-vs-keyword-search-architecture-implementation-2026",
+        "title": "Semantic Search vs Keyword Search: Architecture and Implementation",
+        "snippet": "semantic search and keyword search architecture — covering embedding models, vector stores, hybrid retrieval, reranking, and evaluation metrics.",
+        "index": 13
+      },
+      {
+        "url": "https://www.geeky-gadgets.com/keyword-vs-vector-search-why-hybrid-systems-are-the-future-for-search-system-supremacy/",
+        "title": "Keyword vs Vector Search: Why Hybrid Systems Are the Future for Search System Supremacy",
+        "snippet": "keyword-based search, vector-based search, or a hybrid approach can significantly impact performance, relevance, and user satisfaction.",
+        "index": 14
+      }
+    ]
+  },
+  {
+    "id": "R02",
+    "query": "Find research papers on retrieval-augmented generation published in 2025 or 2026.",
+    "criteria": "Publication dates and real papers",
+    "pool": [
+      {
+        "url": "https://arxiv.org/abs/2508.06401",
+        "title": "[2508.06401] A Systematic Literature Review of Retrieval-Augmented Generation: Techniques, Metrics, and Challenges",
+        "snippet": "[Submitted on 8 Aug 2025 (v1), last revised 9 Sep 2025 (this version, v3)]\nTitle:A Systematic Literature Review of Retrieval-Augmented Generation: Techniques, Metrics, and Challenges\nAbstract:This systematic review of the research literature on retrieval-augmented generation (RAG) provides a focused analysis of the most highly cited studies published between 2020 and May 2025. A total of 128 articles met our inclusion criteria. The records were retrieved from ACM Digital Library, IEEE Xplore, Scopus, ScienceDirect, and the Digital Bibliography and Library Project (DBLP). RAG couples a neural r",
+        "index": 0
+      },
+      {
+        "url": "https://bioengineer.org/how-retrieval-augmented-generation-is-rewiring-what-ai-knows/",
+        "title": "How Retrieval-Augmented Generation Is Rewiring What AI Knows",
+        "snippet": "A new survey in Artificial Intelligence Review maps the evolution of retrieval-augmented generation from simple retrieve-then-read pipelines to agentic systems, while cataloguing its evaluation",
+        "index": 1
+      },
+      {
+        "url": "https://bioengineer.org/retrieval-beats-fine-tuning-teaching-ai-the-science-of-3d-printing/",
+        "title": "Retrieval Beats Fine-Tuning: Teaching AI the Science of 3D Printing",
+        "snippet": "retrieval-augmented generation dramatically outperforms fine-tuning when adapting large language models to expert-level additive manufacturing questions.",
+        "index": 2
+      },
+      {
+        "url": "https://www.forbes.com/councils/forbestechcouncil/2026/04/24/retrieval-augmented-generation-is-an-engineering-problem-not-a-model-problem/",
+        "title": "Retrieval-Augmented Generation Is An Engineering Problem, Not A Model Problem",
+        "snippet": "Every few months, the enterprise AI conversation resets around the same flawed premise that better models solve the problem. When large language models hallucinate, the instinct is to reach for a newer version. When outputs drift from reality, the fix must ...",
+        "index": 3
+      }
+    ]
+  },
+  {
+    "id": "A01",
+    "query": "Find free or open-weight LLMs suitable for CPU inference on a machine with 16 GB RAM.",
+    "criteria": "Model requirements and realistic hardware compatibility",
+    "pool": [
+      {
+        "url": "https://dev.to/max_quimby/how-to-run-ai-models-locally-on-your-pc-or-mac-2026-guide-n4p",
+        "title": "Running LLMs on Your Own Hardware: What Actually Works in 2026 - DEV Community",
+        "snippet": "Apple Silicon (M1/M2/M3/M4): Unified memory means your GPU and CPU share the same RAM pool. This is a massive advantage for local AI — a MacBook Pro with 32GB can use all of that memory for model inference. Apple Silicon is genuinely one of the best platforms for running local LLMs.\nNVIDIA GPUs: On Windows and Linux, NVIDIA GPUs with CUDA support provide the best performance. An RTX 4090 with 24GB VRAM can run 13B models at blazing speeds. For larger models, you need multi-GPU setups or CPU offloading.\nAMD GPUs: ROCm support has improved significantly, but NVIDIA remains the safer choice for b",
+        "index": 0
+      },
+      {
+        "url": "https://computingforgeeks.com/open-source-llm-comparison/",
+        "title": "Open Source LLM Comparison Table (2026) | ComputingForGeeks",
+        "snippet": "The tables below compare architecture details, benchmark results, licensing restrictions, and what each model actually needs to run on your own machine using Ollama or llama.cpp.\nEvery parameter count, license, and context length below was read straight from the published model cards, config.json files, and LICENSE files on Hugging Face in September 2026 instead of copied from an aggregator, and every download size was computed from each repository’s own shard index. The hands-on numbers come from our own lab runs: the small-model CPU tests from March 2026 on Ubuntu 24.04 (4 vCPUs, 16 GB RAM, ",
+        "index": 1
+      },
+      {
+        "url": "https://www.promptquorum.com/local-llms/best-cpu-only-llm",
+        "title": "CPU-Only LLM 2026: Phi-4 Mini Runs 12 tok/s, No GPU",
+        "snippet": "RTX 3060 (GPU, 12 GB)\nPhi-4 Mini 3.8B\n80 tokens/sec\nGPU is 6.7× faster\nRTX 4090 (GPU, 24 GB)\n120 tokens/sec\nGPU is 30× faster than CPU\nCPU is 6-30x slower than GPU -- but costs $0 in dedicated hardware and works on any machine.\nCPU is 6-30x slower than GPU -- but costs $0 in dedicated hardware and works on any machine.\nHow Much RAM Does Each CPU-Only Model Need?\nRule of thumb: GGUF size + 500 MB overhead = minimum RAM needed. A 2 GB GGUF model needs 2.5–3 GB of free system RAM:\nModel\nGGUF Size\nMin RAM\nComfortable\nContext Length\n~1.5 GB\n2–2.5 GB\n4 GB\n128K\n~2.3 GB\n3 GB\n6 GB\n4K\n~2 GB\n2.5–3 GB\n6 G",
+        "index": 2
+      },
+      {
+        "url": "https://www.promptquorum.com/local-llms/fastest-local-llms-low-end-pcs",
+        "title": "Fastest Local LLMs for Low-End PCs 2026: CPU-Only Guide",
+        "snippet": "Tested lightweight open-source LLMs for 4-16 GB RAM, CPU-only and Intel iGPU.",
+        "index": 3
+      }
+    ]
+  },
+  {
+    "id": "A02",
+    "query": "Find official documentation for the Gemini embedding models API.",
+    "criteria": "Correct provider documentation",
+    "pool": [
+      {
+        "url": "https://ai.google.dev/gemini-api/docs/models/gemini-embedding-001",
+        "title": "Gemini Embedding model | Gemini API | Google AI for Developers",
+        "snippet": "Gemini 4 Argon is now available. Try it out.\nGemini Embedding model\nA specialized engine for high-dimensional vector representation, providing efficient numerical mapping of text and images. The Gemini Embedding model is best for semantic search, document retrieval, and recommendation systems that require fast, scalable similarity calculations across large datasets.\nDocumentation\nVisit the Embeddings page for full coverage of features and capabilities.\ngemini-embedding-001\nProperty\nDescription\nModel code\nGemini API\ngemini-embedding-001\nSupported data types\nInput\nText\nOutput\nText embeddings\nTok",
+        "index": 0
+      },
+      {
+        "url": "https://ai.google.dev/gemini-api/docs/embeddings",
+        "title": "Embeddings | Gemini API | Google AI for Developers",
+        "snippet": "model, gemini-embedding-2, is the first multimodal embedding model in the Gemini API. It maps text, images, video, audio, and documents into a unified embedding space, enabling cross-modal search, classification, and clustering across over 100 languages. See the multimodal embeddings section to learn more.",
+        "index": 1
+      },
+      {
+        "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/reference/models/text-embeddings-api",
+        "title": "Text embeddings API | Gemini Enterprise Agent Platform | Google Cloud ...",
+        "snippet": "embedding quality, gemini-embedding-001 is our large model designed to provide the highest performance.",
+        "index": 2
+      },
+      {
+        "url": "https://colab.research.google.com/github/google-gemini/cookbook/blob/main/quickstarts/Embeddings.ipynb/",
+        "title": "Gemini API: Getting started with Gemini embedding models",
+        "snippet": "model, gemini-embedding-2, is the first multimodal embedding model in the Gemini API. It maps text, images, video, audio, and PDFs into a unified embedding space, enabling cross-modal search, classification, and clustering across over 100 languages.",
+        "index": 3
+      },
+      {
+        "url": "https://developers.googleblog.com/gemini-embedding-available-gemini-api/",
+        "title": "Gemini Embedding now generally available in the Gemini API",
+        "snippet": "Gemini Embedding text model (gemini-embedding-001) is now generally available to developers in the Gemini API and Vertex AI. This embedding model has consistently held a top spot on the Massive Text Embedding Benchmark (MTEB) Multilingual leaderboard since the experimental launch in March. Surpassing both our previous text embedding models and ...",
+        "index": 4
+      },
+      {
+        "url": "https://apidog.com/blog/gemini-embedding-api/",
+        "title": "How to use Gemini Embedding in the Gemini API - apidog.com",
+        "snippet": "embedding technology promises to revolutionize how developers approach text understanding and semantic search. Gemini Embedding is now generally available in the Gemini API, marking a significant milestone for developers seeking state-of-the-art text representation capabilities.",
+        "index": 5
+      },
+      {
+        "url": "https://developers.googleblog.com/gemini-embedding-text-model-now-available-gemini-api/",
+        "title": "State-of-the-art text embedding via the Gemini API",
+        "snippet": "Gemini Embedding text model, now available in the Gemini API, excels in language understanding, surpasses previous models, and comes with new features.",
+        "index": 6
+      },
+      {
+        "url": "https://ai.google.dev/",
+        "title": "Gemini Developer API | Gemma open models | Google AI for Developers",
+        "snippet": "Gemini adds AI-powered code completion with natural language understanding to create entire code blocks from your descriptions, …",
+        "index": 7
+      },
+      {
+        "url": "https://note.com/dende2023/n/nc6da44152cb8?hl=en",
+        "title": "What is Gemini Embedding 2? A 5-minute guide to the system that places text, images, and videos on a single 'semantic map'",
+        "snippet": "Gemini Embedding 2\" via the Gemini API and Vertex AI, which became generally available (GA) on April 22.",
+        "index": 8
+      },
+      {
+        "url": "https://www.geeky-gadgets.com/gemini-api-multimodal-rag-update/",
+        "title": "Gemini’s Multimodal RAG API is Changing AI Search",
+        "snippet": "Gemini API introduces multimodal retrieval, allowing users to query both text and image data within a shared vector space.",
+        "index": 9
+      }
+    ]
+  },
+  {
+    "id": "B01",
+    "query": "Find open-source ERP systems used for accounting, inventory, sales, and invoicing.",
+    "criteria": "Actual ERP capabilities",
+    "pool": [
+      {
+        "url": "https://theretailexec.com/tools/best-accounting-software-with-inventory-management/",
+        "title": "10 Best Accounting Software with Inventory Management 2026 | The Retail Exec",
+        "snippet": "Customizable quotes and invoices\nSupports multiple currencies\nExtensive reporting options\nCons:\nLimited offline access\nAdvanced features need setup time\nLimited mobile app functionality\nLearn more about ZarMoney:\nERPNext\n6\nERPNext\nBest for open-source access\nFree trial available\nPricing upon request\nCustomer Rating:4.2/5This rating combines scores from multiple user review sites to reflect overall customer sentiment about the product.\nERPNext screenshot\nERPNext handles accounting, HR, and operations for growing businesses.\nERPNext is an open-source ERP solution designed for small to medium-siz",
+        "index": 0
+      },
+      {
+        "url": "https://www.cubesoftware.com/blog/erp-system-examples",
+        "title": "22 ERP systems and software examples",
+        "snippet": "Manage manufacturing processes with the MRP system.\nOptimize field service operations with dedicated tools.\nAutomate marketing campaigns, including email and social media.\nIntegrate online sales with other business processes.\nMaintain and enhance customer relationships with the CRM system.\nPros\nProvides a unified suite of apps covering accounting, CRM, sales, inventory, HR, and more.\nEnables seamless integration across business functions through one platform.\nSupports both community (free) and enterprise editions with open-source flexibility.\nDelivers customization through Odoo Studio for work",
+        "index": 1
+      },
+      {
+        "url": "https://www.tekrevol.com/blogs/erp-software-examples/",
+        "title": "ERP Software Examples: 25 Systems, Verified for 2026",
+        "snippet": "ERP instantly updates warehouse inventory records, notifies shipping logistics, generates an invoice in accounting, and updates sales revenue reports. This real-time automation keeps your business running smoothly, cuts down manual errors, and gives leadership full visibility over operational costs.",
+        "index": 2
+      },
+      {
+        "url": "https://worldmetrics.org/best/erp-and-accounting-software/",
+        "title": "Top 10 Best ERP And Accounting Software | Top Picks 2026",
+        "snippet": "inventory, purchasing, sales, and invoicing that map directly to accounting entries. For financial reporting, Odoo includes chart of accounts management, tax logic, and audit trail fields attached to accounting moves.",
+        "index": 3
+      },
+      {
+        "url": "https://mazoonerp.com/en/sector/sales-inventory-invoicing-manufacturing-system",
+        "title": "Sales, Inventory & Purchasing Software with Accounting | Mazoon ERP",
+        "snippet": "Sales, inventory and purchasing software: quote to invoice, multi-warehouse average costing, POS, stock counts, manufacturing BOMs and automatic entries.",
+        "index": 4
+      },
+      {
+        "url": "https://www.sigzen.com/blog/open-source-erp-systems/",
+        "title": "Top 7 Open Source ERP Systems in 2026 - sigzen.com",
+        "snippet": "ERP system is business management software whose source code is publicly available. Businesses can use, modify, and customize it to manage operations like accounting, inventory, sales, HR, and manufacturing.",
+        "index": 5
+      },
+      {
+        "url": "https://msdynamicsworld.com/blog-post/types-erp-systems-and-software-solutions",
+        "title": "Types of ERP Systems and Software Solutions",
+        "snippet": "ERP) systems are software solutions that help businesses manage all their core processes in one place. An ERP software platform connects finance, inventory, human resources, manufacturing, sales and other functions into a ...",
+        "index": 6
+      },
+      {
+        "url": "https://sourceforge.net/directory/accounting/",
+        "title": "Best Open Source Accounting Software 2026 - SourceForge",
+        "snippet": "ERP - CRM is an easy to use ERP and CRM open source software package (run with a web php server or as standalone software) for businesses, foundations or freelancers (prospect, invoicing, inventory, warehouse, order, shipment, POS, members for foundations, bank accounts...). Dolibarr is also available with…",
+        "index": 7
+      },
+      {
+        "url": "https://sourceforge.net/directory/erp/",
+        "title": "Best Open Source ERP Software 2026 - SourceForge",
+        "snippet": "ERP - CRM is an easy to use ERP and CRM open source software package (run with a web php server or as standalone software) for businesses, foundations or freelancers (prospect, invoicing, inventory, warehouse, order, shipment, POS, members for foundations, bank accounts...). Dolibarr is also available with…",
+        "index": 8
+      },
+      {
+        "url": "https://github.com/lsfusion-solutions/mycompany",
+        "title": "MyCompany — Free Open-Source ERP & CRM for Small Business",
+        "snippet": "ERP and CRM for small and medium-sized businesses: inventory, invoicing, manufacturing, sales, purchasing, projects, HR and retail POS in one application with a single database, built on the open-source lsFusion platform.",
+        "index": 9
+      },
+      {
+        "url": "https://softwareconnect.com/roundups/best-open-source-erp-software/",
+        "title": "Best Open Source ERP Software of 2026 (+ Free Options)",
+        "snippet": "ERP software is an enterprise resource planning system with publicly available source code. We used our advanced review methodology to evaluate and rank the top open-source ERP software on the market today. Odoo: Best Overall ERPNext: Best Entry-Level Accounting Module Dolibarr: Best CRM Tools metasfresh: Best for…",
+        "index": 10
+      }
+    ]
+  },
+  {
+    "id": "B02",
+    "query": "Compare ERPNext and Odoo for small Indian retail businesses.",
+    "criteria": "Relevant product features and India-specific support",
+    "pool": [
+      {
+        "url": "https://www.erpresearch.com/compare/erpnext-vs-odoo-for-retail",
+        "title": "ERPNext vs Odoo for Retail: 2026 Comparison | ERP Research",
+        "snippet": "ERPNext Resources\nOdoo Resources\nMore Retail ERP Comparisons\nFrequently Asked Questions\nWhich is better for retail: ERPNext or Odoo?\nFor retail businesses, Odoo has the edge. Odoo treats this as a primary industry with stronger scores across retail-critical modules. ERPNext also prioritises this industry but has gaps in key areas.\nHow do ERPNext and Odoo handle omnichannel inventory visibility and fulfilment?\nERPNext addresses this through its Strong Inventory Management capabilities. Odoo approaches it via Integrated POS, ecommerce, inventory, and CRM modules with a modern UI and aggressive p",
+        "index": 0
+      },
+      {
+        "url": "https://mith.tech/blog/erpnext-vs-odoo-small-business-india",
+        "title": "ERPNext vs Odoo for Small Business in India",
+        "snippet": "On this pageHow do ERPNext and Odoo compare feature by feature?Accounting and financeInventory and supply chainHuman resources and payrollCRM and salesManufacturingWhat decides what each costs an Indian SME?What you pay for with ERPNextWhat you pay for with OdooWhat you pay for on eachWhich handles Indian GST and compliance better?Who builds each oneWho implements each one in IndiaHow does customisation differ between the two?ERPNext (Frappe framework)OdooWhen should you choose Odoo instead?Which should most Indian small businesses choose?Frequently asked questionsIs ERPNext free?Is Odoo's man",
+        "index": 1
+      },
+      {
+        "url": "https://autonez.com/blog/odoo-vs-erpnext-indian-sme-guide",
+        "title": "Odoo vs ERPNext for Indian SMEs: An Implementer's Honest Comparison",
+        "snippet": "Odoo and ERPNext are the two ERPs we implement most often for Indian small and mid-size businesses, and the honest answer to \"which is better\" is: it depends on exactly three things — your budget for licenses, how unusual your processes are, and who will maintain the system after go-live.",
+        "index": 2
+      },
+      {
+        "url": "https://neersoft.com/odoo-vs-erpnext/",
+        "title": "Odoo vs ERPNext for Indian Businesses (2026) | NeerSoft",
+        "snippet": "Odoo vs ERPNext comparison for India. Real costs, the open-core catch, GST support, and which suits your business. From a team that implements Odoo.",
+        "index": 3
+      },
+      {
+        "url": "https://www.cypraon.com/blog/erpnext-vs-odoo-india-comparison/",
+        "title": "ERPNext vs Odoo India 2026 - Which Open-Source ERP to Choose?",
+        "snippet": "comparison of ERPNext and Odoo for Indian SMEs and mid-market companies: cost, India compliance, implementation partners, customisation depth, and the decision criteria that matter for growing Indian businesses.",
+        "index": 4
+      },
+      {
+        "url": "https://www.infonoxe.com/erpnext-vs-odoo",
+        "title": "ERPNext vs Odoo — Which Open-Source ERP Is Better for India? (2026)",
+        "snippet": "Comparison · 2026 ERPNext vs Odoo Both are open-source ERPs — but one is completely free and India-first, while the other charges per user for full features. Here's the honest comparison for Indian businesses.",
+        "index": 5
+      },
+      {
+        "url": "https://psdigitise.com/blogs/erpnext-vs-odoo-india-2026",
+        "title": "ERPNext vs Odoo India 2026 — Technical Comparison",
+        "snippet": "Odoo vs ERPNext question in 2026 ERPNext and Odoo are the two most commonly compared open-source ERP systems globally. In India specifically, the comparison carries a critical additional dimension: India GST compliance. Both systems claim open-source ERP for Indian businesses — but they differ significantly in how complete their India compliance is, how their customisation models work ...",
+        "index": 6
+      },
+      {
+        "url": "https://factostack.com/blog/erpnext-vs-odoo-indian-msme",
+        "title": "ERPNext vs Odoo for Indian MSMEs: Which Is Actually Simpler?",
+        "snippet": "comparison of ERPNext and Odoo for Indian MSME manufacturers, covering implementation, manufacturing workflows, accounting, customisation, and total cost.",
+        "index": 7
+      },
+      {
+        "url": "https://www.sigzen.com/blog/erpnext-vs-odoo/",
+        "title": "ERPNext vs Odoo: Which ERP Is Best for Businesses?",
+        "snippet": "Compare ERPNext vs Odoo for pricing, features, GST compliance, customization, and ROI to choose the best ERP for your business.",
+        "index": 8
+      },
+      {
+        "url": "https://primoerp.com/blog/erpnext-vs-odoo-india-sme-2026",
+        "title": "ERPNext vs Odoo India SME 2026 | Complete Guide | PrimoERP",
+        "snippet": "ERPNext vs Odoo for Indian SMEs in 2026: Compare costs, customization, GST compliance, and best-fit scenarios to choose the right ERP without surprises.",
+        "index": 9
+      },
+      {
+        "url": "https://exalixtech.com/blog/erpnext-guide/erpnext-vs-odoo",
+        "title": "ERPNext vs Odoo (2026 Comparison Guide for Businesses) | Exalix Tech",
+        "snippet": "ERPNext vs Odoo The Complete 2026 Comparison In 2026, the ERP landscape has shifted. Choosing between ERPNext and Odoo is no longer just about features-it's about digital sovereignty, long-term scalability, GST readiness, and total cost of ownership. This guide breaks down everything a modern Indian business needs to…",
+        "index": 10
+      }
+    ]
+  },
+  {
+    "id": "N01",
+    "query": "What are the latest major AI model releases announced this week?",
+    "criteria": "Publication dates and announcement sources",
+    "pool": [
+      {
+        "url": "https://www.scriptbyai.com/ai-model-release-calendar/",
+        "title": "AI Model Release Calendar: Latest AI Model Releases by Date",
+        "snippet": "AI ResourcesAI Model Release Calendar: Latest AI Model Releases by Date\nAI Model Release Calendar: Latest AI Model Releases by Date\nSee major AI model releases by date, provider, and model type in a continuously updated calendar.\nai-model-release-calendar\nThis AI model release calendar tracks major model launches from OpenAI, Anthropic, Google DeepMind, Meta, SpaceXAI, DeepSeek, Qwen, Mistral AI, Moonshot AI, Z.ai, MiniMax, NVIDIA, Microsoft AI, Cohere, Xiaomi, and other prominent AI labs. The newest-first tables show each release date, provider, and model type.\nDates use the earliest meaningf",
+        "index": 0
+      }
+    ]
+  },
+  {
+    "id": "N02",
+    "query": "Find the latest official announcements about Python releases in 2026.",
+    "criteria": "Current version and official release information",
+    "pool": [
+      {
+        "url": "https://www.ad-hoc-news.de/boerse/news/nebenwerte/teradata-launches-elastic-python-compute-as-stock-holds-eur-28-04/70373555",
+        "title": "Teradata launches Elastic Python Compute as stock holds EUR 28.04",
+        "snippet": "MarketScreener's company calendar listed the October 14 announcement alongside the Elastic Python Compute release, while its profile identifies Teradata as an IT services and consulting company with 5,100 employees.\nTeradata's investor-relations page presents the Autonomous Knowledge Platform as its core offering across cloud, on-premises and hybrid environments. The page reports USD 1.509 billion in total annual recurring revenue and 3 percent recurring revenue growth for the second quarter of 2026, alongside a 27.1 percent non-GAAP adjusted EBITDA margin and USD 127 million in adjusted non-G",
+        "index": 0
+      },
+      {
+        "url": "https://note.com/zeronin_keiei/n/ndb89e1c857a4?hl=en",
+        "title": "[IT News] Python 3.15.0rc3 Released, Official Announcement States Final Version Postponed to October 9｜元サッカー少年、今エンジニア",
+        "snippet": "[IT News] Python 3.15.0rc3 Released, Official Announcement States Final Version Postponed to October 9\n2026年10月3日 06:53\n* This article summarizes the content of the official announcement. Verification date: 2026-10-03. Screens and conditions are subject to change.\nTable of Contents\nWhat has been announced\nChanges and new capabilities\nConditions for use\nThings to check before you start using it\nIntroduction\nOn 2026-10-02, the official Python blog announced the release of the third release candidate for Python 3.15.0, \"3.15.0rc3.\" Although the final version of 3.15.0 was originally scheduled for",
+        "index": 1
+      },
+      {
+        "url": "https://discuss.python.org/c/packaging/ann/36",
+        "title": "Latest Announcements topics - Discussions on Python.org",
+        "snippet": "Announcements about projects. This is releases for \"major\" projects (mainly pip releases and PyPI feature deployments), as well as one-off announcements for new projects/tools directly related to packaging.",
+        "index": 2
+      },
+      {
+        "url": "https://note.com/zeronin_keiei/n/n631586f763d5?hl=en",
+        "title": "[IT News] Python 3.16.0 alpha 1 released, final release scheduled for October 5, 2027",
+        "snippet": "announcement. Confirmation date: 2026-10-15 (confirmation date of 00_seed.md).",
+        "index": 3
+      },
+      {
+        "url": "https://realpython.com/python-news-october-2026/",
+        "title": "Python 3.15 Gets a Surprise RC3 and Other Python News for October 2026",
+        "snippet": "Python 3.15 Gets a Surprise RC3 Python 3.15.0 was due on October 1, the date that PEP 790 set for it more than a year ago. Instead, release manager Hugo van Kemenade announced a third release candidate, explaining that \"we got some last-minute lazy-import release blockers, and it makes sense to include them in 3.15.0 final.\" Python 3.15.0rc3 came out on October 2 with around 156 fixes from ...",
+        "index": 4
+      },
+      {
+        "url": "https://www.python.org/downloads/release/python-3150/",
+        "title": "Python Release Python 3.15.0 | Python.org",
+        "snippet": "Python 3.15.0 Release date: Oct. 9, 2026 This is the stable release of Python 3.15.0 Python 3.15.0 is the newest major release of the Python programming language, and it contains many new features and optimisations compared to Python 3.14, in 5,643 commits from 1,012 contributors.",
+        "index": 5
+      },
+      {
+        "url": "https://www.python.org/downloads/release/python-3150rc3/",
+        "title": "Python Release Python 3.15.0rc3 | Python.org",
+        "snippet": "2, 2026 Following recent tradition, here's a surprise third release candidate for Python 3.15.0! We got some last-minute lazy-import release blockers, and it makes sense to include them in 3.15.0 final.",
+        "index": 6
+      },
+      {
+        "url": "https://releasebytes.com/python",
+        "title": "Latest Python Releases, Changelog & Updates - ReleaseBytes",
+        "snippet": "latest Python release notes, changelogs and updates, summarised in plain English - new features, breaking changes, security advisories and deprecations, updated continuously.",
+        "index": 7
+      },
+      {
+        "url": "https://blog.python.org/2026/10/python-31022-31117/",
+        "title": "Python 3.10.22, 3.11.17, 3.12.15, 3.13.16 and 3.14.8 are now available ...",
+        "snippet": "Python 3.10-3.14, the final maintenance release of 3.13, and a farewell to Python 3.10.",
+        "index": 8
+      },
+      {
+        "url": "https://devnewsletter.com/p/state-of-python-2026/",
+        "title": "State of Python 2026 | The Dev Newsletter",
+        "snippet": "Python 2026 Watchlist Modernization Imperatives: Critical Python & Django Deadlines in 2026 1. Python 3.15 and Lazy Imports When: October 2026 (expected release).",
+        "index": 9
+      }
+    ]
+  },
+  {
+    "id": "T01",
+    "query": "Docker Desktop on Ubuntu does not open after installation. Find official troubleshooting steps.",
+    "criteria": "Correct OS-specific instructions",
+    "pool": [
+      {
+        "url": "https://docs.docker.com/desktop/troubleshoot-and-support/troubleshoot/",
+        "title": "Troubleshoot Docker Desktop | Docker Docs",
+        "snippet": "Troubleshoot menu\nTo navigate to Troubleshoot either:\nSelect the Docker menu Docker menu whale menu and then Troubleshoot.\nSelect the question mark icon near the top-right corner of the Docker Desktop Dashboard.\nThe Troubleshoot menu contains the following options:\nRestart Docker Desktop\nSupport\nReset Kubernetes cluster. Select to delete all stacks and Kubernetes resources. For more information, see Kubernetes.\nClean up data. A disk image reset destroys all Docker containers and images local to the machine, preserving all settings.\nReset to factory defaults: Choose this option to reset all opt",
+        "index": 0
+      },
+      {
+        "url": "https://docs.docker.com/desktop/setup/install/linux/ubuntu/",
+        "title": "Install Docker Desktop on Ubuntu",
+        "snippet": "install, launch, and upgrade Docker Desktop on Ubuntu. This quick guide will cover prerequisites, installation methods, and more.",
+        "index": 1
+      },
+      {
+        "url": "https://dev.to/chandrashekhar/docker-desktop-is-not-working-on-ubuntu-2404-lts--2kpa",
+        "title": "Docker Desktop is not working on Ubuntu 24.04 LTS",
+        "snippet": "Ubuntu 24.04 LTS may cause problems with Docker Desktop. Follow these steps to resolve... Tagged with docker, ubuntu, linux, devops.",
+        "index": 2
+      },
+      {
+        "url": "https://hatchjs.com/docker-desktop-stopped-ubuntu/",
+        "title": "Docker Desktop Stopped Ubuntu: How to Fix - HatchJS.com",
+        "snippet": "troubleshoot Docker Desktop not starting on Ubuntu with this step-by-step guide. Includes common causes and solutions.",
+        "index": 3
+      },
+      {
+        "url": "https://oneuptime.com/blog/post/2026-02-08-how-to-troubleshoot-docker-desktop-not-starting/view",
+        "title": "How to Troubleshoot Docker Desktop Not Starting",
+        "snippet": "Troubleshoot Docker Desktop Not Starting Fix Docker Desktop startup failures on macOS, Windows, and Linux with step-by-step troubleshooting for common issues.",
+        "index": 4
+      },
+      {
+        "url": "https://www.docker.com/",
+        "title": "Docker | Secure Sandboxes for AI Agents",
+        "snippet": "Policy enforced at every step, with every action signed and documented. Evidence your auditors will actually appreciate.\nFrom the company that secured the developer laptop for the enterprise.\n91%\nof the Fortune 100\nalready run on Docker\n20B+\npulls a month on\nDocker Hub\n20M+\ndevelopers build on\nDocker every day\nDocker Desktop\nHow modern applications get built. Containers and the full dev loop in one place. Go from blank file to running app in minutes, shipped anywhere.\nDownload Docker Desktop\ndesktop containers application\ngray\nBuild better, together",
+        "index": 5
+      },
+      {
+        "url": "https://forums.docker.com/t/docker-destop-gui-wont-open-on-ubuntu/150462",
+        "title": "Docker Destop GUI won't open on Ubuntu",
+        "snippet": "Ubuntu so so I can learn some linux and start hosting some docker containers. The machine used to be window server, and is not Ubuntu 24.04. I've installed docker desktop following the guide. After Install docker desktop GUI does not open, no errors. I can see in System Monitor that after I click the icon a bunch of Docker Desktop services start ...",
+        "index": 6
+      },
+      {
+        "url": "https://forums.docker.com/t/docker-desktop-ubuntu-service-starts-but-gui-will-not-open/151952",
+        "title": "Docker Desktop Ubuntu - Service Starts but GUI Will Not Open",
+        "snippet": "Docker Desktop on an Ubuntu VM (24.04.4 LTS) through Proxmox (9.2.3). I was running v4.53 of Desktop and recently attempted to upgrade to 4.79. When I upgrade and restart, Docker Desktop starts in the background, but I cannot pull up the GUI. The Docker logo shows up in the top bar next to the network icon, but when I hit \"Go to the Dashboard\" nothing happens.",
+        "index": 7
+      },
+      {
+        "url": "https://askubuntu.com/questions/1511725/ubuntu-24-04-docker-desktop-is-not-starting",
+        "title": "Ubuntu 24.04 Docker Desktop is not starting - Ask Ubuntu",
+        "snippet": "installed Ubuntu 24.04 LTS, and tried to install Docker Desktop following the instructions from the official site, but in the end, the first docker command can not be used if you did not use it with sudo, and Docker Desktop is not starting at all.",
+        "index": 8
+      },
+      {
+        "url": "https://www.danielkossmann.com/docker-desktop-is-not-starting-in-ubuntu-24-04/",
+        "title": "Docker Desktop is not starting in Ubuntu 24.04",
+        "snippet": "installing Docker Desktop following the official instructions it wasn't starting, even after rebooting the computer. Searching for a solution I found a thread in AskUbuntu mentioning that Ubuntu 24.04 LTS is not yet supported by Docker Desktop (last checked on JUN.2024).",
+        "index": 9
+      },
+      {
+        "url": "https://stackoverflow.com/questions/75907472/docker-desktop-does-not-launch-on-ubuntu-failed-to-start-docker-desktop-service",
+        "title": "docker-desktop does not launch on ubuntu [Failed to start docker ...",
+        "snippet": "Ubuntu 22.04 Jammy. After installing Docker Desktop, following the instructions on the official documentation, and meeting system requirements including having virtualization support, I am unable to launch the Docker Desktop GUI. I tried launching it from the applications menu but nothing.",
+        "index": 10
+      },
+      {
+        "url": "https://stackoverflow.com/questions/79346702/docker-desktop-wont-start-after-installation",
+        "title": "Docker Desktop won't start after installation - Stack Overflow",
+        "snippet": "Docker Desktop on Ubuntu 24.04 so that I can install Mealie on a home server. I am following the Docker Desktop instructions. I have added the Docker Apt repository and atta...",
+        "index": 11
+      }
+    ]
+  },
+  {
+    "id": "T02",
+    "query": "Git reports fatal: unable to get credential storage lock. Find likely causes and safe fixes.",
+    "criteria": "Relevant troubleshooting information",
+    "pool": [
+      {
+        "url": "https://stackoverflow.com/questions/37505843/fatal-unable-to-get-credential-storage-lock-file-exists",
+        "title": "fatal: unable to get credential storage lock: File exists",
+        "snippet": "git-scm and tried to push to a repository. Upon doing so, I was greeted with the following message: fatal: unable to get credential storage lock: File exists While the push did end up p...",
+        "index": 0
+      },
+      {
+        "url": "https://stackoverflow.com/questions/76124288/git-push-error-unable-to-persist-credentials-with-the-wincredman-credential-s",
+        "title": "Git Push Error: Unable to persist credentials with the 'wincredman ...",
+        "snippet": "fatal: Unable to persist credentials with the 'wincredman' credential store. My understanding of this is: it's trying to use windows default git credential manager for you to login remote git but it failed to do that.",
+        "index": 1
+      },
+      {
+        "url": "https://stackoverflow.com/questions/72695102/git-suddenly-wont-authenticate-to-github-automatically",
+        "title": "Git suddenly won't authenticate to GitHub automatically",
+        "snippet": "GitHub. I typed git pull origin main exactly as I have a hundred times but I get the error: fatal: Unable to persist credentials with the 'wincredman' credential store. I've tried everything I could find. I unset my credential manager, deleted old credentials in Windows Credential Manager, tried creating a PAT.",
+        "index": 2
+      }
+    ]
+  },
+  {
+    "id": "P01",
+    "query": "Compare Google Search, Brave Search API, and Firecrawl for building an AI research agent.",
+    "criteria": "Correctly distinguishes their capabilities",
+    "pool": [
+      {
+        "url": "https://docs.firecrawl.dev/use-cases/deep-research",
+        "title": "Deep Research - Firecrawl Docs",
+        "snippet": "Deep Research\nBuild agentic research tools with deep web search capabilities\nBuild automated research agents that search the web, scrape full-page content, and synthesize findings with an LLM. Firecrawl handles source discovery and content extraction so you can focus on analysis, not parsing HTML.\nThis is the current recommended Deep Research workflow. It is built from Firecrawl Search and Scrape. If you are maintaining the legacy v1 Deep Research API, use the v1 Deep Research endpoint and plan migration to the Search-based workflow.\nStart with a Template\nFireplexity\nBlazing-fast AI search wit",
+        "index": 0
+      },
+      {
+        "url": "https://www.firecrawl.dev/alternatives/firecrawl-vs-brave-search-api",
+        "title": "Firecrawl vs Brave Search API | Best Alternative",
+        "snippet": "Clean, reliable data for AI pipelines\nFirecrawl turns any URL into clean markdown and structured JSON your models can use directly. Brave Search API returns search snippets and LLM Context chunks, which work for grounding but stop short of the full page content that extraction and RAG pipelines need.\nScrape\nSearch\nCrawl\nAgent\nBrowse\nFirecrawl Alexandria and first-party indexes\nBrave searches its own web index. One Firecrawl search call reaches the web and 90+ data providers through Firecrawl Alexandria: first-party sources such as SEC EDGAR, FRED, and the World Bank, plus Firecrawl's own Devel",
+        "index": 1
+      },
+      {
+        "url": "https://llmpodium.com/blog/best-web-search-apis-for-ai-agents",
+        "title": "Best Web Search API for AI Agents (2026): Brave vs Tavily vs…",
+        "snippet": "API for AI agents in 2026. Benchmark comparing Brave, Tavily, Firecrawl, and SerpAPI on latency, markdown quality, and cost.",
+        "index": 2
+      },
+      {
+        "url": "https://www.vellum.ai/blog/best-web-search-apis-and-mcps-for-ai-agents",
+        "title": "Best Web Search APIs & MCPs for AI Agents 2026",
+        "snippet": "APIs and MCPs for AI agents: Firecrawl, Brave Search, Exa, Perplexity Sonar, Parallel AI. Pricing, strengths, tradeoffs.",
+        "index": 3
+      },
+      {
+        "url": "https://brave.com/search/api/",
+        "title": "Brave Search API | Brave",
+        "snippet": "Brave is the only fully-fledged search index available through an open API, and it's the only index built by signals from 130+ million real humans. These anonymous clicks and queries (via Brave browser and Brave Search) help combat AI slop and SEO spam.",
+        "index": 4
+      },
+      {
+        "url": "https://clawnewbie.com/reviews/best-ai-search-apis-for-agents-2026",
+        "title": "Best AI Search APIs for Agents 2026: Tavily, Exa, Brave, Firecrawl, Linkup",
+        "snippet": "AI search API hub connects this page with Exa, Tavily, Firecrawl, Brave Search API, and browser-agent routes for workflows that need page interaction after retrieval.",
+        "index": 5
+      },
+      {
+        "url": "https://www.firecrawl.dev/blog/best-web-search-apis",
+        "title": "Best Web Search APIs for AI Applications in 2026 - firecrawl.dev",
+        "snippet": "API for your AI project. We compare top web search APIs including Firecrawl, Exa, Tavily, SerpAPI, and more - with pricing, features, and use cases.",
+        "index": 6
+      },
+      {
+        "url": "https://brave.com/learn/best-search-api-2026/",
+        "title": "The best web search APIs for AI in 2026 - Brave",
+        "snippet": "Brave Search API is thus the best Web search API for agents, chatbots, and LLMs in 2026 and beyond. To wit: 700,000 OpenClaw users selected the Brave Search API as the Web search of choice for their AI agent projects.",
+        "index": 7
+      },
+      {
+        "url": "https://artificialanalysis.ai/agents/search-api",
+        "title": "Artificial Analysis Search Index: Search API Benchmark & Leaderboard",
+        "snippet": "API Benchmark & Leaderboard Search APIs allow AI agents to retrieve information from the web, grounding their responses in up-to-date sources. They are used across a wide range of agentic applications, including deep research, coding, and general knowledge work, to improve factuality and overall outputs.",
+        "index": 8
+      },
+      {
+        "url": "https://ai-tools-revieww.hashnode.dev/best-search-apis-and-tools-for-ai-agents-in-2026",
+        "title": "Best Search APIs for AI Agents in 2026",
+        "snippet": "APIs for AI agents in 2026, Brave, Tavily, Exa, Firecrawl, and more, plus how to connect them through one MCP gateway",
+        "index": 9
+      },
+      {
+        "url": "https://blog.sandbase.ai/best-ai-search-apis-agent-workflows-2026/",
+        "title": "Best AI Search APIs 2026: Agent Workflow Comparison",
+        "snippet": "AI search APIs for agent workflows in 2026: compare Exa, Tavily, Firecrawl, SerpAPI, Google, and Brave on search quality, crawling, cost, and developer fit.",
+        "index": 10
+      },
+      {
+        "url": "https://openbenchmarks.com/web-search/best-web-search-api-for-ai",
+        "title": "Best Web Search APIs for AI Agents: 2026 Comparison & Benchmark",
+        "snippet": "APIs for AI agents from 11 providers, including Exa, Firecrawl, Parallel, Tavily and Brave, by accuracy, speed and cost. Independent benchmark results with official API docs for grounding and RAG. Compared on the same 300 search questions.",
+        "index": 11
+      },
+      {
+        "url": "https://www.contextstudios.ai/guides/best-ai-search-apis-agents-2026",
+        "title": "Best AI Search APIs for Agents 2026 | Context Studios",
+        "snippet": "AI search APIs for agents in 2026 are not interchangeable. Tavily is strongest when an agent needs concise web context for RAG. Exa is best for neural and semantic discovery. Perplexity Sonar is best when you want answer-first search with citations. Firecrawl is the safest default when search must become clean…",
+        "index": 12
+      },
+      {
+        "url": "https://parallel.ai/articles/the-honest-2026-comparison-web-search-apis-for-ai-agents",
+        "title": "The honest 2026 comparison: web search APIs for AI agents",
+        "snippet": "API\" comparisons are published by vendors who rank themselves first. This guide covers ten options across three categories (SERP APIs, AI-native search APIs, and native LLM-provider tools) with 2026 pricing, the limitations each one carries, and a framework for matching an API to your own workload.",
+        "index": 13
+      },
+      {
+        "url": "https://aimultiple.com/agentic-search",
+        "title": "Agentic Search: Benchmark 8 Search APIs for Agents",
+        "snippet": "Agentic search plays a crucial role in bridging the gap between traditional search engines and AI search capabilities. Search APIs are the first layer of an agentic tool, where performance caps the quality of everything downstream. We benchmarked 8 search APIs across 100 real-world AI/LLM queries, evaluating 4,000…",
+        "index": 14
+      }
+    ]
+  },
+  {
+    "id": "P02",
+    "query": "Compare Elasticsearch, OpenSearch, and Typesense for a small self-hosted search engine.",
+    "criteria": "Relevant features and deployment requirements",
+    "pool": [
+      {
+        "url": "https://labhub.hopto.org/blog/culture/2026-05-16-self-hosted-search-engines-2026-meilisearch-typesense-manticore-opensearch-vespa-paradedb-orama-deep-dive?lang=en",
+        "title": "Self-Hosted Search Engines 2026 Deep Dive - Meilisearch, Typesense ...",
+        "snippet": "engine landscape was redrawn as self-hosted alternatives like Meilisearch, Typesense, Manticore, OpenSearch, Vespa, ParadeDB, and Orama exp",
+        "index": 0
+      },
+      {
+        "url": "https://contracollective.com/blog/typesense-vs-elasticsearch-opensearch-ecommerce-search-2026",
+        "title": "Typesense vs Elasticsearch vs OpenSearch: Self-Hosted E-Commerce Search ...",
+        "snippet": "Typesense, Elasticsearch, and OpenSearch for e-commerce product search. Self-hosted costs, deployment complexity, and when to choose each platform.",
+        "index": 1
+      },
+      {
+        "url": "https://www.askantech.com/elasticsearch-opensearch-typesense-search-infrastructure-comparison-2026/",
+        "title": "Elasticsearch vs OpenSearch vs Typesense: Search Infrastructure ...",
+        "snippet": "OpenSearch Service removes much of the operational burden that makes self-hosted Elasticsearch challenging at scale. Typesense Typesense is the most architecturally distinct of the three.",
+        "index": 2
+      },
+      {
+        "url": "https://www.birjob.com/blog/search-engines-comparison",
+        "title": "Building Search at Scale: Elasticsearch vs Typesense vs Meilisearch",
+        "snippet": "Typesense is a C++-based search engine focused on simplicity, speed, and developer experience. It was built specifically as an open-source alternative to Algolia — with a similar API design but self-hosted.",
+        "index": 3
+      },
+      {
+        "url": "https://www.macrostack.net/compare/opensearch-vs-typesense",
+        "title": "Typesense vs OpenSearch (2026): Our Verdict — Macrostack",
+        "snippet": "Typesense and OpenSearch — the search infrastructure comparison on license, self-hosting, real pricing, pros and cons, each one's transparent Sovereignty Score, and which we would pick.",
+        "index": 4
+      }
+    ]
+  },
+  {
+    "id": "E01",
+    "query": "Find beginner-friendly tutorials explaining how BM25 ranks documents.",
+    "criteria": "Accurate explanations and useful examples",
+    "pool": [
+      {
+        "url": "https://medium.com/@spandana_doki/ranking-documents-with-bm25-understanding-the-math-behind-search-relevance-31505b350825",
+        "title": "Ranking Documents with BM25-Understanding the Math Behind ... - Medium",
+        "snippet": "Ranking Documents with BM25-Understanding the Math Behind Search Relevance In today's digital world, search engines handle billions of web pages and articles, delivering the most relevant ...",
+        "index": 0
+      },
+      {
+        "url": "https://martinuke0.github.io/posts/2026-01-04-bm25-zero-to-hero-the-essential-guide-for-developers-mastering-search-retrieval/",
+        "title": "BM25 Zero-to-Hero: The Essential Guide for Developers Mastering Search Retrieval | martinuke0's Blog",
+        "snippet": "Simple Python Implementation with rank_bm25\nCommon Pitfalls and Fixes\nTuning Tips for Production\nWhen to Use BM25 vs Vectors vs Hybrid\nConclusion\nTop 10 Authoritative BM25 Learning Resources\nBM25 (Best Matching 25) is a probabilistic ranking function that powers modern search engines by scoring document relevance based on query terms, term frequency saturation, inverse document frequency, and document length normalization. As an information retrieval engineer, you’ll use BM25 for precise lexical matching in applications like Elasticsearch, Azure Search, and custom retrievers—outperforming TF-I",
+        "index": 1
+      },
+      {
+        "url": "https://geekycodes.in/generative-ai/bm25-explained-how-search-engines-find-the-most-relevant-documents/",
+        "title": "BM25 Explained: How Search Engines Find the Most Relevant Documents",
+        "snippet": "documents are most relevant? One of the most widely used solutions is BM25 — Best Matching 25. BM25 is a lexical information-retrieval algorithm that ranks documents based primarily on term frequency, inverse document frequency, and document length.",
+        "index": 2
+      },
+      {
+        "url": "https://dataaspirant.com/blog/bm25-explained/",
+        "title": "BM25 Explained: How Keyword Relevance Scoring Works (2026)",
+        "snippet": "BM25 algorithm ranks documents: TF saturation, IDF, length normalisation, the k1 and b parameters, Python and Elasticsearch code, BM25 vs embeddings, and where it fits in hybrid RAG.",
+        "index": 3
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=1X4KKcWFdf0",
+        "title": "BM25: How Search Engines Rank Documents, Explained in 2 Minutes",
+        "snippet": "ranks thousands of documents. BM25, from the Okapi system, is the classic formula behind that ranking. In 2 minutes you'll learn:",
+        "index": 4
+      },
+      {
+        "url": "https://learncodecamp.net/bm-25/",
+        "title": "BM25 Explained: How the Ranking Function Works, with Python Code",
+        "snippet": "BM25 ranks documents: term frequency saturation, IDF, document length normalization, the k1 and b parameters, how it improves on TF-IDF, and a Python implementation.",
+        "index": 5
+      },
+      {
+        "url": "https://123ofai.com/articles/blogs/bm25",
+        "title": "BM25 Explained — How Best Matching Powers Modern Search",
+        "snippet": "BM25, short for \"Best Matching 25,\" is a probabilistic information retrieval ranking function that scores how well a document matches a query term or set of query terms. It is a practical evolution of tf idf: BM25 keeps inverse document frequency, but fixes raw term frequency with saturation and document length normalization. In production, BM25 is not a vector search replacement; it ...",
+        "index": 6
+      },
+      {
+        "url": "https://www.geeksforgeeks.org/nlp/what-is-bm25-best-matching-25-algorithm/",
+        "title": "What is BM25 (Best Matching 25) Algorithm - GeeksforGeeks",
+        "snippet": "BM25 (Best Matching 25) is a ranking algorithm used in information retrieval systems to determine how relevant a document is to a given search query. It's an improved version of the traditional TF-IDF (Term Frequency-Inverse Document Frequency) approach and is widely used in modern search engines and databases.",
+        "index": 7
+      },
+      {
+        "url": "https://aicoming.net/wiki/bm25",
+        "title": "BM25 Explained: How Keyword Search Ranks Documents",
+        "snippet": "BM25 combines rare terms, repeated matches, and document-length normalization to rank keyword search results and support AI retrieval.",
+        "index": 8
+      },
+      {
+        "url": "https://brello.ai/learn/bm25/",
+        "title": "BM25 explained: how search ranks relevant text | Brello",
+        "snippet": "BM25 scores how well a passage matches a query from term frequency, term rarity and length. The formula, what k1 and b do, and how it ranks passages on a phone.",
+        "index": 9
+      }
+    ]
+  },
+  {
+    "id": "E02",
+    "query": "Find university lectures explaining information retrieval and search ranking.",
+    "criteria": "Educational quality and original institutions",
+    "pool": [
+      {
+        "url": "https://web.stanford.edu/class/cs276/handouts/lecture14-learning-ranking.pdf",
+        "title": "PDF Information Retrieval - Stanford University",
+        "snippet": "Information Retrieval CS276: Information Retrieval and Web Search Christopher Manning and Pandu Nayak Lecture 14: Learning to Rank",
+        "index": 0
+      },
+      {
+        "url": "https://www.scribd.com/document/701715910/2-Notes-CS8080-Information-Retrieval-Technique",
+        "title": "CS8080 Information Retrieval Techniques | PDF | Information Retrieval ...",
+        "snippet": "Information Retrieval Techniques course. It covers 5 units: 1) Introduction to information retrieval systems and models, 2) Modeling and retrieval evaluation techniques, 3) Text classification and clustering algorithms, 4) Web retrieval and crawling, and 5) Recommender systems.",
+        "index": 1
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=fXIrXQ4jT_E",
+        "title": "Module 3 - Information Retrieval and Search Engine Ranking Algorithms",
+        "snippet": "ranking phase relies on predictive retrieval and raw quantities, and how the re-ranking phase shifts focus to advanced text processing, user signals, and ultimate content ...",
+        "index": 2
+      },
+      {
+        "url": "https://web.stanford.edu/class/cs276/19handouts/lecture15-learning-ranking-1per.pdf",
+        "title": "PDF Introduction to Information Retrieval - Stanford University",
+        "snippet": "Rank (with GBDTs) Borrows slides/pictures from Schigehiko Schamoni",
+        "index": 3
+      },
+      {
+        "url": "https://sut-mir-fall2025.github.io/lectures/",
+        "title": "Lectures - Modern Information Retrieval / Fall 2025",
+        "snippet": "information retrieval and document preprocessing tl;dr: Boolean information retrieval and document preprocessing [slides]",
+        "index": 4
+      },
+      {
+        "url": "https://www.cl.cam.ac.uk/teaching/1314/InfoRtrv/lecture1.pdf",
+        "title": "PDF Lecture 1: Introduction and Overview - Information Retrieval Computer ...",
+        "snippet": "ranked retrieval both offered Document ranking only wrt chronological order Expert queries are carefully defined and incrementally developed",
+        "index": 5
+      },
+      {
+        "url": "https://bitsnotes.com/subject/information-retrieval",
+        "title": "Information Retrieval Lectures & Notes | BitsNotes",
+        "snippet": "Information Retrieval. Access view-only notes and curated summaries for every lecture.",
+        "index": 6
+      },
+      {
+        "url": "https://www.slideshare.net/slideshow/chapter-1overview-of-information-retrievalppt/267176671",
+        "title": "chapter 1-Overview of Information Retrieval.ppt - SlideShare",
+        "snippet": "information retrieval systems, including: 1) It describes the key components and processes of an IR system, including indexing, searching, and ranking documents in response to user queries.",
+        "index": 7
+      },
+      {
+        "url": "https://www.jbiet.edu.in/pdffls/csecoursefile2020/IRS_Notes_IV_I.pdf",
+        "title": "PDF Information Retrieval System",
+        "snippet": "ranking, Relevance feedback, Selective dissemination of information search, Weighted searches of Boolean systems, Searching the Internet and hypertext.",
+        "index": 8
+      }
+    ]
+  },
+  {
+    "id": "S01",
+    "query": "Find 16 GB RAM laptops under ₹50,000 available in India.",
+    "criteria": "Actual specifications, prices, and availability",
+    "pool": [
+      {
+        "url": "https://www.smartprix.com/laptops/price-below_50000/16_gb_above-ram",
+        "title": "Laptops Under ₹50,000 With 16 GB & Above RAM - Smartprix",
+        "snippet": "Laptops Under ₹50,000 With 16 GB & Above RAM in India. This price list was last updated on Oct 20, 2026.",
+        "index": 0
+      },
+      {
+        "url": "https://matribhumisamachar.com/en/2026/04/15/best-laptops-under-%E2%82%B950000-in-india-2026-student-office-guide/",
+        "title": "Best 16GB RAM Laptops Under ₹50,000 in India: The Ultimate 2026 Buyer's Guide - Matribhumisamachar",
+        "snippet": "16GB RAM prevents aggressive drive caching, ensuring smooth multitasking without UI lag.\nQ2: Can I upgrade the storage on budget laptops later?\nYes. Most laptops in the sub-₹50,000 segment feature accessible M.2 PCIe NVMe slots, allowing you to expand local storage to 1TB or 2TB SSDs as needed.\nQ3: Can these laptops handle AAA video games?\nIntegrated graphics like AMD Radeon or Intel Iris Xe easily handle esports titles (e.g., Valorant, CS:GO) at moderate settings. However, modern AAA games require dedicated GPUs for stable frame rates.\nDisclaimer: Prices and availability mentioned in this art",
+        "index": 1
+      },
+      {
+        "url": "https://www.91mobiles.com/list-of-laptops/top-10-laptops-below-50000-in-india",
+        "title": "Best Laptops Under Rs. 50,000 In India (Oct 2026)",
+        "snippet": "50,000, the Lenovo ThinkPad E14 is a solid productivity laptop built for students, professionals, and remote workers. It offers a sturdy build, an excellent keyboard, USB charging, and upgradeable RAM. Designed for everyday reliability, it is a great pick for those who prioritise function over flash. Upgrade the RAM to 16GB, and it becomes an even more capable machine for ...",
+        "index": 2
+      },
+      {
+        "url": "https://www.91mobiles.com/list-of-laptops/16gb-ram-laptops-under-50000",
+        "title": "16GB Ram Laptops Under 50000 in India (Oct 2026) - 91mobiles.com",
+        "snippet": "Ram Laptops Under 50000 in India with prices, specifications, and features.",
+        "index": 3
+      },
+      {
+        "url": "https://www.pricekeeda.com/laptops/16gb-ram-laptops-under-50000/",
+        "title": "16GB RAM Laptop Under ₹50000 in India (October 2026)",
+        "snippet": "ram laptop under 50000 options by CPU, RAM type, upgradeability, SSD and display instead of assuming memory alone means faster performance.",
+        "index": 4
+      },
+      {
+        "url": "https://www.flipkart.com/laptops/~laptops-under-rs50000/pr?sid=6bo%2Cb5g",
+        "title": "Laptops Under 50000 Online at Best Prices in India - Flipkart",
+        "snippet": "laptops under 50000 online in India. Explore top models from HP, ASUS, Lenovo & Dell with 16GB RAM, 512GB SSD, and powerful processors on Flipkart today.",
+        "index": 5
+      },
+      {
+        "url": "https://www.gadgets360.com/laptops/laptops-under-50000",
+        "title": "LAPTOPS UNDER 50000 IN INDIA",
+        "snippet": "laptops under Rs 50,000 in India (15th October 2026) with price, features and specifications. Check top laptops under 50k in India with buying options and best offer deals.",
+        "index": 6
+      },
+      {
+        "url": "https://www.digit.in/laptops/best-laptops-under-50000.html",
+        "title": "Best Laptops Under 50000",
+        "snippet": "RAM, 512GB SSD) 13th Gen Intel Core i3 1315U 16 GB 512 GB 15.6 inches Asus Vivobook 15 X1504VA-NJ2217WS Laptop (13th Gen Core i5/ 16GB/ 512GB SSD/ Win11) 13th Gen Intel Core i5 1334U 16 GB 512 GB 15.6 inches ...",
+        "index": 7
+      }
+    ]
+  },
+  {
+    "id": "S02",
+    "query": "Compare mini PCs suitable for running CPU-based LLMs locally.",
+    "criteria": "RAM, processor, upgradeability, and price",
+    "pool": [
+      {
+        "url": "https://www.propelrc.com/best-mini-pcs-for-running-local-llms/",
+        "title": "8 Best Mini PCs for Running Local LLMs (October 2026)",
+        "snippet": "Mini PCs for Running Local LLMs (October 2026)\n8 Best Mini PCs for Running Local LLMs (October 2026)\nWritten By: Richard J. Gross\nUpdated On: September 19th, 2026\nI spent six weeks running Llama 3, Qwen, and Mistral models locally across eight mini PCs, and I can tell you the best mini PCs for running local LLMs in 2026 are no longer the compromises they used to be. AMD’s Ryzen AI MAX+ 395 (Strix Halo) changed the conversation with up to 128GB of unified LPDDR5x memory that the CPU, iGPU, and NPU all share, meaning a 70B-parameter model that used to demand a workstation GPU now fits in a box t",
+        "index": 0
+      },
+      {
+        "url": "https://www.virtual-pc.com/best-mini-pcs-for-running-local-llms/",
+        "title": "8 Best Mini PCs for Running Local LLMs (October 2026) Latest Reviews",
+        "snippet": "How to Choose a Mini PC for Local LLMs?\nHow much RAM you actually need\nMemory bandwidth beats memory size for speed\nKnow your software lane before you buy\nNoise, power, and placement\nExpansion: OCuLink, USB4, and the eGPU trap\nWarranty, support, and the reality of buying from small brands\nFrequently Asked Questions\nWhat is the best mini PC for local AI processing?\nWhat is the best CPU for running LLMs locally?\nHow much RAM do I need to run LLMs locally?\nAre mini PCs good for AI?\nCan a mini PC run a 70B model like Llama 3.3 locally?\nFinal Verdict: The Best Mini PCs for Running Local LLMs\nTop 3 ",
+        "index": 1
+      },
+      {
+        "url": "https://www.gizmochina.com/2026/08/24/xiaomi-announces-ai-cube-mini-pc-with-xring-o3-o100-and-d100-to-run-llms-locally/",
+        "title": "Xiaomi announces AI Cube mini-PC with XRING O3, O100, and D100 to run LLMs locally",
+        "snippet": "CPU layout, a 16-core G2-Ultra NX GPU, and a 200 TOPS low-power NPU.",
+        "index": 2
+      },
+      {
+        "url": "https://www.msn.com/en-us/technology/hardware-and-devices/gmktec-evo-x3-review-i-ran-local-llms-on-the-impressive-mini-pc-but-it-s-not-plug-and-play/ar-AA2c4Cdm",
+        "title": "GMKtec EVO-X3 review: I ran local LLMs on the impressive mini PC — but it's not plug-and-play",
+        "snippet": "mini PC with a difference: firstly, it stands upright; the size is larger than most, the specs are impressive, and the price- well, that prices it out of most people's reach; however, this is a machine with an AMD Halo Strix processor.",
+        "index": 3
+      }
+    ]
+  },
+  {
+    "id": "L01",
+    "query": "Find coworking spaces in Ahmedabad with monthly pricing.",
+    "criteria": "Actual locations and published prices",
+    "pool": [
+      {
+        "url": "https://www.karmaworkspaces.com/pricing",
+        "title": "Coworking Space Pricing in Ahmedabad | Karma Workspaces",
+        "snippet": "Everything Included in Every Coworking Plan\nHigh-Speed WiFi\nReliable fibre internet on all floors with no throttling.\nElectricity & Power Backup\nUninterrupted power with generator backup — your work never stops.\n24/7 Access\nWork on your schedule with round-the-clock building access and 3-tier security.\nHousekeeping\nDaily cleaning of workspace and common areas.\nLounge & Common Areas\nAccess to cafeteria, lounge zones, and collaborative spaces.\nCCTV & Security\n24/7 CCTV surveillance and security personnel on premises.\nGot Questions?\nCoworking Pricing FAQs in Ahmedabad\n01 How much does a coworking",
+        "index": 0
+      },
+      {
+        "url": "https://myhq.in/ahmedabad/dedicated/coworking-space-in-ahmedabad",
+        "title": "Best Coworking Space in Ahmedabad | Book Shared Office Space - myhq",
+        "snippet": "coworking space in Ahmedabad ranges between Rs 5,000 to Rs 15,000 for a monthly fixed desk. The cost to rent a coworking space depends on locality and team size.",
+        "index": 1
+      },
+      {
+        "url": "https://coworkingers.com/location/ahmedabad/",
+        "title": "10+ Best Coworking Space In Ahmedabad (2026) @ ₹249/Day",
+        "snippet": "Entrepreneurship to such a greater extent gave rise to affordable coworking spaces in special economic zones. coworking space in Ahmedabad has been supported by magnificent mill culture, malls, multiplexes, and the hub of premier institutes along with all forms of development that made it the Boston City of India. Therefore, we strongly recommend Ahmedabad as your business center in India!\nEven if you are planning for a Virtual Office in Ahmedabad for your Business or Startup we have the best office spaces for you.\nWhether you’re in need of a caffeine fix or a comfortable workspace, our Work C",
+        "index": 2
+      },
+      {
+        "url": "https://cofynd.com/coworking/ahmedabad",
+        "title": "Best Coworking Spaces in Ahmedabad | Book a Shared Office",
+        "snippet": "Coworking spaces in Ahmedabad- 1. DevX Vastrapur,2. Karma Workspaces Bodakdev, 3. Connekt Ahmedabad, 4. Incuspaze Vijay Cross Road. Click for More Spaces.",
+        "index": 3
+      },
+      {
+        "url": "https://nobrokeragehub.com/coworking-space-in-ahmedabad/",
+        "title": "Best Coworking Space in Ahmedabad | 75+ Options Starting ₹5,000",
+        "snippet": "coworking space in Ahmedabad with 75+ options across SG Highway, Navrangpura, Prahlad Nagar & more.",
+        "index": 4
+      },
+      {
+        "url": "https://www.bookmycoworking.com/coworking-space/ahmedabad",
+        "title": "Coworking Spaces in Ahmedabad | From ₹2,099",
+        "snippet": "coworking spaces in Ahmedabad from ₹2,099. Real photos, transparent pricing and amenities.",
+        "index": 5
+      },
+      {
+        "url": "https://www.qdesq.com/coworking-space/ahmedabad",
+        "title": "25+ Coworking Spaces in Ahmedabad in 2026 | Qdesq",
+        "snippet": "coworking spaces in Ahmedabad in 2026 from ₹4,400/desk. SG Highway, Prahlad Nagar, CG Road, Navrangpura, Vastrapur & more.",
+        "index": 6
+      },
+      {
+        "url": "https://www.flexospaces.com/in/coworking/ahmedabad",
+        "title": "Best Coworking Space in AHMEDABAD (2026) | Compare & Book - Flexo Spaces",
+        "snippet": "Coworking Spaces in AHMEDABAD with flexible pricing and premium amenities at prime locations.",
+        "index": 7
+      },
+      {
+        "url": "https://www.innov8.work/coworking-space/ahmedabad/",
+        "title": "Best Coworking Space in Ahmedabad | Shared Office in Ahmedabad",
+        "snippet": "Coworking space in Ahmedabad starting at ₹6,500 *. Book shared desks, private cabins, meeting rooms & modern workspaces for startups, SMEs, freelancers & growing businesses.",
+        "index": 8
+      },
+      {
+        "url": "https://uncubate.co/",
+        "title": "Best Coworking Space Ahmedabad | Shared Office Space for Startups",
+        "snippet": "Coworking Spaces in Ahmedabad Incepted in October 2016, Uncubate was conceived to create a commune for startups and professionals more than ju…",
+        "index": 9
+      },
+      {
+        "url": "https://www.coworker.com/india/ahmedabad?view=list",
+        "title": "See All Coworking Spaces in Ahmedabad | Coworker",
+        "snippet": "coworking space in Ahmedabad, India. Discover the best coworking spaces in Ahmedabad, India and 1000+ other cities. Read reviews from thousands of professionals, and book space online at Coworker",
+        "index": 10
+      },
+      {
+        "url": "https://www.letmeseat.com/coworking/space/ahmedabad",
+        "title": "Best Coworking Spaces in Ahmedabad | Compare Prices & Amenities",
+        "snippet": "coworking spaces in Ahmedabad with prices, amenities, locations and flexible office options.",
+        "index": 11
+      },
+      {
+        "url": "https://flexofc.com/coworking/ahmedabad",
+        "title": "Co-working Spaces in Ahmedabad — Verified, Zero Brokerage",
+        "snippet": "spaces in Ahmedabad. Verified listings with transparent pricing and zero brokerage on Flexofc.",
+        "index": 12
+      }
+    ]
+  },
+  {
+    "id": "L02",
+    "query": "Find computer hardware shops in Ahmedabad that sell desktop RAM.",
+    "criteria": "Real businesses and contact details",
+    "pool": [
+      {
+        "url": "https://www.indiamart.com/proddetail/laptop-desktop-ram-supply-in-ahmedabad-21242607562.html",
+        "title": "Laptop & Desktop RAM Supply in Ahmedabad at ₹ 499/piece | Ahmedabad | ID: 21242607562",
+        "snippet": "Laptop & Desktop RAM Supply in Ahmedabad\n₹ 499/Piece\nMemory\nAll Brand\nColor\nNa\nItem Height\nNa\nModel Name/Number\nNa\nOffered By: Computer Care Laptop Repairing Center, Ahmedabad\nEnhance the speed and performance of your device with our high-quality Laptop and Desktop RAM Supply service in Ahmedabad. At Computer Care Laptop Repairing Center, we provide reliable RAM options for all brands and models, ensuring smooth multitasking, faster boot time, and improved system stability.\n🔹 Product/Service Description\nWe supply original, branded, and fully compatible RAM for laptops and desktop computers. Wh",
+        "index": 0
+      },
+      {
+        "url": "https://www.justdial.com/Ahmedabad/Computer-Ram-Dealers/nct-10117935",
+        "title": "Popular Computer Ram Dealers in Ahmedabad",
+        "snippet": "Computer Ram Dealers in Ahmedabad - Upgrade your system's speed and performance with top-rated RAM. Buy, sell, or find the best deals on high-quality memory modules. Whether you're gaming, designing, or simply trying to boost your computer's efficiency, our listings connect you with trusted dealers for the cheapest options.",
+        "index": 1
+      },
+      {
+        "url": "https://yellowpages.webindia123.com/d-py/Gujarat/Ahmedabad/Computer-Hardware-And-Consumables-386/1/",
+        "title": "Top 10 Computer Shops in Ahmedabad - Computer Hardware Shops in ...",
+        "snippet": "Computer Hardware Shops in Ahmedabad. Get address, phone number, email, reviews and more for Computer Hardware And Consumables in Ahmedabad on yellowpages.webindia123.com, Gujarat, India like Yom Computer, Active Computers, Mehta Brothers- Ahmedabad, Bothra Trading Company, Data First, C.G.",
+        "index": 2
+      },
+      {
+        "url": "https://www.olx.in/en-in/ahmedabad_g4058677/computer-accessories_c1515/q-ram",
+        "title": "Ram - Buy & Sell Computer Accessories in Ahmedabad - OLX",
+        "snippet": "Ram price! Ram for sale in Ahmedabad. Buy and sell second hand Computer Accessories in Ahmedabad. OLX provides the best Free Online Classified Advertising in India.",
+        "index": 3
+      },
+      {
+        "url": "https://www.justdial.com/Ahmedabad/Computer-Hardware-Dealers/nct-10111877",
+        "title": "Popular Computer Hardware Dealers in Ahmedabad",
+        "snippet": "Computer Hardware Dealers in Ahmedabad - Find the best deals on top computer hardware! Buy, sell, or upgrade your gadgets effortlessly.",
+        "index": 4
+      },
+      {
+        "url": "https://www.indiamart.com/swamicomputer/",
+        "title": "Wholesaler / Distributor of Computer Hardware & Micron Ram ... - IndiaMART",
+        "snippet": "Computer - Wholesaler / Distributor of Computer Hardware, Micron Ram 8gb Ddr4 2400 Mhz 19200 Pin Dimm & Laptop Computer RAM from Ahmedabad, Gujarat, India",
+        "index": 5
+      }
+    ]
+  }
+]

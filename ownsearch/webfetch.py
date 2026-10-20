@@ -120,6 +120,7 @@ class WebFetchSession(Fetcher):
         item.title = ext.title[:300] or item.title
         item.content = ext.text[:self.settings.live_max_text_chars]
         item.headings = ext.headings[:50]
+        item.links = ext.links[:self.settings.discovery_sitemap_limit]
         item.language = ext.lang or item.language
         if ext.published_at:
             inferred = ext.metadata.get('publication_date_source') == 'url_inferred'

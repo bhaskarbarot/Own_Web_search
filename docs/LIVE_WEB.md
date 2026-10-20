@@ -100,7 +100,7 @@ Set `OWNSEARCH_LIVE_LOCAL_ENABLED=true` only if you want an existing corpus quer
 
 ## Budgets and evidence
 
-Defaults: total request budget 8s; independent provider budget 3s; at most three pages, three fetch workers, a four-second enrichment window, 1MB per response, 4MB decoded response bodies per request, 16 page/robots/redirect requests. Each origin is serial and respects configured delay/robots crawl delay. Candidate output and text are bounded; no links are enqueued for a continuing crawl. The configured minimum interval/cooldown is per process, not a distributed provider quota service.
+Defaults: total request budget 8s; independent provider budget 3s; at most three pages, three fetch workers, a four-second enrichment window, 2MB per response, 6MB decoded response bodies per request, 16 page/robots/redirect requests. Each origin is serial and respects configured delay/robots crawl delay. Candidate output and text are bounded. Documentation can follow at most two specific same-origin page links, or one robots-declared sitemap, within the remaining global deadline and shared byte/request limits. No links are enqueued for a continuing crawl. The configured minimum interval/cooldown is per process, not a distributed provider quota service.
 
 After enough relevant general results arrive, the coordinator permits a short configurable grace period before returning partial results. Timeouts/unfinished workers are reported, cancellation is requested, and late output is ignored. Python cannot forcibly kill arbitrary blocked extension code; finite worker capacity and HTTP/DNS deadlines bound ordinary work. CPU parsing/ranking can add overhead beyond a nominal deadline. This is a synchronous bounded final response; token/SSE streaming and background enrichment are not implemented in this path.
 
@@ -123,3 +123,16 @@ The example queries are **unreviewed** and produce no accuracy score. Record 300
 The evaluator reports top-five useful-result success, P@5, Recall@10 where judgments support it, MRR@10 and NDCG@10 with bootstrap intervals. Missing results count against reviewed answerable queries. Relevance labels do not certify answers: attach separate human `answer_correct` and `citations_supported` labels to the recorded `answer_sha256`. Reassess the captured report with `--recorded`; do not reuse stale answer labels after changing evidence. Stratify results by language/category/time sensitivity and independently verify publication dates, claims, market timestamps and arithmetic. Report cached and cold latency separately.
 
 Unit tests and the old 57-document synthetic development benchmark cannot establish 90% open-web accuracy. No public integration or general accuracy is certified until a configured provider responds and independent judgments are available.
+
+## Current quality checks
+
+See [SEARCH_QUALITY_REPORT.md](SEARCH_QUALITY_REPORT.md) for the completed 100-case recording, new-topic probes, provisional review, direct-answer checks and remaining failures. General discovery defaults to the general category; confident news or explicit fresh-date queries also use news. An uncertain uncalibrated intent does not restrict discovery. Query qualifiers and operators survive forwarding.
+
+Property questions abstain when only an arbitrary source excerpt is available. Other extractive output is explicitly a source excerpt, not an independently verified answer. A validated market answer avoids unnecessary HTML enrichment; provider deadlines and delayed-data labels remain.
+
+```sh
+python3 scripts/benchmark_query_md.py --fetch --output /tmp/ownsearch-recording.json
+python3 scripts/eval_live_web.py --queries docs/evaluation/full-web/review.jsonl --recorded docs/evaluation/full-web/after.json --output /tmp/ownsearch-reviewed.json
+```
+
+The saved labels are AI-assisted developer diagnostics with `independent_review: false`; they cannot certify 90% accuracy. A fresh independent holdout, with complete task and answer judgments, is still required. Existing regex parses syntax, tokens and dates; generic lexical/structural heuristics do not establish broad semantic understanding.

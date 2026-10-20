@@ -42,7 +42,7 @@ def setup(data_dir, port=8888, install=True):
     old = json.loads(settings_file.read_text()) if settings_file.exists() else {}
     secret = old.get('server', {}).get('secret_key') or secrets.token_hex(32)
     engines = ['google', 'bing', 'brave', 'duckduckgo', 'google news', 'bing news',
-               'brave.news', 'duckduckgo news', 'bing images', 'brave.images']
+               'brave.news', 'duckduckgo news', 'bing images', 'brave.images', 'mwmbl']
     # JSON is valid YAML. Only this small instance configuration is customized.
     settings = {
         'use_default_settings': {'engines': {'keep_only': engines}},
@@ -52,7 +52,7 @@ def setup(data_dir, port=8888, install=True):
                    'limiter': False, 'public_instance': False, 'image_proxy': False},
         'valkey': {'url': False},
         'outgoing': {'request_timeout': 2.0, 'max_request_timeout': 2.5},
-        'engines': [{'name': name, 'disabled': False, 'timeout': 2.0} for name in engines],
+        'engines': [{'name': name, 'disabled': False, 'timeout': 1.0 if name == 'mwmbl' else 2.0} for name in engines],
     }
     python = RUNTIME / 'venv/bin/python'
     if install:

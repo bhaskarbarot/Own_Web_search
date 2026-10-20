@@ -1,3 +1,5 @@
+> Historical integration smoke report. Current measurements and limits: [SEARCH_QUALITY_REPORT.md](SEARCH_QUALITY_REPORT.md).
+
 # Bundled discovery source verification
 
 The user requested reusing the cloned SearXNG implementation in `searxxxing/`.

@@ -14,10 +14,13 @@ from .providers import Calls
 from .query import parse_query
 from .snippet import highlights
 from .util import utc_now
+from .textproc import analyze
+from .webquery import relation_terms
 from .webfetch import WebFetchSession, EnrichmentJob
+from .fetcher import FetchError
 from .webmodels import WebCandidate, WebRequest, web_url
 from .webproviders import configured, SourceBatch, FeedWebProvider, MarketWebProvider
-from .webranking import merge, rank
+from .webranking import merge, rank, constraints
 
 
 def _validated(settings):
@@ -175,6 +178,8 @@ class LiveSearch:
         q = parse_query(query, freshness=freshness, site=site, filetype=filetype, lang=lang,
                         preferred_language=preferred_language, timezone_name=timezone_name or self.settings.timezone,
                         holiday_country=self.settings.holiday_country)
+        from .webquery import conservative_intent
+        q = conservative_intent(q)
         parse_ms = (time.perf_counter()-parse_started)*1000
         sources = list(self.providers) if live and query else []
         if live and search_type == 'web' and query:
@@ -209,7 +214,10 @@ class LiveSearch:
                 for index, row in enumerate(self._rows(response).rows, 1):
                     if item := WebCandidate.from_row(row, response.provider, index):
                         items.append(item)
-            return len(rank(items, q, final=False))
+            # Direct financial evidence must get its own bounded opportunity.
+            if q.intent == 'financial' and any(job['name'] == 'market' for job in jobs) and not any(r.provider == 'market' for r in responses):
+                return 0
+            return len(rank(items, q, final=not fetch_pages))
         responses, provider_status = self._collect(jobs, deadline, useful)
         provider_ms = (time.perf_counter()-provider_started)*1000
         errors = [s['provider']+': '+s['error'] for s in provider_status if s.get('error')]
@@ -225,15 +233,21 @@ class LiveSearch:
                 if item := WebCandidate.from_row(row, response.provider, index):
                     candidates.append(item)
         candidates = merge(candidates)
+        structured_market = bool(answer and answer.get('type') in ('stock_quote', 'stock_history'))
+        fetch_pages = fetch_pages and not structured_market
         normalized_count = len(candidates)
         selection_started = time.perf_counter()
+        from .webfocus import seeds, links, sitemap_links
+        focus_seeds = seeds(candidates, q) if fetch_pages and search_type == 'web' else []
         candidates = rank(candidates, q, final=False)[:self.settings.live_max_candidates]
+        candidates.extend(item for item in focus_seeds if item.url not in {c.url for c in candidates})
         selection_ms = (time.perf_counter()-selection_started)*1000
         fetch_started = time.perf_counter()
         session = WebFetchSession(self.settings, threading.Event())
         fetch_status = []
         if live and fetch_pages and search_type == 'web' and time.monotonic() < deadline:
-            selected = [i for i in candidates if i.source_type not in ('market_data', 'local_index')][:self.settings.live_fetch_pages]
+            available = [i for i in candidates if i.source_type not in ('market_data', 'local_index')]
+            selected = (focus_seeds + [i for i in available if i not in focus_seeds])[:self.settings.live_fetch_pages]
             page_deadline = min(deadline, time.monotonic()+self.settings.live_fetch_timeout)
             # Finite waves cap per-query parallelism independently of the global worker pool.
             for begin in range(0, len(selected), self.settings.live_fetch_concurrency):
@@ -254,6 +268,47 @@ class LiveSearch:
                         item.fetch_status = state.get('status', 'not_fetched')
                         if state.get('error'):
                             errors.append('Page enrichment failed for '+urlsplit(item.url).hostname+': '+state['error'][:200])
+            # One focused link wave shares the same deadline, robots policy and byte/request budget.
+            known_urls = {item.url for item in candidates}
+            focused = []
+            if q.intent == 'tech_docs':
+                for item in list(candidates):
+                    if item.fetch_status == 'fetched':
+                        for linked in links(item, q):
+                            if linked.url not in known_urls:
+                                known_urls.add(linked.url)
+                                focused.append(linked)
+            focus_deadline = page_deadline
+            sufficient_doc = any(item.fetch_status == 'fetched' and item.features.get('documentation_structure', 0) >= .5
+                                 and item.features.get('coverage', 0) >= .8 for item in candidates)
+            if q.intent == 'tech_docs' and focus_seeds and not focused and not sufficient_doc:
+                # The bounded direct-fetch window has ended; focused discovery can use
+                # the remaining global budget, sharing the same request/byte limits.
+                focus_deadline = deadline
+                seed = next((item for item in candidates if item.url in {seed.url for seed in focus_seeds}
+                             and item.fetch_status == 'fetched'), None)
+                if seed is not None and time.monotonic() < focus_deadline:
+                    try:
+                        focused = sitemap_links(session, seed, q, focus_deadline)
+                    except (FetchError, ValueError) as exc:
+                        errors.append('Focused sitemap unavailable: '+str(exc)[:160])
+            # Link labels are often short; inspect a bounded specific link before
+            # applying the final page-content coverage threshold.
+            focused = [item for item in focused if constraints(item, q, final=False)][:2]
+            if focused and q.intent == 'tech_docs':
+                focus_deadline = deadline
+            if focused:
+                candidates.extend(focused)
+                link_jobs = [self._start(EnrichmentJob(session, 'link:'+str(i)), item, focus_deadline)
+                             for i, item in enumerate(focused) if time.monotonic() < focus_deadline]
+                pages, states = self._collect(link_jobs, focus_deadline)
+                fetch_status.extend(states)
+                for response in pages:
+                    if response.status == 'ok' and isinstance(response.results, WebCandidate):
+                        replacement = response.results
+                        original = next((item for item in focused if item.original_url == replacement.original_url), None)
+                        if original is not None:
+                            candidates[candidates.index(original)] = replacement
             session.cancel.set()
         fetch_ms = (time.perf_counter()-fetch_started)*1000
         ranking_started = time.perf_counter()
@@ -270,10 +325,22 @@ class LiveSearch:
                          'passages': i.evidence, 'text': ' … '.join(p['text'] for p in i.evidence)[:1800],
                          'injection_risk': i.injection_risk} for i in chosen]
         answer_status = 'available' if answer else 'not_requested'
+        if answer_mode and not answer and q.intent == 'news':
+            headlines = [{'title': item.title, 'url': item.url, 'published_at': item.published_at}
+                         for item in chosen[:5] if item.published_at and not item.injection_risk]
+            if headlines:
+                answer = {'type': 'headlines', 'text': '\n'.join('- '+row['title'] for row in headlines),
+                          'headlines': headlines, 'citations': [{'url': row['url'], 'title': row['title']} for row in headlines],
+                          'verification': 'publisher_dated_headlines', 'inference': False}
+                answer_status = 'source_headlines'
         if answer_mode and not answer:
-            source = next((i for i in chosen if i.evidence and not i.injection_risk and i.features.get('coverage', 0) >= .8), None)
+            relations = set(relation_terms(q)) if q.intent == 'reference' else set()
+            # Property questions need a validated claim, not an arbitrary passage
+            # that mentions the same relation for a different person or subject.
+            source = None if relations else next((i for i in chosen if i.evidence and not i.injection_risk
+                                                 and i.features.get('coverage', 0) >= .8), None)
             if source:
-                passage = source.evidence[0]['text'][:500]
+                passage = next((p['text'] for p in source.evidence if not relations or relations & set(analyze(p['text']))), source.evidence[0]['text'])[:500]
                 answer = {'type': 'extractive', 'text': passage,
                           'source': {'name': source.title, 'url': source.url},
                           'citations': [{'url': source.url, 'title': source.title, 'passage': passage}],
@@ -326,7 +393,8 @@ class LiveSearch:
                             'pages_skipped': sum(i.fetch_status == 'not_fetched' for i in candidates),
                             'local_results': sum(i.provider == 'local_index' for i in chosen),
                             'page_requests': session.requests, 'decoded_bytes': session.decoded_bytes,
-                            'persistent_pages_written': 0, 'cache_hit': False},
+                            'persistent_pages_written': 0, 'cache_hit': False,
+                            'structured_market_answer': structured_market},
                   'timing': {'total_ms': took_ms, 'parse_ms': round(parse_ms, 2),
                              'providers_ms': round(provider_ms, 2), 'fetch_wall_ms': round(fetch_ms, 2),
                              'fetch_worker_ms': round(session.network_ms, 2), 'extraction_worker_ms': round(session.extraction_ms, 2),

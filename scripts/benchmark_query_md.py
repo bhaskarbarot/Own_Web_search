@@ -2,6 +2,7 @@
 """Record every query.md table case; retrieval is not workflow completion or accuracy."""
 import argparse
 import copy
+import hashlib
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -61,6 +62,12 @@ def summarize(runs):
             'reviewed_queries': 0, 'accuracy': None, 'green_flag': False}
 
 
+def save_report(output, report):
+    temporary = output.with_suffix(output.suffix+'.tmp')
+    temporary.write_text(json.dumps(report, ensure_ascii=False, indent=2, default=str)+'\n')
+    temporary.replace(output)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input', default='query.md')
@@ -76,6 +83,13 @@ def main():
         'started_at': datetime.now(timezone.utc).isoformat(), 'input': str(args.input),
         'scope': 'All table cases; M cases test initial retrieval only, not completed workflows.',
         'fetch_pages': args.fetch, 'runs': [], 'green_flag': False}
+    if report.get('fetch_pages') != args.fetch:
+        raise ValueError('Cannot resume with a different page-fetch mode.')
+    lookup = {case['id']: case['query'] for case in cases}
+    if any(lookup.get(run['id']) != run['query'] for run in report['runs']):
+        raise ValueError('Cannot resume a different query set.')
+    report.setdefault('source_sha256', {str(path.relative_to(Path(__file__).resolve().parents[1])): hashlib.sha256(path.read_bytes()).hexdigest()
+                      for path in (Path(__file__).resolve().parents[1]/'ownsearch').rglob('*') if path.is_file() and path.suffix in ('.py', '.txt', '.tsv', '.json')})
     engine = LiveSearch(Settings.load())
     engine.providers = [Recorder(p) for p in engine.providers]
     report['configuration'] = engine.diagnostics()
@@ -89,7 +103,7 @@ def main():
                                'response': response,
                                'source_batches': [batch for p in engine.providers for batch in p.snapshot(case['query'])]})
         report['summary'] = summarize(report['runs'])
-        output.write_text(json.dumps(report, ensure_ascii=False, indent=2, default=str)+'\n')
+        save_report(output, report)
         print(json.dumps({'id': case['id'], 'count': len(response['results']),
                           'candidates': response['total_candidates'], 'took_ms': response['took_ms'],
                           'top': [r['title'] for r in response['results'][:2]]}), flush=True)
@@ -97,7 +111,7 @@ def main():
             time.sleep(args.interval)
     report['completed_at'] = datetime.now(timezone.utc).isoformat()
     report['summary'] = summarize(report['runs'])
-    output.write_text(json.dumps(report, ensure_ascii=False, indent=2, default=str)+'\n')
+    save_report(output, report)
     print(json.dumps(report['summary']))
 
 

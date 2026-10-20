@@ -22,7 +22,8 @@ class ProviderError(Exception):
 
 def provider_query(request):
     """Forward separately supplied CLI/API filters as search syntax, too."""
-    text, q = request.query, request.parsed
+    from .webquery import discovery_text
+    text, q = discovery_text(request), request.parsed
     if len(q.sites) == 1 and 'site:' not in text.lower() and 'domain:' not in text.lower():
         text += ' site:'+q.sites[0]
     if len(q.filetypes) == 1 and q.filetypes[0] not in ('web', 'text', 'image') and 'filetype:' not in text.lower():
@@ -105,7 +106,7 @@ class SearxWebProvider(JsonProvider):
     def search(self, request, deadline):
         q = request.parsed
         params = {'q': provider_query(request), 'format': 'json',
-                  'categories': 'images' if request.search_type == 'images' else ('news' if q.intent == 'news' else self.settings.searxng_categories),
+                  'categories': 'images' if request.search_type == 'images' else (','.join(dict.fromkeys(['general', 'news']+self.settings.searxng_categories.split(','))) if q.intent == 'news' or (q.fresh_intent and q.explicit_date_filter) else self.settings.searxng_categories),
                   'safesearch': 1}
         if q.lang or q.language_info.get('language') not in (None, 'und'):
             params['language'] = q.lang or q.language_info['language']
@@ -121,6 +122,28 @@ class SearxWebProvider(JsonProvider):
         results = data.get('results')
         if not isinstance(results, list):
             raise ProviderError('SearXNG response has no results array.')
+        results = [dict(row, _ownsearch_source_query=params['q']) for row in results if isinstance(row, dict)]
+        # A source can ignore a distinctive API/product identifier in a verbose query.
+        # Retry at most once, inside the original deadline, emphasizing missing literal evidence.
+        retry_warning = None
+        if request.search_type == 'web' and time.monotonic()+.25 < deadline and not request.cancel.is_set():
+            from .webquery import literal_identifiers
+            from .textproc import analyze
+            seen = set(analyze(' '.join(str(row.get('title', ''))+' '+str(row.get('content', ''))+' '+str(row.get('url', '')) for row in results)))
+            missing = [identifier for identifier in literal_identifiers(q) if not set(analyze(' '.join(identifier))) <= seen]
+            if missing:
+                prefix = ' '.join(max(missing, key=lambda group: sum(len(word) for word in group)))
+                if not params['q'].lower().startswith(prefix.lower()):
+                    params['q'] = prefix+' '+params['q']
+                    try:
+                        focused = self.request(request, base+'/search?'+urlencode(params), deadline,
+                                               allow_private=self.settings.searxng_allow_private)
+                        if not isinstance(focused.get('results'), list):
+                            raise ProviderError('Focused response has no results array.')
+                        results = [dict(row, _ownsearch_source_query=params['q']) for row in focused['results'] if isinstance(row, dict)]+results
+                        data['unresponsive_engines'] = data.get('unresponsive_engines', [])+focused.get('unresponsive_engines', [])
+                    except ProviderError as exc:
+                        retry_warning = 'Focused retry unavailable: '+str(exc)
         rows = []
         for row in results[:self.settings.live_max_candidates]:
             if not isinstance(row, dict):
@@ -129,9 +152,15 @@ class SearxWebProvider(JsonProvider):
                          'published_at': row.get('publishedDate'), 'lang': row.get('language'),
                          'image_url': row.get('img_src') if request.search_type == 'images' else None,
                          'thumbnail_url': row.get('thumbnail_src') or row.get('thumbnail'),
-                         'kind': 'image' if request.search_type == 'images' else 'web'})
-        warnings = ['SearXNG reports unavailable upstream engines.'] if data.get('unresponsive_engines') else []
-        return SourceBatch(rows, warnings)
+                         'kind': 'image' if request.search_type == 'images' else 'web',
+                         'source_query': row['_ownsearch_source_query'], 'upstream_engines': row.get('engines') or [row.get('engine')],
+                         'upstream_score': row.get('score')})
+        warnings = ['Upstream '+str(error[0])[:80]+': '+str(error[1])[:160]
+                    for error in data.get('unresponsive_engines', [])
+                    if isinstance(error, (list, tuple)) and len(error) >= 2]
+        if retry_warning:
+            warnings.append(retry_warning)
+        return SourceBatch(rows, list(dict.fromkeys(warnings)))
 
 
 class BraveWebProvider(JsonProvider):

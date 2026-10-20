@@ -41,9 +41,9 @@ Valkey server, separate SearXNG install or public SearXNG instance is required.
 The launcher is source-checkout tooling; the OwnSearch-only wheel does not bundle
 this third-party tree. Keep this folder when distributing the source checkout.
 
-Ten configured adapters cover general, news and images. All other copied
+Eleven configured adapters cover general, news and images. All other copied
 adapters remain available in source but are not enabled. Per-engine timeout is
-2 seconds and maximum request timeout is 2.5 seconds. Search provider errors,
+2 seconds (1 second for Mwmbl) and maximum request timeout is 2.5 seconds. Search provider errors,
 rate limits and challenges remain real limitations; do not bypass them.
 
 This is a bundled metasearch backend: it still contacts external search engines.
