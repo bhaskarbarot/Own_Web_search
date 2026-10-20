@@ -25,7 +25,7 @@ def _coerce(value, kind):
 class Settings:
     data_dir: Path = Path(DEFAULT_DATA_DIR)
 
-    # Identity used when crawling. Put a real contact address in ownsearch.json.
+    # Bot identity uses the public repository as contact; never a personal email.
     user_agent: str = "OwnSearchBot/1.0 (+https://github.com/bhaskarbarot/Own_Web_search; self-hosted search engine)"
     robots_token: str = "ownsearchbot"
 
@@ -44,6 +44,11 @@ class Settings:
     crawl_threads: int = 8
     max_pages_per_host: int = 20000
     max_depth: int = 10
+    max_frontier_urls: int = 50000
+    max_enqueue_batch: int = 1000
+    max_sitemap_urls: int = 500
+    max_sitemap_depth: int = 3
+    max_crawl_bytes: int = 256 * 1024 * 1024
     max_attempts: int = 5
     max_links_per_page: int = 400
     min_recrawl: float = 3600.0
@@ -57,6 +62,7 @@ class Settings:
     ocr_lang: str = "eng"
     ocr_timeout: float = 120.0
     ocr_max_pages: int = 30
+    max_index_chars: int = 500000 # bound analysis CPU independently of stored content
     max_index_tokens: int = 60000       # body tokens indexed per document
 
     # Index
@@ -70,14 +76,31 @@ class Settings:
     max_concurrent_searches: int = 0    # 0 = 2 x CPU count
     search_timeout_ms: int = 8000
     log_queries: bool = True
+    vector_index: bool = False
+    embedding_model_path: str = ""
+    reranker_enabled: bool = False
+    reranker_model_path: str = ""
+    rerank_budget_ms: int = 40
+    translation_enabled: bool = False
+    translation_target: str = "en"
+    ner_model_path: str = ""
+    intent_embedding_enabled: bool = False
+    intent_budget_ms: int = 25
+    language_detector: str = "script"
+    document_languages: str = "en,hi,gu"
+    holiday_country: str = "" # explicit country; never inferred from browser language
+    timezone: str = "UTC"
+    default_language: str = "en"
 
     # Live Discovery and External Providers
+    provider_wait_ms: int = 500 # only when no useful local results; background workers have separate deadlines
     searxng_url: str = ""               # self-hosted SearXNG endpoint, e.g. "http://localhost:8080"
     searxng_timeout: float = 3.0
     searxng_categories: str = "general,news"
     brave_api_key: str = ""             # optional Brave Search API key
     brave_timeout: float = 3.0
     news_feeds: str = ""                # comma/newline-separated list of RSS/Atom feed URLs
+    discovery_mode: str = "background" # API never waits for page crawling; CLI opts into inline
     discovery_timeout: float = 8.0      # request budget shared with linking and local ranking
     discovery_provider_timeout: float = 3.0
     knowledge_timeout: float = 2.5
@@ -88,6 +111,8 @@ class Settings:
     discovery_cache_ttl: float = 900.0
     relevance_score_ratio: float = 0.30
     knowledge_enabled: bool = True
+    remote_knowledge_enabled: bool = False  # explicit opt-in for Wikimedia network queries
+    package_lookup_url: str = "https://pypi.org/pypi/{name}/json" # maintainer-published docs URLs; empty disables
     financial_provider_url: str = ""    # optional live financial quote endpoint
     financial_timeout: float = 3.0
     # Market data source (free, public). Templates: {q} search text, {symbol}, {period1}/{period2} unix seconds,
@@ -98,7 +123,7 @@ class Settings:
     market_quote_page: str = "https://finance.yahoo.com/quote/{symbol}"
     market_source_name: str = "Yahoo Finance public chart feed"
     # News feeds: file with one RSS/Atom URL per line (default: the bundled resources/news_feeds.txt)
-    news_feeds_file: str = str(Path(__file__).with_name("resources") / "news_feeds.txt")
+    news_feeds_file: str = str(Path(__file__).with_name("resources") / "news_feeds.tsv")
 
     @classmethod
     def load(cls, data_dir=None, **overrides):

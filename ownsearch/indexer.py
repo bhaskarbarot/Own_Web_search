@@ -23,7 +23,8 @@ except ImportError:          # non-POSIX: fall back to an in-process lock only
 
 from .segments import FIELDS, NF, SegmentBuilder, SegmentReader, merge_segments
 from .store import _decompress
-from .textproc import analyze, tokenize
+from .textproc import analyze, exact_tokens, ngrams, tokenize
+from .transliterate import key as phonetic_key
 from .util import file_extension, host_suffixes
 
 META = "\x01"                 # prefix for hidden filter terms (site:, type:, ext:, lang:)
@@ -362,15 +363,19 @@ class Indexer:
 
     def fields_for(self, row):
         text = _decompress(row["body"])
+        original=self.store.originals([row['id']]).get(row['id'],{})
         url = row["url"]
         anchors = self.store.anchors_for(url)
         meta = [META + "site:" + s for s in host_suffixes(row["host"] or "")]
+        meta.append(META + "analysis:2")
         meta.append(META + "type:" + (row["source_type"] or "web"))
         ext = file_extension(url)
         if ext and len(ext) <= 8:
             meta.append(META + "ext:" + ext)
         if row["lang"]:
-            meta.append(META + "lang:" + row["lang"].lower()[:2])
+            meta.append(META + "lang:" + row["lang"].lower())
+            if "-" in row["lang"]:
+                meta.append(META + "lang:" + row["lang"].lower().split("-")[0])
         if row["published_at"]:
             meta.append(META + "dated")
         return {
@@ -378,7 +383,10 @@ class Indexer:
             "headings": analyze(((row["headings"] or "") + " " + (row["description"] or ""))[:50_000]),
             "url": analyze(url_words(url)),
             "anchor": analyze(" ".join(anchors))[:3000],
-            "body": analyze(text)[: self.settings.max_index_tokens],
+            "body": analyze(text[:self.settings.max_index_chars])[: self.settings.max_index_tokens],
+            "exact": ["\x02e:"+t for field in [original.get("title",row["title"] or ""), row["headings"] or "", original.get("text",text)] for t in exact_tokens(field[:self.settings.max_index_chars])[:self.settings.max_index_tokens]+["__boundary__"]],
+            "ngram": ["\x02g:"+t for t in ngrams((row["title"] or "")+" "+text[:12000])][:12000],
+            "phonetic": ["\x02p:"+phonetic_key(t) for t in tokenize((row["title"] or "")+" "+text[:20000]) if not t.isascii() and phonetic_key(t)],
             "meta": meta,
         }
 

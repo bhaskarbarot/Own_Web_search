@@ -1,6 +1,10 @@
 """Passage (evidence) extraction for AI agents and prompt-injection screening of retrieved text."""
 import math
 import re
+try:
+    import regex as passage_re
+except ImportError:
+    passage_re=re
 
 from .textproc import stem, tokenize
 
@@ -42,7 +46,7 @@ def _term_patterns(terms, surface):
         pats.append(f"(?P<t{i}>(?<!\\w)(?:{body})\\w*)")
     if not pats:
         return None
-    return re.compile("|".join(pats[:40]), re.I)
+    return passage_re.compile("|".join(pats[:40]), passage_re.I)
 
 
 _SENT_END = re.compile(r"[.!?](?=\s|$)|\n|\f")

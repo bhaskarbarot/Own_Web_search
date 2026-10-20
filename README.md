@@ -1,6 +1,6 @@
 # OwnSearch — self-owned web search engine
 
-Pure Python 3.10+ standard library. No paid APIs, no external search providers, no `pip install`.
+Python 3.10+. The standard-library fallback remains available; the base profile adds Unicode and date libraries. No paid API is required. Full-web providers and local model adapters are optional and configurable.
 
 ## Quick start
 
@@ -9,7 +9,7 @@ python3 main.py crawl https://example.org/ --max-pages 100        # polite crawl
 python3 main.py search "your query" --pretty
 python3 main.py ingest ./my_documents                               # HTML, PDF, DOCX/XLSX/PPTX/ODT, EPUB, text, images
 python3 main.py serve                                               # HTTP API on 127.0.0.1:8765
-python3 -m unittest discover -s tests -t .                          # 56 tests
+python3 -m unittest discover -s tests -t .                          # full regression suite
 ```
 
 ## For AI agents
@@ -98,3 +98,45 @@ through arbitrary sitemap/page links during a query.
 The tests use isolated indexes and mock services/local HTTP fixtures. The legacy
 50-query evaluation remains a manual corpus benchmark, rather than a test that
 reads or modifies your production index. See [the measured relevance report](docs/RELEVANCE_REPORT.md).
+
+## Current engineering checkpoint
+
+Step 1 baseline and prerequisite freshness corrections are documented in
+[docs/progress.md](docs/progress.md) and [docs/architecture.md](docs/architecture.md).
+
+```bash
+python3 eval/run_eval.py --output /tmp/ownsearch-baseline.json
+```
+
+This evaluates 59 synthetic queries with per-language bootstrap intervals using
+a disposable offline index. It does not establish 90% open-web accuracy.
+
+## Current upgrade and setup
+
+The implementation, measured results, file changes and remaining accuracy gates are in [the upgrade report](docs/UPGRADE_REPORT.md). Passing fixtures is not a 90% open-web accuracy claim.
+
+```bash
+sh scripts/setup.sh base
+.venv/bin/python main.py search "your query" --pretty
+.venv/bin/python eval/run_eval.py --output /tmp/ownsearch-eval.json
+```
+
+`sh scripts/setup.sh full` installs optional runtimes; it does not download or validate model weights. Configure local model paths and calibrated language margins before enabling them. See [dependencies and licenses](docs/DEPENDENCIES.md).
+
+The API uses background page discovery by default and returns `discovery_status`; repeat a query after ingestion completes. The short-lived CLI explicitly waits for bounded live discovery. Use `--no-live` for local-only CLI search.
+
+Remote Wikimedia entity queries are opt-in: set `remote_knowledge_enabled` to true in `data/ownsearch.json`. Local labels can be imported using `entities-import path.jsonl --limit 10000`; existing public cached entity records are migrated locally. `entities-import-cache` repeats that operation explicitly. Docs discovery can read maintainer-published URLs through `package_lookup_url`; an empty URL disables it. A self-hosted SearXNG URL is optional; no public full-web search endpoint is enabled automatically.
+
+Existing indexes remain readable. Back up the data directory before running `python3 main.py reindex` to populate new analysis fields; old code cannot read newly written nine-field segments. New ingestions preserve original text; old lost source distinctions require recrawling.
+
+Language priors: `--prefer-lang hi-IN`; strict filter: `--lang hi`; temporal zone: `--timezone Asia/Kolkata`. Timezones default to UTC and are never inferred from browser language.
+
+```bash
+python3 benchmark.py --source-data-dir data --reindex --output /tmp/ownsearch-benchmark.json
+python3 scripts/fetch_eval_samples.py --output-dir /tmp/miracl-metadata
+python3 scripts/import_trec_eval.py --help
+python3 scripts/validate_feeds.py --report /tmp/feed-health.json
+python3 scripts/calibrate_intent.py --help
+```
+
+Benchmarking uses a temporary corpus copy. Public evaluation requires the corresponding passage corpus and original judgments; missing judged passages are rejected. The bundled Hindi/Gujarati/temporal/output resources remain active fallbacks and are not removed prematurely.

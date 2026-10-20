@@ -124,6 +124,12 @@ def decode_text(data, content_type=""):
     try:
         return data.decode("utf-8")
     except UnicodeDecodeError:
+        try:
+            from charset_normalizer import from_bytes
+            guess = from_bytes(data[:1_000_000]).best()
+            if guess is not None and guess.encoding and guess.percent_coherence >= 30:
+                return data.decode(guess.encoding, "replace")
+        except (ImportError, LookupError): pass
         return data.decode("cp1252", "replace")
 
 

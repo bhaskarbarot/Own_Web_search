@@ -54,13 +54,13 @@ class Processor:
         if ext.kind == "sitemap":
             if can_enqueue:
                 items = []
-                for loc, lastmod, prio, _freq in ext.sitemap_urls:
+                for loc, lastmod, prio, _freq in ext.sitemap_urls[:self.settings.max_sitemap_urls]:
                     ts = iso_to_ts(lastmod)
-                    items.append({"url": normalize_url(loc, final_url), "source": "sitemap", "depth": 1, "lastmod": ts,
+                    items.append({"url": normalize_url(loc, final_url), "source": "sitemap", "depth": depth + 1, "lastmod": ts,
                                   "priority": 4.0 + _recency_bonus(ts, now) + (prio or 0.5)})
-                for loc, lastmod in ext.sitemaps:
+                for loc, lastmod in (ext.sitemaps[:20] if depth < self.settings.max_sitemap_depth else []):
                     items.append({"url": normalize_url(loc, final_url), "source": "sitemap", "kind": "sitemap",
-                                  "depth": 0, "priority": 7.0, "lastmod": iso_to_ts(lastmod)})
+                                  "depth": depth + 1, "priority": 7.0, "lastmod": iso_to_ts(lastmod)})
                 out["new_links"] = self.frontier.enqueue_many(items)
             out["entries"] = len(ext.sitemap_urls) + len(ext.sitemaps)
             return out
@@ -107,7 +107,11 @@ class Processor:
                     and self.store.get_by_url(canon, with_text=False)):
                 out.update(result="skipped", changed=False, extraction_status="non-canonical duplicate")
                 return out
+        from .language import document_language
+        detected = document_language(ext.text, ext.lang or headers.get("content-language"),self.settings.language_detector,tuple(self.settings.document_languages.split(",")))
+        ext.lang = detected["language"]
         meta = dict(ext.metadata)
+        meta["language_evidence"] = detected
         if published_at and not ext.published_at:
             from .dates import parse_date
             ext.published_at = parse_date(published_at)

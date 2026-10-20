@@ -57,7 +57,16 @@ def build_parser():
     sub = p.add_subparsers(dest="command", required=True)
 
     sub.add_parser("init", help="create the data directory")
+    sub.add_parser("entities-import-cache",help="build local labels from existing cached Wikidata records")
+    s = sub.add_parser("entities-import", help="stream a local Wikidata JSONL/.gz export into the label index")
+    s.add_argument("path")
+    s.add_argument("--limit", type=int)
+
     sub.add_parser("stats", help="index, store and frontier statistics")
+    s=sub.add_parser('vectors-build',help='build optional local ONNX/FAISS vectors outside search requests')
+    s.add_argument('--model-path',required=True)
+    s.add_argument('--margins',help='JSON containing held-out minimum_margin per language')
+    sub.add_parser("reindex",help="rebuild analysis fields from stored documents (back up data first)")
 
     s = sub.add_parser("search", help="search the index")
     s.add_argument("query")
@@ -67,6 +76,8 @@ def build_parser():
     s.add_argument("--site")
     s.add_argument("--filetype")
     s.add_argument("--lang")
+    s.add_argument("--prefer-lang", help="language prior; does not filter other languages")
+    s.add_argument("--timezone", help="IANA timezone for temporal expressions")
     s.add_argument("--no-evidence", action="store_true")
     s.add_argument("--explain", action="store_true", help="include ranking features per result")
     s.add_argument("--pretty", action="store_true", help="human readable output instead of JSON")
@@ -200,6 +211,31 @@ def _install_signal_handlers():
 def main(argv=None):
     _install_signal_handlers()
     args = build_parser().parse_args(argv)
+    if args.command == 'entities-import-cache':
+        from .config import Settings
+        from .entities import EntityIndex
+        cfg=Settings.load(args.data_dir);cfg.ensure_dirs()
+        _print({'imported':EntityIndex(cfg.data_dir).import_cache(cfg.data_dir/'knowledge_cache.db')})
+        return 0
+    if args.command == 'vectors-build':
+        from .plugins.semantic import build
+        from pathlib import Path
+        margins=json.loads(Path(args.margins).read_text()) if args.margins else None
+        _print(build(_engine(args),args.model_path,margins))
+        return 0
+    if args.command == 'reindex':
+        engine=_engine(args)
+        with engine.store.db.tx() as c:
+            seq=engine.store._next_seq(c)
+            c.execute('UPDATE documents SET seq=?',(seq,))
+        _print({'indexed':engine.indexer.run()})
+        return 0
+    if args.command == 'entities-import':
+        from .entities import EntityIndex, json_records
+        from .config import Settings
+        cfg=Settings.load(args.data_dir); cfg.ensure_dirs()
+        _print({'imported': EntityIndex(cfg.data_dir).import_records(json_records(args.path),str(args.path),args.limit)})
+        return 0
     cmd = args.command
 
     if cmd in ("create-key", "list-keys", "revoke-key"):
@@ -261,7 +297,7 @@ def main(argv=None):
     elif cmd == "search":
         res = engine.search(args.query, args.limit, not args.no_evidence, offset=args.offset, freshness=args.freshness,
                             site=args.site, filetype=args.filetype, lang=args.lang, explain=args.explain, agent="cli",
-                            live=not args.no_live)
+                            live=not args.no_live, preferred_language=args.prefer_lang, timezone_name=args.timezone, discovery_mode="inline")
         _pretty(res) if args.pretty else print(json.dumps(res, ensure_ascii=False, indent=2))
     elif cmd == "ingest-text":
         d = engine.add_document(args.title, args.text, args.url or "")

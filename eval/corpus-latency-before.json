@@ -1,0 +1,328 @@
+{
+  "scope": "Existing-corpus snapshot latency; no relevance judgments and no production-scale claim.",
+  "documents": 821,
+  "reindexed": false,
+  "reindex_ms": 0.001989000338653568,
+  "segment_bytes": 8608059,
+  "latency_p50_ms": {
+    "value": 2.60184,
+    "ci95": [
+      1.422203,
+      11.200121
+    ],
+    "queries": 59
+  },
+  "latency_p95_ms": {
+    "value": 147.224451,
+    "ci95": [
+      81.730196,
+      175.71598
+    ],
+    "queries": 59
+  },
+  "parse_p95_ms": {
+    "value": 1.032266,
+    "ci95": [
+      0.985615,
+      1.111492
+    ],
+    "queries": 177
+  },
+  "per_query": [
+    {
+      "query": "Python code for palindrome",
+      "latency_ms": 5.389607999859436,
+      "results": 1
+    },
+    {
+      "query": "Python palindrome program",
+      "latency_ms": 5.137972000738955,
+      "results": 1
+    },
+    {
+      "query": "Python recursion",
+      "latency_ms": 192.66097099989565,
+      "results": 10
+    },
+    {
+      "query": "Python requests library",
+      "latency_ms": 160.11843199976283,
+      "results": 10
+    },
+    {
+      "query": "list comprehension Python",
+      "latency_ms": 145.7917859997906,
+      "results": 10
+    },
+    {
+      "query": "what is artificial intelligence",
+      "latency_ms": 66.82556900068448,
+      "results": 8
+    },
+    {
+      "query": "machine learning algorithms",
+      "latency_ms": 123.68146600056207,
+      "results": 3
+    },
+    {
+      "query": "neural network basics",
+      "latency_ms": 18.057518000205164,
+      "results": 1
+    },
+    {
+      "query": "\u0915\u0943\u0924\u094d\u0930\u093f\u092e \u092c\u0941\u0926\u094d\u0927\u093f\u092e\u0924\u094d\u0924\u093e \u0915\u094d\u092f\u093e \u0939\u0948",
+      "latency_ms": 1.0700059992814204,
+      "results": 0
+    },
+    {
+      "query": "\u092e\u0936\u0940\u0928 \u0932\u0930\u094d\u0928\u093f\u0902\u0917 \u0915\u094d\u092f\u093e \u0939\u0948",
+      "latency_ms": 1.273191999644041,
+      "results": 0
+    },
+    {
+      "query": "\u0921\u0940\u092a \u0932\u0930\u094d\u0928\u093f\u0902\u0917 \u091f\u094d\u092f\u0942\u091f\u094b\u0930\u093f\u092f\u0932",
+      "latency_ms": 1.0136789996977313,
+      "results": 0
+    },
+    {
+      "query": "\u0a95\u0ac3\u0aa4\u0acd\u0ab0\u0abf\u0aae \u0aac\u0ac1\u0aa6\u0acd\u0aa7\u0abf \u0ab6\u0ac1\u0a82 \u0a9b\u0ac7",
+      "latency_ms": 1.1778240004787222,
+      "results": 0
+    },
+    {
+      "query": "\u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0\u0aae\u0abe\u0a82 \u0a95\u0ac3\u0aa4\u0acd\u0ab0\u0abf\u0aae \u0aac\u0ac1\u0aa6\u0acd\u0aa7\u0abf \u0ab8\u0aae\u0a9c\u0abe\u0ab5\u0acb",
+      "latency_ms": 1.0564280000835424,
+      "results": 0
+    },
+    {
+      "query": "\u0aae\u0ab6\u0ac0\u0aa8 \u0ab2\u0ab0\u0acd\u0aa8\u0abf\u0a82\u0a97 \u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4\u0ac0\u0aae\u0abe\u0a82",
+      "latency_ms": 1.208069999847794,
+      "results": 0
+    },
+    {
+      "query": "Kumkum Bhagya serial characters",
+      "latency_ms": 12.048354000398831,
+      "results": 1
+    },
+    {
+      "query": "Kundali Bhagya serial characters",
+      "latency_ms": 12.225428999954602,
+      "results": 1
+    },
+    {
+      "query": "Kumkum Bhagya latest episodes",
+      "latency_ms": 2.6018399994427455,
+      "results": 0
+    },
+    {
+      "query": "Claude official MCP documentation",
+      "latency_ms": 26.808777000042028,
+      "results": 1
+    },
+    {
+      "query": "Claude API reference",
+      "latency_ms": 30.444748000263644,
+      "results": 4
+    },
+    {
+      "query": "latest AI news today",
+      "latency_ms": 46.71966699970653,
+      "results": 10
+    },
+    {
+      "query": "Python code for xyz_nonexistent_123",
+      "latency_ms": 4.097903000001679,
+      "results": 0
+    },
+    {
+      "query": "nonexistent_topic_abc999",
+      "latency_ms": 1.329539999460394,
+      "results": 0
+    },
+    {
+      "query": "capital of France",
+      "latency_ms": 55.87845499940158,
+      "results": 0
+    },
+    {
+      "query": "who wrote Romeo and Juliet",
+      "latency_ms": 1.2450630001694662,
+      "results": 0
+    },
+    {
+      "query": "photosynthesis process",
+      "latency_ms": 0.8934289999160683,
+      "results": 0
+    },
+    {
+      "query": "water cycle explanation",
+      "latency_ms": 1.2884900006611133,
+      "results": 0
+    },
+    {
+      "query": "Python vs JavaScript",
+      "latency_ms": 173.8332029999583,
+      "results": 10
+    },
+    {
+      "query": "React vs Angular",
+      "latency_ms": 2.914073000283679,
+      "results": 1
+    },
+    {
+      "query": "what causes diabetes",
+      "latency_ms": 1.217293000081554,
+      "results": 0
+    },
+    {
+      "query": "common cold remedies",
+      "latency_ms": 1.4588639996873098,
+      "results": 0
+    },
+    {
+      "query": "stock market basics",
+      "latency_ms": 4.566917999909492,
+      "results": 0
+    },
+    {
+      "query": "mutual funds explained",
+      "latency_ms": 11.200121000001673,
+      "results": 0
+    },
+    {
+      "query": "best places to visit in India",
+      "latency_ms": 62.53093000032095,
+      "results": 10
+    },
+    {
+      "query": "how to get a passport",
+      "latency_ms": 2.177104000111285,
+      "results": 1
+    },
+    {
+      "query": "masala dosa recipe",
+      "latency_ms": 0.984940000307688,
+      "results": 0
+    },
+    {
+      "query": "chocolate cake recipe",
+      "latency_ms": 1.0816700005307212,
+      "results": 0
+    },
+    {
+      "query": "best strategy games 2026",
+      "latency_ms": 34.716115000264836,
+      "results": 1
+    },
+    {
+      "query": "how to play chess",
+      "latency_ms": 1.5166390003287233,
+      "results": 0
+    },
+    {
+      "query": "cricket world cup winners",
+      "latency_ms": 2.032336999945983,
+      "results": 0
+    },
+    {
+      "query": "olympic games history",
+      "latency_ms": 1.422203000402078,
+      "results": 0
+    },
+    {
+      "query": "best smartphones under 30000",
+      "latency_ms": 1.1834029992314754,
+      "results": 0
+    },
+    {
+      "query": "wireless headphones comparison",
+      "latency_ms": 0.9666979995017755,
+      "results": 0
+    },
+    {
+      "query": "how to learn programming",
+      "latency_ms": 104.38172799968015,
+      "results": 10
+    },
+    {
+      "query": "UPSC exam preparation",
+      "latency_ms": 1.2368140005492023,
+      "results": 0
+    },
+    {
+      "query": "what is cloud computing",
+      "latency_ms": 96.04523399957543,
+      "results": 8
+    },
+    {
+      "query": "blockchain technology explained",
+      "latency_ms": 23.998161000235996,
+      "results": 1
+    },
+    {
+      "query": "software engineer interview questions",
+      "latency_ms": 104.04644800019014,
+      "results": 10
+    },
+    {
+      "query": "how to write a resume",
+      "latency_ms": 73.02039200021682,
+      "results": 9
+    },
+    {
+      "query": "weather in Mumbai",
+      "latency_ms": 17.793911999433476,
+      "results": 4
+    },
+    {
+      "query": "krtrim buddhimatta kya hai",
+      "latency_ms": 0.8475619997625472,
+      "results": 0
+    },
+    {
+      "query": "artificial intelligence in hindi",
+      "latency_ms": 64.43699400006153,
+      "results": 8
+    },
+    {
+      "query": "give me doremon cartoon character names",
+      "latency_ms": 1.1734019999494194,
+      "results": 0
+    },
+    {
+      "query": "Pythn palindrome program",
+      "latency_ms": 1.4685189998999704,
+      "results": 0
+    },
+    {
+      "query": "reqests timeout library",
+      "latency_ms": 2.0833660000789678,
+      "results": 0
+    },
+    {
+      "query": "mosam Mumbai",
+      "latency_ms": 0.7851100008338108,
+      "results": 0
+    },
+    {
+      "query": "mausam Mumbai",
+      "latency_ms": 0.7873889999245876,
+      "results": 0
+    },
+    {
+      "query": "Python mein palindrome program",
+      "latency_ms": 5.06445600058214,
+      "results": 1
+    },
+    {
+      "query": "give me Nebula museum exhibit names",
+      "latency_ms": 1.0641520002536708,
+      "results": 0
+    },
+    {
+      "query": "Nebula museum gallery",
+      "latency_ms": 0.9309470005973708,
+      "results": 0
+    }
+  ]
+}

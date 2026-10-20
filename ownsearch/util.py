@@ -65,15 +65,15 @@ def sha256_text(text):
 
 def normalize_text(text):
     """Single-line normalisation: NFKC, invisible characters removed, whitespace collapsed."""
-    text = unicodedata.normalize("NFKC", text or "").replace("\x00", " ")
-    text = _INVISIBLE.sub("", text)
+    text = unicodedata.normalize("NFC", text or "").replace("\x00", " ")
+    text = _INVISIBLE.sub(lambda m:m.group() if m.group() in ("\u200c","\u200d") else "", text)
     return re.sub(r"\s+", " ", text).strip()
 
 
 def clean_multiline(text, keep_formfeed=False):
     """Collapse whitespace inside lines but keep paragraph breaks (and optional page breaks)."""
-    text = unicodedata.normalize("NFKC", text or "").replace("\x00", " ")
-    text = _INVISIBLE.sub("", text)
+    text = unicodedata.normalize("NFC", text or "").replace("\x00", " ")
+    text = _INVISIBLE.sub(lambda m:m.group() if m.group() in ("\u200c","\u200d") else "", text)
     if keep_formfeed:
         pages = text.split("\f")
         return "\f".join(clean_multiline(p) for p in pages)

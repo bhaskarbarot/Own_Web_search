@@ -1,0 +1,41 @@
+.......................................F.............................F..............................................F..........................
+======================================================================
+FAIL: test_evaluation_metrics (tests.test_evaluation_set.EvaluationTests.test_evaluation_metrics)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_evaluation_set.py", line 473, in test_evaluation_metrics
+    self.assertGreater(s["p@5"], 0.5, f"P@5 too low: {s['p@5']}")
+AssertionError: 0.1882 not greater than 0.5 : P@5 too low: 0.1882
+
+======================================================================
+FAIL: test_freshness_filter_rejects_discovered_crawl_date (tests.test_quality_and_providers.QualityAndProviderTests.test_freshness_filter_rejects_discovered_crawl_date)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_quality_and_providers.py", line 161, in test_freshness_filter_rejects_discovered_crawl_date
+    self.assertNotIn("https://undated.example.com/page", matching_urls)
+AssertionError: 'https://undated.example.com/page' unexpectedly found in ['https://undated.example.com/page']
+
+======================================================================
+FAIL: test_freshness (tests.test_search.SearchTests.test_freshness)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_search.py", line 70, in test_freshness
+    self.assertEqual([x["title"] for x in r["results"]], ["Electric vehicle sales in India rise"])
+AssertionError: Lists differ: ['Ele[15 chars]ales in India rise', 'Electric vehicles in India: an overview'] != ['Ele[15 chars]ales in India rise']
+
+First list contains 1 additional elements.
+First extra element 1:
+'Electric vehicles in India: an overview'
+
+- ['Electric vehicle sales in India rise',
+?                                        ^
+
++ ['Electric vehicle sales in India rise']
+?                                        ^
+
+-  'Electric vehicles in India: an overview']
+
+----------------------------------------------------------------------
+Ran 143 tests in 32.355s
+
+FAILED (failures=3)

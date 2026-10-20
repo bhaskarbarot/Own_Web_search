@@ -66,6 +66,7 @@ class DocumentStore:
         self.root = self.settings.data_dir
         self.settings.ensure_dirs()
         self.db = Database(self.settings.db_path, SCHEMA)
+        self.db.execute('CREATE TABLE IF NOT EXISTS originals(doc_id INTEGER PRIMARY KEY,title TEXT,body BLOB)')
         with self.db.tx() as c:
             c.execute("INSERT OR IGNORE INTO meta(key, value) VALUES('seq', '0')")
         self._migrate_legacy()
@@ -102,22 +103,35 @@ class DocumentStore:
         key = normalize_url(url) or (url or "").strip()
         if not key:
             raise ValueError("Document needs a URL or identifier")
+        from .language import identify
+        language = identify((title or '') + ' ' + (text or '')[:4000], lang)
+        lang = lang or (language['language'] if language['confidence'] >= .8 else '')
+        metadata = dict(metadata or {})
+        metadata.setdefault('language_evidence',language)
+        original_title=(title or "")[:1000]
+        original_text=(text or "")[:self.settings.max_text_chars]
         title = normalize_text(title)[:1000]
         text = clean_multiline(text, keep_formfeed=True)[: self.settings.max_text_chars]
         if not title and not text:
             raise ValueError("Document has no searchable content")
         tokens = tokenize(title + " " + text[:300_000])
-        content_hash = sha256_text(title + "\n" + text)
+        content_hash = sha256_text(original_title + "\n" + original_text)
         fingerprint = simhash(tokens)
         quality = page_quality(title, tokens, key, n_links if n_links is not None else len(links or ()),
                                hidden_chars, len(text))
         now = utc_now()
         fetched_at = fetched_at or now
-        meta_json = json.dumps(metadata or {}, ensure_ascii=False)[:200_000]
+        meta_json = json.dumps(metadata or {}, ensure_ascii=False)
+        if len(meta_json)>200_000:
+            raise ValueError('Document metadata exceeds 200000 characters')
         with self.db.tx() as c:
-            row = c.execute("SELECT id, content_hash, active, duplicate_of, discovered_at FROM documents WHERE url=?",
+            row = c.execute("SELECT id, content_hash, active, duplicate_of, discovered_at, lang, published_at, modified_at, description, headings, metadata FROM documents WHERE url=?",
                             (key,)).fetchone()
-            if row and row["content_hash"] == content_hash and row["active"]:
+            if row:
+                c.execute('INSERT OR REPLACE INTO originals VALUES(?,?,?)',(row['id'],original_title,_compress(original_text)))
+            if row and row["content_hash"] == content_hash and row["active"] and all((row[k] or '') == (v or '') for k,v in (
+                    ('lang',lang),('published_at',published_at),('modified_at',modified_at),('description',normalize_text(description)[:2000]),
+                    ('headings',normalize_text(headings)[:20000]),('metadata',meta_json))):
                 c.execute("UPDATE documents SET fetched_at=? WHERE id=?", (fetched_at, row["id"]))
                 return {"id": row["id"], "status": "unchanged", "duplicate_of": row["duplicate_of"], "changed": False}
             dup = self._find_duplicate(c, content_hash, fingerprint, len(tokens), row["id"] if row else None)
@@ -141,6 +155,7 @@ class DocumentStore:
                 cols = ", ".join(values)
                 c.execute(f"INSERT INTO documents({cols}) VALUES({', '.join(':' + k for k in values)})", values)
                 doc_id, status = c.execute("SELECT last_insert_rowid()").fetchone()[0], "new"
+            c.execute('INSERT OR REPLACE INTO originals VALUES(?,?,?)',(doc_id,original_title,_compress(original_text)))
             c.execute("DELETE FROM simhash_bands WHERE doc_id=?", (doc_id,))
             if dup is None and len(tokens) >= 50:
                 c.executemany("INSERT OR IGNORE INTO simhash_bands(band, value, doc_id) VALUES(?, ?, ?)",
@@ -225,6 +240,14 @@ class DocumentStore:
                 c.execute(f"UPDATE documents SET seq=? WHERE id IN ({','.join('?' * len(chunk))})", [seq, *chunk])
 
     # ------------------------------------------------------------ reads
+    def originals(self,doc_ids):
+        ids=list(doc_ids);result={}
+        for offset in range(0,len(ids),400):
+            batch=ids[offset:offset+400]
+            for row in self.db.query('SELECT doc_id,title,body FROM originals WHERE doc_id IN ('+','.join('?' for _ in batch)+')',batch):
+                result[row['doc_id']]={'title':row['title'],'text':_decompress(row['body'])}
+        return result
+
     def changes_since(self, seq, limit=1000):
         return self.db.query(
             "SELECT id, seq, url, host, title, description, headings, body, lang, source_type, content_type, "

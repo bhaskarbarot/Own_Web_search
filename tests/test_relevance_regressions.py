@@ -138,6 +138,7 @@ class RelevanceRegressionTests(unittest.TestCase):
 
     def test_reranking_wait_cannot_exceed_expired_request_budget(self):
         engine, _ = make_engine(max_concurrent_searches=1,discovery_timeout=0.02)
+        engine.search("warmup",live=False,use_cache=False)  # isolate the reranking wait from cold parsing
         def blocked_discovery(*args,**kwargs):
             engine._slots.acquire()
             time.sleep(0.03)

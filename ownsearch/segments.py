@@ -23,14 +23,14 @@ import sys
 import zlib
 from itertools import accumulate
 
-FIELDS = ("title", "headings", "url", "anchor", "body", "meta")
+FIELDS = ("title", "headings", "url", "anchor", "body", "exact", "ngram", "phonetic", "meta")
 NF = len(FIELDS)
-F_TITLE, F_HEAD, F_URL, F_ANCHOR, F_BODY, F_META = range(NF)
+F_TITLE, F_HEAD, F_URL, F_ANCHOR, F_BODY, F_EXACT, F_NGRAM, F_PHONETIC, F_META = range(NF)
 POSITION_GAP = 64                # gap between fields so phrases never span two fields
 BLOCK_TERMS = 64
 CHAMP_MIN_DF = 4096              # terms with at least this df get a champion (top-k) list
 CHAMP_K = 1000
-CHAMP_WEIGHTS = (3.0, 1.8, 1.2, 2.0, 1.0, 0.0)
+CHAMP_WEIGHTS = (3.0, 1.8, 1.2, 2.0, 1.0, 0.1, 0.1, 0.1, 0.0)
 
 _ENTRY = struct.Struct("<IQIQIQI")   # df, post_off, post_len, pos_off, pos_len, champ_off, champ_len
 _TLEN = struct.Struct("<H")
@@ -286,14 +286,17 @@ class SegmentReader:
         with open(base + ".docs", "rb") as f:
             raw = f.read()
         magic, n, nf = _DOCS_HDR.unpack_from(raw, 0)
-        if magic != b"OSD1" or nf != NF:
+        if magic != b"OSD1" or nf not in (6, NF):
             raise ValueError(f"Bad segment header in {name}")
         o = _DOCS_HDR.size
         self.n = n
+        self.stored_nf = nf
         self.docids = _arr("q", raw[o:o + 8 * n])
         o += 8 * n
-        self.lengths = _arr("I", raw[o:o + 4 * n * NF])
-        o += 4 * n * NF
+        self.lengths = _arr("I", raw[o:o + 4 * n * nf])
+        o += 4 * n * nf
+        if nf == 6:
+            self.lengths = array.array("I", (v for i in range(n) for v in list(self.lengths[i*6:i*6+5]) + [0,0,0,self.lengths[i*6+5]]))
         self.static = raw[o:o + n]
         with open(base + ".tix", encoding="utf-8") as f:
             tix = json.load(f)
@@ -359,8 +362,11 @@ class SegmentReader:
         raw = zlib.decompress(self.post[post_off:post_off + post_len])
         n = df
         docs = list(accumulate(_arr("I", raw[:4 * n])))
-        tfs = raw[4 * n:4 * n + NF * n]
-        posoff = _arr("I", raw[4 * n + NF * n:])
+        nf = self.stored_nf
+        tfs = raw[4 * n:4 * n + nf * n]
+        posoff = _arr("I", raw[4 * n + nf * n:])
+        if nf == 6:
+            tfs = tfs[:5*n] + bytes(3*n) + tfs[5*n:]
         return Postings(docs, tfs, posoff, pos_off)
 
     def champions(self, entry):

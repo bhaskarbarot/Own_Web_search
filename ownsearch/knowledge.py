@@ -180,7 +180,7 @@ class Knowledge:
         self.search_records = {}
 
     def _json(self, url, max_bytes=20_000_000):
-        if self.cached_only or (self.deadline is not None and time.monotonic() >= self.deadline):
+        if not self.settings.remote_knowledge_enabled or self.cached_only or (self.deadline is not None and time.monotonic() >= self.deadline):
             return self.cache.get(url)
         return _get_json(self.fetcher, url, max_bytes, self.cache, self.deadline)
 
@@ -452,10 +452,14 @@ class Knowledge:
             if len(chosen) >= max_entities:
                 break
         full = self.entities([c.qid for c in chosen], claims=True) if load_claims else {}
-        from .intent import get_model
-        model = get_model(self.settings.data_dir)
         for ent in chosen:
             ent.claims = (full.get(ent.qid) or {}).get("claims") or {}
+        return self.attach_urls(chosen,load_urls=load_urls)
+
+    def attach_urls(self,entities,load_urls=True):
+        from .intent import get_model
+        model = get_model(self.settings.data_dir)
+        for ent in entities:
             urls = []
             url_pids = [pid for pid, claims in ent.claims.items()
                         if any((c.get("mainsnak") or {}).get("datatype") == "url" for c in claims)]
@@ -481,7 +485,7 @@ class Knowledge:
                     if snak.get("datatype") == "url" and (snak.get("datavalue") or {}).get("value"):
                         urls.append(snak["datavalue"]["value"])
             ent.urls = list(dict.fromkeys(urls))
-        return chosen
+        return entities
 
     # ------------------------------------------------------------ facts
     def answer(self, entity, question_words):

@@ -1,0 +1,16 @@
+{
+  "operation": "pip install --dry-run ai4bharat-transliteration",
+  "resolution_completed": true,
+  "actual_install_performed": false,
+  "execution_tested": false,
+  "default_enabled": false,
+  "observed_dependencies": [
+    "torch",
+    "fairseq",
+    "nvidia-cudnn-cu13",
+    "nvidia-cublas",
+    "cuda-toolkit"
+  ],
+  "log_sha256": "caa9eb1bf040cc0b8dc3030a4f0d153b36ef843f2927d68fb56110cb06f4696f",
+  "reason": "Dependency resolution includes large GPU packages; rule-based path retained. No library/model accuracy claim."
+}

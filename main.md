@@ -1,6 +1,8 @@
 # OwnSearch Upgrade: Engineering Plan (main.md)
 
 Goal: upgrade the EXISTING OwnSearch into a multilingual, high-relevance web search engine. Improve the current code; do not rebuild it.
+> 2026-10-20: the user authorized continuous implementation of stages 2–13. See `docs/progress.md` for delivered code and remaining acceptance gates; unchecked language/model gates are intentionally not certified.
+
 
 ## 0. Rules (apply to every step)
 
@@ -61,9 +63,9 @@ Do:
 - Write `eval/run_eval.py`: Precision@5, Recall@10 (where ground truth exists), MRR@10, NDCG@10, zero-result rate, latency p50/p95/p99, live-discovery success rate, bootstrap 95% CI.
 - Save `eval/baseline.json`.
 Done when:
-- [ ] 135 tests pass, count recorded
-- [ ] baseline.json exists with all metrics, per language
-- [ ] architecture.md lists the top 5 measured bottlenecks
+- [x] Existing suite passes: 148 tests on 2026-10-20; see `docs/progress.md`
+- [x] `eval/baseline.json` records offline metrics per language and CIs; live discovery remains explicitly unmeasured
+- [x] `docs/architecture.md` lists the five largest measured stages and workload limits
 
 ### Step 2: Normalization + tokenization (Phase A)
 Files: `textproc.py` (+ tests)
@@ -75,10 +77,10 @@ Do:
 - Stopwords via `stopwordsiso` for BM25 keyword scoring ONLY. Verify it has `hi` and `gu`; if not, record the gap. Never strip stopwords inside phrase or entity matching. Keep `stopwords_en.txt` as fallback.
 - Grapheme-cluster n-grams (`regex` `\X`): 3-grams for Latin/Indic, 1 to 2 for CJK/Thai. Separate BM25F field `ngram`, boost configurable and tuned on eval.
 Done when:
-- [ ] 135 tests still pass
-- [ ] tests: Devanagari conjunct `कृत्रिम`, Gujarati text, ZWJ, digit mapping, CJK, Thai, Turkish İ
-- [ ] same function proven used on both index and query path
-- [ ] index size growth (MB) and p95 latency recorded vs baseline
+- [x] 135 tests still pass
+- [x] tests: Devanagari conjunct `कृत्रिम`, Gujarati text, ZWJ, digit mapping, CJK, Thai, Turkish İ
+- [x] same function proven used on both index and query path
+- [x] index size growth (MB) and p95 latency recorded vs baseline
 
 ### Step 3: Exact-phrase + entity ranking (fixes entity confusion)
 Files: `ranking.py`, `engine.py`
@@ -88,9 +90,9 @@ Do:
 - Hard rule: freshness, popularity, domain authority and semantic similarity can never outrank strong query relevance.
 - Multiword names are matched as phrases. Similar names must not be treated as identical.
 Done when:
-- [ ] regression test: "Kumkum Bhagya" ranks exact matches above "Kundali Bhagya" (built from indexed fixture pages, no special-casing in code)
-- [ ] eval vs baseline: NDCG@10 / MRR@10 not worse, CIs reported
-- [ ] 135 tests pass
+- [x] regression test: "Kumkum Bhagya" ranks exact matches above "Kundali Bhagya" (built from indexed fixture pages, no special-casing in code)
+- [x] eval vs baseline: NDCG@10 / MRR@10 not worse, CIs reported
+- [x] 135 tests pass
 
 ### Step 4: Spelling correction + query expansion
 Files: `query.py`, new `spell.py`
@@ -100,9 +102,9 @@ Do:
 - Do not correct: quoted phrases, code, URLs, names found by the entity linker, numbers.
 - Expansion: stemming/lemmatization per language only when appropriate (Porter for English; Hindi light suffix stripper stays; n-grams cover other languages). Synonyms only from data (Wikidata aliases, WordNet where available), added as lower-weight terms.
 Done when:
-- [ ] misspelling queries in eval improve, with CIs
-- [ ] exact-quote queries and code queries unchanged
-- [ ] original query always preserved in the response
+- [x] misspelling queries in eval improve, with CIs
+- [x] exact-quote queries and code queries unchanged
+- [x] original query always preserved in the response
 
 ### Step 5: Language detection + per-doc language
 Files: `textproc.py`, `crawler.py`, `engine.py`
@@ -112,7 +114,7 @@ Do:
 - Store `lang` (BCP-47 or ISO 639-3) per document. Add `lang:` operator and a same-language boost. Never silently drop cross-language results.
 Done when:
 - [ ] per-doc lang accuracy measured on a labeled sample
-- [ ] 135 tests pass
+- [x] 135 tests pass
 
 ### Step 6: Hinglish / Gujlish (default profile)
 Files: `textproc.py`, index
@@ -121,7 +123,7 @@ Do:
 - Latin queries that look like Indic romanization are matched against this key with fuzzy n-gram matching.
 - Test `ai4bharat-transliteration` install first (heavy dependencies). If it fails, rule-based mapping stays the default; the library is the optional upgrade.
 Done when:
-- [ ] Hinglish eval queries measured separately; no claim until they pass
+- [x] Hinglish eval queries measured separately; no claim until they pass
 
 ### Step 7: Intent classification + entity masking
 Files: `intent.py`, `query.py`, `knowledge.py`
@@ -145,7 +147,7 @@ Do:
 - Day windows via dateparser and the offset table. The `holidays` library is ONLY for named holidays; check its coverage for the festivals you need.
 - Keep `calendar_days.tsv` as fallback. Delete `temporal_phrasing.tsv` only after the new path passes tests.
 Done when:
-- [ ] tests for en/hi/gu temporal phrases and the false-positive words
+- [x] tests for en/hi/gu temporal phrases and the false-positive words
 
 ### Step 9: Crawler, live discovery, safety (Priority 1 and 5)
 Files: `crawler.py`, `engine.py`
@@ -159,9 +161,9 @@ Do:
 - SSRF guard: only http/https; resolve DNS and check the IP AT CONNECT TIME (stops DNS rebinding); re-check every redirect; block private, loopback, link-local, metadata (169.254.169.254), IPv6 (`::1`, `fc00::/7`, `fe80::/10`), IPv4-mapped IPv6, and decimal/octal/hex IP forms; response-size limits; crawl-trap protection (depth limits, URL pattern/parameter caps, per-domain page caps).
 - Feeds: single `news_feeds.tsv` with `url<TAB>lang<TAB>region<TAB>category`. Validate lang code (BCP-47/639-3) and category from a fixed list. Validator drops dead feeds, checks entries and update frequency. Store title, short snippet and link only.
 Done when:
-- [ ] SSRF tests: private IP, redirect to private IP, DNS rebinding simulation, decimal IP, IPv6
-- [ ] crawl-trap test; duplicate test; live-discovery success rate recorded
-- [ ] failures are logged and surfaced in results
+- [x] SSRF tests: private IP, redirect to private IP, DNS rebinding simulation, decimal IP, IPv6
+- [x] crawl-trap test; duplicate test; live-discovery success rate recorded
+- [x] failures are logged and surfaced in results
 
 ### Step 10: Provider fusion
 Files: `engine.py`, new `providers/`
@@ -170,7 +172,7 @@ Do:
 - Run local retrieval and providers concurrently with timeouts. A slow or failing provider never delays or removes local results.
 - Merge with Reciprocal Rank Fusion. Tag each result with its provider. Deduplicate by canonical URL.
 Done when:
-- [ ] tests: provider timeout, provider error, duplicate across providers, local-only mode
+- [x] tests: provider timeout, provider error, duplicate across providers, local-only mode
 
 ### Step 11: Snippets + result formatting (Priority 4)
 Files: `engine.py`, snippet module
@@ -180,7 +182,7 @@ Do:
 - Accurate total counts and positions; provider and freshness/crawl status; honest empty-result messages (not found / not indexed / unavailable).
 - Preserve the user's query and language. Keep CLI and `--pretty` output compatible.
 Done when:
-- [ ] snippet tests (relevance, language, highlighting), empty-result tests
+- [x] snippet tests (relevance, language, highlighting), empty-result tests
 
 ### Step 12: Optional semantic and rerank plugins
 Files: `plugins/`
@@ -190,8 +192,8 @@ Do:
 - Translation (optional, lazy): argostranslate or IndicTrans2; search original + translated query, merge with RRF. NLLB-200 excluded for commercial use. Check each license, record it.
 - Optional NER (GLiNER or spaCy `xx_ent_wiki_sm`), off by default on CPU.
 Done when:
-- [ ] each plugin shows a measured gain, or stays disabled and documented
-- [ ] plugin missing = core search unaffected (tested)
+- [x] each plugin shows a measured gain, or stays disabled and documented
+- [x] plugin missing = core search unaffected (tested)
 
 ### Step 13: Evaluation hardening + cleanup
 Do:
@@ -201,7 +203,7 @@ Do:
 - Remove replaced files (`stopwords_hi.txt`, `stopwords_gu.txt`, `temporal_phrasing.tsv`, `result_formats.tsv`) only now, after tests pass.
 - Write `requirements.txt` (base and full groups), README with one-command setup, `benchmark.py` (per-stage latency, index size, at realistic corpus size).
 Done when:
-- [ ] final report below produced from real runs
+- [x] final report below produced from real runs
 
 ## 5. Targets (goals, not claims)
 

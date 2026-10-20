@@ -48,7 +48,8 @@ def feed_urls(settings):
             urls += Path(settings.news_feeds_file).read_text(encoding="utf-8").splitlines()
         except OSError:
             pass
-    return list(dict.fromkeys(u.strip() for u in urls if u.strip() and not u.lstrip().startswith("#")))
+    from .feeds import registry
+    return [feed.url for feed in registry(urls)[0]]
 
 
 def _client(settings, timeout, client):
@@ -91,6 +92,63 @@ class SearXNGProvider(BaseProvider):
             return [], [f"SearXNG request failed: {e}"]
         except Exception as e:
             return [], [f"SearXNG request failed: {e}"]
+
+
+class PackageMetadataProvider(BaseProvider):
+    """Discover documentation URLs from public package metadata, without guessing domains."""
+    name='package_metadata'
+
+    def is_configured(self,settings):
+        return bool(settings.package_lookup_url)
+
+    def discover(self,query,pq,settings,timeout=3.0,log=None,client=None):
+        if pq.intent!='tech_docs' or any(e.urls for e in pq.entities):return [],[]
+        import re
+        from urllib.parse import quote
+        from .knowledge import Entity
+        client=_client(settings,timeout,client)
+        candidates=[(name,entity) for entity in pq.entities for name in entity.names]
+        candidates.extend((name,None) for name in pq.entity)
+        seen=set();errors=[];model=get_model(settings.data_dir)
+        for name,entity in candidates:
+            if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,99}',name):continue
+            name=name.lower()
+            if name in seen:continue
+            seen.add(name)
+            if len(seen)>4 or time.monotonic()>=client.deadline:break
+            try:
+                response=client.raw(settings.package_lookup_url.format(name=quote(name,safe='')),accept='application/json',max_bytes=2_000_000)
+                if response.status==404:continue
+                if response.status!=200:raise ValueError('HTTP '+str(response.status))
+                info=json.loads(response.body.decode('utf-8')).get('info',{})
+                published_name=info.get('name','')
+                # Package naming equivalence is syntax defined by the registry.
+                canonical=lambda value:re.sub(r'[-_.]+','-',value).lower()
+                if canonical(published_name)!=canonical(name):continue
+                if entity and len(tokenize(entity.label))>1:
+                    context=set(analyze(info.get('summary','')+' '+info.get('description','')[:2000]))
+                    if not set(analyze(entity.label))<=context:continue
+                urls=[]
+                for role,url in (info.get('project_urls') or {}).items():
+                    scores=model.classify(role)[1]
+                    relevant=max(scores.get('tech_docs',0),scores.get('company',0))
+                    competing=max((v for label,v in scores.items() if label not in ('tech_docs','company')),default=0)
+                    if relevant>competing and _http_url(url):
+                        urls.append((scores.get('tech_docs',0),_http_url(url)))
+                if not urls and _http_url(info.get('docs_url')):urls.append((1,_http_url(info['docs_url'])))
+                if not urls and _http_url(info.get('home_page')):urls.append((0,_http_url(info['home_page'])))
+                roots=list(dict.fromkeys(url for _,url in sorted(urls,reverse=True)))[:3]
+                if not roots:continue
+                if entity is None and not pq.entities:
+                    entity=Entity('package:'+published_name,published_name,info.get('summary',''),[name],name,1.0)
+                    pq.entities=[entity]
+                    pq.required=[term for term in pq.required if term not in analyze(name)]
+                if entity:
+                    entity.urls=list(dict.fromkeys(entity.urls+roots))
+                pq.reference_roots=list(dict.fromkeys(pq.reference_roots+roots))
+                return [],errors
+            except Exception as exc:errors.append('Package metadata unavailable: '+str(exc))
+        return [],errors
 
 
 class NewsFeedProvider(BaseProvider):
@@ -272,6 +330,11 @@ class OfficialSiteProvider(BaseProvider):
                                     if any("".join(tokenize(name)) in "".join(tokenize(urlparse(normalized).hostname or ""))
                                            for name in entity.names if len("".join(tokenize(name))) >= 3):
                                         entity.urls.append(normalized)
+                internal=[item for score,item in candidates.values() if item.url not in roots and urlparse(item.url).hostname==host]
+                if len(internal)>=2:
+                    # Spend the remaining query budget fetching the best known
+                    # pages; sitemaps and additional roots are fallback discovery.
+                    break
                 origin = urlparse(r.final_url)._replace(path="", query="", fragment="").geturl()
                 maps = [(u, 0) for u in client.policy(r.final_url).sitemaps[:3]] or [(origin + "/sitemap.xml", 0)]
                 seen, examined = set(), 0
@@ -328,7 +391,7 @@ def gather_candidates(engine, query, pq, max_urls=6, log=None, client=None):
     items, errors = [], []
     reference = WikipediaProvider()
     official = OfficialSiteProvider()
-    focused = [reference, official] if pq.intent in ("general", "reference") else [official, reference]
+    focused = [reference, official] if pq.intent in ("general", "reference") else [PackageMetadataProvider(), official, reference]
     for provider in [SearXNGProvider(), NewsFeedProvider(), FinancialProvider()] + focused:
         if not provider.is_configured(settings) or time.monotonic() >= client.deadline:
             continue

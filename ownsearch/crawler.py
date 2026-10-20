@@ -28,6 +28,9 @@ class Crawler:
         self._robots_lock = threading.Lock()
         self._host_locks = defaultdict(threading.Lock)
         self.stats = Counter()
+        self._deadline = None
+        self._reserved_bytes = 0
+        self._bytes_at_start = 0
         self._stats_lock = threading.Lock()
 
     def _say(self, msg):
@@ -37,6 +40,22 @@ class Crawler:
     def _count(self, key, n=1):
         with self._stats_lock:
             self.stats[key] += n
+
+    def _fetch_budgeted(self,url,**kwargs):
+        requested=kwargs.get('max_bytes',self.settings.max_page_bytes)
+        with self._stats_lock:
+            remaining=self.settings.max_crawl_bytes-(self.stats['decoded_bytes']-self._bytes_at_start)-self._reserved_bytes
+            reservation=min(self.settings.max_decompressed_bytes,requested*4,remaining)
+            if reservation<=0:raise FetchError('Crawl byte budget exhausted','budget')
+            self._reserved_bytes+=reservation
+        try:
+            kwargs['max_bytes']=min(requested,reservation)
+            response=self.fetcher.fetch(url,max_decompressed_bytes=reservation,**kwargs)
+            if len(response.body)>reservation:raise FetchError('Decoded crawl response exceeds byte reservation','too_large')
+            with self._stats_lock:self.stats['decoded_bytes']+=len(response.body)
+            return response
+        finally:
+            with self._stats_lock:self._reserved_bytes-=reservation
 
     # ------------------------------------------------------------ robots
     def robots_for(self, url):
@@ -74,7 +93,7 @@ class Crawler:
         robots_url = origin_of(normalize_url(url)) + "/robots.txt"
         host = host_of(url)
         try:
-            res = self.fetcher.fetch(robots_url, max_bytes=512_000, accept="text/plain,*/*;q=0.5", retries=1)
+            res = self._fetch_budgeted(robots_url, max_bytes=512_000, accept="text/plain,*/*;q=0.5", retries=1, deadline=self._deadline)
         except FetchError as e:
             if e.kind in ("blocked", "invalid"):
                 return RobotsPolicy.disallow_all(None), 3600
@@ -120,9 +139,9 @@ class Crawler:
             return "disallowed"
         doc_exists = bool(item.get("doc_id"))
         try:
-            res = self.fetcher.fetch(url, etag=item.get("etag") if doc_exists else None,
+            res = self._fetch_budgeted(url, etag=item.get("etag") if doc_exists else None,
                                      last_modified=item.get("last_modified") if doc_exists else None,
-                                     allow=lambda u: self.robots_for(u).allowed(u))
+                                     allow=lambda u: self.robots_for(u).allowed(u), deadline=self._deadline)
         except FetchError as e:
             result = {"robots": "disallowed", "blocked": "blocked", "invalid": "failed", "redirect": "failed",
                       "too_large": "failed", "encoding": "failed", "tls": "failed"}.get(e.kind, "retry")
@@ -190,6 +209,9 @@ class Crawler:
         stop = stop_event or threading.Event()
         self.frontier.recover_leases()
         deadline = time.monotonic() + duration if duration else None
+        self._deadline = deadline
+        initial_bytes = self.stats.get("decoded_bytes",0)
+        self._bytes_at_start = initial_bytes
         started = [0]
         lock = threading.Lock()
         start_time = time.monotonic()
@@ -199,6 +221,7 @@ class Crawler:
                 if deadline and time.monotonic() > deadline:
                     return
                 with lock:
+                    if self.stats.get("decoded_bytes",0)-initial_bytes >= self.settings.max_crawl_bytes: return
                     if max_pages and started[0] >= max_pages:
                         return
                 item = self.frontier.claim()
@@ -209,6 +232,7 @@ class Crawler:
                     stop.wait(min(2.0, wait if wait is not None else 1.0) or 0.05)
                     continue
                 with lock:
+                    if self.stats.get("decoded_bytes",0)-initial_bytes >= self.settings.max_crawl_bytes: return
                     if max_pages and started[0] >= max_pages:
                         self.frontier.release(item["url"])
                         return

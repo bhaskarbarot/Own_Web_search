@@ -19,8 +19,8 @@ import time
 from .indexer import META
 from .segments import F_TITLE, F_URL, NF
 
-FIELD_WEIGHTS = (3.0, 1.8, 1.4, 2.2, 1.0, 0.0)
-FIELD_B = (0.40, 0.50, 0.30, 0.60, 0.75, 0.0)
+FIELD_WEIGHTS = (3.0, 1.8, 1.4, 2.2, 1.0, 0.05, 0.12, 0.12, 0.0)
+FIELD_B = (0.40, 0.50, 0.30, 0.60, 0.75, 0.0, 0.5, 0.5, 0.0)
 K1 = 1.2
 CAND_LIMIT = 30000          # max postings scanned for the lead term before switching to champion lists
 PHRASE_CHECK_LIMIT = 20000
@@ -35,6 +35,9 @@ DEFAULT_WEIGHTS = {
     "authority": 0.40,       # entity-provided official URL scope, gated on content relevance
     "format": 0.60,          # requested list/output grammar in a content-matching title
     "url": 0.12,             # fraction of query terms in the URL
+    "exact_title": 1.0,
+    "same_language": 0.12,
+    "ngram": 0.03, # secondary evidence only; never generates broad OR candidates
     "phrase": 0.30,          # whole query appears as a phrase
     "proximity": 0.30,       # 1 / (1 + extra words in the minimal window covering all terms)
     "passage": 0.25,         # best passage density
@@ -192,7 +195,7 @@ def retrieve(snap, q, want=400, deadline=None, need=10):
                 cand = cand[:PHRASE_CHECK_LIMIT]
                 if q.phrases:
                     cand = [d for d in cand if all(_phrase_ok(r, d, pl, ph) for ph in q.phrases)]
-                if q.excluded_phrases:
+                if q.excluded_phrases and not q.exact_excluded_phrases:
                     extra = {t: snap.postings(ri, t) for ph in q.excluded_phrases for t in ph}
                     cand = [d for d in cand if not any(_phrase_ok(r, d, extra, ph) for ph in q.excluded_phrases)]
             if q.intitle:

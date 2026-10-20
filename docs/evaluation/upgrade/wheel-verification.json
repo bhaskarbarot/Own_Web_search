@@ -1,0 +1,15 @@
+{
+  "wheel": "ownsearch-1.1.0-py3-none-any.whl",
+  "sha256": "f1bdf0db8f5b195af1785359d8c6fdade00bb597bb3c367c3beeeb0927b26f62",
+  "resources_present": [
+    "ownsearch/resources/intent_seed.tsv",
+    "ownsearch/resources/news_feeds.tsv",
+    "ownsearch/resources/calendar_days.tsv",
+    "ownsearch/resources/holiday_cues.tsv",
+    "ownsearch/plugins/semantic.py",
+    "ownsearch/providers/__init__.py"
+  ],
+  "isolated_install_passed": true,
+  "installed_resource_model_smoke_passed": true,
+  "version": "1.1.0"
+}

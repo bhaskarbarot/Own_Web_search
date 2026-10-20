@@ -15,7 +15,7 @@ def test_settings(tmp, **kw):
     base = dict(allow_private_hosts=True, default_delay=0.0, max_crawl_delay=0.0, fetch_retries=0,
                 fetch_timeout=5.0, crawl_threads=4, log_queries=False, ocr="off",
                 market_lookup_url="", market_chart_url="", news_feeds="", news_feeds_file="",
-                knowledge_enabled=False, searxng_url="", financial_provider_url="", brave_api_key="")
+                knowledge_enabled=False, package_lookup_url="", remote_knowledge_enabled=True, discovery_mode="inline", searxng_url="", financial_provider_url="", brave_api_key="")
     base.update(kw)
     return Settings.load(tmp, **base)
 

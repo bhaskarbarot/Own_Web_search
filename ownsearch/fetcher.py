@@ -12,6 +12,8 @@
 import http.client
 import ipaddress
 import socket
+import threading
+_DNS_SLOTS = threading.BoundedSemaphore(8)
 import ssl
 import time
 import zlib
@@ -172,11 +174,24 @@ class Fetcher:
         v4 = [a for a in addrs if ":" not in a]
         return (v4 or addrs)[0]
 
+    def _resolve_for_request(self,host,port,deadline):
+        until=min(deadline or float('inf'),time.monotonic()+self.settings.fetch_timeout)
+        if not _DNS_SLOTS.acquire(False):raise FetchError('DNS resolver capacity reached','timeout')
+        event=threading.Event();result={}
+        def lookup():
+            try:result['ip']=self.resolve(host,port)
+            except Exception as exc:result['error']=exc
+            finally:_DNS_SLOTS.release();event.set()
+        threading.Thread(target=lookup,name='ownsearch-dns',daemon=True).start()
+        if not event.wait(max(0,until-time.monotonic())):raise FetchError('DNS lookup exceeded request deadline','timeout')
+        if 'error' in result:raise result['error']
+        return result['ip']
+
     # ------------------------------------------------------------ requests
     def _request_once(self, url, headers, max_bytes, method="GET", deadline=None):
         p = self.check_url(url)
         port = p.port or (443 if p.scheme == "https" else 80)
-        ip = self.resolve(p.hostname, port)
+        ip = self._resolve_for_request(p.hostname, port, deadline)
         timeout = self.settings.fetch_timeout
         if deadline is not None:
             timeout = min(timeout, deadline - time.monotonic())
@@ -231,7 +246,7 @@ class Fetcher:
             conn.close()
 
     def fetch(self, url, *, etag=None, last_modified=None, max_bytes=None, accept=None,
-              allow=None, extra_headers=None, retries=None, method="GET", deadline=None, before_request=None):
+              allow=None, extra_headers=None, retries=None, method="GET", deadline=None, before_request=None, max_decompressed_bytes=None):
         """GET a URL safely. ``allow(url) -> bool`` vetoes redirect hops (robots.txt)."""
         max_bytes = int(max_bytes or self.settings.max_page_bytes)
         retries = self.settings.fetch_retries if retries is None else retries
@@ -286,7 +301,7 @@ class Fetcher:
                 continue
             if truncated and hdrs.get("content-encoding", "identity").lower() not in ("", "identity"):
                 raise FetchError("Compressed body exceeded size limit", "too_large")
-            body = decode_content(body, hdrs.get("content-encoding"), self.settings.max_decompressed_bytes)
+            body = decode_content(body, hdrs.get("content-encoding"), min(self.settings.max_decompressed_bytes, max_decompressed_bytes or self.settings.max_decompressed_bytes))
             result = FetchResult(url=url, final_url=current, status=status, headers=hdrs, body=body,
                                  redirects=redirects, elapsed=time.monotonic() - start, truncated=truncated)
             if status in (429, 503):

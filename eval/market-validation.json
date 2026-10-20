@@ -1,0 +1,36 @@
+[
+  {
+    "symbol": "NVDA",
+    "type": "stock_quote",
+    "status": "passed",
+    "checks": {
+      "currency": true,
+      "not_future": true,
+      "disclaimer_present": true,
+      "price": true,
+      "timestamp": true
+    },
+    "scope": "Primary-feed consistency and arithmetic; not independent-provider or investment validation."
+  },
+  {
+    "symbol": "TCS.NS",
+    "type": "stock_history",
+    "status": "passed",
+    "checks": {
+      "currency": true,
+      "not_future": true,
+      "disclaimer_present": true,
+      "series_matches_source": true,
+      "change": true,
+      "change_pct": true,
+      "mean": true,
+      "sma20": true,
+      "sma50": true,
+      "max_drawdown_pct": true,
+      "volatility_pct": true,
+      "date_bounds": true,
+      "chronological": true
+    },
+    "scope": "Primary-feed consistency and arithmetic; not independent-provider or investment validation."
+  }
+]

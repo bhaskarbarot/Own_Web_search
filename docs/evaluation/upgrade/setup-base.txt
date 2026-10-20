@@ -1,0 +1,8 @@
+Command: sh scripts/setup.sh base
+Disposable copy only; fresh .venv, editable package installation.
+Installed OwnSearch 1.1.0 with base dependencies.
+................................................................
+----------------------------------------------------------------------
+Ran 172 tests in 45.290s
+
+OK

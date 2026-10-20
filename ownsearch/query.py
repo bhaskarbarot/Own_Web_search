@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 
 from .dates import parse_date, parse_duration, parse_month_period, start_of_today_utc
 from .intent import get_model, requested_format
-from .textproc import STOPWORDS, analyze, stem, tokenize
+from .textproc import STOPWORDS, analyze, stem, tokenize, exact_tokens, ALL_STOPWORDS, stopwords
 from .util import iso_to_ts
 
 _LEX = re.compile(r'(-?)(?:(\w+):)?("([^"]*)"?|\S+)')     # operator syntax: -x  site:y  "phrase"
@@ -30,6 +30,8 @@ class ParsedQuery:
     required: list = field(default_factory=list)      # analysed terms that must match (AND)
     optional: list = field(default_factory=list)      # OR-group terms / stopwords: scored, not required
     alternatives: list = field(default_factory=list) # explicit OR syntax, never inferred from phrasing
+    exact_phrases: list = field(default_factory=list)
+    exact_excluded_phrases: list = field(default_factory=list)
     phrases: list = field(default_factory=list)       # [[term, ...]] must appear as phrases
     excluded: list = field(default_factory=list)
     excluded_phrases: list = field(default_factory=list)
@@ -38,10 +40,11 @@ class ParsedQuery:
     filetypes: list = field(default_factory=list)
     intitle: list = field(default_factory=list)
     inurl: list = field(default_factory=list)
+    language_info: dict = field(default_factory=dict)
     lang: str = None
     after: float = None
     before: float = None
-    explicit_date_filter: bool = False   # True when user used after:/before: operators
+    explicit_date_filter: bool = False   # explicit date operators or a requested freshness preset
     freshness: str = None          # None | recent | day | week | month | year
     fresh_intent: bool = False
     intent: str = "general"        # general | news | financial | tech_docs | company | reference
@@ -50,11 +53,13 @@ class ParsedQuery:
     entity: list = field(default_factory=list)        # subject words (original case): not query-phrasing words
     entity_terms: list = field(default_factory=list)  # analysed (stemmed) subject terms
     context: list = field(default_factory=list)       # remaining content words (phrasing, intent cues)
+    intent_confidence: dict = field(default_factory=dict)
     intent_scores: dict = field(default_factory=dict)
     entities: list = field(default_factory=list)      # linked knowledge-base entities (filled when live)
     named_phrases: list = field(default_factory=list) # capitalization evidence, used until linking succeeds
     reference_roots: list = field(default_factory=list) # source-provided lookup hints from the local index
     spelling_corrections: dict = field(default_factory=dict) # accepted source suggestions, never a topic dictionary
+    temporal: dict = field(default_factory=dict)
     result_format: str = None
 
     @property
@@ -88,10 +93,14 @@ class ParsedQuery:
                 "excluded": self.excluded, "sites": self.sites, "not_sites": self.not_sites,
                 "filetypes": self.filetypes, "intitle": self.intitle, "inurl": self.inurl, "lang": self.lang,
                 "after": self.after, "before": self.before, "freshness": self.freshness,
+                "explicit_date_filter": self.explicit_date_filter,
                 "fresh_intent": self.fresh_intent, "intent": self.intent,
                 "intent_details": self.intent_details, "subject": " ".join(self.entity),
                 "spelling_corrections": self.spelling_corrections,
                 "result_format": self.result_format,
+                "language": self.language_info,
+                "temporal": self.temporal,
+                "intent_confidence": self.intent_confidence,
                 "intent_scores": {k: round(v, 3) for k, v in self.intent_scores.items()},
                 "entities": [e.to_dict() for e in self.entities]}
 
@@ -101,9 +110,12 @@ def _date_ts(value):
     return iso_to_ts(iso) if iso else None
 
 
-def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_dir=None):
+def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_dir=None, preferred_language=None, timezone_name="UTC", holiday_country=""):
     q = ParsedQuery(raw=raw)
+    from .language import identify, tag
+    q.language_info = identify(raw, preferred_language)
     model = get_model(data_dir)
+    keyword_stopwords = ALL_STOPWORDS | stopwords(q.language_info.get("language", "en"))
     tokens = list(_LEX.finditer(raw or ""))
     words = []                         # (term, surface, is_stop, or_group)
     or_next = False
@@ -126,7 +138,7 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
             q.filetypes.append(FILETYPE_ALIASES.get(ft, ft))
             continue
         if op == "lang":
-            q.lang = value.lower()[:2]
+            q.lang = tag(value)
             continue
         if op in ("after", "since"):
             q.after = _date_ts(value)
@@ -145,6 +157,7 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
         if op and op not in ("http", "https"):
             value = f"{op} {value}"          # unknown "foo:bar" is plain text
         if phrase is not None:
+            (q.exact_excluded_phrases if neg else q.exact_phrases).append(exact_tokens(phrase))
             terms = analyze(phrase)
             if not terms:
                 continue
@@ -162,7 +175,7 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
             if neg:
                 q.excluded.append(term)
             else:
-                words.append((term, surf, surf in STOPWORDS, or_next))
+                words.append((term, surf, surf in keyword_stopwords, or_next))
             or_next = False
     content = [w for w in words if not w[2]]
     if not content and not q.phrases:
@@ -188,17 +201,27 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
         q.required = list(dict.fromkeys(w[0] for w in content))
     if freshness:
         q.freshness = str(freshness).lower()
+        q.explicit_date_filter = q.explicit_date_filter or q.freshness in FRESHNESS_WINDOWS
     if site:
         q.sites.extend(s.strip().lower() for s in str(site).split(",") if s.strip())
     if filetype:
         q.filetypes.extend(FILETYPE_ALIASES.get(f.strip().lower(), f.strip().lower())
                            for f in str(filetype).split(",") if f.strip())
     if lang:
-        q.lang = str(lang).lower()[:2]
+        q.lang = tag(str(lang))
     # Operators and exclusions are syntax, not evidence for the intent classifier.
     clean_raw = " ".join(q.surface)
     q.result_format = requested_format(clean_raw)
-    label, probs = model.classify(clean_raw)
+    from pathlib import Path
+    import json
+    thresholds={}
+    if data_dir:
+        try:thresholds=json.loads((Path(data_dir)/'intent_margins.json').read_text())
+        except (OSError,ValueError):pass
+    label, probs, confidence = model.classify_calibrated(clean_raw,q.language_info.get('language','en'),thresholds)
+    q.intent_confidence = confidence
+    if q.language_info.get("script") not in ("latin", "unknown"):
+        label, probs = "general", {}
     q.intent_scores = probs
     if not probs or probs.get(label, 0) < MIN_INTENT_CONFIDENCE:
         label = "general"
@@ -253,6 +276,12 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
                 break
     if q.freshness in FRESHNESS_WINDOWS and not q.after:
         q.after = datetime.now(timezone.utc).timestamp() - FRESHNESS_WINDOWS[q.freshness]
+    from .temporal import windows
+    q.temporal = windows(clean_raw,q.language_info.get('language','en'),timezone_name,datetime.now(timezone.utc),holiday_country=holiday_country)
+    if q.temporal['windows'] and not any(op+':' in raw for op in ('after','before')) and not freshness:
+        q.explicit_date_filter = True
+        q.after=min(w['after'] for w in q.temporal['windows'])
+        q.before=max(w['before'] for w in q.temporal['windows'])
     return q
 
 

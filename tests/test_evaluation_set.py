@@ -470,7 +470,12 @@ class EvaluationTests(unittest.TestCase):
         self.assertGreaterEqual(result["queries"], 50)
         s = result["summary"]
         self.assertGreater(s["ndcg@10"], 0.5, f"NDCG@10 too low: {s['ndcg@10']}")
-        self.assertGreater(s["p@5"], 0.5, f"P@5 too low: {s['p@5']}")
+        # P@5 divides by five even when a query has only one relevant page.
+        # This corpus's ceiling is 0.2275, so an absolute >0.5 gate is impossible.
+        ceiling = sum(min(5, sum(g > 0 for g in q['judgments'].values())) for q in QRELS) / (5 * len(QRELS))
+        self.assertLessEqual(s['p@5'], ceiling + 0.0001)
+        self.assertGreaterEqual(s['p@5'], 0.8 * ceiling,
+                                'Less than 80% of the attainable relevant top-five slots were recovered.')
         self.assertGreater(s["mrr@10"], 0.5, f"MRR too low: {s['mrr@10']}")
         self.assertGreater(s["recall@10"], 0.4, f"Recall@10 too low: {s['recall@10']}")
         self.assertGreaterEqual(s["zero_result_rate"], 0.0)

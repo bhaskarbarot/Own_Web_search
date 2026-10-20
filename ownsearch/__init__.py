@@ -1,5 +1,2 @@
-"""OwnSearch: a self-owned web search engine built from scratch on the Python standard library.
-
-No third-party packages, no paid services and no external search providers are used.
-"""
-__version__ = "1.0.0"
+"""OwnSearch: self-hosted web retrieval with a standard-library fallback and optional local models."""
+__version__ = "1.1.0"

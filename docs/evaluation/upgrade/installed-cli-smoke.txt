@@ -1,0 +1,7 @@
+
+1 results for 'cafe timeout'  (81.44 ms, 1 matches in 1 docs, mode=all_terms)
+
+ 1. Café timeout manual
+    https://smoke.example/manual
+    timeout parameter for network requests.
+

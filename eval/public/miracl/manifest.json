@@ -1,0 +1,31 @@
+{
+  "sources": [
+    {
+      "language": "en",
+      "url": "https://huggingface.co/datasets/miracl/miracl/resolve/main/miracl-v1.0-en/topics/topics.miracl-v1.0-en-dev.tsv",
+      "sha256": "25d9e6d17656674fd7aa3b67ee912c71545e664a842b147bfc17e9ff391db3da",
+      "bytes": 36782
+    },
+    {
+      "language": "en",
+      "url": "https://huggingface.co/datasets/miracl/miracl/resolve/main/miracl-v1.0-en/qrels/qrels.miracl-v1.0-en-dev.tsv",
+      "sha256": "a0af836c300e85088c4d73449492e2378280f967cac032853c9e11f3bc8a8d81",
+      "bytes": 167817
+    },
+    {
+      "language": "hi",
+      "url": "https://huggingface.co/datasets/miracl/miracl/resolve/main/miracl-v1.0-hi/topics/topics.miracl-v1.0-hi-dev.tsv",
+      "sha256": "94bed8e649806246f59edfb6434ea0c59920a44f2f60a56e01d205c6bf58ef60",
+      "bytes": 52022
+    },
+    {
+      "language": "hi",
+      "url": "https://huggingface.co/datasets/miracl/miracl/resolve/main/miracl-v1.0-hi/qrels/qrels.miracl-v1.0-hi-dev.tsv",
+      "sha256": "4cec99e7012ffca7fd129eeea01f37984bb21702706a8398208e8fba1c14e963",
+      "bytes": 79771
+    }
+  ],
+  "license": "Apache-2.0",
+  "source": "https://huggingface.co/datasets/miracl/miracl",
+  "scope": "Topics/qrels only. Passage pool/full corpus must be supplied before ranking can be evaluated."
+}

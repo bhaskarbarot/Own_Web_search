@@ -16,7 +16,7 @@ from pathlib import Path
 
 from .textproc import stem, tokenize
 
-RESOURCE = Path(__file__).with_name("resources") / "intent_templates.tsv"
+RESOURCE = Path(__file__).with_name("resources") / "intent_seed.tsv"
 _models = {}
 _lock = threading.Lock()
 
@@ -77,6 +77,18 @@ class IntentModel:
         best = max(probs, key=probs.get)
         return best, probs
 
+    def classify_calibrated(self, text, language='en', thresholds=None):
+        if language.split('-')[0] != 'en': return 'general', {}, {'status':'no_multilingual_model'}
+        label,probs=self.classify(text)
+        ordered=sorted(probs.values(),reverse=True)
+        margin=ordered[0]-(ordered[1] if len(ordered)>1 else 0) if ordered else 0
+        table=thresholds if isinstance(thresholds,dict) else {}
+        setting=table.get(language,table.get(language.split('-')[0],{}))
+        threshold=setting.get('minimum_margin') if isinstance(setting,dict) else None
+        if type(threshold) not in (int,float) or not math.isfinite(threshold) or not 0<=threshold<=1:threshold=None
+        accepted=label if not (isinstance(setting,dict) and setting.get('reject_all')) and (threshold is None or margin>=threshold) else 'general'
+        return accepted,probs,{'margin':margin,'minimum_margin':threshold,'status':'calibrated' if threshold is not None else 'uncalibrated'}
+
     def is_query_language(self, word, min_share=0.004):
         """True when a word is common in how queries are phrased (learned), i.e. not a subject word.
 
@@ -102,13 +114,20 @@ class IntentModel:
 def get_model(data_dir=None):
     key = str(data_dir or "")
     extra = Path(data_dir) / "intent_examples.tsv" if data_dir else None
-    mtime = (os.path.getmtime(RESOURCE) if RESOURCE.exists() else 0,
+    entity_files=[Path(data_dir)/name for name in ('entities.db','entities.db-wal')] if data_dir else []
+    entity_mtime=tuple(path.stat().st_mtime_ns if path.exists() else 0 for path in entity_files)
+    mtime = (entity_mtime, os.path.getmtime(RESOURCE) if RESOURCE.exists() else 0,
              os.path.getmtime(extra) if extra and extra.exists() else 0)
     with _lock:
         hit = _models.get(key)
         if hit and hit[0] == mtime:
             return hit[1]
         examples = _read(RESOURCE) + (_read(extra) if extra else [])
+        if data_dir and (Path(data_dir)/'entities.db').exists():
+            from .entities import EntityIndex, mask
+            local=EntityIndex(data_dir)
+            if local.db.one('SELECT 1 FROM entities LIMIT 1'):
+                examples=[(label,mask(text,local.link(text))) for label,text in examples]
         model = IntentModel(examples)
         _models[key] = (mtime, model)
         return model

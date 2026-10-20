@@ -3,6 +3,12 @@ import re
 import unicodedata
 from functools import lru_cache
 from pathlib import Path
+from dataclasses import dataclass
+try:
+    import regex as _regex
+except ImportError:
+    _regex = None
+_UNICODE_TOKEN = _regex.compile(r"[\p{L}\p{M}\p{N}]+(?:[’'][\p{L}\p{M}\p{N}]+)*") if _regex else None
 
 # \w in Python's re does not include combining marks, which breaks Indic and Arabic words
 # (e.g. Hindi vowel signs). Add the mark ranges explicitly.
@@ -51,56 +57,105 @@ def detect_script(text):
     return best
 
 
-def detect_language(text):
-    """Best-effort language detection from script. Returns a 2-letter ISO code or 'unk'."""
-    script = detect_script(text)
-    if script == "devanagari":
-        return "hi"
-    if script == "gujarati":
-        return "gu"
-    if script == "cjk":
-        return "ja"
-    return "en"
+def detect_language(text, hint=None):
+    from .language import identify
+    return identify(text,hint)['language']
 
 
-def _fold(tok):
-    """Remove accents from Latin letters only (keeps Indic/Arabic combining marks intact)."""
-    if tok.isascii():
-        return tok
-    out = []
-    for ch in unicodedata.normalize("NFD", tok):
-        if unicodedata.combining(ch) and out and ord(out[-1]) < 0x250:
+@dataclass(frozen=True)
+class NormalizedText:
+    original: str
+    exact: str
+    folded: str
+
+
+def normalize(text, lang=None):
+    """One document/query normalization path; retain the original and unfolded form."""
+    original = str(text or "")
+    exact = unicodedata.normalize("NFC", original).lower()
+    folded = unicodedata.normalize("NFKC", original).casefold().replace("\u200c", "").replace("\u200d", "")
+    out, latin = [], False
+    for ch in unicodedata.normalize("NFD", folded):
+        category = unicodedata.category(ch)
+        if not category.startswith("M"):
+            latin = 'LATIN' in unicodedata.name(ch, '')
+        if category.startswith('M') and latin:
             continue
+        if '\u064b' <= ch <= '\u065f' or ch == '\u0670':
+            continue
+        try:
+            ch = str(unicodedata.decimal(ch))
+        except (ValueError, TypeError):
+            pass
         out.append(ch)
-    return unicodedata.normalize("NFC", "".join(out))
+    return NormalizedText(original, exact, unicodedata.normalize("NFC", "".join(out)))
+
+
+def graphemes(text):
+    if _regex:
+        return _regex.findall(r"\X", text)
+    out = []
+    for ch in text:
+        if out and (unicodedata.combining(ch) or unicodedata.category(ch).startswith('M') or out[-1].endswith(('\u094d','\u0acd','\u200d'))):
+            out[-1] += ch
+        else:
+            out.append(ch)
+    return out
+
+
+def _tokens(text):
+    matches = (_UNICODE_TOKEN.findall(text) if _regex else _TOKEN_RE.findall(text))
+    out = []
+    for tok in matches:
+        if _CJK_RE.search(tok) or any('\u0e00' <= c <= '\u0e7f' for c in tok):
+            out.extend(c for c in graphemes(tok) if any(unicodedata.category(x)[0] in 'LN' for x in c))
+        else:
+            out.append(tok[:MAX_TOKEN_LEN])
+    return out
+
+
+def exact_tokens(text):
+    return _tokens(normalize(text).exact)
 
 
 def tokenize(text):
-    """Lowercased surface tokens (no stemming). Possessive 's and apostrophes removed; CJK split per char."""
-    text = unicodedata.normalize("NFKC", text or "").lower()
-    out = []
-    has_cjk = _CJK_RE.search(text) is not None
-    for tok in _TOKEN_RE.findall(text):
-        if "'" in tok or "’" in tok:
-            tok = tok.replace("’", "'")
-            if tok.endswith("'s"):
-                tok = tok[:-2]
-            tok = tok.replace("'", "")
-        if has_cjk and _CJK_RE.search(tok):
-            buf = ""
-            for ch in tok:
-                if _CJK_RE.match(ch):
-                    if buf:
-                        out.append(_fold(buf))
-                        buf = ""
-                    out.append(ch)
-                else:
-                    buf += ch
-            if buf:
-                out.append(_fold(buf))
-        elif tok:
-            out.append((tok if tok.isascii() else _fold(tok))[:MAX_TOKEN_LEN])
-    return out
+    result = []
+    for tok in _tokens(normalize(text).folded):
+        tok = tok.replace('’', "'")
+        if tok.endswith("'s"):
+            tok = tok[:-2]
+        tok = tok.replace("'", '')
+        if tok:
+            result.append(tok)
+    return result
+
+
+@lru_cache(maxsize=64)
+def stopwords(lang='en'):
+    try:
+        import stopwordsiso
+        words = stopwordsiso.stopwords((lang or 'en').split('-')[0])
+        if words:
+            return frozenset(words)
+    except ImportError:
+        pass
+    return _load_stopwords((lang or 'en').split('-')[0])
+
+
+def ngrams(text, size=3):
+    result = []
+    folded = normalize(text).folded
+    for run in re.findall(r'[\u3040-\u30ff\u3400-\u9fff\u0e00-\u0e7f]+',folded):
+        pieces=graphemes(run)
+        result.extend(pieces)
+        result.extend(a+b for a,b in zip(pieces,pieces[1:]))
+    for word in tokenize(text):
+        parts = graphemes(word)
+        n = min(size, 2) if _CJK_RE.search(word) or any('\u0e00' <= c <= '\u0e7f' for c in word) else size
+        if len(parts) < n:
+            continue
+        result.extend(''.join(parts[i:i+n]) for i in range(len(parts)-n+1))
+    return result
 
 
 # ------------------------------------------------------------------ Porter stemmer (1980)

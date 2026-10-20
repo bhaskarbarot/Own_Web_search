@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "scope": "Synthetic, versioned retrieval fixtures; not evidence of real-world factual correctness.",
+  "as_of": "2026-10-20T12:00:00+00:00",
+  "documents": [
+    {
+      "title": "Python palindrome program",
+      "text": "Here is a Python program to check if a string is a palindrome. def is_palindrome(s): return s == s[::-1]. A palindrome reads the same forwards and backwards. This code works for strings, numbers and lists. Use this function in your Python projects.",
+      "url": "https://docs.example/python/palindrome",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Python palindrome code examples",
+      "text": "Python code for palindrome checking: number = int(input('Enter a number: ')); temp = number; reverse = 0; while number > 0: digit = number % 10; reverse = reverse * 10 + digit; number = number // 10; if temp == reverse: print('palindrome'). These are useful Python snippets for beginners learning algorithms.",
+      "url": "https://tutorials.example/python-palindrome-code",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Python recursion tutorial",
+      "text": "Learn recursion in Python. A recursive function calls itself. Example: def factorial(n): return 1 if n <= 1 else n * factorial(n-1). Recursion is useful for tree traversal and divide-and-conquer.",
+      "url": "https://tutorials.example/python-recursion",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Python list comprehensions",
+      "text": "Python list comprehensions provide a concise way to create lists. squares = [x**2 for x in range(10)]. This is faster and more readable than for loops.",
+      "url": "https://docs.example/python/list-comprehensions",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Python requests library guide",
+      "text": "The Python requests library lets you send HTTP requests easily. import requests; r = requests.get('https://api.example.com'); print(r.json()). Handle status codes, headers, timeouts and sessions.",
+      "url": "https://docs.example/python-requests-guide",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "What is artificial intelligence",
+      "text": "Artificial intelligence (AI) is the simulation of human intelligence by machines. AI includes machine learning, deep learning, natural language processing and computer vision. Modern AI systems use neural networks trained on large datasets.",
+      "url": "https://wiki.example/artificial-intelligence",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Machine learning algorithms explained",
+      "text": "Machine learning algorithms include linear regression, decision trees, random forests, support vector machines and neural networks. Supervised learning uses labeled data; unsupervised learning finds patterns in unlabeled data.",
+      "url": "https://tutorials.example/ml-algorithms",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Neural network basics",
+      "text": "A neural network consists of layers of interconnected nodes (neurons). Input layer receives data, hidden layers process it, output layer produces results. Backpropagation adjusts weights to minimize error.",
+      "url": "https://wiki.example/neural-network",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "कृत्रिम बुद्धिमत्ता क्या है",
+      "text": "कृत्रिम बुद्धिमत्ता (AI) मशीनों द्वारा मानव बुद्धि का अनुकरण है। इसमें मशीन लर्निंग, डीप लर्निंग, प्राकृतिक भाषा प्रसंस्करण और कंप्यूटर विज़न शामिल हैं। आधुनिक AI सिस्टम बड़े डेटासेट पर प्रशिक्षित न्यूरल नेटवर्क का उपयोग करते हैं।",
+      "url": "https://wiki.example/krtrim-buddhimatta",
+      "lang": "hi",
+      "source_type": "web"
+    },
+    {
+      "title": "मशीन लर्निंग क्या है",
+      "text": "मशीन लर्निंग एक ऐसी तकनीक है जिसमें कंप्यूटर डेटा से सीखते हैं बिना स्पष्ट रूप से प्रोग्राम किए। वे पैटर्न की पहचान करते हैं और सुधार करते हैं। मशीन लर्निंग अल्गोरिदम में रिग्रेशन, क्लासिफिकेशन और क्लस्टरिंग शामिल हैं।",
+      "url": "https://wiki.example/machine-learning-hindi",
+      "lang": "hi",
+      "source_type": "web"
+    },
+    {
+      "title": "डीप लर्निंग ट्यूटोरियल",
+      "text": "डीप लर्निंग मशीन लर्निंग का एक उपसमूह है जो न्यूरल नेटवर्क का उपयोग करता है। यह छवि पहचान, भाषा अनुवाद और खेल जैसे कार्यों में उत्कृष्ट है। कनवोल्यूशनल नेटवर्क छवियों के लिए उपयुक्त हैं।",
+      "url": "https://tutorials.example/deep-learning-hindi",
+      "lang": "hi",
+      "source_type": "web"
+    },
+    {
+      "title": "કૃત્રિમ બુદ્ધિ શું છે",
+      "text": "કૃત્રિમ બુદ્ધિ એ મશીનો દ્વારા માનવ બુદ્ધિનું અનુકરણ છે. તેમાં મશીન લર્નિંગ, ડીપ લર્નિંગ, કુદરતી ભાષા પ્રક્રિયા અને કમ્પ્યુટર વિઝનનો સમાવેશ થાય છે. આધુનિક AI સિસ્ટમ્સ મોટા ડેટાસેટ પર તાલીમ પામેલા ન્યૂરલ નેટવર્કનો ઉપયોગ કરે છે.",
+      "url": "https://wiki.example/krutrim-buddhi",
+      "lang": "gu",
+      "source_type": "web"
+    },
+    {
+      "title": "મશીન લર્નિંગ ગુજરાતીમાં",
+      "text": "મશીન લર્નિંગ એ એક તકનીક છે જેમાં કમ્પ્યુટર ડેટા પરથી શીખે છે સ્પષ્ટ રીતે પ્રોગ્રામ કર્યા વિના. તેઓ પેટર્ન ઓળખે છે અને સુધારે છે. મશીન લર્નિંગ અલ્ગોરિધમમાં રિગ્રેશન, ક્લાસિફિકેશન અને ક્લસ્ટરિંગનો સમાવેશ થાય છે.",
+      "url": "https://wiki.example/machine-learning-gujarati",
+      "lang": "gu",
+      "source_type": "web"
+    },
+    {
+      "title": "ગુજરાતીમાં કૃત્રિમ બુદ્ધિ સમજાવો",
+      "text": "કૃત્રિમ બુદ્ધિ એ એવી તકનીક છે જેમાં મશીન માનવની જેમ વિચારવા અને નિર્ણય લેવાનું શીખે છે. AI ના ઉદાહરણોમાં વોચ રિકગ્નિશન, સELF-DRIVING કાર, અને ચેટબોટનો સમાવેશ થાય છે. મશીન લર્નિંગ અને ડીપ લર્નિંગ AI ના ભાગ છે.",
+      "url": "https://wiki.example/ai-gujarati-explanation",
+      "lang": "gu",
+      "source_type": "web"
+    },
+    {
+      "title": "Kumkum Bhagya serial characters",
+      "text": "Kumkum Bhagya is a popular Indian TV serial on Zee TV. The main characters are Pragya, Abhi, Bulbul, Purab, Alia, Tanu, Dadi, Sarla, and many others. The show follows the love story of Pragya and Abhi. It has been running since 2014.",
+      "url": "https://example.com/kumkum-bhagya",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Kundali Bhagya serial characters",
+      "text": "Kundali Bhagya is a spin-off of Kumkum Bhagya. The characters include Preeta, Karan, Rishabh, Srishti, Sameera, Sherlyn, Prithvi, and Rakhi. It focuses on the Luthra family and the love triangle between Preeta, Karan and Rishabh.",
+      "url": "https://example.com/kundali-bhagya",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Kumkum Bhagya latest episodes",
+      "text": "Watch the latest episodes of Kumkum Bhagya on Zee TV. The serial has completed over 2000 episodes since its launch in 2014. The current track focuses on the next generation of the Mehra family.",
+      "url": "https://example.com/kumkum-episodes",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Claude MCP documentation",
+      "text": "The official Claude MCP (Model Context Protocol) documentation explains how to build MCP servers and clients. MCP enables AI assistants to interact with external tools and data sources. The protocol defines tools, resources and prompts. See docs.anthropic.com for the official guide.",
+      "url": "https://docs.anthropic.com/claude/mcp",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Claude API reference",
+      "text": "The Claude API reference covers all endpoints for the Anthropic Claude models. Use POST /v1/messages to generate responses. Supports vision, tool use and streaming. Authentication uses x-api-key header.",
+      "url": "https://docs.anthropic.com/api/reference",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "MCP server implementation guide",
+      "text": "This guide shows how to implement an MCP server in Python. Use the mcp Python package. Define tools with @mcp.tool decorator. Connect via stdio or HTTP transport.",
+      "url": "https://docs.anthropic.com/mcp/server-guide",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "AI news today October 2026",
+      "text": "AI startups raised record funding this week. Major tech companies announced new AI models. The conference featured keynote speeches on AGI safety. Published on October 10, 2026.",
+      "url": "https://news.example/ai-news-oct-2026",
+      "lang": "en",
+      "source_type": "web",
+      "published_days_ago": 0
+    },
+    {
+      "title": "Technology news this week",
+      "text": "This week in technology: new smartphone launches, software updates, and AI developments. Industry analysts predict strong growth in cloud computing. Reported October 12, 2026.",
+      "url": "https://news.example/tech-news-oct-12-2026",
+      "lang": "en",
+      "source_type": "web",
+      "published_days_ago": 0
+    },
+    {
+      "title": "Old AI research paper",
+      "text": "A 2018 research paper on neural network architectures. This is an older study on deep learning. Published in 2018 in a peer-reviewed journal.",
+      "url": "https://arxiv.example/old-ai-paper-2018",
+      "lang": "en",
+      "source_type": "web",
+      "published_days_ago": 400
+    },
+    {
+      "title": "What is the capital of France",
+      "text": "The capital of France is Paris. Paris is located on the Seine River and is the largest city in France. It is known for the Eiffel Tower, Louvre Museum and Notre-Dame Cathedral.",
+      "url": "https://wiki.example/paris",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Who wrote Romeo and Juliet",
+      "text": "Romeo and Juliet was written by William Shakespeare. It is a tragedy about two young lovers whose deaths reconcile their feuding families. Written around 1594-1596.",
+      "url": "https://wiki.example/romeo-juliet",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Photosynthesis process",
+      "text": "Photosynthesis is the process by which green plants use sunlight to synthesize food from carbon dioxide and water. It produces oxygen and glucose. The equation is: 6CO2 + 6H2O + light -> C6H12O6 + 6O2.",
+      "url": "https://wiki.example/photosynthesis",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Water cycle explanation",
+      "text": "The water cycle describes the continuous movement of water on Earth. Steps: evaporation, condensation, precipitation, collection. The sun drives the cycle by heating water in oceans.",
+      "url": "https://wiki.example/water-cycle",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Python vs JavaScript comparison",
+      "text": "Python and JavaScript are both popular programming languages. Python is used for data science, AI and backend. JavaScript is used for web development. Python uses indentation; JavaScript uses curly braces. Python is dynamically typed; JavaScript is also dynamically typed.",
+      "url": "https://comparison.example/python-vs-javascript",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "React vs Angular",
+      "text": "React is a library by Facebook; Angular is a framework by Google. React uses virtual DOM; Angular uses real DOM with change detection. React is more flexible; Angular is opinionated. Both are used for building web applications.",
+      "url": "https://comparison.example/react-vs-angular",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Weather in Mumbai",
+      "text": "Mumbai has a tropical wet and dry climate. Monsoon season is June to September. Average temperature ranges from 25C to 35C. Humidity is high throughout the year.",
+      "url": "https://weather.example/mumbai",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Best restaurants near me",
+      "text": "This page lists popular restaurants in your area. Use location services to find nearby dining options. Includes ratings, cuisines and price ranges.",
+      "url": "https://local.example/restaurants",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "What causes diabetes",
+      "text": "Diabetes is caused by insufficient insulin production or insulin resistance. Type 1 is autoimmune; Type 2 is lifestyle-related. Symptoms include frequent urination, excessive thirst and fatigue.",
+      "url": "https://health.example/diabetes",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Common cold remedies",
+      "text": "Common cold remedies include rest, fluids, honey, ginger tea and over-the-counter medications. The common cold is caused by viruses and usually resolves in 7-10 days.",
+      "url": "https://health.example/common-cold",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Stock market basics",
+      "text": "The stock market is where shares of public companies are bought and sold. Investors buy stocks to earn returns through dividends and capital appreciation. Major indices include S&P 500, Dow Jones and NASDAQ.",
+      "url": "https://finance.example/stock-market-basics",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Mutual funds explained",
+      "text": "A mutual fund pools money from many investors to invest in stocks, bonds and other assets. Professional fund managers make investment decisions. Mutual funds offer diversification and professional management.",
+      "url": "https://finance.example/mutual-funds",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Best places to visit in India",
+      "text": "Popular tourist destinations in India include the Taj Mahal, Goa beaches, Kerala backwaters, Himalayan hill stations, Rajasthan forts and Delhi monuments. India offers diverse cultures and landscapes.",
+      "url": "https://travel.example/india-tourism",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "How to get a passport",
+      "text": "To get a passport, submit an application online or at a passport office. Required documents include proof of identity, address and birth certificate. Processing time varies by country.",
+      "url": "https://travel.example/passport-guide",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Masala dosa recipe",
+      "text": "Masala dosa is a South Indian dish. Ingredients: rice, urad dal, potatoes, spices. Soak and grind rice and dal, ferment overnight. Make potato masala with mustard seeds, curry leaves, turmeric. Spread batter on tava, add masala, fold and serve with chutney.",
+      "url": "https://recipes.example/masala-dosa",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Chocolate cake recipe",
+      "text": "Chocolate cake recipe: flour, cocoa powder, sugar, eggs, butter, baking powder, milk. Mix dry ingredients, add wet ingredients, bake at 180C for 30 minutes. Frost with chocolate ganache.",
+      "url": "https://recipes.example/chocolate-cake",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Best strategy games 2026",
+      "text": "Top strategy games of 2026 include Civilization VIII, Total War, Age of Empires IV, XCOM 3 and Stellaris. These games require planning, resource management and tactical thinking.",
+      "url": "https://gaming.example/strategy-games-2026",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "How to play chess",
+      "text": "Chess is a two-player strategy board game. Each player starts with 16 pieces: king, queen, rooks, bishops, knights and pawns. The goal is to checkmate the opponent's king.",
+      "url": "https://gaming.example/chess-guide",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Cricket World Cup winners",
+      "text": "The Cricket World Cup is held every four years. Winners include Australia (6 times), India (2 times), West Indies (2 times), Pakistan, Sri Lanka and England. The 2023 World Cup was won by Australia.",
+      "url": "https://sports.example/cricket-world-cup",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Olympic games history",
+      "text": "The modern Olympic Games began in 1896 in Athens. Held every four years, the Olympics feature summer and winter sports. The 2024 Olympics were held in Paris. The 2028 Olympics will be in Los Angeles.",
+      "url": "https://sports.example/olympic-history",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Best smartphones under 30000",
+      "text": "Top smartphones under 30000 rupees include models from Xiaomi, Samsung, Realme and OnePlus. Features include AMOLED displays, 5G, good cameras and large batteries. Check reviews before buying.",
+      "url": "https://shopping.example/smartphones-under-30000",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Wireless headphones comparison",
+      "text": "Compare wireless headphones from Sony, Bose, Apple, Sennheiser and JBL. Consider sound quality, battery life, noise cancellation and comfort. Price ranges from budget to premium.",
+      "url": "https://shopping.example/headphones-comparison",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "How to learn programming",
+      "text": "To learn programming, start with a beginner-friendly language like Python. Practice daily, build projects, read code from others and join communities. Online courses and tutorials are helpful resources.",
+      "url": "https://education.example/learn-programming",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "UPSC exam preparation",
+      "text": "UPSC Civil Services exam preparation requires 1-2 years of study. Cover NCERT books, current affairs, optional subject and practice answer writing. The exam has three stages: Prelims, Mains and Interview.",
+      "url": "https://education.example/upsc-preparation",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "What is cloud computing",
+      "text": "Cloud computing delivers computing services over the internet. Services include servers, storage, databases, networking and AI. Major providers are AWS, Azure and Google Cloud. Benefits include scalability and cost savings.",
+      "url": "https://tech.example/cloud-computing",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Blockchain technology explained",
+      "text": "Blockchain is a distributed ledger technology. Blocks contain transaction data and are linked cryptographically. It is decentralized and immutable. Used in cryptocurrencies and supply chain management.",
+      "url": "https://tech.example/blockchain",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "Software engineer interview questions",
+      "text": "Common software engineer interview questions include data structures, algorithms, system design and behavioral questions. Practice coding problems on LeetCode and HackerRank. Be prepared to discuss your projects.",
+      "url": "https://jobs.example/software-engineer-interview",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "title": "How to write a resume",
+      "text": "A good resume includes contact info, summary, work experience, skills and education. Use action verbs and quantify achievements. Keep it to one page for early career. Tailor to each job application.",
+      "url": "https://jobs.example/resume-guide",
+      "lang": "en",
+      "source_type": "web"
+    },
+    {
+      "url": "https://museum.example/nebula/list",
+      "title": "List of Nebula museum exhibits",
+      "text": "Nebula museum exhibits include a lunar prism and a solar pendulum. These exhibits demonstrate light and motion. Nebula museum provides these displays for visitors.",
+      "headings": "Lunar prism | Solar pendulum",
+      "lang": "en"
+    },
+    {
+      "url": "https://encyclopedia.example/nebula",
+      "title": "Nebula museum",
+      "text": "Nebula is a science museum with exhibits about light and motion. The Nebula museum has two demonstration halls.",
+      "lang": "en"
+    },
+    {
+      "url": "https://news.example/nebula-current",
+      "title": "Nebula museum opens a gallery",
+      "text": "Nebula museum opens a new gallery of science exhibits. Nebula visitors can see the new gallery.",
+      "published_days_ago": 1,
+      "lang": "en"
+    },
+    {
+      "url": "https://news.example/nebula-old",
+      "title": "Nebula museum gallery archive",
+      "text": "Nebula museum gallery archive describes earlier exhibits. Nebula visitors attended a historic opening.",
+      "published_days_ago": 400,
+      "lang": "en"
+    },
+    {
+      "url": "https://news.example/nebula-undated",
+      "title": "Nebula museum gallery overview",
+      "text": "Nebula museum gallery overview describes science exhibits. Nebula visitors explore the gallery.",
+      "lang": "en"
+    },
+    {
+      "url": "https://fiction.example/doraemon-characters",
+      "title": "Doraemon cartoon characters",
+      "text": "Doraemon cartoon characters include Doraemon, Nobita, Shizuka, Gian and Suneo. This fixture represents a character list. Doraemon is the main cartoon character.",
+      "headings": "Doraemon | Nobita | Shizuka | Gian | Suneo",
+      "lang": "en"
+    }
+  ]
+}

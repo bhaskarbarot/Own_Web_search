@@ -226,6 +226,8 @@ def make_handler(engine, keys, limiter, metrics, frontier, require_auth, role):
                 res = engine.search(query, src.get("limit", 10), ev, offset=src.get("offset", 0),
                                     freshness=src.get("freshness"), site=src.get("site"),
                                     filetype=src.get("filetype"), lang=src.get("lang"),
+                                    preferred_language=src.get("preferred_language") or self.headers.get("Accept-Language"),
+                                    timezone_name=src.get("timezone"),
                                     timeout_ms=src.get("timeout_ms"), agent=agent,
                                     live=str(src.get("live", "true")).lower() in ("1", "true", "yes")
                                     and (not require_auth or self._can_fetch()),

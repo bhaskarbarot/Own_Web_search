@@ -1,0 +1,17 @@
+{
+  "actual_checkout": "/home/pc-117/Documents/own_web_search_engine",
+  "engine_sha256": "7ecd3c3073a82b50cd1f4312d5ff745a71d89ed7e7bae5aeb6c77c66be720807",
+  "corpus_sha256": "cd6830271f986277aa0e4af8e8ae26bcc1643390c3cbd724ea45827aafcad414",
+  "queries_sha256": "3772afbb51f8ed28d41ed7b893745e050c4d54b24bc7c9602c456640a4fd9ddb",
+  "all_result_urls_reproduced": true,
+  "all_quality_metrics_reproduced": true,
+  "actual_tests": 172,
+  "actual_tests_passed": true,
+  "setup_profile": "base",
+  "setup_tests": 172,
+  "setup_passed": true,
+  "installed_cli_smoke": "passed",
+  "actual_fallback_tests": 172,
+  "actual_fallback_passed": true,
+  "actual_fallback_seconds": 41.648
+}

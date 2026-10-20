@@ -1,0 +1,37 @@
+{
+  "scope": "Same 59-query synthetic benchmark before/after explicit freshness contract repair; paired query bootstrap.",
+  "paired_deltas": {
+    "p@5": {
+      "value": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "queries": 57
+    },
+    "recall@10": {
+      "value": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "queries": 57
+    },
+    "mrr@10": {
+      "value": 0.008772,
+      "ci95": [
+        0.0,
+        0.026316
+      ],
+      "queries": 57
+    },
+    "ndcg@10": {
+      "value": 0.006475,
+      "ci95": [
+        0.0,
+        0.019425
+      ],
+      "queries": 57
+    }
+  }
+}

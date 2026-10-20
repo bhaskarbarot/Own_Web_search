@@ -1,0 +1,6 @@
+# Base profile. Core retains a standard-library fallback when these are absent.
+regex>=2024.11.6,<2027
+stopwordsiso==0.7.1
+dateparser>=1.2,<2
+holidays>=0.60,<1
+charset-normalizer>=3.4,<4

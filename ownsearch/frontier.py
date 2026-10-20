@@ -106,7 +106,8 @@ class Frontier:
         new = 0
         max_depth = self.settings.max_depth
         rows = []
-        for it in items:
+        import itertools
+        for it in itertools.islice(items, self.settings.max_enqueue_batch):
             url = normalize_url(it.get("url", ""))
             if not url.startswith(("http://", "https://")) or is_probable_trap(url):
                 continue
@@ -120,6 +121,7 @@ class Frontier:
             return 0
         with self.db.tx() as c:
             host_counts = {}
+            total_urls = c.execute("SELECT COUNT(*) FROM urls").fetchone()[0]
             for url, it in rows:
                 host = host_of(url)
                 if host not in host_counts:
@@ -135,6 +137,7 @@ class Frontier:
                 lastmod = it.get("lastmod")
                 when = float(it.get("next_fetch_at", now))
                 if existing is None:
+                    if total_urls + new >= self.settings.max_frontier_urls: continue
                     if host_counts[host] >= self.settings.max_pages_per_host and not it.get("force"):
                         continue
                     kind = it.get("kind") or ("home" if url_depth(url) == 0 and not url.split("?")[1:] else "page")

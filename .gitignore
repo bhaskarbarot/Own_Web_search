@@ -4,3 +4,8 @@ repo/
 __pycache__/
 *.pyc
 *.tmp
+
+.venv/
+build/
+dist/
+*.egg-info/
