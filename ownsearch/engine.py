@@ -477,22 +477,14 @@ class SearchEngine:
                     continue
 
 
-            # Strict freshness filtering: crawl date (discovered) cannot satisfy a requested date filter
-            if q.after:
-                if is_ref:
-                    # Static reference/encyclopedic pages cannot satisfy date filters via wiki edits
-                    if ts_pub is None or ts_pub < q.after:
-                        continue
-                elif q.intent in ("news", "financial") or q.freshness in ("day", "week", "month", "recent", "pd", "pw", "pm"):
-                    # For news/financial or explicit freshness windows, only verified publication or non-ref updates count
-                    eff_ts = ts_pub if q.intent == "news" else ts
-                    if eff_ts is None or eff_ts < q.after:
-                        continue
-                else:
-                    eff_ts = ts
-                    if eff_ts is None or eff_ts < q.after:
-                        continue
-            if q.before:
+            # Strict filtering only for explicit date operators (after:/before:).
+            # Inferred freshness ("latest", "news", "today") ranks dated pages higher but
+            # still returns undated matches rather than an empty result set.
+            if q.explicit_date_filter and q.after:
+                eff_ts = ts_pub if q.intent == "news" else ts
+                if eff_ts is None or eff_ts < q.after:
+                    continue
+            if q.explicit_date_filter and q.before:
                 eff_ts = ts_pub if q.intent == "news" else ts
                 if eff_ts is None or eff_ts > q.before:
                     continue

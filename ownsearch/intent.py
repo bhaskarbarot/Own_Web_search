@@ -77,13 +77,17 @@ class IntentModel:
         best = max(probs, key=probs.get)
         return best, probs
 
-    def is_query_language(self, word, min_share=0.025):
-        """True when a word is common in how queries are phrased (learned), i.e. not a subject word."""
+    def is_query_language(self, word, min_share=0.004):
+        """True when a word is common in how queries are phrased (learned), i.e. not a subject word.
+
+        Because ``{subject}`` slots are removed from training, every word in the vocabulary is by
+        definition a phrasing word; the threshold only guards against single-occurrence noise.
+        """
         s = stem(word.lower())
         if self.n_docs == 0:
             return False
         # used in several different intents -> a phrasing word, not a topic ("give", "show", "about")
-        return len(self.label_spread[s]) >= 2 or self.doc_freq[s] >= max(3, min_share * self.n_docs)
+        return len(self.label_spread[s]) >= 2 or self.doc_freq[s] >= max(2, min_share * self.n_docs)
 
     def cue_strength(self, word, label):
         """How strongly a word indicates a label: P(word|label) / P(word)."""

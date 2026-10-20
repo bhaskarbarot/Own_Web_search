@@ -21,7 +21,7 @@ FILETYPE_ALIASES = {"doc": "docx", "word": "docx", "excel": "xlsx", "xls": "xlsx
                     "htm": "web", "html": "web", "webpage": "web", "page": "web", "txt": "text", "image": "image",
                     "img": "image", "jpg": "image", "jpeg": "image", "png": "image"}
 MODEL_LABELS = {"finance_quote": "financial", "finance_history": "financial"}   # model label -> engine intent
-MIN_INTENT_CONFIDENCE = 0.45
+MIN_INTENT_CONFIDENCE = 0.12
 
 
 @dataclass
@@ -41,6 +41,7 @@ class ParsedQuery:
     lang: str = None
     after: float = None
     before: float = None
+    explicit_date_filter: bool = False   # True when user used after:/before: operators
     freshness: str = None          # None | recent | day | week | month | year
     fresh_intent: bool = False
     intent: str = "general"        # general | news | financial | tech_docs | company | reference
@@ -129,9 +130,11 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
             continue
         if op in ("after", "since"):
             q.after = _date_ts(value)
+            q.explicit_date_filter = True
             continue
         if op in ("before", "until"):
             q.before = _date_ts(value)
+            q.explicit_date_filter = True
             continue
         if op in ("intitle", "allintitle"):
             q.intitle.extend(analyze(value))

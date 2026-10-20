@@ -6,16 +6,61 @@ from pathlib import Path
 
 # \w in Python's re does not include combining marks, which breaks Indic and Arabic words
 # (e.g. Hindi vowel signs). Add the mark ranges explicitly.
-_MARKS = ("̀-ͯ҃-҉֑-ׇؐ-ًؚ-ٰٟۖ-ۭ"
+_MARKS = ("̀-ͯ҃-҉֑-ׇؐ-ًؚ-ٰٟۖ-ۭ"
           "ऀ-෿฀-๿຀-໿ༀ-࿿က-႟ក-៿")
 _WC = rf"(?:[^\W_]|[{_MARKS}])"
 _TOKEN_RE = re.compile(rf"\d+(?:[.,]\d+)+|{_WC}+(?:['’]{_WC}+)*")
-_CJK_RE = re.compile(r"[぀-ヿ㐀-䶿一-鿿가-힯豈-﫿]")
+_CJK_RE = re.compile(r"[぀-ヿ㐀-䶿一-鿿가-힯豈-﫿]")
+# Devanagari (Hindi/Marathi/Nepali) and Gujarati Unicode ranges
+_DEVANAGARI_RE = re.compile(r"[ऀ-ॿ]")
+_GUJARATI_RE = re.compile(r"[઀-૿]")
 MAX_TOKEN_LEN = 64
 
-STOPWORDS = frozenset(line.strip() for line in
-    (Path(__file__).with_name("resources") / "stopwords_en.txt").read_text(encoding="utf-8").splitlines()
-    if line.strip() and not line.lstrip().startswith("#"))
+
+def _load_stopwords(lang):
+    path = Path(__file__).with_name("resources") / f"stopwords_{lang}.txt"
+    try:
+        return frozenset(line.strip() for line in path.read_text(encoding="utf-8").splitlines()
+                         if line.strip() and not line.lstrip().startswith("#"))
+    except OSError:
+        return frozenset()
+
+
+STOPWORDS = _load_stopwords("en")
+STOPWORDS_HI = _load_stopwords("hi")
+STOPWORDS_GU = _load_stopwords("gu")
+ALL_STOPWORDS = STOPWORDS | STOPWORDS_HI | STOPWORDS_GU
+
+
+def detect_script(text):
+    """Return the dominant script of the text: 'devanagari', 'gujarati', 'latin', 'cjk', or 'mixed'."""
+    if not text:
+        return "latin"
+    deva = len(_DEVANAGARI_RE.findall(text))
+    guj = len(_GUJARATI_RE.findall(text))
+    cjk = len(_CJK_RE.findall(text))
+    latin = sum(1 for ch in text if ch.isascii() and ch.isalpha())
+    counts = {"devanagari": deva, "gujarati": guj, "cjk": cjk, "latin": latin}
+    best = max(counts, key=counts.get)
+    if counts[best] == 0:
+        return "latin"
+    # If more than one script has significant presence, call it mixed
+    second = sorted(counts.values(), reverse=True)[1]
+    if second > 0 and counts[best] / (second + counts[best]) < 0.7:
+        return "mixed"
+    return best
+
+
+def detect_language(text):
+    """Best-effort language detection from script. Returns a 2-letter ISO code or 'unk'."""
+    script = detect_script(text)
+    if script == "devanagari":
+        return "hi"
+    if script == "gujarati":
+        return "gu"
+    if script == "cjk":
+        return "ja"
+    return "en"
 
 
 def _fold(tok):
@@ -112,10 +157,42 @@ _STEP3.sort(key=lambda x: -len(x[0]))
 _STEP4.sort(key=len, reverse=True)
 
 
+# ------------------------------------------------------------------ Hindi light stemmer
+
+# Common Hindi grammatical suffixes (longest first). These are inflectional markers,
+# not topic-specific, so stripping them improves recall without harming precision.
+_HI_SUFFIXES = [
+    "करने", "करना", "करके", "करकर", "करते", "करती", "करता",
+    "वालों", "वाला", "वाली", "वाले", "वाले",
+    "ों", "एं", "ां", "ों", "ाँ",
+    "ने", "ना", "नी", "ने",
+    "कर", "कार",
+    "ा", "ी", "े", "ि", "ु", "ू",
+]
+_HI_SUFFIXES.sort(key=len, reverse=True)
+
+
+def _stem_hindi(word):
+    """Light stemmer for Devanagari (Hindi/Marathi/Nepali). Strips grammatical suffixes."""
+    if not _DEVANAGARI_RE.search(word):
+        return word
+    for suf in _HI_SUFFIXES:
+        if word.endswith(suf) and len(word) > len(suf) + 1:
+            return word[: -len(suf)]
+    return word
+
+
 @lru_cache(maxsize=200_000)
 def stem(word):
     w = word
-    if len(w) <= 2 or not w.isascii() or not w.isalpha():
+    if len(w) <= 2:
+        return w
+    if not w.isascii():
+        # Non-ASCII: try Hindi light stemming; leave other scripts untouched
+        if _DEVANAGARI_RE.search(w):
+            return _stem_hindi(w)
+        return w
+    if not w.isalpha():
         return w
     # step 1a
     if w.endswith("sses"):
@@ -181,5 +258,5 @@ def analyze(text):
 
 
 def analyze_query_words(text):
-    """[(surface, term, is_stopword)] in order."""
-    return [(t, stem(t), t in STOPWORDS) for t in tokenize(text)]
+    """[(surface, term, is_stopword)] in order. Stopwords checked across all supported languages."""
+    return [(t, stem(t), t in ALL_STOPWORDS) for t in tokenize(text)]

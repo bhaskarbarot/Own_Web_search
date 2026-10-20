@@ -123,3 +123,377 @@ news	{subject} headlines
 news	headlines about {subject}
 news	headlines for {subject}
 news	latest {subject} headlines
+# ===== Extended set: new intents + broader coverage (templates) =====
+weather	{subject} weather
+weather	weather in {subject}
+weather	weather in {subject} today
+weather	{subject} weather tomorrow
+weather	{subject} weather forecast
+weather	7 day forecast for {subject}
+weather	will it rain in {subject}
+weather	temperature in {subject} right now
+weather	{subject} humidity and wind
+weather	{subject} air quality index
+weather	is it going to snow in {subject}
+weather	{subject} weather this weekend
+weather	what is the weather like in {subject}
+weather	{subject} rainfall today
+weather	{subject} sunrise and sunset time
+weather	{subject} monsoon forecast
+weather	hourly forecast {subject}
+weather	{subject} heat wave warning
+sports	{subject} score
+sports	{subject} live score
+sports	{subject} match today
+sports	{subject} fixtures
+sports	{subject} standings
+sports	{subject} points table
+sports	{subject} schedule this week
+sports	who won the {subject} match
+sports	{subject} vs {subject} score
+sports	{subject} playing xi
+sports	{subject} team squad
+sports	{subject} league table
+sports	{subject} match highlights
+sports	{subject} results yesterday
+sports	when is the next {subject} game
+sports	{subject} player stats
+sports	{subject} transfer news
+sports	{subject} top scorers
+local	{subject} near me
+local	best {subject} near me
+local	{subject} nearby
+local	{subject} open now
+local	{subject} opening hours
+local	{subject} closing time
+local	directions to {subject}
+local	how to reach {subject}
+local	{subject} phone number and address
+local	{subject} reviews and ratings
+local	{subject} in my city
+local	nearest {subject}
+local	{subject} on map
+local	distance from {subject} to {subject}
+local	route from {subject} to {subject}
+local	{subject} parking
+local	24 hour {subject} nearby
+shopping	buy {subject} online
+shopping	{subject} price
+shopping	{subject} price in india
+shopping	{subject} discount
+shopping	{subject} deals
+shopping	{subject} coupon code
+shopping	cheapest {subject}
+shopping	{subject} best price
+shopping	{subject} reviews
+shopping	{subject} specifications
+shopping	{subject} offers today
+shopping	{subject} for sale
+shopping	{subject} amazon
+shopping	{subject} flipkart
+shopping	where to buy {subject}
+shopping	{subject} emi options
+shopping	{subject} price comparison
+shopping	{subject} unboxing and review
+comparison	{subject} vs {subject}
+comparison	{subject} versus {subject}
+comparison	compare {subject} and {subject}
+comparison	{subject} or {subject} which is better
+comparison	difference between {subject} and {subject}
+comparison	{subject} vs {subject} comparison
+comparison	{subject} compared to {subject}
+comparison	is {subject} better than {subject}
+comparison	{subject} vs {subject} pros and cons
+comparison	{subject} alternatives
+comparison	alternatives to {subject}
+comparison	{subject} vs {subject} for beginners
+travel	flights from {subject} to {subject}
+travel	{subject} hotels
+travel	{subject} trip itinerary
+travel	{subject} 3 day itinerary
+travel	things to do in {subject}
+travel	best time to visit {subject}
+travel	{subject} visa requirements
+travel	train from {subject} to {subject}
+travel	{subject} tourist places
+travel	{subject} travel guide
+travel	{subject} package tour
+travel	bus tickets {subject} to {subject}
+travel	{subject} flight status
+travel	pnr status {subject}
+travel	{subject} airport
+travel	{subject} cheap hotels
+travel	how many days are enough for {subject}
+definition	define {subject}
+definition	definition of {subject}
+definition	{subject} meaning
+definition	{subject} meaning in hindi
+definition	{subject} synonym
+definition	synonyms for {subject}
+definition	antonym of {subject}
+definition	{subject} pronunciation
+definition	how do you pronounce {subject}
+definition	{subject} etymology
+definition	origin of the word {subject}
+definition	what does {subject} mean
+definition	{subject} dictionary
+definition	{subject} word meaning and usage
+definition	{subject} in a sentence
+translation	translate {subject} to hindi
+translation	translate {subject} to english
+translation	{subject} in french
+translation	{subject} in spanish
+translation	{subject} in gujarati
+translation	how do you say {subject} in japanese
+translation	{subject} english to hindi
+translation	{subject} hindi to english
+translation	{subject} translation
+translation	what is {subject} in german
+translation	{subject} in tamil
+translation	translate {subject} into arabic
+conversion	convert {subject} to {subject}
+conversion	{subject} to {subject} converter
+conversion	{subject} in {subject}
+conversion	how many {subject} in a {subject}
+conversion	1 {subject} to {subject}
+conversion	{subject} to inr
+conversion	{subject} to usd
+conversion	{subject} to kg
+conversion	{subject} in miles
+conversion	{subject} exchange rate
+conversion	calculate {subject}
+conversion	{subject} percentage calculator
+conversion	{subject} emi calculator
+conversion	{subject} square root
+conversion	solve {subject}
+conversion	{subject} celsius to fahrenheit
+conversion	what is {subject} plus {subject}
+time_date	time in {subject}
+time_date	current time in {subject}
+time_date	what time is it in {subject}
+time_date	{subject} time zone
+time_date	{subject} date today
+time_date	what day is it
+time_date	{subject} local time
+time_date	time difference between {subject} and {subject}
+time_date	{subject} calendar
+time_date	what is the date in {subject}
+time_date	{subject} holidays
+time_date	{subject} public holiday list
+time_date	when is {subject}
+time_date	how many days until {subject}
+time_date	{subject} date
+time_date	{subject} festival date
+images	{subject} images
+images	{subject} pictures
+images	{subject} photos
+images	{subject} wallpaper
+images	{subject} hd wallpaper
+images	{subject} png
+images	{subject} logo
+images	{subject} image download
+images	{subject} pictures free
+images	{subject} high resolution photos
+images	show me pictures of {subject}
+images	{subject} gif
+images	{subject} clipart
+images	{subject} icons
+images	{subject} meme
+video	{subject} video
+video	{subject} videos
+video	{subject} youtube
+video	watch {subject}
+video	{subject} trailer
+video	{subject} full video
+video	{subject} video tutorial
+video	{subject} video lecture
+video	{subject} documentary
+video	{subject} live stream
+video	{subject} clips
+video	{subject} reaction video
+video	{subject} official video
+video	{subject} webinar recording
+academic	{subject} research paper
+academic	{subject} arxiv
+academic	{subject} pdf
+academic	{subject} journal article
+academic	{subject} literature review
+academic	{subject} study results
+academic	{subject} meta analysis
+academic	{subject} thesis
+academic	{subject} citation
+academic	{subject} peer reviewed
+academic	{subject} google scholar
+academic	{subject} systematic review
+academic	{subject} survey paper
+academic	{subject} dataset
+academic	{subject} lecture notes
+academic	{subject} syllabus
+academic	{subject} previous year question papers
+academic	{subject} ncert solutions
+health	{subject} symptoms
+health	{subject} treatment
+health	{subject} causes
+health	{subject} side effects
+health	{subject} dosage
+health	{subject} home remedies
+health	{subject} diet plan
+health	is {subject} safe
+health	{subject} vaccine
+health	how to prevent {subject}
+health	{subject} medicine
+health	{subject} test normal range
+health	{subject} doctor near me
+health	{subject} signs and diagnosis
+health	{subject} pregnancy safe
+health	calories in {subject}
+health	{subject} nutrition facts
+health	{subject} benefits and risks
+jobs	{subject} jobs
+jobs	{subject} jobs near me
+jobs	{subject} vacancy
+jobs	{subject} recruitment 2026
+jobs	{subject} salary
+jobs	{subject} job openings
+jobs	{subject} internship
+jobs	{subject} freshers jobs
+jobs	{subject} work from home jobs
+jobs	{subject} resume format
+jobs	{subject} interview questions
+jobs	{subject} hiring
+jobs	{subject} walk in interview
+jobs	{subject} admit card
+jobs	{subject} exam result
+jobs	{subject} notification
+entertainment	{subject} movie
+entertainment	{subject} cast
+entertainment	{subject} release date
+entertainment	{subject} review
+entertainment	{subject} box office collection
+entertainment	{subject} ott release
+entertainment	{subject} imdb rating
+entertainment	{subject} songs
+entertainment	{subject} full movie cast and crew
+entertainment	{subject} web series
+entertainment	{subject} showtimes
+entertainment	{subject} album
+entertainment	{subject} season 2
+entertainment	{subject} where to watch
+entertainment	movies like {subject}
+entertainment	{subject} plot summary
+entertainment	{subject} ending explained
+government	{subject} application form
+government	{subject} apply online
+government	{subject} status check
+government	{subject} eligibility
+government	{subject} documents required
+government	{subject} registration
+government	{subject} helpline number
+government	{subject} login portal
+government	{subject} act
+government	{subject} rules and regulations
+government	{subject} income tax
+government	{subject} gst rate
+government	{subject} passport
+government	{subject} aadhaar update
+government	{subject} fees and process
+government	{subject} government scheme
+government	{subject} last date
+code_error	{subject} error
+code_error	error {subject}
+code_error	fix {subject} error
+code_error	{subject} exception
+code_error	{subject} not working
+code_error	{subject} traceback
+code_error	{subject} failed to install
+code_error	why is {subject} undefined
+code_error	{subject} segmentation fault
+code_error	{subject} stack overflow
+code_error	{subject} cannot find module
+code_error	{subject} permission denied
+code_error	{subject} syntax error
+code_error	{subject} 404 not found fix
+code_error	{subject} cors error
+code_error	{subject} bug
+navigational	{subject} login
+navigational	{subject} sign in
+navigational	{subject} homepage
+navigational	{subject} website
+navigational	{subject} app download
+navigational	{subject} official app
+navigational	go to {subject}
+navigational	open {subject}
+navigational	{subject} sign up
+navigational	{subject} dashboard
+navigational	{subject} account
+navigational	{subject} download page
+navigational	{subject}.com
+navigational	{subject} web version
+recipes	{subject} recipe
+recipes	how to make {subject} at home
+recipes	{subject} recipe easy
+recipes	{subject} ingredients
+recipes	best {subject} recipe
+recipes	{subject} step by step recipe
+recipes	{subject} without oven
+recipes	vegan {subject} recipe
+recipes	{subject} cooking time
+recipes	quick {subject} recipe
+news	{subject} latest
+news	{subject} news today
+news	{subject} live updates
+news	{subject} breaking
+news	what is the latest on {subject}
+news	{subject} update
+news	news from {subject} this week
+news	{subject} ki khabar
+news	{subject} newsletter roundup
+finance_quote	{subject} price today
+finance_quote	{subject} rate today
+finance_quote	{subject} live rate
+finance_quote	{subject} stock price now
+finance_quote	{subject} ticker
+finance_quote	{subject} 52 week high
+finance_quote	{subject} pe ratio
+finance_quote	{subject} dividend yield
+finance_history	{subject} 5 year return
+finance_history	{subject} price chart 10 years
+finance_history	{subject} all time high
+finance_history	{subject} historical data
+finance_history	{subject} stock performance ytd
+finance_history	{subject} 1 month trend
+tech_docs	{subject} cheat sheet
+tech_docs	{subject} getting started
+tech_docs	{subject} changelog
+tech_docs	{subject} release notes
+tech_docs	{subject} github
+tech_docs	{subject} quickstart
+tech_docs	{subject} best practices
+tech_docs	{subject} cli reference
+tech_docs	{subject} migration guide
+tech_docs	how to use {subject} with {subject}
+tech_docs	{subject} vs {subject} performance benchmark
+reference	{subject} wikipedia
+reference	{subject} facts
+reference	{subject} biography
+reference	{subject} timeline
+reference	{subject} age
+reference	{subject} net worth
+reference	{subject} full form
+reference	{subject} area
+reference	{subject} climate
+reference	what is the difference between {subject} and {subject}
+company	{subject} stock symbol
+company	{subject} ceo
+company	{subject} email address
+company	{subject} toll free number
+company	{subject} store locator
+company	{subject} investor relations
+company	{subject} annual report
+general	best {subject} in 2026
+general	{subject} ideas
+general	{subject} tips and tricks
+general	{subject} for kids
+general	how to choose {subject}
+general	is {subject} worth it
+general	pros and cons of {subject}

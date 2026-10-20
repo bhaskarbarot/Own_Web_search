@@ -145,3 +145,386 @@ reference	can you say where the statue of unity is located
 reference	which place was the battle of plassey fought in
 finance_quote	what is the share price of the company infosys today
 tech_docs	can you see the docs and say how to install kafka
+# ===== Extended set: new intents + broader coverage (examples) =====
+weather	weather in rajkot
+weather	will it rain in mumbai tomorrow
+weather	temperature in london right now
+weather	delhi air quality index
+weather	7 day forecast for new york
+weather	is it going to snow in denver this weekend
+weather	aaj ka mausam
+weather	mumbai monsoon forecast
+weather	weather tokyo hourly
+weather	humidity in chennai today
+weather	heat wave warning gujarat
+weather	sunrise time in paris
+weather	cyclone alert odisha today
+weather	tomorrow weather bangalore
+weather	uv index sydney
+sports	india vs australia live score
+sports	ipl points table
+sports	premier league fixtures this weekend
+sports	who won the match yesterday
+sports	real madrid vs barcelona score
+sports	nba standings
+sports	virat kohli stats
+sports	champions league results
+sports	f1 race schedule
+sports	csk playing xi today
+sports	wimbledon final score
+sports	fifa world cup groups
+sports	kabaddi league table
+sports	mumbai indians squad
+sports	pakistan vs india cricket highlights
+sports	latest transfer news manchester united
+local	restaurants near me
+local	pharmacy open now
+local	petrol pump nearby
+local	directions to the airport
+local	atm near me
+local	how to reach gir national park from rajkot
+local	hospitals nearby
+local	best biryani near me
+local	dentist open on sunday
+local	distance from delhi to jaipur
+local	route from ahmedabad to surat
+local	coffee shops in bangalore open now
+local	24 hour medical store near me
+local	bus stand nearby
+local	gyms in my area
+shopping	buy iphone 16 online
+shopping	samsung galaxy s25 price in india
+shopping	best deals on laptops today
+shopping	nike air max discount
+shopping	cheapest 55 inch tv
+shopping	amazon great indian festival offers
+shopping	coupon code for myntra
+shopping	redmi note price comparison
+shopping	boat earbuds reviews
+shopping	buy running shoes online
+shopping	where to buy a standing desk
+shopping	sony headphones for sale
+shopping	ac price with emi
+shopping	oneplus 13 specifications
+shopping	lg washing machine 7 kg price
+comparison	iphone vs samsung
+comparison	python vs javascript
+comparison	react vs vue
+comparison	tesla model 3 vs model y
+comparison	aws vs azure vs gcp
+comparison	difference between ssd and hdd
+comparison	is a mac better than a windows laptop
+comparison	postgres vs mysql
+comparison	kindle or paper books which is better
+comparison	chatgpt vs gemini
+comparison	alternatives to photoshop
+comparison	sbi vs hdfc savings account
+comparison	hybrid vs electric car
+comparison	flask vs django for beginners
+comparison	nikon vs canon
+travel	flights from delhi to goa
+travel	hotels in jaipur
+travel	3 day itinerary for kerala
+travel	things to do in paris
+travel	best time to visit ladakh
+travel	japan visa requirements for indians
+travel	train from mumbai to ahmedabad
+travel	udaipur tourist places
+travel	pnr status check
+travel	bali travel guide
+travel	cheap flights to dubai next month
+travel	bus tickets rajkot to ahmedabad
+travel	manali package tour
+travel	air india flight status
+travel	how many days are enough for rome
+definition	define serendipity
+definition	meaning of ephemeral
+definition	synonyms for happy
+definition	antonym of generous
+definition	how do you pronounce quinoa
+definition	etymology of the word salary
+definition	what does ubiquitous mean
+definition	nostalgia meaning in hindi
+definition	definition of inflation
+definition	meaning of the idiom break the ice
+definition	onomatopoeia examples and meaning
+definition	what does carpe diem mean
+definition	lethargic synonym
+definition	affect vs effect meaning
+definition	pronounce worcestershire
+translation	translate good morning to hindi
+translation	how do you say thank you in japanese
+translation	hello in french
+translation	i love you in spanish
+translation	translate where is the station to german
+translation	english to gujarati translation
+translation	what is water in tamil
+translation	hindi to english how are you
+translation	bonjour meaning translation
+translation	translate this sentence into arabic
+translation	thank you in korean
+translation	how to say sorry in italian
+conversion	convert 100 usd to inr
+conversion	10 km in miles
+conversion	how many ounces in a pound
+conversion	celsius to fahrenheit 37
+conversion	1 bitcoin to inr
+conversion	5 feet in cm
+conversion	square root of 144
+conversion	15 percent of 2400
+conversion	emi calculator for 20 lakh loan
+conversion	euro to dollar exchange rate
+conversion	what is 17 times 23
+conversion	kg to pounds 70
+conversion	gst calculator 18 percent on 5000
+conversion	how many days in 10000 hours
+conversion	1 lakh in million
+time_date	time in tokyo
+time_date	what time is it in new york
+time_date	india time zone
+time_date	time difference between delhi and london
+time_date	what day is it today
+time_date	when is diwali
+time_date	how many days until christmas
+time_date	public holidays 2026 india
+time_date	current time in sydney
+time_date	date today
+time_date	holi date next year
+time_date	est to ist converter
+time_date	when is the next full moon
+time_date	pst to gmt time now
+time_date	republic day date
+images	golden retriever puppy pictures
+images	taj mahal photos
+images	mountain wallpaper hd
+images	apple logo png
+images	sunset beach images
+images	cute cat gif
+images	royal enfield wallpaper 4k
+images	nasa moon photos high resolution
+images	diwali rangoli designs pictures
+images	python logo transparent
+images	vintage car images
+images	flower clipart
+images	anime wallpaper
+images	eiffel tower at night photos
+video	python tutorial for beginners video
+video	interstellar trailer
+video	how to tie a tie video
+video	ted talk on creativity
+video	stanford machine learning lecture
+video	isro launch live stream
+video	guitar lesson for beginners youtube
+video	national geographic documentary on oceans
+video	watch ipl highlights
+video	yoga for back pain video
+video	avengers official trailer
+video	how to change a tyre video
+video	cricket world cup final clips
+video	react crash course
+academic	transformer architecture research paper
+academic	arxiv attention is all you need
+academic	climate change meta analysis
+academic	systematic review of intermittent fasting
+academic	cbse class 10 previous year question papers
+academic	ncert class 12 physics solutions
+academic	machine learning lecture notes pdf
+academic	literature review on remote work
+academic	gate cse syllabus
+academic	protein folding journal article
+academic	dataset for sentiment analysis
+academic	peer reviewed studies on meditation
+academic	google scholar graph neural networks
+academic	upsc syllabus pdf
+academic	thesis on renewable energy storage
+health	symptoms of dengue
+health	type 2 diabetes treatment
+health	side effects of paracetamol
+health	home remedies for cold and cough
+health	is turmeric milk safe daily
+health	calories in a banana
+health	normal blood pressure range
+health	vitamin d deficiency causes
+health	how to prevent migraine
+health	benefits of intermittent fasting
+health	covid vaccine booster schedule
+health	iron rich foods list
+health	back pain exercises
+health	nutrition facts of oats
+health	heart attack warning signs
+jobs	software engineer jobs in pune
+jobs	data analyst salary india
+jobs	freshers jobs ahmedabad
+jobs	sbi po recruitment 2026
+jobs	work from home jobs
+jobs	google internship for students
+jobs	resume format for freshers
+jobs	python developer interview questions
+jobs	ssc cgl notification
+jobs	railway group d admit card
+jobs	remote react developer jobs
+jobs	nurse vacancy near me
+jobs	upsc result
+jobs	government jobs in gujarat
+jobs	product manager salary bangalore
+entertainment	oppenheimer cast
+entertainment	dune part two release date
+entertainment	best web series on netflix
+entertainment	pushpa 2 box office collection
+entertainment	stranger things season 5 release
+entertainment	where to watch the godfather
+entertainment	movies like inception
+entertainment	imdb top 250
+entertainment	jawan ott release
+entertainment	arijit singh new songs
+entertainment	barbie movie plot summary
+entertainment	shows like breaking bad
+entertainment	avatar 3 showtimes near me
+entertainment	taylor swift new album
+entertainment	the last of us season 2 ending explained
+government	pan card apply online
+government	aadhaar address update
+government	passport application documents required
+government	income tax return last date
+government	gst rate on restaurants
+government	driving licence renewal fees
+government	ration card status check
+government	pm kisan eligibility
+government	voter id registration
+government	epfo login portal
+government	right to information act rules
+government	pradhan mantri awas yojana apply
+government	itr refund status
+government	birth certificate online gujarat
+government	scholarship application last date
+code_error	python modulenotfounderror no module named numpy
+code_error	typeerror cannot read properties of undefined
+code_error	npm err code eresolve
+code_error	segmentation fault core dumped c
+code_error	cors error fetch localhost
+code_error	java lang nullpointerexception fix
+code_error	git push rejected non fast forward
+code_error	docker permission denied var run docker sock
+code_error	react hydration failed error
+code_error	importerror cannot import name
+code_error	pip install failed building wheel
+code_error	indexerror list index out of range
+code_error	uncaught syntaxerror unexpected token
+code_error	postgres connection refused fix
+code_error	cuda out of memory pytorch
+navigational	youtube
+navigational	facebook login
+navigational	gmail sign in
+navigational	github
+navigational	amazon india
+navigational	irctc login
+navigational	linkedin
+navigational	paytm download page
+navigational	netflix sign up
+navigational	twitter web
+navigational	wikipedia
+navigational	hdfc netbanking
+navigational	instagram
+navigational	openai dashboard
+navigational	flipkart app download
+recipes	paneer butter masala recipe
+recipes	how to make pizza dough at home
+recipes	easy chocolate cake recipe
+recipes	dal tadka ingredients
+recipes	vegan pancakes recipe
+recipes	khaman dhokla step by step recipe
+recipes	quick pasta recipe
+recipes	chicken biryani cooking time
+recipes	sourdough bread recipe
+recipes	masala chai recipe
+news	sensex aaj ki khabar
+news	top news india today
+news	aaj ki taaza khabar
+news	latest news from gujarat
+news	ai regulation news this week
+news	election commission announcement today
+news	space mission news
+news	startup funding news today
+news	isro latest news
+news	what is the government saying about the budget
+news	global markets news this morning
+news	news on climate summit
+news	today's headlines from asia
+news	breaking news on cyclone
+news	oil prices news this week
+finance_quote	nifty 50 live
+finance_quote	gold price today
+finance_quote	silver rate now
+finance_quote	usd to inr live rate
+finance_quote	bitcoin price live
+finance_quote	tata motors share price
+finance_quote	adani enterprises stock quote
+finance_quote	s&p 500 today
+finance_quote	dow jones live
+finance_quote	brent crude price now
+finance_quote	sol price right now
+finance_quote	nvidia stock value today
+finance_quote	zomato share price
+finance_quote	bank nifty live
+finance_quote	sbi share price
+finance_history	gold price history last 10 years
+finance_history	nifty 50 returns over 5 years
+finance_history	tcs share price last 6 months
+finance_history	bitcoin price trend this year
+finance_history	s&p 500 performance last decade
+finance_history	sensex all time high history
+finance_history	hdfc bank stock chart 1 year
+finance_history	crude oil price history 2 years
+finance_history	apple stock analysis past 12 months
+finance_history	ethereum price chart last month
+finance_history	usd inr historical rates
+finance_history	nvidia share price trend 3 years
+tech_docs	numpy array slicing documentation
+tech_docs	how to install node on windows
+tech_docs	tailwind css grid examples
+tech_docs	go goroutines tutorial
+tech_docs	how to use r dplyr group by
+tech_docs	c pointers explained
+tech_docs	aws lambda python example
+tech_docs	sql join types tutorial
+tech_docs	kotlin coroutines guide
+tech_docs	terraform aws provider docs
+tech_docs	how to configure ssh keys on github
+tech_docs	rust lifetimes explained
+tech_docs	vite proxy config
+tech_docs	pytorch dataloader api reference
+reference	who is the prime minister of india
+reference	what is blockchain
+reference	population of india
+reference	capital of australia
+reference	who invented the telephone
+reference	when did india gain independence
+reference	height of burj khalifa
+reference	who wrote the constitution of india
+reference	what is the speed of light
+reference	history of the internet
+reference	who discovered penicillin
+reference	where is machu picchu located
+reference	what does gdp stand for
+reference	who founded tesla
+reference	how far is the moon from earth
+company	infosys careers
+company	amazon customer care number
+company	microsoft headquarters address
+company	reliance industries official website
+company	contact flipkart support
+company	where is the head office of tcs
+company	about openai company
+company	nvidia official site
+company	zomato customer support number
+company	tata steel careers
+general	tips for better focus
+general	how to learn guitar fast
+general	good gifts for dad
+general	how to remove a stain from a shirt
+general	ideas for a birthday party
+general	how to save money every month
+general	best way to learn a language
+general	how to meditate
+general	how to improve handwriting
+general	what to do on a rainy day

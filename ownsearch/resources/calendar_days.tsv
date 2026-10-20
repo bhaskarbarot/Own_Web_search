@@ -1,4 +1,13 @@
 # Calendar-day language grammar: day offset from today's UTC midnight, then token.
 0	today
 0	todays
+0	tonight
+0	tonights
+0	aaj
 -1	yesterday
+-1	yesterdays
+-1	yday
+1	tomorrow
+1	tomorrows
+1	tmrw
+1	tmr
