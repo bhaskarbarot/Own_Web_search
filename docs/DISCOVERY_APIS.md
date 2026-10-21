@@ -69,3 +69,11 @@ service. The adapter never follows an error into an access-denial bypass.
 
 [Official manual](https://info.arxiv.org/help/api/user-manual.html) and
 [API terms](https://info.arxiv.org/help/api/tou.html).
+# OpenAlex
+
+Uses the official works search endpoint, returned landing/DOI/work URLs and
+publication dates. Abstracts contain only words supplied in the inverted index.
+Basic requests currently work without a key; an optional key is sent in an HTTPS
+Bearer header. Decimal remaining-quota values and relative reset seconds are
+honored. Contract: https://help.openalex.org/api/authentication/ and
+https://developers.openalex.org/api-reference/works/get-a-list-of-works.

@@ -266,7 +266,35 @@ class ArxivApiProvider(ApiProvider):
             self._connection.release()
 
 
-ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider,'crates':CratesApiProvider,'arxiv':ArxivApiProvider}
+class OpenAlexApiProvider(ApiProvider):
+    name='openalex'
+    quota_reset_is_delay=True
+
+    def accepts(self,request):return super().accepts(request) and research_request(request)
+
+    def search(self,request,deadline):
+        headers={'Authorization':'Bearer '+self.settings.openalex_api_key} if self.settings.openalex_api_key else None
+        data=self.request(request,self.settings.openalex_api_url+'?'+urlencode({'search':api_query(request),'per_page':10}),deadline,headers=headers)
+        items=data.get('results')
+        if not isinstance(items,list):raise ProviderError('OpenAlex API returned an invalid results array.')
+        rows=[]
+        for item in items[:10]:
+            if not isinstance(item,dict):continue
+            location=item.get('primary_location') if isinstance(item.get('primary_location'),dict) else {}
+            url=location.get('landing_page_url') or item.get('doi') or item.get('id')
+            inverted=item.get('abstract_inverted_index');words={}
+            if isinstance(inverted,dict):
+                for word,positions in list(inverted.items())[:2000]:
+                    if not isinstance(word,str) or not isinstance(positions,list):continue
+                    for position in positions[:1000]:
+                        if type(position) is int and 0<=position<300:words.setdefault(position,word)
+            abstract=' '.join(words[pos] for pos in sorted(words))
+            row=self.row(request,url,item.get('display_name') or item.get('title'),abstract,item.get('publication_date'),item.get('language'))
+            if row:rows.append(row)
+        return SourceBatch(rows)
+
+
+ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider,'crates':CratesApiProvider,'arxiv':ArxivApiProvider,'openalex':OpenAlexApiProvider}
 
 
 def configured_verticals(settings):

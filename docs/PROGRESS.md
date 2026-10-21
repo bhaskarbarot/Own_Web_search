@@ -448,3 +448,12 @@ stopped when the service circuit opened. No denial was bypassed or called a
 success. Fifty relevant tests pass, including Atom and source-cache regressions.
 All offline preservation scores unchanged (arxiv-offline.json). arxiv-live.json
 retains the actual service response error. Continue to OpenAlex alternative.
+# Phase 1 adapter — OpenAlex
+
+2026-10-21, parent fd59d16. Added independent research metadata search,
+source-returned URLs, actual publication dates and bounded reconstruction of
+supplied abstract words. Optional HTTPS header credentials; keyless basic calls
+were verified. All 300 dev IDs considered; 32 eligible; two actual probes both
+succeeded with 20 URLs total. These are availability observations, not relevance
+grades. Twenty-one targeted tests pass; legacy offline scores unchanged. Quota
+tests cover decimal zero and relative reset seconds. Continue to StackExchange.

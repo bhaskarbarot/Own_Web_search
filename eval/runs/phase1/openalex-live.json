@@ -1,0 +1,213 @@
+{
+  "provider": "openalex",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 32,
+  "runs": [
+    {
+      "id": "original-M03",
+      "query": "Research whether a search API is suitable for an AI agent.",
+      "checked_at": "2026-10-21T07:18:18.011093+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://doi.org/10.1016/j.inffus.2025.103599",
+          "title": "AI Agents vs. Agentic AI: A Conceptual taxonomy, applications and challenges",
+          "snippet": "Information fusion, in the context of the Generative AI era, must distinguish AI Agents from Agentic AI. This review critically distinguishes between AI Agents and Agentic AI, offering a structured, conceptual taxonomy, application mapping, and analysis of opportunities and challenges to clarify their divergent design philosophies and capabilities. We begin by outlining the search strategy and foundational definitions, characterizing AI Agents as modular systems driven and enabled by LLMs and LIMs for task-specific automation. Generative AI is positioned as a precursor providing the foundation, with AI agents advancing through tool integration, prompt engineering, and reasoning enhancements. We then characterize Agentic AI systems, which, in contrast to AI Agents, represent a paradigm shift marked by multi-agent collaboration, dynamic task decomposition, persistent memory, and coordinated autonomy. Through a chronological evaluation of architectural evolution, operational mechanisms, interaction styles, and autonomy levels, we present a comparative analysis across both AI agents and agentic AI paradigms. Application domains enabled by AI Agents such as customer support, scheduling,",
+          "published_at": "2025-08-22",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "http://arxiv.org/abs/2412.13233",
+          "title": "Creating an LLM-based AI-agent: A high-level methodology towards enhancing LLMs with APIs",
+          "snippet": "Large Language Models (LLMs) have revolutionized various aspects of engineering and science. Their utility is often bottlenecked by the lack of interaction with the external digital environment. To overcome this limitation and achieve integration of LLMs and Artificial Intelligence (AI) into real-world applications, customized AI agents are being constructed. Based on the technological trends and techniques, we extract a high-level approach for constructing these AI agents, focusing on their underlying architecture. This thesis serves as a comprehensive guide that elucidates a multi-faceted approach for empowering LLMs with the capability to leverage Application Programming Interfaces (APIs). We present a 7-step methodology that begins with the selection of suitable LLMs and the task decomposition that is necessary for complex problem-solving. This methodology includes techniques for generating training data for API interactions and heuristics for selecting the appropriate API among a plethora of options. These steps eventually lead to the generation of API calls that are both syntactically and semantically aligned with the LLM's understanding of a given task. Moreover, we review e",
+          "published_at": "2024-12-17",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "https://doi.org/10.70777/si.v2i3.15161",
+          "title": "AI Agents vs. Agentic AI: A Conceptual Taxonomy, Applications and Challenges",
+          "snippet": "This review critically distinguishes between AI Agents and Agentic AI, offering a structured, conceptual taxonomy, application mapping, and analysis of opportunities and challenges to clarify their divergent design philosophies and capabilities. We begin by outlining the search strategy and foundational definitions, characterizing AI Agents as modular systems driven and enabled by LLMs and LIMs for taskspecific automation. Generative AI is positioned as a precursor providing the foundation, with AI agents advancing through tool integration, prompt engineering, and reasoning enhancements. We then characterize Agentic AI systems, which, in contrast to AI Agents, represent a paradigm shift marked by multi-agent collaboration, dynamic task decomposition, persistent memory, and coordinated autonomy. Through a chronological evaluation of architectural evolution, operational mechanisms, interaction styles, and autonomy levels, we present a comparative analysis across both AI agents and agentic AI paradigms. Application domains enabled by AI Agents such as customer support, scheduling, and data summarization are then contrasted with Agentic AI deployments in research automation, robotic co",
+          "published_at": "2025-07-20",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.96.7282",
+          "title": "The QASE API: A Comprehensive Platform for Games-Based AI Research and Education.",
+          "snippet": "intelligent agents, education. Computer games have belatedly come to the fore as a serious platform for AI research. Through our own experiments in the fields of imitation learning and intelligent agents, it became clear that the lack of a unified, powerful yet intuitive API was a serious impediment to the adoption of commercial games in both research and education. Parallel to our own specialised work, we therefore decided to develop a generalpurpose library for the creation of game agents, in the hope that the availability of such software would help stimulate further interest in the field. Though geared towards machinelearning, the API would be flexible enough to facilitate multiple forms of artificial intelligence, making it suitable for application in research and in undergraduate courses centring upon traditional AI and agent-based systems. In this paper, we present the result of our efforts; the Quake 2 Agent Simulation Environment (QASE) API. We first describe the theme of our work, the reasons for choosing Quake 2 as our testbed, and the necessity for an API of this nature. We then outline its most important features, before presenting an experiment from our own research t",
+          "published_at": "2007-06-01",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "https://doi.org/10.2139/ssrn.5455842",
+          "title": "AI Agents for Economic Research",
+          "snippet": "",
+          "published_at": "2025-01-01",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "https://doi.org/10.1145/3630106.3658948",
+          "title": "Visibility into AI Agents",
+          "snippet": "Increased delegation of commercial, scientific, governmental, and personal activities to AI agents—systems capable of pursuing complex goals with limited supervision—may exacerbate existing societal risks and introduce new risks. Understanding and mitigating these risks involves critically evaluating existing governance structures, revising and adapting these structures where needed, and ensuring accountability of key stakeholders. Information about where, why, how, and by whom certain AI agents are used, which we refer to as visibility, is critical to these objectives. In this paper, we assess three categories of measures to increase visibility into AI agents: agent identifiers, real-time monitoring, and activity logging. For each, we outline potential implementations that vary in intrusiveness and informativeness. We analyze how the measures apply across a spectrum of centralized through decentralized deployment contexts, accounting for various actors in the supply chain including hardware and software service providers. Finally, we discuss the implications of our measures for privacy and concentration of power. Further work into understanding the measures and mitigating their ne",
+          "published_at": "2024-06-03",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "https://doi.org/10.1109/iccv.2019.00943",
+          "title": "Habitat: A Platform for Embodied AI Research",
+          "snippet": "We present Habitat, a platform for research in embodied artificial intelligence (AI). Habitat enables training embodied agents (virtual robots) in highly efficient photorealistic 3D simulation. Specifically, Habitat consists of: (i) Habitat-Sim: a flexible, high-performance 3D simulator with configurable agents, sensors, and generic 3D dataset handling. Habitat-Sim is fast - when rendering a scene from Matterport3D, it achieves several thousand frames per second (fps) running single-threaded, and can reach over 10,000 fps multi-process on a single GPU. (ii) Habitat-API: a modular high-level library for end-toend development of embodied AI algorithms - defining tasks (e.g. navigation, instruction following, question answering), configuring, training, and benchmarking embodied agents. These large-scale engineering contributions enable us to answer scientific questions requiring experiments that were till now impracticable or `merely' impractical. Specifically, in the context of point-goal navigation: (1) we revisit the comparison between learning and SLAM approaches from two recent works [19, 16] and find evidence for the opposite conclusion - that learning outperforms SLAM if scaled",
+          "published_at": "2019-10-01",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "https://doi.org/10.18653/v1/2025.findings-acl.577",
+          "title": "Beyond Browsing: API-Based Web Agents",
+          "snippet": "Web browsers are a portal to the internet, where much of human activity is undertaken.Thus, there has been significant research work in AI agents that interact with the internet through web browsing.However, there is also another interface designed specifically for machine interaction with online content: application programming interfaces (APIs).In this paper we ask -what if we were to take tasks traditionally tackled by Browsing Agents, and give AI agents access to APIs?To do so, we propose two varieties of agents: (1) an API-calling agent that attempts to perform online tasks through APIs only, similar to traditional coding agents, and (2) a Hybrid Agent that can interact with online data through both web browsing and APIs.In experiments on WebArena, a widely-used and realistic benchmark for web navigation tasks, we find that API-Based Agents outperform web Browsing Agents.Hybrid Agents outperform both others nearly uniformly across tasks, resulting in a more than 24.0%absolute improvement over web browsing alone, achieving a success rate of 38.9%, the SOTA performance among task-agnostic agents.These results strongly suggest that when APIs are available, they present an attract",
+          "published_at": "2025-01-01",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "http://arxiv.org/abs/2407.01502",
+          "title": "AI Agents That Matter",
+          "snippet": "AI agents are an exciting new research direction, and agent development is driven by benchmarks. Our analysis of current agent benchmarks and evaluation practices reveals several shortcomings that hinder their usefulness in real-world applications. First, there is a narrow focus on accuracy without attention to other metrics. As a result, SOTA agents are needlessly complex and costly, and the community has reached mistaken conclusions about the sources of accuracy gains. Our focus on cost in addition to accuracy motivates the new goal of jointly optimizing the two metrics. We design and implement one such optimization, showing its potential to greatly reduce cost while maintaining accuracy. Second, the benchmarking needs of model and downstream developers have been conflated, making it hard to identify which agent would be best suited for a particular application. Third, many agent benchmarks have inadequate holdout sets, and sometimes none at all. This has led to agents that are fragile because they take shortcuts and overfit to the benchmark in various ways. We prescribe a principled framework for avoiding overfitting. Finally, there is a lack of standardization in evaluation pra",
+          "published_at": "2024-07-01",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        },
+        {
+          "url": "https://doi.org/10.3390/fi17020057",
+          "title": "AI Agents Meet Blockchain: A Survey on Secure and Scalable Collaboration for Multi-Agents",
+          "snippet": "In recent years, the interplay between AI agents and blockchain has enabled secure and scalable collaboration among multi-agent systems, promoting unprecedented levels of autonomy and interoperability. AI agents play a vital role in facilitating complex decision making and improving operational efficiency in blockchain systems. This collaborative synergy is particularly evident in how multi-agent systems collectively tackle complex tasks to ensure seamless integration within these frameworks. While significant efforts have been made to integrate AI agents and blockchain, most studies overlook the broader potential of AI agents in addressing challenges such as interoperability, scalability, and privacy issues. In this paper, we bridge these gaps by illustrating the interplay between AI agents and blockchain. Specifically, we explore how AI agents enhance decentralized systems and examine blockchain’s role in enabling secure and scalable collaboration. Furthermore, we categorize practical applications across domains, such as Web3, decentralized finance (DeFi), asset management, and autonomous systems, providing practical insights and real-world use cases. Additionally, we identify ke",
+          "published_at": "2025-02-02",
+          "lang": "en",
+          "source_query": "Research API suitable AI agent"
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 3000.82,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 1,
+        "successes": 1,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 59,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    },
+    {
+      "id": "live-research-007",
+      "query": "papers differential privacy composition theorem",
+      "checked_at": "2026-10-21T07:18:22.012066+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://doi.org/10.29012/jpc.870",
+          "title": "Numerical Composition of Differential Privacy",
+          "snippet": "We give a fast algorithm to optimally compose privacy guarantees of differentially private (DP) algorithms to arbitrary accuracy. Our method is based on the notion of \\emph{privacy loss random variables} to quantify the privacy loss of DP algorithms.The running time and memory needed for our algorithm to approximate the privacy curve of a DP algorithm composed with itself $k$ times is $\\tilde{O}(\\sqrt{k})$. This improves over the best prior method by Koskela et al. (2021) which requires $\\tilde{\\Omega}(k^{1.5})$ running time. We demonstrate the utility of our algorithm by accurately computing the privacy loss of DP-SGD algorithm of Abadi et al. (2016) and showing that our algorithm speeds up the privacy computations by a few orders of magnitude compared to prior work, while maintaining similar accuracy.",
+          "published_at": "2024-02-11",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doi.org/10.1198/jasa.2009.tm08651",
+          "title": "A Statistical Framework for Differential Privacy",
+          "snippet": "One goal of statistical privacy research is to construct a data release mechanism that protects individual privacy while preserving information content. An example is a random mechanism that takes an input database X and outputs a random database Z according to a distribution Qn(⋅|X). Differential privacy is a particular privacy requirement developed by computer scientists in which Qn(⋅|X) is required to be insensitive to changes in one data point in X. This makes it difficult to infer from Z whether a given individual is in the original database X. We consider differential privacy from a statistical perspective. We consider several data-release mechanisms that satisfy the differential privacy requirement. We show that it is useful to compare these schemes by computing the rate of convergence of distributions and densities constructed from the released data. We study a general privacy method, called the exponential mechanism, introduced by McSherry and Talwar (2007). We show that the accuracy of this method is intimately linked to the rate at which the probability that the empirical distribution concentrates in a small ball around the true distribution.",
+          "published_at": "2010-03-01",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "http://arxiv.org/abs/2203.05481",
+          "title": "Fully Adaptive Composition in Differential Privacy",
+          "snippet": "Composition is a key feature of differential privacy. Well-known advanced composition theorems allow one to query a private database quadratically more times than basic privacy composition would permit. However, these results require that the privacy parameters of all algorithms be fixed before interacting with the data. To address this, Rogers et al. introduced fully adaptive composition, wherein both algorithms and their privacy parameters can be selected adaptively. They defined two probabilistic objects to measure privacy in adaptive composition: privacy filters, which provide differential privacy guarantees for composed interactions, and privacy odometers, time-uniform bounds on privacy loss. There are substantial gaps between advanced composition and existing filters and odometers. First, existing filters place stronger assumptions on the algorithms being composed. Second, these odometers and filters suffer from large constants, making them impractical. We construct filters that match the rates of advanced composition, including constants, despite allowing for adaptively chosen privacy parameters. En route we also derive a privacy filter for approximate zCDP. We also construc",
+          "published_at": "2022-03-10",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doaj.org/article/af20d6cd82ef48b9882678a724e279b2",
+          "title": "SoK: Differential privacies",
+          "snippet": "Shortly after it was first introduced in 2006, differential privacy became the flagship data privacy definition. Since then, numerous variants and extensions were proposed to adapt it to different scenarios and attacker models. In this work, we propose a systematic taxonomy of these variants and extensions. We list all data privacy definitions based on differential privacy, and partition them into seven categories, depending on which aspect of the original definition is modified.",
+          "published_at": "2020-04-01",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doi.org/10.29012/jpc.v4i2.621",
+          "title": "Random Differential Privacy",
+          "snippet": "We propose a relaxed privacy definition called {\\em random differential privacy} (RDP). Differential privacy requires that adding any new observation to a database will have small effect on the output of the data-release procedure. Random differential privacy requires that adding a {\\em randomly drawn new observation} to a database will have small effect on the output. We show an analog of the composition property of differentially private procedures which applies to our new definition. We show how to release an RDP histogram and we show that RDP histograms are much more accurate than histograms obtained using ordinary differential privacy. We finally show an analog of the global sensitivity framework for the release of functions under our privacy definition.",
+          "published_at": "2013-03-01",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doi.org/10.1109/access.2022.3151670",
+          "title": "Differential Privacy for Deep and Federated Learning: A Survey",
+          "snippet": "Users’ privacy is vulnerable at all stages of the deep learning process. Sensitive information of users may be disclosed during data collection, during training, or even after releasing the trained learning model. Differential privacy (DP) is one of the main approaches proven to ensure strong privacy protection in data analysis. DP protects the users’ privacy by adding noise to the original dataset or the learning parameters. Thus, an attacker could not retrieve the sensitive information of an individual involved in the training dataset. In this survey paper, we analyze and present the main ideas based on DP to guarantee users’ privacy in deep and federated learning. In addition, we illustrate all types of probability distributions that satisfy the DP mechanism, with their properties and use cases. Furthermore, we bridge the gap in the literature by providing a comprehensive overview of the different variants of DP, highlighting their advantages and limitations. Our study reveals the gap between theory and application, accuracy, and robustness of DP. Finally, we provide several open problems and future research directions.",
+          "published_at": "2022-01-01",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doi.org/10.1109/tkde.2020.3014246",
+          "title": "More Than Privacy: Applying Differential Privacy in Key Areas of Artificial Intelligence",
+          "snippet": "Artificial Intelligence (AI) has attracted a great deal of attention in recent years. However, alongside all its advancements, problems have also emerged, such as privacy violations, security issues and model fairness. Differential privacy, as a promising mathematical model, has several attractive properties that can help solve these problems, making it quite a valuable tool. For this reason, differential privacy has been broadly applied in AI but to date, no study has documented which differential privacy mechanisms can or have been leveraged to overcome its issues or the properties that make this possible. In this paper, we show that differential privacy can do more than just preserve privacy. It can also be used to improve security, stabilize learning, build fair models, and impose composition in selected areas of AI. With a focus on regular machine learning, distributed machine learning, deep learning, and multi-agent systems, the purpose of this article is to deliver a new view on many possibilities for improving AI performance with differential privacy techniques.",
+          "published_at": "2020-08-04",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doi.org/10.1145/3243734.3243818",
+          "title": "Detecting Violations of Differential Privacy",
+          "snippet": "The widespread acceptance of differential privacy has led to the publication of many sophisticated algorithms for protecting privacy. However, due to the subtle nature of this privacy definition, many such algorithms have bugs that make them violate their claimed privacy. In this paper, we consider the problem of producing counterexamples for such incorrect algorithms. The counterexamples are designed to be short and human-understandable so that the counterexample generator can be used in the development process -- a developer could quickly explore variations of an algorithm and investigate where they break down. Our approach is statistical in nature. It runs a candidate algorithm many times and uses statistical tests to try to detect violations of differential privacy. An evaluation on a variety of incorrect published algorithms validates the usefulness of our approach: it correctly rejects incorrect algorithms and provides counterexamples for them within a few seconds.",
+          "published_at": "2018-10-15",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doi.org/10.1109/comst.2019.2944748",
+          "title": "Differential Privacy Techniques for Cyber Physical Systems: A Survey",
+          "snippet": "Modern cyber physical systems (CPSs) has widely being used in our daily lives because of development of information and communication technologies (ICT). With the provision of CPSs, the security and privacy threats associated to these systems are also increasing. Passive attacks are being used by intruders to get access to private information of CPSs. In order to make CPSs data more secure, certain privacy preservation strategies such as encryption, and k-anonymity have been presented in the past. However, with the advances in CPSs architecture, these techniques also need certain modifications. Meanwhile, differential privacy emerged as an efficient technique to protect CPSs data privacy. In this paper, we present a comprehensive survey of differential privacy techniques for CPSs. In particular, we survey the application and implementation of differential privacy in four major applications of CPSs named as energy systems, transportation systems, healthcare and medical systems, and industrial Internet of things (IIoT). Furthermore, we present open issues, challenges, and future research direction for differential privacy techniques for CPSs. This survey can serve as basis for the de",
+          "published_at": "2019-10-01",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        },
+        {
+          "url": "https://doi.org/10.1109/csf.2014.35",
+          "title": "Differential Privacy: An Economic Method for Choosing Epsilon",
+          "snippet": "Differential privacy is becoming a gold standard notion of privacy; it offers a guaranteed bound on loss of privacy due to release of query results, even under worst-case assumptions. The theory of differential privacy is an active research area, and there are now differentially private algorithms for a wide range of problems. However, the question of when differential privacy works in practice has received relatively little attention. In particular, there is still no rigorous method for choosing the key parameter ε, which controls the crucial tradeoff between the strength of the privacy guarantee and the accuracy of the published results. In this paper, we examine the role of these parameters in concrete applications, identifying the key considerations that must be addressed when choosing specific values. This choice requires balancing the interests of two parties with conflicting objectives: the data analyst, who wishes to learn something abou the data, and the prospective participant, who must decide whether to allow their data to be included in the analysis. We propose a simple model that expresses this balance as formulas over a handful of parameters, and we use our model to c",
+          "published_at": "2014-07-01",
+          "lang": "en",
+          "source_query": "differential privacy composition theorem papers"
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 2609.43,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 2,
+        "successes": 2,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 58,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    }
+  ]
+}

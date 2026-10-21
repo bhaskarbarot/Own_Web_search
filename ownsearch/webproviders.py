@@ -70,9 +70,12 @@ class JsonProvider:
                                    max_bytes=2_000_000, max_decompressed_bytes=2_000_000,
                                    retries=0, deadline=deadline, preserve_query=True)
             retry_delay = _retry_after(result.headers.get('retry-after') or result.headers.get('x-retry-after'))
-            if result.headers.get('x-ratelimit-remaining') == '0':
+            try: quota_empty = float(result.headers.get('x-ratelimit-remaining', 'nan')) <= 0
+            except (ValueError, TypeError): quota_empty = False
+            if quota_empty:
                 try:
-                    retry_delay = max(retry_delay or 0, float(result.headers['x-ratelimit-reset'])-time.time())
+                    reset = float(result.headers['x-ratelimit-reset'])
+                    retry_delay = max(retry_delay or 0, reset if getattr(self, 'quota_reset_is_delay', False) else reset-time.time())
                 except (KeyError, ValueError, TypeError):
                     retry_delay = max(retry_delay or 0, self.settings.provider_cooldown)
             if result.status != 200:
@@ -88,7 +91,7 @@ class JsonProvider:
             if not decoder and not isinstance(payload, dict):
                 raise ValueError('Provider returned an invalid JSON schema.')
             self.health.success(generation=generation)
-            if result.headers.get('x-ratelimit-remaining') == '0':
+            if quota_empty:
                 self.health.defer(retry_delay)
             return payload
         except (FetchError, ValueError, UnicodeError) as exc:

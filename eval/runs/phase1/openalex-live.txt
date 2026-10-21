@@ -1,0 +1,1 @@
+{"provider": "openalex", "considered": 300, "eligible": 32, "attempted": 2, "statuses": ["ok", "ok"], "returned_rows": 20}

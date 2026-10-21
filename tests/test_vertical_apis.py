@@ -8,7 +8,7 @@ from urllib.parse import parse_qs,urlsplit
 from ownsearch.fetcher import Fetcher,FetchResult
 from ownsearch.query import parse_query
 from ownsearch.webmodels import WebRequest
-from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,CratesApiProvider,ArxivApiProvider,atom_document,configured_verticals
+from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,CratesApiProvider,ArxivApiProvider,OpenAlexApiProvider,atom_document,configured_verticals
 from ownsearch.coordinator import LiveSearch
 from tests.test_live_web import settings,Source,row
 
@@ -97,6 +97,19 @@ class VerticalApiTests(unittest.TestCase):
         p._cache.clear()
     def test_atom_entity_declarations_are_rejected(self):
         with self.assertRaises(ValueError):atom_document(b'<!DOCTYPE x [<!ENTITY y "z">]><feed/>')
+    def test_openalex_reconstructs_only_returned_abstract_words_and_real_url(self):
+        p=OpenAlexApiProvider(settings())
+        data={'results':[{'display_name':'Orbital sensors','primary_location':{'landing_page_url':'https://papers.example.org/observed'},
+                         'publication_date':'2020-01-02','abstract_inverted_index':{'Orbital':[0],'sensors':[1],'calibration':[2]}}]}
+        with self.payload(data):batch=p.search(self.request('research orbital sensors'),time.monotonic()+1)
+        self.assertEqual(batch.rows[0]['url'],'https://papers.example.org/observed')
+        self.assertEqual(batch.rows[0]['snippet'],'Orbital sensors calibration')
+        self.assertEqual(batch.rows[0]['published_at'],'2020-01-02')
+    def test_openalex_relative_reset_and_zero_decimal_budget_are_respected(self):
+        p=OpenAlexApiProvider(settings())
+        with patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,{'x-ratelimit-remaining':'0.0','x-ratelimit-reset':'3600'},b'{"results":[]}')):
+            p.search(self.request('research orbital sensors'),time.monotonic()+1)
+        self.assertGreater(p.health_snapshot()['retry_after_seconds'],3590)
 
 
 if __name__=='__main__':unittest.main()
