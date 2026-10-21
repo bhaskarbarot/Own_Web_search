@@ -1,7 +1,7 @@
 """Independent official-API adapters; URLs and descriptions come from responses."""
 import re
 from dataclasses import replace
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 
 from .webmodels import plain, web_url
 from .webproviders import JsonProvider, ProviderError, SourceBatch
@@ -118,7 +118,45 @@ class GitHubApiProvider(ApiProvider):
         return SourceBatch(rows,['GitHub search reports incomplete results.'] if data.get('incomplete_results') else [])
 
 
-ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider}
+class PyPIApiProvider(ApiProvider):
+    name='pypi'
+    missing_is_empty=True
+
+    def project_name(self,request):
+        match=re.search(r'\b(?:pip\s+install|pypi(?:\s+package)?|python(?:\s+(?:package|library))?)\s+`?([A-Za-z0-9][A-Za-z0-9._-]*)',request.query,re.I)
+        if not match:return None
+        name=match.group(1).rstrip('.')
+        if name.lower() in {'library','libraries','package','packages','program','programs','code','documentation','official','module','modules'}:return None
+        return name
+
+    def accepts(self,request):
+        return super().accepts(request) and bool(self.project_name(request))
+
+    def search(self,request,deadline):
+        name=self.project_name(request)
+        if not name:return SourceBatch()
+        try:data=self.request(request,self.settings.pypi_api_url.format(name=quote(name,safe='')),deadline)
+        except ProviderError as exc:
+            if exc.http_status==404:return SourceBatch([],['Exact package name was not found; no package URL was invented.'])
+            raise
+        info=data.get('info')
+        if not isinstance(info,dict) or not isinstance(info.get('name'),str):raise ProviderError('PyPI returned invalid project metadata.')
+        norm=lambda text:re.sub('[-_.]+','-',text).lower()
+        if norm(info['name'])!=norm(name):raise ProviderError('PyPI metadata does not match the requested project.')
+        links=info.get('project_urls') if isinstance(info.get('project_urls'),dict) else {}
+        links={**links,'Package':info.get('package_url'),'Project':info.get('project_url'),'Homepage':info.get('home_page')}
+        rows=[];seen=set()
+        description=plain(info.get('summary',''),300)+' '+plain(info.get('description',''),900)
+        for label,url in links.items():
+            if not isinstance(url,str) or url in seen:continue
+            seen.add(url)
+            row=self.row(request,url,info['name']+' '+str(label),description)
+            if row:row['source_query']=name;rows.append(row)
+            if len(rows)>=10:break
+        return SourceBatch(rows)
+
+
+ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider}
 
 
 def configured_verticals(settings):

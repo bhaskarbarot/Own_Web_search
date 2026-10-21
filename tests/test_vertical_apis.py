@@ -8,7 +8,7 @@ from urllib.parse import parse_qs,urlsplit
 from ownsearch.fetcher import Fetcher,FetchResult
 from ownsearch.query import parse_query
 from ownsearch.webmodels import WebRequest
-from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,configured_verticals
+from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,configured_verticals
 from ownsearch.coordinator import LiveSearch
 from tests.test_live_web import settings,Source,row
 
@@ -53,6 +53,24 @@ class VerticalApiTests(unittest.TestCase):
         self.assertIn('is:issue',query);self.assertIn('is:open',query)
         self.assertTrue(batch.warnings)
         self.assertEqual(p.health_snapshot()['budget_window_seconds'],3600)
+    def test_pypi_is_exact_lookup_and_uses_only_owner_published_links(self):
+        p=PyPIApiProvider(settings())
+        req=self.request('Python NebulaKit timeout documentation')
+        data={'info':{'name':'NebulaKit','summary':'Timeout configuration library.',
+                      'project_urls':{'Documentation':'https://docs.example.org/nebula','Local':'http://127.0.0.1/admin'}}}
+        with self.payload(data):batch=p.search(req,time.monotonic()+1)
+        self.assertEqual([r['url'] for r in batch.rows],['https://docs.example.org/nebula'])
+        self.assertEqual(batch.rows[0]['source_query'],'NebulaKit')
+        self.assertFalse(p.accepts(self.request('Find Python libraries extracting webpage text')))
+        self.assertFalse(p.accepts(self.request('Python code examples')))
+    def test_pypi_missing_project_does_not_poison_healthy_service(self):
+        p=PyPIApiProvider(settings())
+        with patch.object(Fetcher,'fetch',return_value=FetchResult('','',404,{},b'')):
+            for _ in range(2):
+                # Respect the adapter spacing without waiting in this schema test.
+                p.minimum_interval=0
+                self.assertEqual(p.search(self.request('Python MissingNebula package'),time.monotonic()+1).rows,[])
+        self.assertEqual(p.health_snapshot()['errors'],0)
 
 
 if __name__=='__main__':unittest.main()

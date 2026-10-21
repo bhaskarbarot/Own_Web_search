@@ -1,0 +1,76 @@
+{
+  "provider": "pypi",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 8,
+  "runs": [
+    {
+      "id": "original-N02",
+      "query": "Find the latest official announcements about Python releases in 2026.",
+      "checked_at": "2026-10-21T07:10:42.224480+00:00",
+      "status": "error",
+      "error": "ProviderError: Provider request failed: timeout",
+      "rows": [],
+      "elapsed_ms": 8009.95,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 1,
+        "attempts": 1,
+        "successes": 0,
+        "errors": 1,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 59,
+        "budget_window_seconds": 60.0,
+        "last_http_status": null
+      }
+    },
+    {
+      "id": "live-programming-001",
+      "query": "Python asyncio TaskGroup exception handling",
+      "checked_at": "2026-10-21T07:10:51.234648+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://docs.python.org/3/library/asyncio.html",
+          "title": "asyncio homepage",
+          "snippet": "Deprecated backport of asyncio; use the stdlib package instead # asyncio (obsolete backport) This package once provided a backport of the `asyncio` module for Python versions prior to 3.4. The `asyncio` module has shipped with the Python standard library since Python 3.4 and this separate distribution is no longer needed. **Do not install this package.** Use the implementation that comes with Python instead: https://docs.python.org/3/library/asyncio.html This release contains no code and exists only to prevent accidental installation of outdated backports.",
+          "published_at": null,
+          "lang": null,
+          "source_query": "asyncio"
+        },
+        {
+          "url": "https://github.com/python/asyncio",
+          "title": "asyncio source",
+          "snippet": "Deprecated backport of asyncio; use the stdlib package instead # asyncio (obsolete backport) This package once provided a backport of the `asyncio` module for Python versions prior to 3.4. The `asyncio` module has shipped with the Python standard library since Python 3.4 and this separate distribution is no longer needed. **Do not install this package.** Use the implementation that comes with Python instead: https://docs.python.org/3/library/asyncio.html This release contains no code and exists only to prevent accidental installation of outdated backports.",
+          "published_at": null,
+          "lang": null,
+          "source_query": "asyncio"
+        },
+        {
+          "url": "https://pypi.org/project/asyncio/",
+          "title": "asyncio Package",
+          "snippet": "Deprecated backport of asyncio; use the stdlib package instead # asyncio (obsolete backport) This package once provided a backport of the `asyncio` module for Python versions prior to 3.4. The `asyncio` module has shipped with the Python standard library since Python 3.4 and this separate distribution is no longer needed. **Do not install this package.** Use the implementation that comes with Python instead: https://docs.python.org/3/library/asyncio.html This release contains no code and exists only to prevent accidental installation of outdated backports.",
+          "published_at": null,
+          "lang": null,
+          "source_query": "asyncio"
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 1180.12,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 2,
+        "successes": 1,
+        "errors": 1,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 58,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    }
+  ]
+}

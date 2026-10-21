@@ -119,6 +119,7 @@ class Settings:
     wikidata_api_url: str = "https://www.wikidata.org/w/api.php"
     github_api_url: str = "https://api.github.com"
     github_api_token: str = ""         # optional; public repository/issue search works without a token
+    pypi_api_url: str = "https://pypi.org/pypi/{name}/json"
     searxng_allow_private: bool = False # only the explicitly configured instance, not result-page fetching
     brave_search_url: str = "https://api.search.brave.com/res/v1/web/search"
     brave_images_url: str = "https://api.search.brave.com/res/v1/images/search"

@@ -30,3 +30,15 @@ An optional token is passed only as an HTTPS authorization header.
 
 Contracts: [GitHub search](https://docs.github.com/en/rest/search/search) and
 [rate limits](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api).
+
+## PyPI
+
+An explicit Python/PyPI package name or pip-install target enables an exact
+metadata lookup. Owner-published project links and package URLs are read from
+info, never generated. Unknown projects yield an empty batch without declaring
+the API unhealthy. General requests to find Python libraries are not falsely
+treated as a full-text PyPI search. Large metadata responses remain subject to
+the ordinary two-megabyte response budget.
+
+Contracts: [PyPI JSON API](https://docs.pypi.org/api/json/) and
+[project URLs](https://docs.pypi.org/project_metadata/).

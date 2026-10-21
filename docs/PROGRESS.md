@@ -401,3 +401,16 @@ requests returned one row. Raw output: github-live.json. Thirteen focused tests
 pass (github-tests.txt); all five offline preservation scores remain unchanged
 (github-offline.json). API rows are ungraded, not a claimed recall gain.
 Continue to PyPI exact metadata without a confirmation stop.
+
+
+### Phase 1 adapter — PyPI
+
+2026-10-21, parent 2c0ffa0. Added independent opt-in exact-project metadata
+lookup. Explicit names are validated; URLs come from returned project metadata,
+not guessed package/documentation paths. Missing projects do not poison health.
+
+All 300 dev cases considered; eight eligible. Two actual probes returned three
+URLs in total, with one source error retained and one successful response.
+Fifteen focused tests pass; all offline preservation metrics are unchanged.
+See pypi-live.json and pypi-offline.json. No accuracy/recall inference is made
+from these counts. Continue to npm.
