@@ -546,3 +546,23 @@ The 300-dev frozen-source preservation run retained every ranked URL signature
 (204 nonempty), and two-failing-source injection passed.
 Denied fixture calls 6 → 2, healthy calls 300 → 300. Legacy offline scores
 remain unchanged. Fixture/preservation results do not establish live accuracy.
+
+
+### Phase 1 final health audit — schema failures
+
+2026-10-21, parent 934a702. Confirmed that HTTP-200 wrong-result-schema responses
+were reset as successes before adapter validation. Moved schema/body-error checks
+before health success. Four malformed fixture calls previously produced four
+HTTP requests, four false successes, zero failures and a closed circuit; now
+three requests produce three failures, zero successes, and the fourth is
+suppressed with circuit_open. Successful-body backoff/error backoff still applies.
+Timeout/unfinished statuses now retain health snapshots. Sixty-four focused tests
+pass; full suite and 300-dev preservation are being recorded before source freeze.
+Free-only candidate profile documented without enabling paid providers or arXiv.
+
+Final source checks passed: 299 tests (46.104 s), all 300 frozen dev URL
+signatures preserved, injected denied requests 6 → 2 with 300 healthy requests
+retained. All five legacy offline retrieval scores unchanged. Runtime will now
+be frozen for a complete dev capture with free/keyless supplements, with paid
+providers and denied arXiv off. Query variants stay reverted. Existing baseline,
+review CSVs and sealed split remain untouched.

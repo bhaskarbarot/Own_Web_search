@@ -120,6 +120,8 @@ class LiveSearch:
                     job['cancel'].set()
                     statuses.append({'provider': job['name'], 'status': 'timeout', 'result_count': 0,
                                      'error': 'Source did not finish within its deadline; late results are ignored.'})
+                    snapshot=getattr(job['health_provider'],'health_snapshot',None)
+                    if callable(snapshot):statuses[-1]['health']=snapshot()
             if useful and early is None and useful(finished) >= self.settings.live_early_results:
                 early = time.monotonic()+self.settings.live_provider_grace_ms/1000
             if early is not None and time.monotonic() >= early:
@@ -132,6 +134,8 @@ class LiveSearch:
             expired = time.monotonic() >= min(deadline, job['deadline'])
             statuses.append({'provider': job['name'], 'status': 'timeout' if expired else 'unfinished',
                              'result_count': 0, 'error': 'Source unfinished at response cutoff; cancellation requested and late results ignored.'})
+            snapshot=getattr(job['health_provider'],'health_snapshot',None)
+            if callable(snapshot):statuses[-1]['health']=snapshot()
         return finished, statuses
 
     @staticmethod

@@ -1,0 +1,45 @@
+{
+  "scope": "Four identical wrong-schema HTTP-200 fixture responses; not live relevance.",
+  "before": {
+    "fixture_http_calls": 4,
+    "statuses": [
+      "error",
+      "error",
+      "error",
+      "error"
+    ],
+    "health": {
+      "circuit": "closed",
+      "consecutive_failures": 0,
+      "attempts": 4,
+      "successes": 4,
+      "errors": 0,
+      "suppressed": 0,
+      "retry_after_seconds": 0,
+      "budget_remaining": 56,
+      "budget_window_seconds": 60.0,
+      "last_http_status": 200
+    }
+  },
+  "after": {
+    "fixture_http_calls": 3,
+    "statuses": [
+      "error",
+      "error",
+      "error",
+      "circuit_open"
+    ],
+    "health": {
+      "circuit": "open",
+      "consecutive_failures": 3,
+      "attempts": 3,
+      "successes": 0,
+      "errors": 3,
+      "suppressed": 1,
+      "retry_after_seconds": 29.997,
+      "budget_remaining": 57,
+      "budget_window_seconds": 60.0,
+      "last_http_status": null
+    }
+  }
+}

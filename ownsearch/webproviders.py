@@ -44,6 +44,15 @@ class JsonProvider:
     def health_snapshot(self):
         return self.health.snapshot()
 
+    def validate_payload(self,payload):
+        if not isinstance(payload,dict):raise ValueError('Provider returned an invalid JSON schema.')
+        if any(key in payload for key in getattr(self,'body_error_keys',())):
+            self.health.failure(503,payload.get('backoff'))
+            raise ProviderError('Official API reported an error; details redacted.')
+        field=getattr(self,'result_field',None)
+        if field and not isinstance(payload.get(field),getattr(self,'result_type',list)):
+            raise ValueError('Provider returned an invalid result schema.')
+
     def request(self, request, url, deadline, headers=None, allow_private=False, decoder=None, accept='application/json'):
         if headers and urlsplit(url).scheme != 'https':
             raise ProviderError('Credentialed provider endpoints require HTTPS.')
@@ -88,8 +97,7 @@ class JsonProvider:
             if result.truncated:
                 raise ValueError('Provider response exceeds size limit.')
             payload = decoder(result.body) if decoder else json.loads(result.body.decode('utf-8'))
-            if not decoder and not isinstance(payload, dict):
-                raise ValueError('Provider returned an invalid JSON schema.')
+            if not decoder:self.validate_payload(payload)
             self.health.success(generation=generation)
             if quota_empty:
                 self.health.defer(retry_delay)
@@ -102,6 +110,7 @@ class JsonProvider:
 
 class SearxWebProvider(JsonProvider):
     name = 'searxng'
+    result_field = 'results'
 
     def search(self, request, deadline):
         q = request.parsed
@@ -165,6 +174,12 @@ class SearxWebProvider(JsonProvider):
 
 class BraveWebProvider(JsonProvider):
     name = 'brave'
+
+    def validate_payload(self,payload):
+        super().validate_payload(payload)
+        group=payload.get('web',payload)
+        if not isinstance(group,dict) or not isinstance(group.get('results'),list):
+            raise ValueError('Brave returned an invalid results schema.')
 
     def search(self, request, deadline):
         q = request.parsed

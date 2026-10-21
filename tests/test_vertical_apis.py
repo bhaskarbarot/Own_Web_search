@@ -135,6 +135,17 @@ class VerticalApiTests(unittest.TestCase):
         with self.payload({'error_id':502,'error_name':'throttle_violation','backoff':90}):
             with self.assertRaisesRegex(Exception,'API reported an error'):p.search(self.request('Sensor exception'),time.monotonic()+1)
         self.assertEqual(p.health_snapshot()['circuit'],'open')
+    def test_repeated_well_formed_but_wrong_api_schema_opens_circuit(self):
+        from ownsearch.webproviders import ProviderError
+        p=OpenAlexApiProvider(settings());p.minimum_interval=0
+        with self.payload({'results':'invalid'}) as fetch:
+            for _ in range(3):
+                with self.assertRaises(ProviderError):p.search(self.request('research sensors'),time.monotonic()+1)
+            with self.assertRaises(ProviderError) as caught:p.search(self.request('research sensors'),time.monotonic()+1)
+        self.assertEqual(fetch.call_count,3)
+        self.assertEqual(caught.exception.status,'circuit_open')
+        self.assertEqual(p.health_snapshot()['consecutive_failures'],3)
+        self.assertEqual(p.health_snapshot()['successes'],0)
 
 
 if __name__=='__main__':unittest.main()

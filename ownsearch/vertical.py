@@ -23,6 +23,7 @@ def api_query(request):
 class ApiProvider(JsonProvider):
     general_web = False
     minimum_interval = 1.0
+    body_error_keys=('error',)
 
     def accepts(self, request):
         return request.search_type == 'web'
@@ -47,6 +48,12 @@ class ApiProvider(JsonProvider):
 class WikipediaApiProvider(ApiProvider):
     name = 'wikipedia'
 
+    def validate_payload(self,payload):
+        super().validate_payload(payload)
+        # No query object is the documented empty generator result.
+        if 'query' in payload and (not isinstance(payload['query'],dict) or not isinstance(payload['query'].get('pages'),list)):
+            raise ValueError('Wikipedia returned an invalid pages schema.')
+
     def accepts(self, request):
         return super().accepts(request) and request.parsed.intent not in ('news', 'financial', 'tech_docs')
 
@@ -70,6 +77,7 @@ class WikipediaApiProvider(ApiProvider):
 
 class WikidataApiProvider(ApiProvider):
     name = 'wikidata'
+    result_field='search'
 
     def accepts(self, request):
         return super().accepts(request) and request.parsed.intent == 'reference'
@@ -92,6 +100,7 @@ class WikidataApiProvider(ApiProvider):
 
 class GitHubApiProvider(ApiProvider):
     name = 'github'
+    result_field='items'
     minimum_interval = 6.1  # unauthenticated search <=10/min, plus <=60/hour budget
 
     def __init__(self, settings):
@@ -127,6 +136,8 @@ class GitHubApiProvider(ApiProvider):
 
 class PyPIApiProvider(ApiProvider):
     name='pypi'
+    result_field='info'
+    result_type=dict
     missing_is_empty=True
 
     def project_name(self,request):
@@ -165,6 +176,7 @@ class PyPIApiProvider(ApiProvider):
 
 class NpmApiProvider(ApiProvider):
     name='npm'
+    result_field='objects'
 
     def accepts(self,request):
         return super().accepts(request) and bool(re.search(r'\b(?:npm|javascript|typescript|node(?:\.js)?)\b',request.query,re.I))
@@ -191,6 +203,7 @@ class NpmApiProvider(ApiProvider):
 
 class CratesApiProvider(ApiProvider):
     name='crates'
+    result_field='crates'
 
     def accepts(self,request):
         return super().accepts(request) and bool(re.search(r'\b(?:rust|cargo|crates?)\b',request.query,re.I))
@@ -269,6 +282,7 @@ class ArxivApiProvider(ApiProvider):
 
 class OpenAlexApiProvider(ApiProvider):
     name='openalex'
+    result_field='results'
     quota_reset_is_delay=True
 
     def accepts(self,request):return super().accepts(request) and research_request(request)
@@ -297,6 +311,8 @@ class OpenAlexApiProvider(ApiProvider):
 
 class StackExchangeApiProvider(ApiProvider):
     name='stackexchange'
+    result_field='items'
+    body_error_keys=('error','error_id')
     _connection=threading.Lock()
     _cache=OrderedDict()
 
