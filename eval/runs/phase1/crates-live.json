@@ -1,0 +1,132 @@
+{
+  "provider": "crates",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 2,
+  "runs": [
+    {
+      "id": "live-multilingual-014",
+      "query": "offizielle Rust Dokumentation Eigentum und Ausleihen",
+      "checked_at": "2026-10-21T07:13:57.688645+00:00",
+      "status": "error",
+      "error": "ProviderError: Provider request failed: timeout",
+      "rows": [],
+      "elapsed_ms": 8010.87,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 1,
+        "attempts": 1,
+        "successes": 0,
+        "errors": 1,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 59,
+        "budget_window_seconds": 60.0,
+        "last_http_status": null
+      }
+    },
+    {
+      "id": "live-documentation-001",
+      "query": "Cargo official documentation offline build flag",
+      "checked_at": "2026-10-21T07:14:06.700489+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://docs.opencrabs.com/",
+          "title": "opencrabs documentation",
+          "snippet": "The autonomous, self-improving AI agent. Single Rust binary. Every channel. Recommended: the 40MB prebuilt binary for macOS, Linux and Windows: https://github.com/opencrabs/opencrabs/releases",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://opencrabs.com/",
+          "title": "opencrabs homepage",
+          "snippet": "The autonomous, self-improving AI agent. Single Rust binary. Every channel. Recommended: the 40MB prebuilt binary for macOS, Linux and Windows: https://github.com/opencrabs/opencrabs/releases",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://github.com/opencrabs/opencrabs",
+          "title": "opencrabs repository",
+          "snippet": "The autonomous, self-improving AI agent. Single Rust binary. Every channel. Recommended: the 40MB prebuilt binary for macOS, Linux and Windows: https://github.com/opencrabs/opencrabs/releases",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://edito-pdf.com/",
+          "title": "chk_defaced homepage",
+          "snippet": "Detect tampered documents before they reach an LLM: font defacement (the extracted text differs from the glyphs actually drawn) and invisible or cloaked text, in PDF, DOCX and HTML. Deterministic, no LLM, no network.",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://github.com/dariofinardi/chk_defaced-rs",
+          "title": "chk_defaced repository",
+          "snippet": "Detect tampered documents before they reach an LLM: font defacement (the extracted text differs from the glyphs actually drawn) and invisible or cloaked text, in PDF, DOCX and HTML. Deterministic, no LLM, no network.",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://docs.rs/screeps-api/",
+          "title": "screeps-api documentation",
+          "snippet": "Fully typed and tested wrapper over the Screeps Game's HTTP API",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://github.com/daboross/rust-screeps-api",
+          "title": "screeps-api repository",
+          "snippet": "Fully typed and tested wrapper over the Screeps Game's HTTP API",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://docs.rs/twc-rs",
+          "title": "twc-rs documentation",
+          "snippet": "Fast single-binary CLI and interactive TUI dashboard for Timeweb Cloud",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://github.com/RAprogramm/twc-rs",
+          "title": "twc-rs homepage",
+          "snippet": "Fast single-binary CLI and interactive TUI dashboard for Timeweb Cloud",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        },
+        {
+          "url": "https://docs.rs/NeuralAmpModeler-rs",
+          "title": "NeuralAmpModeler-rs documentation",
+          "snippet": "NeuralAmpModeler-rs is a high-performance, real-time neural inference DSP library written in pure Rust. It provides the core engine for loading, building, and executing Neural Amp Modeler (NAM) models.",
+          "published_at": null,
+          "lang": null,
+          "source_query": "Cargo offline flag official documentation build"
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 2255.38,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 2,
+        "successes": 1,
+        "errors": 1,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 58,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    }
+  ]
+}

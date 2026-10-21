@@ -121,6 +121,7 @@ class Settings:
     github_api_token: str = ""         # optional; public repository/issue search works without a token
     pypi_api_url: str = "https://pypi.org/pypi/{name}/json"
     npm_api_url: str = "https://registry.npmjs.org/-/v1/search"
+    crates_api_url: str = "https://crates.io/api/v1/crates"
     searxng_allow_private: bool = False # only the explicitly configured instance, not result-page fetching
     brave_search_url: str = "https://api.search.brave.com/res/v1/web/search"
     brave_images_url: str = "https://api.search.brave.com/res/v1/images/search"

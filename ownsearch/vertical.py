@@ -182,7 +182,30 @@ class NpmApiProvider(ApiProvider):
         return SourceBatch(rows)
 
 
-ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider}
+class CratesApiProvider(ApiProvider):
+    name='crates'
+
+    def accepts(self,request):
+        return super().accepts(request) and bool(re.search(r'\b(?:rust|cargo|crates?)\b',request.query,re.I))
+
+    def search(self,request,deadline):
+        data=self.get(request,self.settings.crates_api_url,{'q':api_query(request),'per_page':10},deadline)
+        items=data.get('crates')
+        if not isinstance(items,list):raise ProviderError('crates.io API returned an invalid crates array.')
+        rows=[];seen=set()
+        for item in items[:10]:
+            if not isinstance(item,dict) or not isinstance(item.get('name') or item.get('id'),str):continue
+            for label in ('documentation','homepage','repository'):
+                url=item.get(label)
+                if not isinstance(url,str) or url in seen:continue
+                seen.add(url)
+                row=self.row(request,url,(item.get('name') or item['id'])+' '+label,item.get('description',''))
+                if row:rows.append(row)
+                if len(rows)>=10:return SourceBatch(rows)
+        return SourceBatch(rows)
+
+
+ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider,'crates':CratesApiProvider}
 
 
 def configured_verticals(settings):

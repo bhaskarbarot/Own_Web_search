@@ -49,3 +49,11 @@ Full-text registry search uses the documented objects/package/links response.
 Only returned npm, homepage and repository links become candidates; absent links
 are not generated. Version modification metadata is not used as a page's
 publication timestamp. [Official registry API](https://github.com/npm/registry/blob/main/docs/REGISTRY-API.md).
+
+## crates.io
+
+Search returns crate metadata. Documentation, homepage and repository links are
+used only if returned; no docs.rs or crate-page URL is generated from a name.
+[Official response types](https://github.com/rust-lang/crates.io/blob/main/crates/crates_io_api_types/src/lib.rs)
+and [data-access policy](https://crates.io/data-access). Existing identifying
+User-Agent, request spacing, response budgets and access-denial handling apply.

@@ -423,3 +423,14 @@ Two of 300 fixed dev cases were applicable; actual probes recorded one error
 and one successful response, with ten source-provided URLs overall. Eight
 vertical-adapter tests pass and all five offline scores remain unchanged.
 Source errors remain in npm-live.json. Continue to crates.io.
+
+
+### Phase 1 adapter — crates.io
+
+2026-10-21, parent 55482fd. Added independent opt-in Rust crate metadata
+search using only returned documentation/home/repository URLs. Missing links
+are not guessed. All 300 dev IDs considered; 2 eligible.
+Actual probe statuses: error, ok;
+returned URLs: 10. Nine vertical tests pass;
+all offline preservation scores unchanged. See crates-live.json and
+crates-offline.json. Continue to research APIs.

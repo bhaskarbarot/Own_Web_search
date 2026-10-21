@@ -8,7 +8,7 @@ from urllib.parse import parse_qs,urlsplit
 from ownsearch.fetcher import Fetcher,FetchResult
 from ownsearch.query import parse_query
 from ownsearch.webmodels import WebRequest
-from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,configured_verticals
+from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,CratesApiProvider,configured_verticals
 from ownsearch.coordinator import LiveSearch
 from tests.test_live_web import settings,Source,row
 
@@ -79,6 +79,11 @@ class VerticalApiTests(unittest.TestCase):
         self.assertEqual(len(batch.rows),1)
         self.assertEqual(batch.rows[0]['url'],'https://registry.example.org/actual-package')
         self.assertIsNone(batch.rows[0]['published_at'])
+    def test_crates_missing_document_links_are_not_guessed_from_name(self):
+        p=CratesApiProvider(settings())
+        with self.payload({'crates':[{'id':'nebula-sensor','description':'Rust sensor library.','repository':'https://code.example.org/nebula'},
+                                      {'id':'unknown-with-no-links'}]}):batch=p.search(self.request('Rust sensor crate'),time.monotonic()+1)
+        self.assertEqual([r['url'] for r in batch.rows],['https://code.example.org/nebula'])
 
 
 if __name__=='__main__':unittest.main()
