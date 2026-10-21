@@ -225,7 +225,7 @@ def main():
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--engine-root', default=str(root))
-    parser.add_argument('--queries', default=str(root / 'eval/queries.jsonl'))
+    parser.add_argument('--queries', default=str(root / 'eval/legacy/queries.jsonl'))
     parser.add_argument('--corpus', default=str(root / 'eval/corpus.json'))
     parser.add_argument('--output', required=True)
     parser.add_argument('--repeats', type=int, default=3)

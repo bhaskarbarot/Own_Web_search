@@ -1,0 +1,8 @@
+................................................................................................................................../usr/lib/python3.12/threading.py:299: ResourceWarning: unclosed <ssl.SSLSocket [closed] fd=48, family=2, type=1, proto=6>
+  def __enter__(self):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................................................................................................................
+----------------------------------------------------------------------
+Ran 246 tests in 48.827s
+
+OK

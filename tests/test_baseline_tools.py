@@ -32,7 +32,7 @@ class BaselineToolsTests(unittest.TestCase):
     def test_fixture_queries_are_valid_and_languages_are_explicit(self):
         root = Path(__file__).resolve().parents[1]
         corpus = json.loads((root / 'eval/corpus.json').read_text())
-        cases = runner.load_queries(root / 'eval/queries.jsonl', {d['url'] for d in corpus['documents']})
+        cases = runner.load_queries(root / 'eval/legacy/queries.jsonl', {d['url'] for d in corpus['documents']})
         self.assertGreaterEqual(len(cases), 50)
         self.assertTrue({'en', 'hi', 'gu', 'hi-Latn'} <= {q['language'] for q in cases})
         self.assertTrue(any(q['expected_empty'] for q in cases))
