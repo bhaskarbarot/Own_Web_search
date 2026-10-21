@@ -44,9 +44,13 @@ class Recorder:
     def search(self, request, deadline):
         batch = self.source.search(request, deadline)
         with self.lock:
-            self.rows.append({'query': request.query, 'source': self.name,
+            self.rows.append({'query': getattr(request,'original_query',None) or request.query, 'source_query':request.query, 'source': self.name,
                               'rows': copy.deepcopy(batch.rows), 'warnings': batch.warnings})
         return batch
+
+    def accepts(self,request):
+        accepts=getattr(self.source,'accepts',None)
+        return accepts(request) if callable(accepts) else True
 
     def snapshot(self, query):
         with self.lock:

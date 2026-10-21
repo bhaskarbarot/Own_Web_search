@@ -40,6 +40,10 @@ class VerticalApiTests(unittest.TestCase):
         self.assertTrue(result['results'])
         self.assertTrue(any(s['provider']=='wikipedia' and s['status']=='not_selected' for s in result['provider_status']))
         self.assertFalse(LiveSearch(settings(),[p]).diagnostics()['general_discovery_configured'])
+    def test_benchmark_recorder_preserves_vertical_routing(self):
+        from scripts.benchmark_query_md import Recorder
+        source=WikipediaApiProvider(settings());source.accepts=lambda req:False
+        self.assertFalse(Recorder(source).accepts(self.request()))
     def test_unsafe_api_result_urls_are_rejected(self):
         p=WikipediaApiProvider(settings())
         for url in ('http://127.0.0.1/admin','file:///etc/passwd','https://user:secret@example.org/'):

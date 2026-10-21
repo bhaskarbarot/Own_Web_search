@@ -1,0 +1,1 @@
+{"before_nonempty": 204, "after_nonempty": 204, "compacted_queries": 48, "with_variants": 119, "original_query_preserved": true, "relevance_metrics": null}

@@ -1,0 +1,89 @@
+{
+  "queries": 59,
+  "answerable_queries": 57,
+  "p@5": {
+    "value": 0.2,
+    "ci95": [
+      0.185965,
+      0.217544
+    ],
+    "queries": 57
+  },
+  "p@5_ceiling": {
+    "value": 0.242105,
+    "ci95": [
+      0.221053,
+      0.266667
+    ],
+    "queries": 57
+  },
+  "recall@10": {
+    "value": 0.880117,
+    "ci95": [
+      0.807018,
+      0.944444
+    ],
+    "queries": 57
+  },
+  "mrr@10": {
+    "value": 0.947368,
+    "ci95": [
+      0.894298,
+      1.0
+    ],
+    "queries": 57
+  },
+  "ndcg@10": {
+    "value": 0.914425,
+    "ci95": [
+      0.846799,
+      0.969706
+    ],
+    "queries": 57
+  },
+  "zero_result_rate": {
+    "value": 0.084746,
+    "ci95": [
+      0.016949,
+      0.169492
+    ],
+    "queries": 59
+  },
+  "empty_query_correct": {
+    "value": 1,
+    "ci95": [
+      1.0,
+      1.0
+    ],
+    "queries": 2
+  },
+  "latency_p50_ms": {
+    "value": 5.887348,
+    "ci95": [
+      5.558405,
+      6.250172
+    ],
+    "queries": 59
+  },
+  "latency_p95_ms": {
+    "value": 11.813273,
+    "ci95": [
+      8.904723,
+      21.001261
+    ],
+    "queries": 59
+  },
+  "latency_p99_ms": {
+    "value": 21.017423,
+    "ci95": [
+      11.203559,
+      21.046717
+    ],
+    "queries": 59
+  },
+  "live_discovery_success_rate": {
+    "value": null,
+    "ci95": null,
+    "queries": 0
+  }
+}

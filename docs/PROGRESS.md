@@ -498,3 +498,26 @@ for audit. Existing Brave compatibility remains disabled; it is not required.
 Free public APIs remain independently optional and must obey external limits.
 The local crawler/index and self-hosted general discovery remain the foundation.
 Continue query variants/site/feed work; do not claim unlimited external service.
+
+
+### Phase 1 query variants — measured and rejected for activation
+
+2026-10-21, parent a21cfa9. Tested original + at most two conservative lexical
+variants, shared worker/health budgets, original-request budget priority, preserved
+operators/negation/quotes and RRF with one vote per URL per variant. Seven targeted
+query tests plus eight health tests passed; complete experimental suite passed
+298 tests with localhost socket access (sandbox-only run could not bind).
+
+All 300 fixed dev frozen-source cases: nonempty 204 → 204; 48 prefixes compacted,
+119 cases had variants, original text preserved in all 300. Small paired LIVE
+probe: nonempty 2/4 → 2/4, with slower responses. After dispatch-priority fix,
+repeat 1/4 → 1/4; upstream responses changed between probes. These counts are
+not relevance/recall. There is no measured coverage gain, so runtime variant
+integration was reverted per rule 7 rather than enabled by default. Full patch
+saved as query-variants-experiment.patch, with raw results/tests and reproducible
+probe/replay scripts (apply patch in an isolated checkout to run those scripts).
+
+Retained an independent recorder correction: delegate adapter accepts() so live
+measurements route verticals honestly. No previous result source, review CSV or
+sealed query was changed. Continue site/sitemap/feed discovery; variants remain
+an unresolved Phase 1 improvement, not claimed complete.

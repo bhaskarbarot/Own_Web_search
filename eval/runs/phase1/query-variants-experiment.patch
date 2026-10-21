@@ -1,0 +1,320 @@
+diff --git a/ownsearch/config.py b/ownsearch/config.py
+index dd588cc..94ca33b 100644
+--- a/ownsearch/config.py
++++ b/ownsearch/config.py
+@@ -115,6 +115,7 @@ class Settings:
+     provider_failure_threshold: int = 3
+     vertical_providers: str = ""       # comma-separated independent API adapters; explicitly enable measured sources
+     vertical_max_providers: int = 3
++    live_query_variants: int = 1       # original plus <=2 lexical variants; enable after dev ablation
+     wikipedia_api_url: str = "https://{language}.wikipedia.org/w/api.php"
+     wikidata_api_url: str = "https://www.wikidata.org/w/api.php"
+     github_api_url: str = "https://api.github.com"
+diff --git a/ownsearch/coordinator.py b/ownsearch/coordinator.py
+index 6649891..7955a41 100644
+--- a/ownsearch/coordinator.py
++++ b/ownsearch/coordinator.py
+@@ -32,6 +32,7 @@ def _validated(settings):
+                       'live_max_total_bytes': (1024, 16_000_000), 'live_max_text_chars': (100, 100_000)}
+     integer_limits.update(provider_request_budget=(1, 10000), provider_failure_threshold=(1, 20))
+     integer_limits['vertical_max_providers'] = (1, 8)
++    integer_limits['live_query_variants'] = (1, 3)
+     for key, (lo, hi) in integer_limits.items():
+         value = getattr(settings, key)
+         if type(value) is not int or not lo <= value <= hi:
+@@ -96,6 +97,9 @@ class LiveSearch:
+         job['cancel'] = getattr(request, 'cancel', threading.Event())
+         job['general_web'] = getattr(provider, 'general_web', False)
+         job['health_provider'] = provider
++        if isinstance(request, WebRequest):
++            job['query'] = request.query
++            job['request'] = request
+         return job
+ 
+     def _collect(self, jobs, deadline, useful=None):
+@@ -115,6 +119,7 @@ class LiveSearch:
+                     snapshot = getattr(job['health_provider'], 'health_snapshot', None)
+                     if callable(snapshot):
+                         statuses[-1]['health'] = snapshot()
++                    if 'query' in job:statuses[-1]['query'] = job['query']
+                 elif time.monotonic() >= job['deadline']:
+                     pending.remove(job)
+                     job['cancel'].set()
+@@ -183,9 +188,12 @@ class LiveSearch:
+             return result
+         parse_started = time.perf_counter()
+         # Bundled language/intent resources; do not open/create entities.db or a corpus.
+-        q = parse_query(query, freshness=freshness, site=site, filetype=filetype, lang=lang,
++        from .queryvariants import compact_request, variants, fuse_responses
++        parsed_text = compact_request(query) if self.settings.live_query_variants > 1 else query
++        q = parse_query(parsed_text, freshness=freshness, site=site, filetype=filetype, lang=lang,
+                         preferred_language=preferred_language, timezone_name=timezone_name or self.settings.timezone,
+                         holiday_country=self.settings.holiday_country)
++        q.raw = query
+         from .webquery import conservative_intent
+         q = conservative_intent(q)
+         parse_ms = (time.perf_counter()-parse_started)*1000
+@@ -210,7 +218,7 @@ class LiveSearch:
+         general_names = {p.name for p in self.providers if getattr(p, 'general_web', True)}
+         for source in sources:
+             source_deadline = min(deadline, time.monotonic()+self.settings.discovery_provider_timeout)
+-            request = WebRequest(query, q, threading.Event(), search_type)
++            request = WebRequest(query, q, threading.Event(), search_type, query)
+             if source in self.providers and not getattr(source, 'general_web', True):
+                 accepts = getattr(source, 'accepts', lambda request: True)
+                 if not accepts(request) or vertical_count >= self.settings.vertical_max_providers:
+@@ -221,9 +229,21 @@ class LiveSearch:
+             job = self._start(source, request, source_deadline)
+             job['general_web'] = source.name in general_names
+             jobs.append(job)
++        # Original requests for all sources get capacity first. Variants share
++        # the same finite worker pool, physical provider health and deadlines.
++        originals = list(jobs)
++        for index in (1, 2):
++            for job in originals:
++                source=job['health_provider']
++                if not job['general_web']:continue
++                choices=variants(WebRequest(query,q,threading.Event(),search_type),self.settings.live_query_variants)
++                if index>=len(choices):continue
++                request=WebRequest(choices[index],q,threading.Event(),search_type,query)
++                request.dispatch_after=job['request'].dispatched
++                jobs.append(self._start(source,request,job['deadline']))
+         def useful(responses):
+             items = []
+-            for response in responses:
++            for response in fuse_responses(responses,self.settings.live_max_candidates):
+                 if response.provider not in general_names:
+                     continue
+                 for index, row in enumerate(self._rows(response).rows, 1):
+@@ -239,7 +259,7 @@ class LiveSearch:
+         errors = [s['provider']+': '+s['error'] for s in provider_status if s.get('error')]
+         candidates, answer = [], None
+         raw_count = 0
+-        for response in responses:
++        for response in fuse_responses(responses,self.settings.live_max_candidates):
+             batch = self._rows(response)
+             errors.extend(response.provider+': '+str(e)[:300] for e in batch.warnings)
+             if batch.answer and _answer_allowed(batch.answer, q):
+diff --git a/ownsearch/webmodels.py b/ownsearch/webmodels.py
+index 309c87d..43eb93d 100644
+--- a/ownsearch/webmodels.py
++++ b/ownsearch/webmodels.py
+@@ -1,5 +1,6 @@
+ """Request-scoped web evidence. No persistence or corpus dependencies."""
+ import ipaddress
++import threading
+ from dataclasses import dataclass, field
+ from html import unescape
+ from html.parser import HTMLParser
+@@ -61,6 +62,9 @@ class WebRequest:
+     parsed: object
+     cancel: object
+     search_type: str = 'web'
++    original_query: str = None
++    dispatched: object = field(default_factory=threading.Event)
++    dispatch_after: object = None
+ 
+ 
+ @dataclass
+@@ -114,6 +118,11 @@ class WebCandidate:
+             item.provenance[0]['cached'] = True
+         if isinstance(row.get('source_query'), str):
+             item.provenance[0]['query'] = row['source_query'][:1000]
++        if row.get('source_rank_method') == 'reciprocal_rank_fusion':
++            item.provenance[0]['rank_method'] = row['source_rank_method']
++            item.provenance[0]['query_ranks'] = [
++                {'query':p['query'][:1000],'rank':p['rank']} for p in row.get('source_query_ranks',[])[:3]
++                if isinstance(p,dict) and isinstance(p.get('query'),str) and type(p.get('rank')) is int and p['rank']>0]
+         if isinstance(row.get('upstream_engines'), list):
+             item.provenance[0]['upstream_engines'] = [v[:80] for v in row['upstream_engines'] if isinstance(v, str)][:20]
+         image = row.get('image_url')
+diff --git a/ownsearch/webproviders.py b/ownsearch/webproviders.py
+index 49b8515..28de515 100644
+--- a/ownsearch/webproviders.py
++++ b/ownsearch/webproviders.py
+@@ -48,9 +48,15 @@ class JsonProvider:
+         if headers and urlsplit(url).scheme != 'https':
+             raise ProviderError('Credentialed provider endpoints require HTTPS.')
+         try:
++            # A short variant must not win the original request's rate-budget slot.
++            while request.dispatch_after is not None and not request.dispatch_after.is_set():
++                if time.monotonic()>=deadline or request.cancel.wait(min(.01,max(0,deadline-time.monotonic()))):
++                    raise ProviderUnavailable('Original request dispatch exceeded variant deadline.','cancelled')
+             generation = self.health.reserve(request, deadline, getattr(self, 'minimum_interval', 0))
+         except ProviderUnavailable as exc:
+             raise ProviderError(str(exc), exc.status, exc.retry_after) from None
++        finally:
++            request.dispatched.set()
+         try:
+             cfg = replace(self.settings, allow_private_hosts=allow_private or self.settings.allow_private_hosts)
+             if allow_private and not self.settings.allow_private_hosts:
+@@ -126,7 +132,7 @@ class SearxWebProvider(JsonProvider):
+         # A source can ignore a distinctive API/product identifier in a verbose query.
+         # Retry at most once, inside the original deadline, emphasizing missing literal evidence.
+         retry_warning = None
+-        if request.search_type == 'web' and time.monotonic()+.25 < deadline and not request.cancel.is_set():
++        if self.settings.live_query_variants == 1 and request.search_type == 'web' and time.monotonic()+.25 < deadline and not request.cancel.is_set():
+             from .webquery import literal_identifiers
+             from .textproc import analyze
+             seen = set(analyze(' '.join(str(row.get('title', ''))+' '+str(row.get('content', ''))+' '+str(row.get('url', '')) for row in results)))
+diff --git a/ownsearch/queryvariants.py b/ownsearch/queryvariants.py
+new file mode 100644
+index 0000000..f5b4747
+--- /dev/null
++++ b/ownsearch/queryvariants.py
+@@ -0,0 +1,68 @@
++"""Bounded lexical variants and RRF, without generated facts or topic aliases."""
++import re
++from collections import defaultdict
++from .textproc import STOPWORDS
++from .webmodels import web_url
++from .webproviders import SourceBatch
++from .providers import Response
++
++
++_PREFIX=re.compile(
++    r'^(?:(?:can|could|would|will)\s+you\s+(?:please\s+)?(?:help\s+me\s+(?:to\s+)?)?'
++    r'|please\s+(?:help\s+me\s+(?:to\s+)?)?|help\s+me\s+(?:to\s+)?)'
++    r'(?:find|search\s+for|look\s+up|show\s+me|give\s+me|tell\s+me\s+about)\s+'
++    r'|^(?:i\s+(?:am\s+looking\s+for|am\s+searching\s+for|need|want\s+to\s+find)'
++    r'|find|search\s+for|show\s+me|tell\s+me\s+about)\s+',re.I)
++_TOKENS=re.compile(r'-?(?:\w+:)?"[^"\n]*"|\S+')
++
++
++def compact_request(text):
++    """Remove only an anchored request prefix; preserve every remaining qualifier."""
++    value=_PREFIX.sub('',text,count=1).strip()
++    return value if len(value.split())>=2 else text
++
++
++def variants(request,maximum=3):
++    original=request.query
++    result=[original]
++    if maximum<=1 or request.search_type!='web':return result
++    compact=compact_request(original)
++    if compact!=original:result.append(compact)
++    # Natural-language negation can depend on stopwords. Keep its complete wording.
++    if not re.search(r'\b(?:not|no|without|except|excluding|rather|versus|vs)\b',compact,re.I):
++        words=_TOKENS.findall(compact)
++        keywords=' '.join(w for w in words if w.lower() not in STOPWORDS)
++        if len(keywords.split())>=2 and keywords not in result:result.append(keywords)
++    # No synonym is invented. Optional source-supported aliases belong in future
++    # variants only after their provenance and quality are measured.
++    return result[:maximum]
++
++
++def rrf_rows(batches,limit=40):
++    scores=defaultdict(float);rows={};rankings=defaultdict(list)
++    for batch in batches:
++        seen=set()
++        for position,row in enumerate(batch.rows[:limit],1):
++            if not isinstance(row,dict) or not (url:=web_url(row.get('url'))) or url in seen:continue
++            seen.add(url);scores[url]+=1/(60+position)
++            rows.setdefault(url,dict(row))
++            rankings[url].append({'query':str(row.get('source_query',''))[:1000],'rank':position})
++    output=[]
++    for url in sorted(scores,key=lambda u:(-scores[u],u))[:limit]:
++        row=rows[url];row['source_query_ranks']=rankings[url]
++        row['source_rank_method']='reciprocal_rank_fusion'
++        output.append(row)
++    return output
++
++
++def fuse_responses(responses,limit=40):
++    groups={}
++    for response in responses:groups.setdefault(response.provider,[]).append(response)
++    output=[]
++    for provider,group in groups.items():
++        batches=[r.results for r in group if r.status=='ok' and isinstance(r.results,SourceBatch)]
++        if len(batches)<=1:
++            output.extend(group);continue
++        warnings=list(dict.fromkeys(w for b in batches for w in b.warnings))
++        output.append(Response(provider,SourceBatch(rrf_rows(batches,limit),warnings)))
++    return output
+diff --git a/tests/test_queryvariants.py b/tests/test_queryvariants.py
+new file mode 100644
+index 0000000..2ef48df
+--- /dev/null
++++ b/tests/test_queryvariants.py
+@@ -0,0 +1,81 @@
++"""Query constraints, bounded calls, and real-source-only RRF."""
++import threading
++import time
++import unittest
++from ownsearch.query import parse_query
++from ownsearch.queryvariants import compact_request,variants,rrf_rows
++from ownsearch.webmodels import WebRequest,WebCandidate
++from ownsearch.webproviders import SourceBatch,JsonProvider
++from ownsearch.coordinator import LiveSearch
++from scripts.benchmark_query_md import Recorder
++from tests.test_live_web import settings,Source,row
++
++
++class QueryVariantTests(unittest.TestCase):
++    def request(self,text):return WebRequest(text,parse_query(text),threading.Event())
++    def test_prefix_compaction_preserves_all_constraints(self):
++        text='Could you please help me find "orbital sensor" site:docs.example.org -advertising after:2020-01-01'
++        compact=compact_request(text)
++        self.assertEqual(compact,'"orbital sensor" site:docs.example.org -advertising after:2020-01-01')
++        for choice in variants(self.request(text)):
++            for value in ('"orbital sensor"','site:docs.example.org','-advertising','after:2020-01-01'):
++                self.assertIn(value,choice)
++        self.assertEqual(variants(self.request(text))[0],text)
++        self.assertEqual(compact_request('"Please find" is a quoted title'),'"Please find" is a quoted title')
++    def test_negation_keeps_complete_wording_and_no_synonyms_are_invented(self):
++        text='Please find orbital sensors without batteries'
++        self.assertEqual(variants(self.request(text)),[text,'orbital sensors without batteries'])
++        self.assertLessEqual(len(variants(self.request('Please find the orbital sensor guide'))),3)
++    def test_duplicate_url_can_vote_only_once_per_variant_and_query_order_is_preserved(self):
++        a={'url':'https://docs.example.org/sensor?z=1&a=2&a=1','title':'Sensor','source_query':'sensor'}
++        b={'url':'https://docs.example.org/other','title':'Other','source_query':'sensor guide'}
++        rows=rrf_rows([SourceBatch([a,a,b]),SourceBatch([b])])
++        self.assertEqual(rows[0]['url'],b['url'])
++        self.assertEqual(rows[1]['url'],a['url'])
++        self.assertEqual(len(rows[1]['source_query_ranks']),1)
++        item=WebCandidate.from_row(rows[0],'fixture',1)
++        self.assertEqual(len(item.provenance[0]['query_ranks']),2)
++    def test_failed_variant_retains_original_results_and_operator_filtering(self):
++        class Mixed:
++            name='mixed';general_web=True
++            def search(self,request,deadline):
++                if not request.query.startswith('Please'):raise ValueError('Injected variant failure')
++                return SourceBatch([row('https://docs.example.org/sensor','Orbital sensor calibration','Orbital sensor calibration guide.'),
++                                    row('https://other.example.org/sensor','Orbital sensor calibration','Orbital sensor calibration guide.')])
++        result=LiveSearch(settings(live_query_variants=3),[Mixed()]).search(
++            'Please find orbital sensor calibration site:docs.example.org',fetch_pages=False)
++        self.assertEqual([r['url'] for r in result['results']],['https://docs.example.org/sensor'])
++        self.assertTrue(any(s['status']=='error' for s in result['provider_status']))
++    def test_variants_share_single_physical_provider_request_budget(self):
++        from unittest.mock import patch
++        from ownsearch.fetcher import Fetcher,FetchResult
++        class BudgetSource(JsonProvider):
++            name='budget'
++            def search(self,request,deadline):
++                self.request(request,'https://api.example.org/search',deadline)
++                return SourceBatch()
++        cfg=settings(live_query_variants=3,provider_request_budget=1)
++        with patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,{},b'{}')) as fetch:
++            result=LiveSearch(cfg,[BudgetSource(cfg)]).search('Please find the orbital sensor guide',fetch_pages=False)
++        self.assertEqual(fetch.call_count,1)
++        self.assertTrue(any(s['status']=='rate_limited' for s in result['provider_status']))
++    def test_original_reserves_budget_before_faster_variants(self):
++        from unittest.mock import patch
++        from ownsearch.fetcher import Fetcher,FetchResult
++        class SlowOriginal(JsonProvider):
++            name='priority'
++            def search(self,request,deadline):
++                if request.query.startswith('Please'):time.sleep(.05)
++                self.request(request,'https://api.example.org/search?q='+request.query,deadline)
++                return SourceBatch()
++        cfg=settings(live_query_variants=3,provider_request_budget=1)
++        with patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,{},b'{}')) as fetch:
++            LiveSearch(cfg,[SlowOriginal(cfg)]).search('Please find the orbital sensor guide',fetch_pages=False)
++        self.assertEqual(fetch.call_count,1)
++        self.assertIn('Please find',fetch.call_args.args[0])
++    def test_recorder_delegates_routing_and_associates_variant_snapshots(self):
++        source=Source('fixture');source.accepts=lambda req:False
++        recorder=Recorder(source);req=self.request('sensor guide');req.original_query='Please find sensor guide'
++        self.assertFalse(recorder.accepts(req))
++        recorder.search(req,time.monotonic()+1)
++        self.assertEqual(len(recorder.snapshot(req.original_query)),1)

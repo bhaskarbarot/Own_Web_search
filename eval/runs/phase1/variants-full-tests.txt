@@ -1,0 +1,159 @@
+======================================================================
+ERROR: setUpClass (test_crawl.CrawlTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_crawl.py", line 13, in setUpClass
+    cls.site = TestSite(120)
+               ^^^^^^^^^^^^^
+  File "/home/pc-117/Documents/own_web_search_engine/tests/helpers.py", line 118, in __init__
+    self.server = ThreadingHTTPServer(("127.0.0.1", 0), H)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_live_api_rejects_persistent_ingestion_explicitly (test_live_http.LiveHTTPTests.test_live_api_rejects_persistent_ingestion_explicitly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_live_http.py", line 132, in test_live_api_rejects_persistent_ingestion_explicitly
+    api = ThreadingHTTPServer(('127.0.0.1', 0), make_handler(engine, keys, RateLimiter(), Metrics(), None, True, 'full'))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_real_http_provider_and_page_enrichment_without_persistence (test_live_http.LiveHTTPTests.test_real_http_provider_and_page_enrichment_without_persistence)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_live_http.py", line 40, in test_real_http_provider_and_page_enrichment_without_persistence
+    server = ThreadingHTTPServer(('127.0.0.1', 0), Fixture)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_search_only_key_can_discover_but_cannot_fetch_and_no_storage_is_created (test_live_http.LiveHTTPTests.test_search_only_key_can_discover_but_cannot_fetch_and_no_storage_is_created)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_live_http.py", line 70, in test_search_only_key_can_discover_but_cannot_fetch_and_no_storage_is_created
+    provider = ThreadingHTTPServer(('127.0.0.1', 0), Provider)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_ui_is_available_without_exposing_authenticated_search (test_live_http.LiveHTTPTests.test_ui_is_available_without_exposing_authenticated_search)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_live_http.py", line 103, in test_ui_is_available_without_exposing_authenticated_search
+    api = ThreadingHTTPServer(('127.0.0.1', 0), make_handler(engine, keys, RateLimiter(), Metrics(), None, True, 'full'))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_news_feed_discovery (test_quality_and_providers.QualityAndProviderTests.test_news_feed_discovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_quality_and_providers.py", line 242, in test_news_feed_discovery
+    server = MockServer(FeedHandler)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_quality_and_providers.py", line 34, in __init__
+    super().__init__(("127.0.0.1", 0), handler_cls)
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_provider_timeout_bounded (test_quality_and_providers.QualityAndProviderTests.test_provider_timeout_bounded)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_quality_and_providers.py", line 193, in test_provider_timeout_bounded
+    server = MockServer(HangingHandler)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_quality_and_providers.py", line 34, in __init__
+    super().__init__(("127.0.0.1", 0), handler_cls)
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_searxng_discovery (test_quality_and_providers.QualityAndProviderTests.test_searxng_discovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_quality_and_providers.py", line 278, in test_searxng_discovery
+    server = MockServer(SearxHandler)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_quality_and_providers.py", line 34, in __init__
+    super().__init__(("127.0.0.1", 0), handler_cls)
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: test_gateway_balances_and_fails_over (test_server.GatewayTests.test_gateway_balances_and_fails_over)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_server.py", line 131, in test_gateway_balances_and_fails_over
+    nodes.append(start(h))
+                 ^^^^^^^^
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_server.py", line 18, in start
+    srv = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+======================================================================
+ERROR: setUpClass (test_server.ServerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_server.py", line 50, in setUpClass
+    cls.srv, cls.port = start(handler)
+                        ^^^^^^^^^^^^^^
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_server.py", line 18, in start
+    srv = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socketserver.py", line 453, in __init__
+    self.socket = socket.socket(self.address_family,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted
+
+----------------------------------------------------------------------
+Ran 281 tests in 34.430s
+
+FAILED (errors=10)
