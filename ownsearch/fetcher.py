@@ -120,11 +120,73 @@ def decode_content(body, encoding, limit):
     return out
 
 
+class ConnectionPool:
+    def __init__(self, max_per_host=4, idle_timeout=15.0):
+        self.max_per_host = max_per_host
+        self.idle_timeout = idle_timeout
+        self.lock = threading.Lock()
+        self.pool = {}
+
+    def get(self, scheme, host, port, ip):
+        now = time.monotonic()
+        key = (scheme, host, port, ip)
+        with self.lock:
+            entries = self.pool.get(key)
+            if entries:
+                while entries:
+                    conn, ts = entries.pop()
+                    if now - ts <= self.idle_timeout and getattr(conn, 'sock', None) is not None:
+                        return conn
+                    try:
+                        conn.close()
+                    except Exception:
+                        pass
+        return None
+
+    def put(self, scheme, host, port, ip, conn):
+        if not conn or getattr(conn, 'sock', None) is None:
+            return
+        now = time.monotonic()
+        key = (scheme, host, port, ip)
+        with self.lock:
+            if key not in self.pool:
+                self.pool[key] = []
+            entries = self.pool[key]
+            entries[:] = [e for e in entries if now - e[1] <= self.idle_timeout]
+            if len(entries) < self.max_per_host:
+                entries.append((conn, now))
+                return
+        try:
+            conn.close()
+        except Exception:
+            pass
+
+    def close(self):
+        with self.lock:
+            for entries in self.pool.values():
+                for conn, _ in entries:
+                    try:
+                        conn.close()
+                    except Exception:
+                        pass
+            self.pool.clear()
+
+    def __del__(self):
+        try:
+            self.close()
+        except Exception:
+            pass
+
+
 class Fetcher:
     def __init__(self, settings):
         self.settings = settings
         self.context = ssl.create_default_context()
         self.allow_private = bool(settings.allow_private_hosts)
+        self.pool = ConnectionPool(max_per_host=4, idle_timeout=15.0)
+
+    def close(self):
+        self.pool.close()
 
     # ------------------------------------------------------------ validation
     def check_url(self, url):
@@ -197,19 +259,40 @@ class Fetcher:
             timeout = min(timeout, deadline - time.monotonic())
             if timeout <= 0:
                 raise FetchError("Request budget exhausted", "timeout")
-        if p.scheme == "https":
-            conn = _PinnedHTTPSConnection(p.hostname, port, ip, timeout, self.context)
-        else:
-            conn = _PinnedHTTPConnection(p.hostname, port, ip, timeout)
+        conn = self.pool.get(p.scheme, p.hostname, port, ip)
+        reused = conn is not None
+        if not conn:
+            if p.scheme == "https":
+                conn = _PinnedHTTPSConnection(p.hostname, port, ip, timeout, self.context)
+            else:
+                conn = _PinnedHTTPConnection(p.hostname, port, ip, timeout)
         path = (p.path or "/") + ("?" + p.query if p.query else "")
+        status = 0
+        hdrs = {}
+        truncated = False
+        reusable = False
         try:
-            conn.request(method, path, headers=headers)
-            resp = conn.getresponse()
-            hdrs = {}
+            try:
+                conn.request(method, path, headers=headers)
+                resp = conn.getresponse()
+            except (http.client.RemoteDisconnected, ConnectionError, OSError):
+                if reused:
+                    try:
+                        conn.close()
+                    except Exception:
+                        pass
+                    if p.scheme == "https":
+                        conn = _PinnedHTTPSConnection(p.hostname, port, ip, timeout, self.context)
+                    else:
+                        conn = _PinnedHTTPConnection(p.hostname, port, ip, timeout)
+                    conn.request(method, path, headers=headers)
+                    resp = conn.getresponse()
+                else:
+                    raise
             for k, v in resp.getheaders():
                 k = k.lower()
                 hdrs[k] = hdrs[k] + ", " + v if k in hdrs else v
-            truncated = False
+            status = resp.status
             chunks, size = [], 0
             if method != "HEAD":
                 declared = hdrs.get("content-length", "")
@@ -231,7 +314,8 @@ class Fetcher:
                         truncated = True
                         break
             body = b"".join(chunks)[:max_bytes]
-            return resp.status, hdrs, body, truncated
+            reusable = not truncated and hdrs.get("connection", "").lower() != "close" and status < 500
+            return status, hdrs, body, truncated
         except socket.timeout as e:
             raise FetchError("Timed out", "timeout") from e
         except ssl.SSLCertVerificationError as e:
@@ -243,7 +327,13 @@ class Fetcher:
                 raise
             raise FetchError(f"Network error: {e.__class__.__name__}: {e}", "network") from e
         finally:
-            conn.close()
+            if reusable:
+                self.pool.put(p.scheme, p.hostname, port, ip, conn)
+            else:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
 
     def fetch(self, url, *, etag=None, last_modified=None, max_bytes=None, accept=None,
               allow=None, extra_headers=None, retries=None, method="GET", deadline=None, before_request=None, max_decompressed_bytes=None,
@@ -257,7 +347,7 @@ class Fetcher:
                                 "application/pdf;q=0.8,text/*;q=0.7,*/*;q=0.3",
             "Accept-Encoding": "gzip, deflate",
             "Accept-Language": "en,*;q=0.5",
-            "Connection": "close",
+            "Connection": "keep-alive",
         }
         if etag:
             headers["If-None-Match"] = etag

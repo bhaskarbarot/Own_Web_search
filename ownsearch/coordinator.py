@@ -44,7 +44,7 @@ class IndependentSearch:
     def search(self, query, limit=10, offset=0, freshness=None, site=None, filetype=None, lang=None,
                timeout_ms=None, explain=False, use_cache=True, fetch_pages=True, search_type='web',
                answer_mode=False, preferred_language=None, timezone_name=None, seeds=None,
-               cancel_event=None, **unused):
+               cancel_event=None, on_progress=None, **unused):
         if not isinstance(query, str) or not query.strip() or len(query) > 1000:
             raise ValueError('Query must contain 1–1000 characters')
         limit, offset = int(limit), int(offset)
@@ -57,6 +57,12 @@ class IndependentSearch:
         budget = self.settings.search_timeout_ms if timeout_ms is None else int(timeout_ms)
         if not 50 <= budget <= self.settings.max_search_timeout_ms:
             raise ValueError('Search timeout is outside configured bounds')
+        cache_key = (query, limit, offset, freshness, site, filetype, lang, search_type, answer_mode, explain,
+                     preferred_language, timezone_name, tuple(seeds or []))
+        if use_cache and not fetch_pages:
+            cached_res = self.cache.get_query_result(cache_key)
+            if cached_res is not None:
+                return cached_res
         if not self.slots.acquire(False):
             raise Busy('All crawl slots are occupied; retry shortly')
         cancel = cancel_event or threading.Event()
@@ -72,6 +78,48 @@ class IndependentSearch:
             q = conservative_intent(q)
             notes, statuses = [], []
             fresh_cache_age = 0 if q.intent == 'financial' else self.settings.cache_ttl_news if q.fresh_intent else None
+
+            # Fast index retrieval for cache-only queries
+            if not fetch_pages:
+                if not use_cache or (fresh_cache_age is not None and fresh_cache_age <= 0):
+                    ranked = []
+                else:
+                    ranked = self.cache.search_index(q, limit=offset + limit, search_type=search_type)
+                    if seeds:
+                        seed_set = set(seeds)
+                        ranked = [it for it in ranked if it.url in seed_set]
+                    for it in ranked:
+                        it.cached = True
+                selected = ranked[offset:offset+limit]
+                answer = None
+                if answer_mode:
+                    safe = next((item for item in selected if item.evidence and not item.injection_risk), None)
+                    if safe:
+                        answer = {'type': 'extractive', 'text': safe.evidence[0]['text'],
+                                  'citations': [{'url': safe.url, 'title': safe.title, 'fetched_at': safe.fetched_at}],
+                                  'disclaimer': 'Source excerpt; not independently verified.'}
+                notes = ['Coverage is limited to configured sites, observed links and unexpired cached pages.']
+                took = round((time.perf_counter()-started)*1000, 3)
+                images = [image for item in selected for image in item.images]
+                if search_type == 'images':
+                    indexed_imgs = self.cache.search_images(q, limit=limit)
+                    if indexed_imgs:
+                        images = indexed_imgs
+                res = {'query': query, 'mode': 'independent', 'results': [item.result(offset+i+1, explain, q.scoring_terms) for i, item in enumerate(selected)],
+                       'answer': answer, 'answer_status': 'supported_excerpt' if answer else 'insufficient_evidence' if answer_mode else 'not_requested',
+                       'query_understanding': q.normalized(), 'source_plan': [], 'crawl_status': [], 'limitations': notes,
+                       'notice': NOTICE, 'images': images,
+                       'coverage': {'starting_urls': 0, 'observed_urls': 0,
+                                    'attempted_pages': 0, 'requests': 0,
+                                    'decoded_bytes': 0,
+                                    'budget_bytes': 0, 'cache_reuses': len(selected),
+                                    'unfinished_pages': 0, 'exhaustive': False},
+                       'cached': bool(selected),
+                       'timed_out': False, 'took_ms': took, 'cache': self.cache.stats()}
+                if use_cache:
+                    self.cache.put_query_result(cache_key, res, ttl=self.settings.cache_ttl)
+                return res
+
             if self.settings.persistent_cache_enabled and use_cache:
                 cached_pages = self.cache.snapshot(max_age=fresh_cache_age)
             else:
@@ -81,6 +129,13 @@ class IndependentSearch:
                 if page.item:
                     page.item.cached = True
                     candidates.append(page.item)
+            if on_progress and use_cache and candidates:
+                try:
+                    init_ranked = self.cache.search_index(q, limit=limit, search_type=search_type)
+                    if init_ranked:
+                        on_progress({'stage': 'cache', 'results': [it.result(i+1, explain, q.scoring_terms) for i, it in enumerate(init_ranked[:limit])]})
+                except Exception:
+                    pass
             remembered = self.cache.memory_sources(lexical) if use_cache and self.settings.persistent_cache_enabled and self.settings.source_memory_enabled else []
             urls = list(dict.fromkeys([*(seeds or []), *explicit_urls, *remembered, *self.starting_urls]))
             # site: is explicit user authorization of a root target; never an asserted result.
@@ -290,12 +345,16 @@ class IndependentSearch:
                 notes.append('Some pages exceeded a crawl deadline; unfinished content was excluded.')
             if fetch_pages and frontier:
                 notes.append('More discovered pages remain beyond this request’s crawl budget.')
-            notes.append('Coverage is limited to configured sites, observed links and unexpired cached pages.')
+            images = [image for item in selected for image in item.images]
+            if search_type == 'images':
+                indexed_imgs = self.cache.search_images(q, limit=limit)
+                if indexed_imgs:
+                    images = indexed_imgs
             took = round((time.perf_counter()-started)*1000, 3)
-            return {'query': query, 'mode': 'independent', 'results': [item.result(offset+i+1, explain, q.scoring_terms) for i, item in enumerate(selected)],
+            out_result = {'query': query, 'mode': 'independent', 'results': [item.result(offset+i+1, explain, q.scoring_terms) for i, item in enumerate(selected)],
                     'answer': answer, 'answer_status': 'supported_excerpt' if answer else 'insufficient_evidence' if answer_mode else 'not_requested',
                     'query_understanding': q.normalized(), 'source_plan': source_plan, 'crawl_status': statuses, 'limitations': notes,
-                    'notice': NOTICE, 'images': [image for item in selected for image in item.images],
+                    'notice': NOTICE, 'images': images,
                     'coverage': {'starting_urls': len(valid), 'observed_urls': len(observed),
                                  'attempted_pages': attempted, 'requests': session.requests if session else 0,
                                  'decoded_bytes': session.decoded_bytes if session else 0,
@@ -303,9 +362,34 @@ class IndependentSearch:
                                  'unfinished_pages': unfinished, 'exhaustive': False},
                     'cached': bool(selected) and all(item.cached for item in selected),
                     'timed_out': timed_out, 'took_ms': took, 'cache': self.cache.stats()}
+            if use_cache and not timed_out:
+                self.cache.put_query_result(cache_key, out_result, ttl=self.settings.cache_ttl)
+            return out_result
         finally:
             cancel.set()
             self.slots.release()
+
+    def search_stream(self, query, **kwargs):
+        """Yield progressive search stages: 'cache', 'progress', 'final'."""
+        q_results = queue.Queue()
+        def on_progress(data):
+            q_results.put(('progress', data))
+        def runner():
+            try:
+                res = self.search(query, on_progress=on_progress, **kwargs)
+                q_results.put(('done', res))
+            except Exception as e:
+                q_results.put(('error', e))
+        threading.Thread(target=runner, name='ownsearch-stream', daemon=True).start()
+        while True:
+            kind, payload = q_results.get()
+            if kind == 'progress':
+                yield payload
+            elif kind == 'done':
+                yield {'stage': 'final', **payload}
+                break
+            elif kind == 'error':
+                raise payload
 
     def close(self):
         if hasattr(self.cache, 'close'):

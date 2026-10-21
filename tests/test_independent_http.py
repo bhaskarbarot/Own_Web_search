@@ -50,6 +50,13 @@ class HTTPTests(unittest.TestCase):
         self.assertEqual(data['answer']['citations'][0]['url'],self.site.base+'/guide')
         self.assertIn('features',data['results'][0])
         self.assertEqual(list(Path(self.tmp.name).iterdir()),[])
+    def test_streaming_search_flow(self):
+        status,headers,body=self.request('/search/stream',body={'query':'orbital guidance','seeds':[self.site.base+'/guide']})
+        self.assertEqual(status,200)
+        self.assertIn('text/event-stream',headers.get('Content-Type',''))
+        text=body.decode()
+        self.assertIn('data: ',text)
+        self.assertIn('"stage": "final"',text)
     def test_get_query_and_boolean_options(self):
         status,_,body=self.request('/search?q=orbital+guidance&fetch_pages=false&answer_mode=true')
         self.assertEqual(status,200)

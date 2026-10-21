@@ -62,15 +62,17 @@ def constraints(item, q, final=True):
         if not matches_language and (final or item.language):
             return False
     if q.filetypes:
-        ext = urlsplit(item.url).path.rsplit('.', 1)[-1].lower()
+        path = urlsplit(item.url).path
+        ext = path.rsplit('.', 1)[-1].lower() if '.' in path else ''
         ext = FILETYPE_ALIASES.get(ext, ext)
-        kinds = ({'web' if item.detected_kind == 'html' else item.detected_kind}
-                 if item.detected_kind else {'web' if item.kind == 'web' else item.kind, ext})
-        if item.detected_kind == 'text':
+        detected = 'web' if item.detected_kind == 'html' else item.detected_kind
+        kinds = {detected} if detected else {'web' if item.kind == 'web' else item.kind}
+        if ext:
             kinds.add(ext)
-            media = (item.content_type or '').split(';')[0].strip().lower()
-            kinds.update({'text/csv': {'csv'}, 'text/tab-separated-values': {'tsv'},
-                          'application/json': {'json'}}.get(media, set()))
+        media = (item.content_type or '').split(';')[0].strip().lower()
+        kinds.update({'text/csv': {'csv'}, 'text/tab-separated-values': {'tsv'},
+                      'application/json': {'json'}, 'text/xml': {'xml'},
+                      'application/xml': {'xml'}}.get(media, set()))
         if not set(q.filetypes) & kinds:
             return False
     stamp = iso_to_ts(item.published_at)

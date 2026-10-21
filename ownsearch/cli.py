@@ -21,12 +21,16 @@ def main(argv=None):
     search.add_argument('--answer', action='store_true')
     search.add_argument('--explain', action='store_true')
     search.add_argument('--cache-only', action='store_true')
+    search.add_argument('--json', action='store_true')
+    search.add_argument('--markdown', action='store_true')
+    search.add_argument('--pdf', default=None, help='Export results to PDF file')
     serve_parser = sub.add_parser('serve')
     serve_parser.add_argument('--host', default='127.0.0.1')
     serve_parser.add_argument('--port', type=int, default=8765)
     serve_parser.add_argument('--require-auth', action='store_true')
     serve_parser.add_argument('--seed', action='append', default=None)
     sub.add_parser('status')
+    sub.add_parser('mcp')
     key = sub.add_parser('create-key')
     key.add_argument('agent')
     args = parser.parse_args(argv)
@@ -35,6 +39,10 @@ def main(argv=None):
         from .auth import KeyStore
         settings.data_dir.mkdir(parents=True, exist_ok=True)
         print(KeyStore(settings.keys_path).create(args.agent))
+        return 0
+    if args.command == 'mcp':
+        from .mcp import run_mcp_server
+        run_mcp_server()
         return 0
     engine = IndependentSearch(settings)
     if args.command == 'serve':
@@ -47,8 +55,21 @@ def main(argv=None):
                                  site=args.site, filetype=args.filetype, lang=args.lang, freshness=args.freshness,
                                  timezone_name=args.timezone, timeout_ms=args.timeout_ms, search_type=args.type,
                                  answer_mode=args.answer, explain=args.explain, fetch_pages=not args.cache_only)
-        print(json.dumps(response, ensure_ascii=False, indent=2))
+        from .tool import SearchResults
+        res_obj = SearchResults(response)
+        if args.pdf:
+            res_obj.to_pdf(args.pdf)
+            print(f"Results exported to {args.pdf}")
+        elif args.markdown:
+            print(res_obj.to_markdown())
+        elif args.json:
+            print(res_obj.to_json())
+        else:
+            print(res_obj.text)
     else:
         print(json.dumps({'mode': 'independent', 'database': False, 'starting_urls': engine.starting_urls,
                           'cache': engine.cache.stats()}, indent=2))
     return 0
+
+if __name__ == '__main__':
+    raise SystemExit(main())

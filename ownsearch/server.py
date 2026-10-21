@@ -85,7 +85,7 @@ def make_handler(engine, require_auth=False):
                 if path == '/stats' and self.command == 'GET':
                     self.send(200, {'mode': 'independent', 'database': False, 'cache': engine.cache.stats(), 'starting_urls': engine.starting_urls})
                     return
-                if path != '/search':
+                if path not in ('/search', '/search/stream'):
                     self.send(404, {'error': 'Unknown endpoint'})
                     return
                 body = {k: v[-1] for k, v in parse_qs(target.query).items()}
@@ -115,6 +115,22 @@ def make_handler(engine, require_auth=False):
                 for key in ('explain', 'use_cache', 'fetch_pages', 'answer_mode'):
                     if key in body:
                         body[key] = _boolean(body[key])
+                if path == '/search/stream':
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'text/event-stream; charset=utf-8')
+                    self.send_header('Cache-Control', 'no-cache')
+                    self.send_header('Connection', 'close')
+                    self.send_header('X-Accel-Buffering', 'no')
+                    self.end_headers()
+                    self.close_connection = True
+                    try:
+                        for event in engine.search_stream(query, **body):
+                            data_str = json.dumps(event, ensure_ascii=False)
+                            self.wfile.write(f"data: {data_str}\n\n".encode('utf-8'))
+                            self.wfile.flush()
+                    except (BrokenPipeError, ConnectionResetError):
+                        pass
+                    return
                 self.send(200, engine.search(query, **body))
             except Busy as error:
                 self.send(503, {'error': str(error)})
