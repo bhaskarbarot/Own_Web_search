@@ -1,0 +1,6 @@
+id,category,query,expected_behaviour,reference_collection_notes
+live-multilingual-002,multilingual,पायथन में सूची और टपल का अंतर,Understand the query language and preserve entity and facet; prefer understandable relevant sources without unsupported translation claims.,
+live-multilingual-003,multilingual,भारतीय मौसम विभाग की ताजा चेतावनी,Understand the query language and preserve entity and facet; prefer understandable relevant sources without unsupported translation claims.,
+live-multilingual-007,multilingual,વરસાદનું પાણી સંગ્રહ કરવાની પદ્ધતિઓ,Understand the query language and preserve entity and facet; prefer understandable relevant sources without unsupported translation claims.,
+live-multilingual-020,multilingual,كيف تتكون المد والجزر شرح علمي,Understand the query language and preserve entity and facet; prefer understandable relevant sources without unsupported translation claims.,
+live-multilingual-025,multilingual,해수면 조석이 발생하는 이유 과학 설명,Understand the query language and preserve entity and facet; prefer understandable relevant sources without unsupported translation claims.,

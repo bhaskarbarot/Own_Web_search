@@ -1,0 +1,421 @@
+[INFO] Websockets are not supported on WSGI, ignoring
+[INFO] Starting granian (main PID: 11906)
+[INFO] Listening at: http://127.0.0.1:8888
+[INFO] Spawning worker-1 with PID: 11907
+2026-10-21 10:54:02,595 WARNING:searx.botdetection.config: missing config file: /home/pc-117/Documents/own_web_search_engine/.runtime/searxxxing/limiter.toml
+[INFO] Started worker-1
+2026-10-21 11:02:23,016 ERROR:searx.botdetection: X-Forwarded-For nor X-Real-IP header is set!
+2026-10-21 11:02:23,818 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=Ruby+Find+open-source+Ruby+on+Rails+projects+that+use+React+and+TypeScript+and+have+open+issues+suitable+for+a+first-time+contributor.&source=web
+2026-10-21 11:02:23,883 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:02:23,975 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=Ruby+Find+open-source+Ruby+on+Rails+projects+that+use+React+and+TypeScript+and+have+open+issues+suitable+for+a+first-time+contributor.&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:02:23,978 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:02:25,030 ERROR:searx.engines.duckduckgo: engine timeout
+2026-10-21 11:02:25,041 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:02:25,046 WARNING:searx.engines.duckduckgo: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'html.duckduckgo.com')) False
+2026-10-21 11:02:32,943 ERROR:searx.engines.duckduckgo: engine timeout
+2026-10-21 11:02:32,949 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:02:32,952 WARNING:searx.engines.duckduckgo: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'html.duckduckgo.com')) False
+2026-10-21 11:02:40,181 ERROR:searx.engines.duckduckgo: engine timeout
+2026-10-21 11:02:40,186 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:02:40,189 WARNING:searx.engines.duckduckgo: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'html.duckduckgo.com')) False
+2026-10-21 11:02:46,926 WARNING:searx.network.google news: HTTP Request failed: GET https://www.google.com/wml/search?q=research+Find+research+papers+on+retrieval-augmented+generation+published+in+2025+or+2026.&sca_esv=1&hl=en&ie=utf8&oe=utf8&tbm=nws
+2026-10-21 11:02:46,928 WARNING:searx.engines.google news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:02:48,082 ERROR:searx.engines.duckduckgo: engine timeout
+2026-10-21 11:02:48,082 ERROR:searx.engines.duckduckgo news: engine timeout
+2026-10-21 11:02:48,098 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:02:48,101 WARNING:searx.engines.duckduckgo: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'html.duckduckgo.com')) False
+2026-10-21 11:02:48,282 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:02:48,283 WARNING:searx.engines.duckduckgo news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, None)) False
+2026-10-21 11:02:55,326 ERROR:searx.engines.duckduckgo: engine timeout
+2026-10-21 11:02:55,333 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:02:55,335 WARNING:searx.engines.duckduckgo: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'html.duckduckgo.com')) False
+2026-10-21 11:03:02,696 ERROR:searx.engines.duckduckgo: engine timeout
+2026-10-21 11:03:02,702 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:03:02,703 WARNING:searx.engines.duckduckgo: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'html.duckduckgo.com')) False
+2026-10-21 11:03:11,713 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 500, 'url=eval_xpath(div_result, ".//h2/a/@href")[0],', 'IndexError', None, ()) False
+2026-10-21 11:03:19,687 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 500, 'url=eval_xpath(div_result, ".//h2/a/@href")[0],', 'IndexError', None, ()) False
+2026-10-21 11:03:28,719 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:03:28,723 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:04:10,007 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:04:10,013 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:04:10,017 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:04:17,541 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:04:17,547 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:04:17,550 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:04:25,682 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:04:25,688 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:04:25,689 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:04:32,983 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:04:32,989 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:04:32,992 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:04:42,279 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:04:42,283 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:04:42,285 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:04:49,655 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:04:49,663 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:04:49,665 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:04:55,494 WARNING:searx.engines.bing news: ErrorContext('searx/engines/bing_news.py', 79, 'dom = resp.html()', 'lxml.etree.ParserError', None, ()) False
+2026-10-21 11:05:01,612 WARNING:searx.engines.bing news: ErrorContext('searx/engines/bing_news.py', 79, 'dom = resp.html()', 'lxml.etree.ParserError', None, ()) False
+2026-10-21 11:05:26,419 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=AI+Find+recent+news+about+AI+regulation+in+India%2C+prioritizing+government+announcements.&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:05:26,421 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:05:26,676 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=AI+Find+recent+news+about+AI+regulation+in+India%2C+prioritizing+government+announcements.&source=web
+2026-10-21 11:05:26,677 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:05:26,968 WARNING:searx.engines.brave.news: ErrorContext('searx/engines/brave.py', 248, 'start = text.index("data: [{")', 'ValueError', None, ()) False
+2026-10-21 11:06:51,741 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:06:51,747 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:06:51,750 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:07:11,051 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:07:11,059 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:07:11,062 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:07:18,406 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:07:18,413 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:07:18,415 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:07:25,867 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:07:25,873 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:07:25,876 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:07:33,560 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:07:33,566 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:07:33,570 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:07:40,987 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:07:40,992 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:07:40,996 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:07:48,332 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:07:48,339 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:07:48,342 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:08:29,189 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=Ahmedabad+Find+laptop+repair+shops+in+Ahmedabad+with+reviews+and+contact+information.&source=web
+2026-10-21 11:08:29,190 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:08:29,236 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=Ahmedabad+Find+laptop+repair+shops+in+Ahmedabad+with+reviews+and+contact+information.&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:08:29,239 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:08:38,443 WARNING:searx.network.google news: HTTP Request failed: GET https://www.google.com/wml/search?q=Ahmedabad+Find+local+technology+meetups+or+developer+events+in+Ahmedabad+this+month.&sca_esv=1&hl=en&ie=utf8&oe=utf8&tbm=nws
+2026-10-21 11:08:38,446 WARNING:searx.engines.google news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:08:39,910 WARNING:searx.engines.bing news: ErrorContext('searx/engines/bing_news.py', 79, 'dom = resp.html()', 'lxml.etree.ParserError', None, ()) False
+2026-10-21 11:08:40,092 ERROR:searx.engines.duckduckgo news: engine timeout
+2026-10-21 11:08:40,293 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:08:40,294 WARNING:searx.engines.duckduckgo news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, None)) False
+2026-10-21 11:10:08,554 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:10:08,560 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:10:08,563 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:10:16,048 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:10:16,052 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:10:16,054 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:10:25,635 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:10:25,640 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:10:25,643 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:10:33,190 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:10:33,196 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:10:33,199 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:11:34,688 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=Cargo+official+documentation+offline+build+flag&source=web
+2026-10-21 11:11:34,691 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:11:34,831 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=Cargo+official+documentation+offline+build+flag&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:11:34,834 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:12:40,903 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:12:40,909 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:12:40,911 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:12:48,548 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:12:48,552 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:12:48,554 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:12:57,989 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:12:57,994 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:12:57,998 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:13:07,319 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:13:07,324 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:13:07,326 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:13:14,987 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:13:14,994 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:13:14,995 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:13:22,558 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:13:22,563 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:13:22,564 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:13:30,142 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:13:30,149 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:13:30,153 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:14:14,980 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:14:15,051 WARNING:searx.network.google news: HTTP Request failed: GET https://www.google.com/wml/search?q=public+latest+public+reports+on+global+coral+bleaching&sca_esv=1&hl=en&ie=utf8&oe=utf8&tbm=nws
+2026-10-21 11:14:15,053 WARNING:searx.engines.google news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:14:16,187 ERROR:searx.engines.duckduckgo news: engine timeout
+2026-10-21 11:14:16,200 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:14:16,206 WARNING:searx.engines.duckduckgo news: ErrorContext('searx/engines/duckduckgo_extra.py', 63, 'resp = get(', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'duckduckgo.com')) False
+2026-10-21 11:14:22,455 WARNING:searx.engines.bing news: ErrorContext('searx/engines/bing_news.py', 79, 'dom = resp.html()', 'lxml.etree.ParserError', None, ()) False
+2026-10-21 11:14:40,005 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=renewable+this+week+renewable+energy+storage+research+news&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:14:40,007 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:14:40,381 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=renewable+this+week+renewable+energy+storage+research+news&source=web
+2026-10-21 11:14:40,383 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:14:40,753 WARNING:searx.engines.brave.news: ErrorContext('searx/engines/brave.py', 248, 'start = text.index("data: [{")', 'ValueError', None, ()) False
+2026-10-21 11:14:54,418 WARNING:searx.engines.bing news: ErrorContext('searx/engines/bing_news.py', 79, 'dom = resp.html()', 'lxml.etree.ParserError', None, ()) False
+2026-10-21 11:15:04,087 ERROR:searx.engines.bing news: engine timeout
+2026-10-21 11:15:04,092 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:15:04,095 WARNING:searx.engines.bing news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'www.bing.com')) False
+2026-10-21 11:15:26,956 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:15:32,939 WARNING:searx.engines.bing news: ErrorContext('searx/engines/bing_news.py', 79, 'dom = resp.html()', 'lxml.etree.ParserError', None, ()) False
+2026-10-21 11:15:34,614 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:15:34,622 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:15:34,625 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:15:42,256 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:15:42,265 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:15:42,269 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:15:48,462 WARNING:searx.engines.bing news: ErrorContext('searx/engines/bing_news.py', 79, 'dom = resp.html()', 'lxml.etree.ParserError', None, ()) False
+2026-10-21 11:15:56,396 ERROR:searx.engines.bing news: engine timeout
+2026-10-21 11:15:56,403 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:15:56,406 WARNING:searx.engines.bing news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'www.bing.com')) False
+2026-10-21 11:16:11,985 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:16:11,991 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:16:11,995 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:16:19,589 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:16:19,598 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:16:19,601 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:16:33,765 ERROR:searx.engines.bing news: engine timeout
+2026-10-21 11:16:33,774 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:16:33,777 WARNING:searx.engines.bing news: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'www.bing.com')) False
+2026-10-21 11:16:52,867 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:16:52,872 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:16:59,530 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:16:59,532 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:05,904 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:12,391 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:12,396 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:18,858 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:18,863 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:25,031 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:25,034 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:30,879 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:37,371 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:37,378 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:43,574 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=studies+ocean+circulation+paleoclimate+proxies&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:17:43,576 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:17:43,860 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=studies+ocean+circulation+paleoclimate+proxies&source=web
+2026-10-21 11:17:43,862 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:17:43,890 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:56,920 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:17:56,923 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:01,914 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:01,917 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:01,919 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:01,922 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:07,517 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:07,519 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:07,521 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:07,525 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:07,529 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:14,668 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:14,670 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:21,367 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:27,305 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:18:34,975 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:18:34,981 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:18:34,984 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:18:42,628 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:18:42,632 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:18:42,633 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:18:50,330 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:18:50,334 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:18:50,337 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:18:57,640 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:18:57,644 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:18:57,647 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:19:05,321 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:19:05,326 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:19:05,329 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:19:13,033 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:19:13,038 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:19:13,041 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:19:20,107 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:19:20,111 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:19:20,113 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:19:25,829 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:19:25,835 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:19:31,725 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:19:31,727 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:19:44,474 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:20:30,641 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:20:49,967 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=Toyota+share+price+Tokyo+exchange+latest&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:20:49,970 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:20:50,022 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=Toyota+share+price+Tokyo+exchange+latest&source=web
+2026-10-21 11:20:50,025 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:21:31,892 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:21:31,896 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:21:31,897 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:21:39,679 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:21:39,683 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:21:39,686 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:21:47,481 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:21:47,488 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:21:47,489 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:21:55,583 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:21:55,587 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:21:55,588 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:23:53,861 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=India+history+of+water+harvesting+stepwells+India&source=web
+2026-10-21 11:23:53,866 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:23:54,403 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=India+history+of+water+harvesting+stepwells+India&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:23:54,406 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:24:07,840 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:24:07,845 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:24:09,064 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:24:09,069 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:24:09,072 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:24:16,898 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:24:16,928 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:24:16,930 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:24:24,710 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:24:24,714 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:24:24,718 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:24:32,513 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:24:32,518 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:24:32,521 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:24:40,457 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:24:40,462 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:24:40,466 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:24:48,386 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:24:48,392 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:24:48,395 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:25:09,510 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:25:09,514 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:25:09,516 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:26:51,302 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:26:51,305 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:26:51,307 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:26:57,564 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=jaguar+speed&source=web
+2026-10-21 11:26:57,566 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:26:57,725 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=jaguar+speed&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:26:57,728 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:26:59,212 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:26:59,219 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:26:59,222 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:27:07,182 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:27:07,188 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:27:07,191 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:27:20,689 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:27:21,925 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:27:21,929 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:27:21,931 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:27:36,014 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:27:36,019 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:27:36,022 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:27:44,027 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:27:44,032 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:27:44,035 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:27:52,033 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:27:52,038 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:27:52,041 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:27:59,962 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:27:59,967 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:27:59,970 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:29:54,915 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 500, 'url=eval_xpath(div_result, ".//h2/a/@href")[0],', 'IndexError', None, ()) False
+2026-10-21 11:29:56,314 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:29:56,321 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:29:56,323 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:29:58,622 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=API+A+webpage+instructs+you+to+send+API+keys%3B+find+guidance+about+prompt+injection&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:29:58,625 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:29:59,026 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=API+A+webpage+instructs+you+to+send+API+keys%3B+find+guidance+about+prompt+injection&source=web
+2026-10-21 11:29:59,030 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:30:07,036 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:30:07,043 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:30:07,046 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:30:15,029 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:30:15,034 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:30:15,037 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:30:23,656 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:30:23,661 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:30:23,664 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:30:33,458 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:30:33,464 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:30:33,467 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:30:41,452 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:30:41,458 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:30:41,461 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:30:49,466 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:30:49,472 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:30:49,475 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:30:52,003 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:30:52,996 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:30:53,000 ERROR:searx.result_types: filter_urls (field 'url'): ignore AttributeError("'MainResult' object has no attribute 'doi'") from callback /home/pc-117/Documents/own_web_search_engine/searxxxing/searx/result_types/_base.py:341
+2026-10-21 11:30:55,967 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:30:58,219 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:30:59,221 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:01,423 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:02,425 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:04,617 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:05,633 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:07,555 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:31:07,559 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:31:07,561 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:31:09,352 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:10,367 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:12,512 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:13,510 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:15,684 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:16,713 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:18,986 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:19,975 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:22,150 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:23,167 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:25,332 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:26,352 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:28,542 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:29,542 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:31,749 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:32,752 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:41,455 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:46,213 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:55,487 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:31:57,696 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:05,920 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:08,449 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:13,925 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:15,481 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:17,706 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:23,901 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:30,320 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:32,900 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:35,589 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:38,388 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:40,957 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:43,529 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:45,462 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:32:45,467 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:32:45,468 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:32:47,393 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:48,914 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:51,087 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:53,017 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:32:53,022 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:32:53,025 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:32:54,946 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:57,097 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:32:58,576 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:33:00,507 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:33:00,512 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:33:00,514 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:33:02,911 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:33:03,193 WARNING:searx.network.brave: HTTP Request failed: GET https://search.brave.com/search?q=%22negative+capability%22+Keats+letter&source=web
+2026-10-21 11:33:03,194 WARNING:searx.engines.brave: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineTooManyRequestsException', None, ('Too many request (suspended_time=180)',)) False
+2026-10-21 11:33:03,868 WARNING:searx.network.google: HTTP Request failed: GET https://www.google.com/wml/search?q=%22negative+capability%22+Keats+letter&sca_esv=1&hl=en&lr=lang_en&cr=&ie=utf8&oe=utf8&safe=medium
+2026-10-21 11:33:03,874 WARNING:searx.engines.google: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:33:05,207 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:33:07,966 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:33:09,888 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:33:09,902 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:33:09,903 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:33:12,072 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:33:13,564 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:33:15,812 WARNING:searx.engines.duckduckgo: ErrorContext('searx/engines/duckduckgo.py', 477, 'raise SearxEngineCaptchaException(suspended_time=0, message=f"CAPTCHA ({params[\'data\'].get(\'kl\')})")', 'searx.exceptions.SearxEngineCaptchaException', None, ('CAPTCHA (us-en) (suspended_time=0)',)) False
+2026-10-21 11:33:17,738 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:33:17,745 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:33:17,746 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:33:20,212 WARNING:searx.network.duckduckgo: HTTP Request failed: POST https://html.duckduckgo.com/html/
+2026-10-21 11:33:20,213 WARNING:searx.engines.duckduckgo: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'searx.exceptions.SearxEngineAccessDeniedException', None, ('HTTP error 403 (suspended_time=180)',)) False
+2026-10-21 11:33:27,989 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:33:27,994 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:33:27,997 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:35:35,362 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:35:35,369 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:35:35,373 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:35:42,978 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:35:42,982 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:35:42,985 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+2026-10-21 11:35:51,351 ERROR:searx.engines.mwmbl: engine timeout
+2026-10-21 11:35:51,354 ERROR:searx: call to ResultContainer.add_unresponsive_engine after ResultContainer.close
+2026-10-21 11:35:51,356 WARNING:searx.engines.mwmbl: ErrorContext('searx/search/processors/online.py', 211, 'response = req(params["url"], **request_args)  # pyright: ignore[reportArgumentType]', 'curl_cffi.requests.exceptions.Timeout', None, (None, None, 'api.mwmbl.org')) False
+[INFO] Shutting down granian
+[INFO] Stopping worker-1
+[INFO] Stopped worker-1
+[INFO] Granian shutdown completed, see ya!

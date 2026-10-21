@@ -1,0 +1,45 @@
+{
+  "recorded_queries": 300,
+  "quality": {
+    "recall@10": {
+      "value": null,
+      "ci95": null,
+      "queries": 0
+    },
+    "ndcg@10": {
+      "value": null,
+      "ci95": null,
+      "queries": 0
+    },
+    "mrr@10": {
+      "value": null,
+      "ci95": null,
+      "queries": 0
+    },
+    "p@5": {
+      "value": null,
+      "ci95": null,
+      "queries": 0
+    },
+    "strict_p@5": {
+      "value": null,
+      "ci95": null,
+      "queries": 0
+    }
+  },
+  "zero_result_rate": {
+    "value": 0.313333,
+    "ci95": [
+      0.26,
+      0.366667
+    ],
+    "queries": 300
+  },
+  "phase0_gate": {
+    "dataset_and_split": true,
+    "complete_dev_capture": true,
+    "all_query_pools_judged": false,
+    "quality_metrics_available": false,
+    "passed": false
+  }
+}

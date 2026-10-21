@@ -19,8 +19,8 @@ never claims about unmeasured performance.
 
 ## Current phase and preserved baseline
 
-Phase 0 is in progress. No search-behaviour files have changed. Do not start
-Phase 1 until the Phase 0 gate passes or its missing judgments are resolved.
+Phase 0 implementation and full dev capture are complete; its quality gate is awaiting human judgments and five missing reference pools. No search-behaviour files have changed. Do not start
+Phase 1 until the Phase 0 gate passes.
 
 - Baseline tag: baseline-v0 -> 344dedc3f50a2d4811ede23b25700d97c9f9a41d.
 - Engine fingerprint (legacy evaluator algorithm):
@@ -86,32 +86,122 @@ search implementation. A ResourceWarning was emitted but no test failed.
   fingerprint, which excludes some resource suffixes.
 - User explicitly selected **Prepare CSVs for my review**. No LLM grading is run.
   The importer accepts completed human fields and preserves judgment history.
-- Dataset step commit: 92ea64b. This pipeline step follows it without any
+- Dataset step commit: 92ea64b; pipeline step commit: 2691519. This follows
+  the baseline without any
   search-behaviour change. The raw capture's code_git_hash identifies the engine
   checkout at capture start; the engine manifest establishes exact equivalence.
 
 ## Step 2b — explicit CSV independence labels
 
-CSV review candidates now explicitly show independent_review=False rather than
+Commit d02facf. CSV review candidates now explicitly show independent_review=False rather than
 an empty cell. Twelve evaluator regression tests pass after the change, and
 all five offline quality measurements remain identical to baseline
 (eval/runs/phase0-offline-final.json). This affects review artifacts only.
-The full regression suite will run after the complete recording, avoiding
-additional benchmark overlap.
+The final full suite ran after recording: **258 tests passed in 48.759 s**
+(eval/runs/phase0-tests-final.txt).
 
-## Step 3 — full dev recording (in progress)
+## Step 3 — full dev recording complete; quality gate not passed
 
-The sequential 300-case recording is still running; do not treat a checkpoint
-as the complete baseline. The 30 repeat cases are fixed by hash, not selected
-from successful queries. Early capture overlaps local evaluation/test work;
-shared-host load is not controlled, so latency is observational rather than an
-isolated machine performance guarantee. No tests need to be repeated unless
-new code changes justify it.
+Recorded **300/300 dev queries**, plus **30 deterministic immediate repeats**, on
+2026-10-21 from 11:02:22 to 11:35:58 IST. No sealed queries were run.
+The response cache remained disabled, and all 30 repeats report cache_hit=False.
+Warm numbers below therefore describe repeated requests, not cache hits.
 
-## Blocking and next work
+Raw capture: eval/runs/baseline-dev.json. Metrics and bootstrap intervals:
+eval/runs/baseline-dev-metrics.json. Metrics, pools and review CSVs reproduce
+byte-for-byte with the documented command (eval/runs/phase0-verification.json).
 
-No LLM judge credentials or configured judge adapter are available. Pool rows
-must remain unjudged; relevance and fabricated-URL metrics must not be invented.
-Finish the dev recording, run the metrics command, prepare review candidates,
-and report the exact exit-gate failure if human/LLM judgments are still missing.
-Do not inspect or execute sealed query bodies.
+| Live baseline measurement | Value | Bootstrap 95% CI | Queries |
+| --- | ---: | --- | ---: |
+| Cold p50 | 5.116 s | 5.070–5.168 s | 300 |
+| Cold p95 | 8.035 s | 7.592–8.137 s | 300 |
+| Cold p99 | 8.250 s | 8.136–8.374 s | 300 |
+| Warm p50 | 5.131 s | 4.972–5.973 s | 30 |
+| Warm p95 | 8.024 s | 6.952–8.525 s | 30 |
+| Warm p99 | 8.402 s | 7.632–8.525 s | 30 |
+| Zero-result rate, all cases | 31.33% | 26.00–36.67% | 300 |
+| Zero-result rate, excluding explicit nonexistent-entity controls | 28.22% | 23.34–33.81% | 287 |
+
+These are new observations on a larger development set, not a speed or accuracy
+improvement over the old 100-case run. Early capture overlapped setup tests;
+OS caches, upstream caches, provider suspension and shared-host load were not
+controlled. Queries ran in dataset order, so category and temporal provider
+availability may be confounded. CIs resample queries and do not remove that bias.
+
+### Quality, provenance and source failures
+
+- 206 cold queries returned results; 94 were empty. Nonemptiness is not accuracy.
+- 3,719 pooled query/URL pairs; **0 graded**, **0 independently reviewed**.
+  Recall@10, NDCG@10, MRR@10, P@5 and strict P@5 remain **null**, with null CIs.
+- 1,610 unique returned query/URL pairs; **0 have explicit URL audits**.
+  Fabricated-URL count remains **null**, not zero. Mechanical provenance gaps
+  are 0; that is not proof that every URL exists or every claim is supported.
+- SearXNG adapter status was ok in all 300 cold requests, but upstream failures
+  remained: Brave suspension/rate-limit warning in 291 queries, Google suspension/
+  denial warning in 291, Mwmbl timeout in 66, and DuckDuckGo suspension, CAPTCHA
+  or access-denial warnings. Adapter completion does not establish upstream health.
+- Structured answer correctness and citation support have not been graded.
+
+Diagnostic empty-response counts (not relevance judgments):
+
+| Development group | Empty / total |
+| --- | ---: |
+| Verbose requests | 14 / 14 |
+| Exact phrase | 12 / 13 |
+| Operators | 8 / 14 |
+| Multilingual | 8 / 11 |
+| Comparison | 8 / 11 |
+| News | 9 / 20 |
+| Original coding-agent cases | 7 / 7 |
+| Original research-agent cases | 4 / 4 |
+
+These identify cases to investigate after grading; no runtime tuning was done.
+
+### Human-review handoff
+
+User chose CSV review. Files are ready:
+
+- eval/human_review_queue.csv: **3,719 unjudged rows**, grouped by query.
+- eval/human_review_candidates.csv: **372 unjudged candidates** (seeded 10%).
+- eval/human_review.csv: header only, because no actual judgments exist yet.
+  After labels are imported, this becomes the seeded 10% judgment audit sample.
+- eval/empty_pool_queries.csv: the **five queries with no observed source URLs**.
+- eval/runs/pool-dev.jsonl: original observations and provenance fingerprints.
+- eval/runs/pool-dev-blinded.json: provider/rank-blinded evidence.
+
+Review a copy, using eval/RUBRIC.md. Fill human_grade (0–3), human_rationale,
+human_reviewer and reviewed_at. Complete all pool rows for a query to measure
+that query. The import and metrics commands are in eval/README.md. Do not edit
+sealed files. Keep source access denials and unverified facts explicit.
+
+Five empty pools cannot be graded from missing URLs. They need reference
+collection from another genuinely available source, supplied via --extra-source
+with its real timestamp and observations; do not invent reference URLs:
+
+- live-multilingual-002
+- live-multilingual-003
+- live-multilingual-007
+- live-multilingual-020
+- live-multilingual-025
+
+### Exit gate and next action
+
+- PASS: >=500 versioned queries, fixed 300/200 split, full dev recording,
+  reproducible metrics/CIs, preserved legacy fixtures and safe review workflow.
+- BLOCKED: complete pool relevance judgments and associated quality CIs; five
+  empty source pools also need reference collection. The saved gate is false.
+- Human action: grade captured evidence and supply references for the five empty
+  pools. Until then do not claim new retrieval accuracy or begin Phase 1.
+
+This follows win_win.md: “If any fail, keep fixing within the phase or state
+exactly what blocks it. Do NOT start the next phase.” No further search changes
+can be qualified against an unjudged baseline.
+
+The installed discovery backend was started only for measurement and stopped
+after capture, restoring the session's initial service state. No provider
+configuration, optional models, local corpus or production search code changed.
+
+After the gate is resolved, plan Phase 1 against these saved dev outputs:
+provider health/backoff, individually measured public vertical adapters,
+operator handling and conservative query variants. Leave the sealed set unused
+until Phase 5.

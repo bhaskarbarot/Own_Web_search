@@ -1,0 +1,32 @@
+{
+  "metrics_reproduced_byte_for_byte": true,
+  "artifact_sha256": {
+    "eval/runs/baseline-dev-metrics.json": "66b38f4c9ecbc6dbbbb2009f6a5a505004ff38dcd276d52407df6113a44f02a5",
+    "eval/runs/pool-dev.jsonl": "89782b39f646d61e21c2d7457ad0590c217f1eeb2c83f07bb2da1eb4e91fc41e",
+    "eval/runs/pool-dev-blinded.json": "d10cda442bc18e3c93bc103df3b2aece34b93389cf57d92fda0637581dfeb25f",
+    "eval/human_review.csv": "057119fc5a82b43e8475770c5fd8fdb1c623fc46d1dd9d8b7f0f37a70adece6f",
+    "eval/human_review_candidates.csv": "540ed88966d753370168746258933a11bbdb826f255aca2531b777f1646cccfa",
+    "eval/human_review_queue.csv": "47496c53d253349995a3edded4ef98ef46ffeabdfc2a8e3c6b83777df824c4a6"
+  },
+  "sealed_searches_run": 0,
+  "sealed_bodies_inspected_after_split": false,
+  "all_tracked_engine_files_match_baseline": true,
+  "runtime_git_diff_empty": true,
+  "full_tests": {
+    "passed": 258,
+    "seconds": 48.759,
+    "log": "eval/runs/phase0-tests-final.txt"
+  },
+  "all_review_ids_are_dev": true,
+  "dataset_hash_matches": true,
+  "dev_capture_complete": true,
+  "quality_gate_passed": false,
+  "empty_pool_queries": [
+    "live-multilingual-002",
+    "live-multilingual-003",
+    "live-multilingual-007",
+    "live-multilingual-020",
+    "live-multilingual-025"
+  ],
+  "services_restored_to_initial_stopped_state": true
+}
