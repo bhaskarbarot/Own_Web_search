@@ -20,17 +20,25 @@ never claims about unmeasured performance.
 
 ## Current phase and preserved baseline
 
-**Current: Phase 1 restored by the user’s explicit sequencing correction.**
+**Current: Phase 1 implementation frozen at 5709c59; full live dev evaluation running.**
+Provider health, independent free supplements and declared site/feed discovery
+are implemented. All 299 runtime regressions pass, plus four comparison-gate
+checks. Fixed-dev replay preserves all 300 ranked URL signatures with two denied
+sources. Query variants were measured and reverted after no coverage gain.
+New account search adapters were removed per the user's free/self-hosted scope.
+Latest consolidated report: docs/PHASE1_REPORT.md. The complete candidate live
+capture is eval/runs/phase1/dev-free-candidate.json; do not mistake a partial run
+for a completed measurement.
 Retain the verified Phase 2 snippet component and defer further ranking work.
 The user requested autonomous work through the hierarchy, without routine
 confirmation stops. Earlier judgments remain missing and are never invented.
 
 Historical Phase 2 start: Its first rendering
 component is implemented and measured below. Phase 0 still awaits human grades
-and five reference pools; Phase 1 has not been executed. Do not infer that the
+and five reference pools; at that historical point Phase 1 had not been executed. Do not infer that the
 missing gates passed, or advance to Phase 3. See docs/plan/phase-2.md.
 
-At the Phase 0 handoff the engine was unchanged. Phase 2 now changes only snippet
+At the Phase 0 handoff the engine was unchanged. The retained Phase 2 component changes only snippet
 presentation in snippet.py, webmodels.py and its coordinator call. The Phase 0
 source manifest below is a historical snapshot, not a claim about the current
 engine. Baseline data, review CSVs and the sealed split remain unchanged.
@@ -566,3 +574,16 @@ retained. All five legacy offline retrieval scores unchanged. Runtime will now
 be frozen for a complete dev capture with free/keyless supplements, with paid
 providers and denied arXiv off. Query variants stay reverted. Existing baseline,
 review CSVs and sealed split remain untouched.
+
+
+### Phase 1 review tooling (runtime unchanged during capture)
+
+2026-10-21, runtime 5709c59. The comparison tool compares complete matching dev
+captures, reports paired bootstrap deltas, and creates a new baseline/candidate
+union review directory. Existing review files are untouched. CSV import accepts
+only explicit 0–3 human grades with matching evidence hashes, rationale, reviewer
+and timestamp; it preserves edits and rejects stale labels. Undefined recall is
+excluded rather than converted to zero. Partial judged query coverage cannot
+turn the phase gate green. Four targeted review/comparison tests pass; baseline
+self-comparison returns identical zero-rate CIs and a false, ungraded quality gate.
+No runtime source file changed after capture began.

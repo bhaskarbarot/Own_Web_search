@@ -65,6 +65,33 @@ Create your own account/key and choose an appropriate plan, then set `OWNSEARCH_
 
 Both adapters apply finite timeouts, bounded output/response parsing, per-process request spacing and cooldowns after rate limits/repeated failures. There are no automatic billable retries. Cache use must comply with your provider's terms. Diagnostics never print keys. Example environment settings are in `.env.example`; they are not automatically loaded.
 
+## Phase 1 free supplements and resilience
+
+General discovery remains self-hosted and eligible for every intent. Free basic
+official-API supplements can be configured independently through
+`OWNSEARCH_VERTICAL_PROVIDERS` (comma-separated names): wikipedia, wikidata,
+github, pypi, npm, crates, arxiv, openalex, stackexchange. They are disabled by
+default while the combined candidate is evaluated; the arXiv probe was denied
+with HTTP 429, so it stays off in that candidate. No new paid/account search
+adapter is present. Public APIs still have limits; optional supplements do not
+turn the engine into an independent full-web index.
+
+Health tracks failed requests and invalid result schemas before recording
+success, honors Retry-After/quota/body backoff, limits request budgets and permits
+one recovery probe. Suppressed calls are reported as such. General discovery
+is retained when vertical intent is uncertain, with at most three eligible
+verticals per query. Page follow-ups share the original safe-fetch budgets.
+
+An explicit site filter can supply an origin fetch target when general discovery
+has no candidate for that site. Results require actual fetched evidence. A
+robots-declared sitemap can expose one same-origin child map; fetched HTML can
+expose one same-origin feed. No internal search route/feed/article URL is guessed.
+All local quote, exclusion, site and date constraints still apply.
+
+See [API contracts](DISCOVERY_APIS.md), [Phase 1 measurements](PHASE1_REPORT.md)
+and [ordered progress/gates](PROGRESS.md). Query variants were tested and reverted
+after failing to improve observed coverage; the original query path is retained.
+
 ## Commands and API
 
 ```bash
