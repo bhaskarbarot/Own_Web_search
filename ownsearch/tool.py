@@ -13,7 +13,8 @@ _DEFAULT_ENGINE = None
 def get_engine() -> IndependentSearch:
     global _DEFAULT_ENGINE
     if _DEFAULT_ENGINE is None:
-        _DEFAULT_ENGINE = IndependentSearch(Settings.load())
+        settings = Settings.load(persistent_cache_enabled=True, source_planning_enabled=True)
+        _DEFAULT_ENGINE = IndependentSearch(settings)
     return _DEFAULT_ENGINE
 
 class SearchResults:
@@ -149,6 +150,10 @@ def search_tool(
 
     timeout_ms = int(time_budget_s * 1000) if time_budget_s is not None else None
     site_str = ",".join(sites) if sites else None
+    if 'limit' in extra:
+        max_results = extra.pop('limit')
+    fetch_pages = not extra.pop('cache_only', False)
+    answer_mode = extra.pop('answer', True)
 
     raw_res = eng.search(
         query=full_query,
@@ -160,8 +165,9 @@ def search_tool(
         timeout_ms=timeout_ms,
         use_cache=use_cache,
         search_type=search_type,
-        answer_mode=True,
+        answer_mode=answer_mode,
         explain=False,
+        fetch_pages=fetch_pages,
         **extra
     )
 
