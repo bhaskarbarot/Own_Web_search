@@ -1,85 +1,824 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<title>OwnSearch</title>
+<title>OwnSearch — Fast, Independent Local Web Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box} body{margin:0;background:#f6f7f9;color:#20252b;font:16px/1.5 system-ui,sans-serif}
-  main{max-width:1040px;margin:36px auto;padding:0 20px} h1{margin:0;font-size:30px} h2{font-size:19px;margin:0 0 12px}
-  p{margin:8px 0} .muted,.meta{color:#626b76;font-size:14px} form,.answer{background:white;border:1px solid #dce0e6;border-radius:8px;padding:20px;margin:20px 0}
-  .searchbar{display:flex;gap:10px} .searchbar input{flex:1;min-width:0} input,select,button{font:inherit;border:1px solid #bdc5d0;border-radius:5px;padding:9px 10px}
-  input,select{background:white;color:inherit;width:100%} button{cursor:pointer;background:#1259b2;color:white;border-color:#1259b2;white-space:nowrap}
-  button:disabled{opacity:.55;cursor:default} #cancel{background:white;color:#444;border-color:#bdc5d0} label{display:block;font-size:14px} label>input,label>select{margin-top:5px}
-  .filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px} .checks{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px}
-  .checks label{display:flex;align-items:center;gap:7px}.checks input{width:auto;margin:0} details{margin-top:16px} summary{cursor:pointer;color:#475467}
-  #status{min-height:25px;margin:18px 0;font-weight:600} .error{color:#ad2525} article{padding:18px 0;border-bottom:1px solid #dce0e6}
-  article h2{margin:3px 0 7px;font-size:20px} a{color:#1259b2;text-decoration:none;overflow-wrap:anywhere} a:hover{text-decoration:underline}
-  .url{color:#39734a;font-size:13px;overflow-wrap:anywhere}.snippet,.answer-text{white-space:pre-wrap;overflow-wrap:anywhere}.answer{border-left:4px solid #1259b2}
-  .disclaimer{color:#79581f;font-size:14px}.warnings{background:#fff9e9;border:1px solid #eddda9;padding:12px 16px;border-radius:6px;font-size:14px;margin:16px 0}
-  .image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}.image-card{background:white;border:1px solid #dce0e6;border-radius:6px;padding:12px}
-  .image-card img{width:100%;height:170px;object-fit:contain;background:#f1f3f6}.image-card p{font-size:14px} pre{font:13px/1.5 monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#eef0f3;padding:15px;max-height:450px;overflow:auto}
-  [hidden]{display:none!important} @media(max-width:650px){main{margin:20px auto}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.searchbar{flex-wrap:wrap}.searchbar input{flex-basis:100%}}
+  :root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Plus Jakarta Sans', var(--font-sans);
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Dark theme tokens (default) */
+    --bg-page: #090d16;
+    --bg-surface: #111827;
+    --bg-surface-elevated: #1a2234;
+    --bg-surface-subtle: rgba(255, 255, 255, 0.04);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-focus: #6366f1;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #3b82f6 50%, #06b6d4 100%);
+    --accent-glow: rgba(99, 102, 241, 0.25);
+    --answer-bg: rgba(99, 102, 241, 0.06);
+    --answer-border: #6366f1;
+    --url-color: #38bdf8;
+    --tag-bg: rgba(56, 189, 248, 0.1);
+    --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+  }
+
+  [data-theme="light"] {
+    --bg-page: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-surface-elevated: #f1f5f9;
+    --bg-surface-subtle: #f1f5f9;
+    --border-color: #e2e8f0;
+    --border-focus: #4f46e5;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #2563eb 50%, #0891b2 100%);
+    --accent-glow: rgba(79, 70, 229, 0.15);
+    --answer-bg: #f5f3ff;
+    --answer-border: #6366f1;
+    --url-color: #0284c7;
+    --tag-bg: #e0f2fe;
+    --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    min-height: 100vh;
+  }
+
+  /* Header & Navigation */
+  header {
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-surface);
+    backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .nav-container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--accent-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px var(--accent-glow);
+    color: white;
+  }
+  .brand-title {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .brand-badge {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    background: var(--tag-bg);
+    color: var(--url-color);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+  }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: background-color 0.3s ease;
+  }
+  .status-dot.online { background: var(--success); box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
+  .status-dot.offline { background: var(--error); }
+  .theme-toggle {
+    background: var(--bg-surface-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    transition: all 0.2s ease;
+  }
+  .theme-toggle:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+  }
+
+  /* Main Container */
+  main {
+    max-width: 1040px;
+    margin: 32px auto 60px;
+    padding: 0 24px;
+  }
+
+  /* Search Container Card */
+  .search-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 28px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .search-card:focus-within {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 30px -4px var(--accent-glow);
+  }
+
+  /* Primary Search Input */
+  .searchbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .search-icon {
+    position: absolute;
+    left: 18px;
+    color: var(--text-muted);
+    pointer-events: none;
+    display: flex;
+  }
+  .searchbar input {
+    flex: 1;
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: 500;
+    padding: 16px 52px 16px 52px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface-elevated);
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.2s ease;
+  }
+  .searchbar input:focus {
+    border-color: var(--accent);
+    background: var(--bg-surface);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .searchbar input::placeholder {
+    color: var(--text-muted);
+  }
+  .clear-btn {
+    position: absolute;
+    right: 140px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    display: none;
+  }
+  .clear-btn:hover { color: var(--text-primary); }
+
+  /* Submit & Cancel Buttons */
+  button[type="submit"] {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 16px 28px;
+    border-radius: 12px;
+    border: none;
+    background: var(--accent-gradient);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--accent-glow);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  button[type="submit"]:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px var(--accent-glow);
+  }
+  button[type="submit"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  #cancel {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-surface-subtle);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  #cancel:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+  }
+
+  /* Quick Suggestion Chips */
+  .quick-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .chip-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .chip {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: var(--bg-surface-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 5px 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  .chip:hover {
+    color: var(--text-primary);
+    background: var(--bg-surface-elevated);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  /* Modern Filter Controls Grid */
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  select, input[type="number"], input[type="text"], input[type="password"], textarea {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+  select:focus, input:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+  }
+
+  /* Collapsible Filters Details */
+  details {
+    margin-top: 16px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 14px;
+  }
+  summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  summary:hover { color: var(--text-primary); }
+  .muted {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 8px 0;
+  }
+
+  /* Checkbox Controls */
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+  }
+  .checks label {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  .checks input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  /* Dynamic Search Status Bar */
+  #status {
+    min-height: 28px;
+    margin: 20px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .status-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #status.error { color: var(--error); }
+
+  /* Answer Card (Executive Summary / AI Extractive) */
+  .answer {
+    background: var(--answer-bg);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--answer-border);
+    border-radius: 14px;
+    padding: 22px;
+    margin: 22px 0;
+    box-shadow: var(--card-shadow);
+  }
+  .answer-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .answer-badge {
+    background: var(--accent);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .answer h2 {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .answer-text {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    margin-bottom: 14px;
+  }
+  .answer-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  /* Result Articles */
+  #results {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  article {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  article:hover {
+    transform: translateY(-2px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  }
+  .url {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--url-color);
+    overflow-wrap: anywhere;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  article h2 {
+    font-family: var(--font-heading);
+    font-size: 19px;
+    font-weight: 700;
+    margin: 4px 0 10px;
+    line-height: 1.4;
+  }
+  article h2 a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  article h2 a:hover {
+    color: var(--accent);
+  }
+  .snippet {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    margin-bottom: 12px;
+  }
+  .meta-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .meta-tag {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--bg-surface-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+
+  /* Source Notes & Disclaimers */
+  .warnings {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13.5px;
+    color: var(--warning);
+    margin: 18px 0;
+  }
+  .disclaimer {
+    color: var(--warning);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  /* Image Grid */
+  .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .image-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+  .image-card:hover { transform: translateY(-3px); }
+  .image-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: var(--bg-surface-elevated);
+  }
+
+  /* JSON Details Inspector */
+  pre {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.5;
+    background: var(--bg-page);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px;
+    color: var(--text-secondary);
+    max-height: 450px;
+    overflow: auto;
+  }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 768px) {
+    main { margin: 16px auto; padding: 0 16px; }
+    .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .searchbar { flex-direction: column; align-items: stretch; }
+    button[type="submit"] { width: 100%; }
+    .clear-btn { right: 18px; top: 18px; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <h1>OwnSearch</h1>
-  <p class="muted">Independent web crawling from your starting sites. Pages are cached in memory; coverage grows through discovered links.</p>
-  <p id="connection" class="muted" role="status">Checking the search server…</p>
-  <button id="reconnect" type="button" hidden>Retry connection</button>
-  <form id="search-form">
-    <div class="searchbar">
-      <input id="query" aria-label="Search query" placeholder="What would you like to search?" maxlength="1000" required autofocus>
-      <button id="submit" type="submit">Search</button>
-      <button id="cancel" type="button" hidden>Cancel</button>
-    </div>
-    <div class="filters">
-      <label>Search type<select id="search-type"><option value="web">Web</option><option value="images">Images</option><option value="video">Video links</option></select></label>
-      <label>Results<input id="limit" type="number" min="1" max="50" value="10" required></label>
-      <label>File type<select id="filetype"><option value="">All types</option><option value="pdf">PDF</option><option value="web">HTML pages</option><option value="text">Plain text</option><option value="docx">Word (.docx)</option><option value="xlsx">Excel (.xlsx)</option><option value="pptx">PowerPoint (.pptx)</option><option value="custom">Other extension</option></select></label>
-      <label>Freshness<select id="freshness"><option value="">Any time</option><option value="day">Past day</option><option value="week">Past week</option><option value="month">Past month</option><option value="year">Past year</option></select></label>
-    </div>
-    <p id="mode-note" class="muted" hidden></p>
-    <details>
-      <summary>More filters</summary>
-      <div class="filters">
-        <label>Site<input id="site" placeholder="example.org"></label>
-        <label>Language code<input id="lang" placeholder="e.g. en, hi, gu" maxlength="20"></label>
-        <label>Time zone<input id="timezone" placeholder="Server default; e.g. Asia/Kolkata" maxlength="100"></label>
-        <label id="custom-wrap" hidden>File extension<input id="custom-filetype" placeholder="e.g. csv" maxlength="20"></label>
-        <label>API key, if required<input id="api-key" type="password" autocomplete="off" placeholder="Optional"></label>
+<header>
+  <div class="nav-container">
+    <a href="/ui" class="brand">
+      <div class="brand-logo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
       </div>
-      <p class="muted">You can also use query operators such as site:example.org, filetype:pdf, after:2026-01-01 and quoted phrases. Files open at the source.</p>
-    </details>
-    <label>Starting URLs (optional, one per line)<textarea id="seeds" rows="2" style="width:100%" placeholder="Use configured sites, or enter starting page URLs"></textarea></label>
-    <div class="checks">
-      <label><input id="answer-mode" type="checkbox" checked>Show answer when available</label>
-      <label><input id="fetch-pages" type="checkbox" checked>Crawl new pages (uncheck to search memory cache only)</label>
-      <label><input id="explain" type="checkbox">Include ranking details</label>
+      <span class="brand-title">OwnSearch</span>
+      <span class="brand-badge">Local-First</span>
+    </a>
+    <div class="nav-actions">
+      <div class="status-pill">
+        <div id="status-indicator" class="status-dot"></div>
+        <span id="connection">Checking server…</span>
+      </div>
+      <button id="reconnect" type="button" class="theme-toggle" hidden>Retry</button>
+      <button id="theme-btn" type="button" class="theme-toggle" aria-label="Toggle dark/light theme">
+        <span id="theme-icon">☀️</span> <span id="theme-text">Light</span>
+      </button>
     </div>
-  </form>
+  </div>
+</header>
+
+<main>
+  <div class="search-card">
+    <form id="search-form">
+      <div class="searchbar">
+        <div class="search-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <input id="query" aria-label="Search query" placeholder="Search anything: knowledge, science, coding, documentation..." maxlength="1000" required autofocus>
+        <button id="clear-query" type="button" class="clear-btn" aria-label="Clear query">✕</button>
+        <button id="submit" type="submit">Search</button>
+        <button id="cancel" type="button" hidden>Cancel</button>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="quick-chips">
+        <span class="chip-label">Try:</span>
+        <button type="button" class="chip" data-query="who is gandhiji?">who is gandhiji?</button>
+        <button type="button" class="chip" data-query="Mount Everest elevation">Mount Everest elevation</button>
+        <button type="button" class="chip" data-query="what is photosynthesis?">what is photosynthesis?</button>
+        <button type="button" class="chip" data-query="Python asyncio tutorial">Python asyncio tutorial</button>
+        <button type="button" class="chip" data-query="who is albert einstein?">who is albert einstein?</button>
+      </div>
+
+      <!-- Core Search Filters Grid -->
+      <div class="filters">
+        <label>Search type
+          <select id="search-type">
+            <option value="web">🌐 Web</option>
+            <option value="images">🖼️ Images</option>
+            <option value="video">🎥 Video links</option>
+          </select>
+        </label>
+        <label>Results count
+          <input id="limit" type="number" min="1" max="50" value="10" required>
+        </label>
+        <label>File type
+          <select id="filetype">
+            <option value="">All types</option>
+            <option value="pdf">PDF (.pdf)</option>
+            <option value="web">HTML web pages</option>
+            <option value="text">Plain text (.txt)</option>
+            <option value="docx">Word (.docx)</option>
+            <option value="xlsx">Excel (.xlsx)</option>
+            <option value="pptx">PowerPoint (.pptx)</option>
+            <option value="custom">Custom extension</option>
+          </select>
+        </label>
+        <label>Freshness
+          <select id="freshness">
+            <option value="">Any time</option>
+            <option value="day">Past 24 hours</option>
+            <option value="week">Past week</option>
+            <option value="month">Past month</option>
+            <option value="year">Past year</option>
+          </select>
+        </label>
+      </div>
+
+      <p id="mode-note" class="muted" hidden></p>
+
+      <!-- Advanced Filters Accordion -->
+      <details>
+        <summary>Advanced filters & custom site seeds</summary>
+        <div class="filters">
+          <label>Filter by site domain
+            <input id="site" placeholder="e.g. wikipedia.org">
+          </label>
+          <label>Language code
+            <input id="lang" placeholder="e.g. en, hi, gu" maxlength="20">
+          </label>
+          <label>Time zone
+            <input id="timezone" placeholder="Server default (e.g. Asia/Kolkata)" maxlength="100">
+          </label>
+          <label id="custom-wrap" hidden>Custom extension
+            <input id="custom-filetype" placeholder="e.g. csv" maxlength="20">
+          </label>
+          <label>API key (optional)
+            <input id="api-key" type="password" autocomplete="off" placeholder="Optional Bearer token">
+          </label>
+        </div>
+        <p class="muted">Supported operators: <code>site:domain.com</code>, <code>filetype:pdf</code>, <code>after:2026-01-01</code>, and <code>"quoted phrases"</code>.</p>
+        <label style="margin-top:12px">Starting URLs (optional, one per line)
+          <textarea id="seeds" rows="2" placeholder="Supply seed roots, or leave blank to crawl configured source roots"></textarea>
+        </label>
+      </details>
+
+      <!-- Search Controls Checkboxes -->
+      <div class="checks">
+        <label><input id="answer-mode" type="checkbox" checked>Show extractive answer card</label>
+        <label><input id="fetch-pages" type="checkbox" checked>Crawl new pages (uncheck for instant sub-ms cache)</label>
+        <label><input id="explain" type="checkbox">Include ranking scores</label>
+      </div>
+    </form>
+  </div>
+
+  <!-- Dynamic Search Status -->
   <div id="status" role="status" aria-live="polite">Ready.</div>
+
+  <!-- Extractive Direct Answer Card -->
   <section id="answer" class="answer" hidden></section>
-  <details id="warnings" class="warnings" hidden><summary>Source notes</summary><ul id="warning-list"></ul></details>
+
+  <!-- Source Disclaimers & Notes -->
+  <details id="warnings" class="warnings" hidden>
+    <summary>Source notes & limitations</summary>
+    <ul id="warning-list" style="margin-top:8px;padding-left:20px;"></ul>
+  </details>
+
+  <!-- Image Grid -->
   <section id="images" class="image-grid" aria-label="Image results" hidden></section>
+
+  <!-- Result Articles List -->
   <section id="results" aria-label="Search results"></section>
-  <details id="debug" hidden><summary>Response details and JSON</summary><pre id="raw"></pre></details>
+
+  <!-- Debug JSON Inspector -->
+  <details id="debug" hidden style="margin-top:28px">
+    <summary>Developer JSON & Ranking Details</summary>
+    <pre id="raw"></pre>
+  </details>
 </main>
+
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
 let controller = null;
+
+// Dark/Light Theme Switcher
+const themeBtn = $('theme-btn');
+const themeIcon = $('theme-icon');
+const themeText = $('theme-text');
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('ownsearch-theme', theme);
+  if (theme === 'dark') {
+    themeIcon.textContent = '☀️';
+    themeText.textContent = 'Light';
+  } else {
+    themeIcon.textContent = '🌙';
+    themeText.textContent = 'Dark';
+  }
+}
+const savedTheme = localStorage.getItem('ownsearch-theme') || 'dark';
+setTheme(savedTheme);
+themeBtn.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  setTheme(current === 'dark' ? 'light' : 'dark');
+});
+
+// Quick Chips Click Event
+document.querySelectorAll('.chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const q = btn.getAttribute('data-query');
+    if (q) {
+      $('query').value = q;
+      clearBtn.style.display = 'block';
+      if (typeof $('search-form').requestSubmit === 'function') {
+        $('search-form').requestSubmit();
+      } else {
+        $('search-form').dispatchEvent(new Event('submit', {cancelable: true}));
+      }
+    }
+  });
+});
+
+// Clear Query Button
+const clearBtn = $('clear-query');
+$('query').addEventListener('input', () => {
+  clearBtn.style.display = $('query').value ? 'block' : 'none';
+});
+clearBtn.addEventListener('click', () => {
+  $('query').value = '';
+  clearBtn.style.display = 'none';
+  $('query').focus();
+});
+
+// Keyboard shortcut '/' to focus search
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== $('query') && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    $('query').focus();
+  }
+});
+
 function connectionMessage(connected) {
-  $('connection').className = connected ? 'muted' : 'error';
+  const ind = $('status-indicator');
+  ind.className = 'status-dot ' + (connected ? 'online' : 'offline');
   $('reconnect').hidden = connected;
   $('connection').textContent = connected
-    ? 'Connected to OwnSearch at ' + location.origin
+    ? 'Engine connected (' + location.origin + ')'
     : ['http:', 'https:'].includes(location.protocol)
-      ? 'OwnSearch is not reachable at ' + location.origin + '. Run ./run.sh ' + (location.port || '8765') + ' and keep that terminal open, then retry.'
-      : 'Open this page through the search server: run ./run.sh and visit http://127.0.0.1:8765/ui.';
+      ? 'Search server offline at ' + location.origin
+      : 'Open page through OwnSearch server: visit http://127.0.0.1:8765/ui';
 }
+
 async function checkConnection() {
   if (!['http:', 'https:'].includes(location.protocol)) { connectionMessage(false); return; }
   const ping = new AbortController();
@@ -93,12 +832,14 @@ async function checkConnection() {
   finally { clearTimeout(timer); $('reconnect').disabled = false; }
 }
 $('reconnect').addEventListener('click', checkConnection);
+
 function node(tag, text, className) {
   const item = document.createElement(tag);
   if (text !== undefined && text !== null) item.textContent = String(text);
   if (className) item.className = className;
   return item;
 }
+
 function safeURL(value) {
   if (typeof value !== 'string') return null;
   try {
@@ -106,12 +847,17 @@ function safeURL(value) {
     return ['http:', 'https:'].includes(url.protocol) && !url.username && !url.password ? url.href : null;
   } catch { return null; }
 }
+
 function link(label, value) {
   const url = safeURL(value);
   if (!url) return node('span', label);
   const a = node('a', label); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; return a;
 }
-function milliseconds(value) { return typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString(undefined, {maximumFractionDigits:2}) + ' ms' : 'not reported'; }
+
+function milliseconds(value) {
+  return typeof value === 'number' && Number.isFinite(value) ? value.toLocaleString(undefined, {maximumFractionDigits:2}) + ' ms' : 'not reported';
+}
+
 function updateFilters() {
   const mode = $('search-type').value;
   $('filetype').disabled = mode !== 'web';
@@ -124,85 +870,149 @@ function updateFilters() {
 $('search-type').addEventListener('change', updateFilters);
 $('filetype').addEventListener('change', updateFilters);
 $('cancel').addEventListener('click', () => controller?.abort());
+
 function showAnswer(answer, status) {
   const section = $('answer'); section.replaceChildren(); section.hidden = false;
   if (!answer) {
-    if (status === 'insufficient_evidence') section.append(node('p', 'Insufficient evidence for a supported answer. Relevant links may still be available.'));
-    else section.hidden = true;
+    if (status === 'insufficient_evidence') {
+      section.append(node('p', 'Insufficient evidence for an extractive answer card. Relevant links are listed below.', 'muted'));
+    } else {
+      section.hidden = true;
+    }
     return;
   }
-  const headings = {extractive:'Source excerpt — not independently verified', stock_quote:'Market quote', stock_history:'Price history', headlines:'Publisher-dated headlines'};
-  section.append(node('h2', headings[answer.type] || 'Answer'), node('div', answer.text || '', 'answer-text'));
+  const headings = {extractive:'Extractive Answer — Grounded in Source Excerpt', stock_quote:'Market Quote', stock_history:'Price History', headlines:'Publisher-Dated Headlines'};
+  const headerDiv = node('div', undefined, 'answer-header');
+  headerDiv.append(node('span', 'Key Takeaway', 'answer-badge'), node('h2', headings[answer.type] || 'Direct Answer'));
+  section.append(headerDiv, node('div', answer.text || '', 'answer-text'));
+  
   const sources = [answer.source, ...(Array.isArray(answer.citations) ? answer.citations : [])];
   const seen = new Set();
   for (const source of sources) {
     if (!source || !safeURL(source.url) || seen.has(source.url)) continue;
-    seen.add(source.url); const p = node('p'); p.append(link(source.title || source.name || source.url, source.url)); section.append(p);
+    seen.add(source.url);
+    const sourceCard = node('div', undefined, 'answer-source');
+    sourceCard.append(node('span', '📄 Source: '), link(source.title || source.name || source.url, source.url));
+    section.append(sourceCard);
   }
-  if (answer.as_of) section.append(node('p', 'Data as of: ' + answer.as_of, 'meta'));
+  if (answer.as_of) section.append(node('p', 'Data as of: ' + answer.as_of, 'muted'));
   if (answer.disclaimer) section.append(node('p', answer.disclaimer, 'disclaimer'));
 }
+
 function render(data, elapsed, mode) {
   const results = Array.isArray(data.results) ? data.results : [];
   $('status').className = '';
-  $('status').textContent = results.length + ' results · Search: ' + milliseconds(data.took_ms) + ' · Browser round trip: ' + milliseconds(elapsed) + (data.timed_out ? ' · Partial response' : '');
+  const searchTime = typeof data.took_ms === 'number' ? (data.took_ms < 10 ? '⚡ ' + data.took_ms.toFixed(2) + ' ms (Cache)' : '🌐 ' + data.took_ms.toFixed(0) + ' ms') : '';
+  $('status').textContent = results.length + ' results · ' + searchTime + ' · Browser latency: ' + milliseconds(elapsed) + (data.timed_out ? ' · Partial crawl' : '');
   $('results').replaceChildren(); $('images').replaceChildren(); $('images').hidden = mode !== 'images';
   showAnswer(data.answer, data.answer_status);
-  if (!results.length) $('results').append(node('p', 'No results were returned. Check the source notes.', 'muted'));
+  
+  if (!results.length) {
+    $('results').append(node('p', 'No matching results found. Try expanding query terms or checking starting URLs.', 'muted'));
+  }
+  
   for (const result of results) {
     const article = node('article');
-    article.append(node('div', result.url, 'url'));
-    const heading = node('h2'); heading.append(link((result.rank ? result.rank + '. ' : '') + (result.title || result.url), result.url)); article.append(heading);
+    const urlDiv = node('div', undefined, 'url');
+    urlDiv.append(node('span', '🔗'), link(result.url, result.url));
+    article.append(urlDiv);
+    
+    const heading = node('h2');
+    heading.append(link((result.rank ? result.rank + '. ' : '') + (result.title || result.url), result.url));
+    article.append(heading);
+    
     article.append(node('p', result.snippet || '', 'snippet'));
-    const meta = [result.source_provider || result.provider, result.fetch_status ? 'Page: ' + result.fetch_status : '', result.published_at ? 'Published: ' + result.published_at : '', result.lang ? 'Language: ' + result.lang : ''].filter(Boolean);
-    article.append(node('p', meta.join(' · '), 'meta'));
-    if (result.injection_risk) article.append(node('p', 'Source contains instruction-like text; inspect it carefully.', 'disclaimer'));
-    if (result.features) { const detail = node('details'); detail.append(node('summary', 'Ranking details'), node('pre', JSON.stringify(result.features, null, 2))); article.append(detail); }
+    
+    const pills = node('div', undefined, 'meta-pills');
+    if (result.source_provider || result.provider) pills.append(node('span', result.source_provider || result.provider, 'meta-tag'));
+    if (result.fetch_status) pills.append(node('span', 'Status: ' + result.fetch_status, 'meta-tag'));
+    if (result.published_at) pills.append(node('span', 'Published: ' + result.published_at.slice(0, 10), 'meta-tag'));
+    if (result.lang) pills.append(node('span', 'Lang: ' + result.lang, 'meta-tag'));
+    article.append(pills);
+    
+    if (result.injection_risk) {
+      article.append(node('p', '⚠️ Source contains instruction-like text; inspect carefully.', 'disclaimer'));
+    }
+    if (result.features) {
+      const detail = node('details');
+      detail.append(node('summary', 'Ranking features & scores'), node('pre', JSON.stringify(result.features, null, 2)));
+      article.append(detail);
+    }
     $('results').append(article);
   }
+
   if (mode === 'images') {
     const seen = new Set();
     const images = [...(Array.isArray(data.images) ? data.images : []), ...results.flatMap(r => Array.isArray(r.images) ? r.images : [])];
     for (const image of images) {
       const url = safeURL(image.thumbnail_url) || safeURL(image.image_url);
       if (!url || seen.has(url)) continue; seen.add(url);
-      const card = node('div', undefined, 'image-card'); const img = document.createElement('img');
+      const card = node('div', undefined, 'image-card');
+      const img = document.createElement('img');
       img.src = url; img.alt = image.caption || 'Search image'; img.loading = 'lazy'; img.referrerPolicy = 'no-referrer';
       img.addEventListener('error', () => { img.hidden = true; card.prepend(node('p', 'Preview unavailable', 'muted')); });
       const anchor = link('', image.page_url || image.image_url); anchor.append(img); card.append(anchor);
-      const caption = node('p'); caption.append(link(image.caption || 'Open source page', image.page_url || image.image_url)); card.append(caption, node('p', 'Source-supplied image', 'meta'));
+      const caption = node('p'); caption.append(link(image.caption || 'Open source page', image.page_url || image.image_url));
+      card.append(caption);
       $('images').append(card);
     }
-    if (!seen.size) $('images').append(node('p', 'No image previews are available from the returned sources.', 'muted'));
+    if (!seen.size) $('images').append(node('p', 'No image previews available from returned sources.', 'muted'));
   }
+
   const crawlNotes = (data.crawl_status || []).filter(s => s.status !== 'fetched').map(s => s.url + ': ' + s.detail);
   const notes = [...crawlNotes, ...(Array.isArray(data.limitations) ? data.limitations : [])];
   if (data.notice) notes.push(data.notice);
   $('warning-list').replaceChildren(...[...new Set(notes.filter(v => typeof v === 'string' && v))].map(text => node('li', text)));
   $('warnings').hidden = !$('warning-list').childElementCount;
-  $('raw').textContent = JSON.stringify(data, null, 2); $('debug').hidden = false;
+  $('raw').textContent = JSON.stringify(data, null, 2);
+  $('debug').hidden = false;
 }
+
 $('search-form').addEventListener('submit', async event => {
-  event.preventDefault(); if (controller || !$('search-form').reportValidity()) return;
+  event.preventDefault();
+  if (controller || !$('search-form').reportValidity()) return;
   if (!['http:', 'https:'].includes(location.protocol)) { connectionMessage(false); return; }
-  const query = $('query').value.trim(); if (!query) { $('query').focus(); return; }
+  const query = $('query').value.trim();
+  if (!query) { $('query').focus(); return; }
   const mode = $('search-type').value;
-  const payload = {query: query, limit:Number($('limit').value), search_type:mode, answer_mode:$('answer-mode').checked, fetch_pages:$('fetch-pages').checked, explain:$('explain').checked};
+  const payload = {
+    query: query,
+    limit: Number($('limit').value),
+    search_type: mode,
+    answer_mode: $('answer-mode').checked,
+    fetch_pages: $('fetch-pages').checked,
+    explain: $('explain').checked
+  };
   if ($('seeds').value.trim()) payload.seeds = $('seeds').value.trim().split(/\s+/);
   for (const id of ['freshness','site','lang','timezone']) if ($(id).value.trim()) payload[id] = $(id).value.trim();
   if (mode === 'web' && $('filetype').value) payload.filetype = $('filetype').value === 'custom' ? $('custom-filetype').value.trim().toLowerCase() : $('filetype').value;
+  
   const headers = {'Content-Type':'application/json'};
   if ($('api-key').value.trim()) headers.Authorization = 'Bearer ' + $('api-key').value.trim();
-  controller = new AbortController(); const started = performance.now(); let timeoutReached = false; let responseReceived = false;
-  $('submit').disabled = true; $('cancel').hidden = false; $('status').className = '';
+  
+  controller = new AbortController();
+  const started = performance.now();
+  let timeoutReached = false;
+  let responseReceived = false;
+  
+  $('submit').disabled = true;
+  $('cancel').hidden = false;
+  $('status').className = '';
   for (const id of ['answer','warnings','images','debug']) $(id).hidden = true;
   $('results').replaceChildren();
-  const progress = () => { $('status').textContent = 'Crawling and ranking… ' + ((performance.now()-started)/1000).toFixed(1) + ' s'; };
-  progress(); const ticker = setInterval(progress, 100);
+  
+  const progress = () => {
+    const spinner = node('span', undefined, 'status-spinner');
+    $('status').replaceChildren(spinner, document.createTextNode(' Crawling and ranking… ' + ((performance.now()-started)/1000).toFixed(1) + ' s'));
+  };
+  progress();
+  const ticker = setInterval(progress, 100);
   const timeout = setTimeout(() => { timeoutReached = true; controller?.abort(); }, 30000);
+  
   try {
     const response = await fetch('/search', {method:'POST', headers, body:JSON.stringify(payload), signal:controller.signal});
-    responseReceived = true; connectionMessage(true);
+    responseReceived = true;
+    connectionMessage(true);
     if (!response.ok) {
       const errData = await response.json().catch(() => ({}));
       throw new Error(errData.error || 'Search failed (HTTP ' + response.status + ')');
@@ -211,23 +1021,34 @@ $('search-form').addEventListener('submit', async event => {
     clearInterval(ticker);
     render(data, performance.now()-started, mode);
   } catch (error) {
-    clearInterval(ticker); $('status').className = 'error';
+    clearInterval(ticker);
+    $('status').className = 'error';
     if (!responseReceived && error.name !== 'AbortError') {
       connectionMessage(false);
-      $('status').textContent = 'Search could not connect to the local API. Restart it with ./run.sh ' + (location.port || '8765') + ', then search again.';
+      $('status').textContent = 'Search could not connect to local server. Restart it with ./run.sh ' + (location.port || '8765') + ', then retry.';
     } else {
-      $('status').textContent = error.name === 'AbortError' ? (timeoutReached ? 'The browser stopped waiting after 30 seconds.' : 'Request cancelled in the browser.') : 'Search failed: ' + error.message;
+      $('status').textContent = error.name === 'AbortError' ? (timeoutReached ? 'Search stopped after 30 seconds.' : 'Request cancelled.') : 'Search failed: ' + error.message;
     }
   } finally {
-    clearInterval(ticker); clearTimeout(timeout); controller = null; $('submit').disabled = false; $('cancel').hidden = true;
+    clearInterval(ticker);
+    clearTimeout(timeout);
+    controller = null;
+    $('submit').disabled = false;
+    $('cancel').hidden = true;
   }
 });
+
 updateFilters();
 checkConnection();
 const urlParams = new URLSearchParams(location.search);
 if (urlParams.get('q')) {
   $('query').value = urlParams.get('q');
-  $('search-form').dispatchEvent(new Event('submit'));
+  clearBtn.style.display = 'block';
+  if (typeof $('search-form').requestSubmit === 'function') {
+    $('search-form').requestSubmit();
+  } else {
+    $('search-form').dispatchEvent(new Event('submit', {cancelable: true}));
+  }
 }
 </script>
 </body>
