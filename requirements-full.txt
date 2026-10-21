@@ -1,9 +1,0 @@
--r requirements.txt
-# Optional local model runtime. Weights and language packs are installed separately.
-onnxruntime>=1.20,<2
-sentence-transformers[onnx]>=5,<6
-lingua-language-detector>=2,<3
-faiss-cpu>=1.9,<2
-# Install translation / NER individually only when needed:
-# argostranslate>=1.9,<2
-# spacy>=3.8,<4

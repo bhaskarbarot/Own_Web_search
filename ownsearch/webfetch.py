@@ -1,163 +1,217 @@
-"""Bounded request-only enrichment using the existing pinned safe HTTP client."""
+"""Direct safe fetching, with query budgets and shared cross-query origin policy."""
+import json
+import re
+import subprocess
+import sys
 import threading
 import time
-from dataclasses import replace
+from collections import OrderedDict
+from dataclasses import dataclass, field
+from email.utils import parsedate_to_datetime
+from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 
 from .evidence import injection_flags
-from .extract import extract, sniff
+from .extract import extract, sniff, Extracted
+from .extract.feeds import parse_feed
 from .fetcher import Fetcher, FetchError, decode_content
 from .robots import RobotsPolicy
 from .util import origin_of, utc_now
-from .webmodels import web_url
+from .webmodels import WebCandidate, web_url
 
+@dataclass
+class OriginGate:
+    lock: object = field(default_factory=threading.Lock)
+    policy_lock: object = field(default_factory=threading.Lock)
+    next_request: float = 0.0
+    cooldown: float = 0.0
+    policy: object = None
+    policy_expires: float = 0.0
+
+class OriginState:
+    def __init__(self, limit):
+        self.limit, self.lock, self.gates = limit, threading.Lock(), OrderedDict()
+    def get(self, origin):
+        with self.lock:
+            if origin in self.gates:
+                self.gates.move_to_end(origin)
+                return self.gates[origin]
+            # Never evict a live politeness clock or a denial to make room.
+            now = time.monotonic()
+            for key, gate in list(self.gates.items()):
+                if (len(self.gates) >= self.limit and gate.next_request <= now and gate.cooldown <= now
+                        and gate.policy_expires <= now and not gate.lock.locked() and not gate.policy_lock.locked()):
+                    del self.gates[key]
+            if len(self.gates) >= self.limit:
+                raise FetchError('Origin capacity reached; wait for cache expiry', 'capacity')
+            gate = self.gates[origin] = OriginGate()
+            return gate
+
+@dataclass
+class CrawledPage:
+    url: str
+    item: object = None
+    links: list = field(default_factory=list)
+    sitemaps: list = field(default_factory=list)
+    kind: str = ''
 
 class WebFetchSession(Fetcher):
-    """Shared per-query request/decoded-byte budgets and per-origin politeness."""
-    def __init__(self, settings, cancel):
-        super().__init__(replace(settings, ocr='off'))
+    def __init__(self, settings, cancel, origins=None):
+        super().__init__(settings)
         self.cancel = cancel
+        self.origins = origins or OriginState(settings.origin_cache_entries)
         self.guard = threading.Lock()
-        self.host_locks = {}
-        self.policy_locks = {}
-        self.next_request = {}
-        self.policies = {}
         self.requests = self.decoded_bytes = self.reserved_bytes = 0
-        self.network_ms = self.extraction_ms = 0.0
-
-    def _host_lock(self, table, host):
-        with self.guard:
-            return table.setdefault(host, threading.Lock())
+        self.allowed_origins = None
 
     def _request_once(self, url, headers, max_bytes, method='GET', deadline=None):
-        deadline = deadline or time.monotonic() + self.settings.live_fetch_timeout
+        deadline = deadline or time.monotonic() + self.settings.fetch_timeout
         origin = origin_of(url)
-        lock = self._host_lock(self.host_locks, origin)
-        if not lock.acquire(timeout=max(0, deadline-time.monotonic())):
-            raise FetchError('Per-host capacity deadline', 'timeout')
+        if self.allowed_origins is not None and origin not in self.allowed_origins:
+            raise FetchError('Redirect outside configured crawl origins', 'scope')
+        gate = self.origins.get(origin)
+        if not gate.lock.acquire(timeout=max(0, deadline-time.monotonic())):
+            raise FetchError('Origin capacity deadline', 'timeout')
         capacity = 0
-        started = time.perf_counter()
         try:
+            if gate.cooldown > time.monotonic():
+                raise FetchError('Origin in cooldown after access denial or rate limit', 'cooldown')
             if self.cancel.is_set():
-                raise FetchError('Request cancelled', 'timeout')
-            wait = max(0, self.next_request.get(origin, 0)-time.monotonic())
+                raise FetchError('Crawl cancelled', 'timeout')
+            wait = max(0, gate.next_request-time.monotonic())
             if time.monotonic()+wait >= deadline or self.cancel.wait(wait):
-                raise FetchError('Host delay exceeds request budget', 'timeout')
+                raise FetchError('Crawl delay exceeds query deadline', 'timeout')
             with self.guard:
-                if self.requests >= self.settings.live_max_requests:
-                    raise FetchError('Page request limit reached', 'timeout')
-                capacity = max(0, min(max_bytes, self.settings.live_max_total_bytes-self.decoded_bytes-self.reserved_bytes))
-                if capacity <= 0:
-                    raise FetchError('Total page byte limit reached', 'too_large')
+                if self.requests >= self.settings.max_requests_per_query:
+                    raise FetchError('Query request limit reached', 'budget')
+                capacity = max(0, min(max_bytes, self.settings.max_bytes_per_query-self.decoded_bytes-self.reserved_bytes))
+                if not capacity:
+                    raise FetchError('Query byte limit reached', 'too_large')
                 self.reserved_bytes += capacity
                 self.requests += 1
             status, response_headers, body, truncated = super()._request_once(url, headers, capacity, method, deadline)
+            if status in (401, 403, 429, 503):
+                seconds = 60.0
+                retry = response_headers.get('retry-after', '')
+                try:
+                    seconds = max(seconds, float(retry))
+                except ValueError:
+                    try:
+                        seconds = max(seconds, parsedate_to_datetime(retry).timestamp()-time.time())
+                    except (TypeError, ValueError, OverflowError):
+                        pass
+                gate.cooldown = time.monotonic() + seconds
             if truncated:
-                raise FetchError('Page exceeds response size limit', 'too_large')
+                raise FetchError('Response exceeds page byte limit', 'too_large')
             body = decode_content(body, response_headers.get('content-encoding'), capacity)
             response_headers = dict(response_headers)
-            response_headers.pop('content-encoding', None)  # decoded once, before charging the shared budget
+            response_headers.pop('content-encoding', None)
             with self.guard:
                 self.decoded_bytes += len(body)
             return status, response_headers, body, False
         finally:
             with self.guard:
                 self.reserved_bytes -= capacity
-                self.network_ms += (time.perf_counter()-started)*1000
-            delay = max(self.settings.default_delay, getattr(self.policies.get(origin), 'crawl_delay', 0) or 0)
-            self.next_request[origin] = time.monotonic() + delay
-            lock.release()
+            gate.next_request = time.monotonic() + max(self.settings.default_delay,
+                                                      getattr(gate.policy, 'crawl_delay', 0) or 0)
+            gate.lock.release()
 
     def policy(self, url, deadline):
         origin = origin_of(url)
-        lock = self._host_lock(self.policy_locks, origin)
-        if not lock.acquire(timeout=max(0, deadline-time.monotonic())):
+        gate = self.origins.get(origin)
+        if not gate.policy_lock.acquire(timeout=max(0, deadline-time.monotonic())):
             raise FetchError('Robots policy deadline', 'timeout')
         try:
-            if origin not in self.policies:
-                r = super().fetch(origin+'/robots.txt', retries=0, deadline=deadline, max_bytes=128_000, preserve_query=True)
+            if gate.policy is None or gate.policy_expires <= time.monotonic():
+                r = super().fetch(origin+'/robots.txt', retries=0, deadline=deadline,
+                                  max_bytes=128_000, preserve_query=True)
                 if r.status == 200:
                     policy = RobotsPolicy.parse(r.body.decode('utf-8', 'replace'), self.settings.robots_token)
-                elif 400 <= r.status < 500 and r.status != 429:
+                elif 400 <= r.status < 500 and r.status not in (401, 403, 429):
                     policy = RobotsPolicy.allow_all(r.status)
                 else:
                     policy = RobotsPolicy.disallow_all(r.status)
-                self.policies[origin] = policy
-            return self.policies[origin]
+                gate.policy = policy
+                gate.policy_expires = time.monotonic() + self.settings.robots_ttl
+            return gate.policy
         finally:
-            lock.release()
+            gate.policy_lock.release()
 
     def page(self, url, deadline):
         if not self.policy(url, deadline).allowed(url):
-            raise FetchError('Page disallowed by robots.txt', 'robots')
-        return super().fetch(url, retries=0, deadline=deadline, max_bytes=self.settings.live_max_page_bytes,
+            raise FetchError('Disallowed by robots.txt', 'robots')
+        return super().fetch(url, retries=0, deadline=deadline, max_bytes=self.settings.max_page_bytes,
                              allow=lambda target: self.policy(target, deadline).allowed(target), preserve_query=True)
 
-    def enrich(self, candidate, deadline):
-        if self.cancel.is_set() or time.monotonic() >= deadline:
-            raise FetchError('Page deadline expired', 'timeout')
-        response = self.page(candidate.url, deadline)
+    def crawl(self, url, deadline):
+        policy = self.policy(url, deadline)
+        response = self.page(url, deadline)
         if not 200 <= response.status < 300:
-            raise FetchError('Page HTTP '+str(response.status), 'http')
-        # Live path does not invoke OCR, JS, archive or document subprocesses.
-        if sniff(response.body, response.content_type, response.final_url) not in ('html', 'text'):
-            raise FetchError('Unsupported live content type', 'content_type')
-        started = time.perf_counter()
-        ext = extract(response.body, response.final_url, response.content_type, self.settings)
-        with self.guard:
-            self.extraction_ms += (time.perf_counter()-started)*1000
-        if not ext.text or ext.noindex:
-            raise FetchError('Page has no usable text or requests noindex', 'no_content')
-        final_url = web_url(response.final_url)
+            raise FetchError('HTTP ' + str(response.status), 'http')
+        data = response.body
+        if re.search(rb'<!\s*(DOCTYPE|ENTITY)\b', data, re.I) and sniff(data, response.content_type, response.final_url) in ('feed', 'sitemap', 'xml'):
+            raise FetchError('DTD/entity XML is unsupported', 'content_type')
+        kind = sniff(data, response.content_type, response.final_url)
+        if kind in ('pdf', 'zip', 'gzip'):
+            remaining = min(self.settings.document_timeout, deadline-time.monotonic())
+            if remaining <= 0:
+                raise FetchError('Document deadline', 'timeout')
+            try:
+                proc = subprocess.run([sys.executable, '-m', 'ownsearch.document_worker', response.final_url,
+                                       response.content_type], input=data, capture_output=True,
+                                      timeout=remaining, cwd=str(Path(__file__).resolve().parent.parent))
+                if proc.returncode:
+                    raise FetchError('Document extraction failed or exceeded resource limit', 'extraction')
+                ext = Extracted(**json.loads(proc.stdout))
+            except (subprocess.TimeoutExpired, ValueError):
+                raise FetchError('Document extraction deadline or invalid output', 'extraction')
+        elif kind == 'feed':
+            feed = parse_feed(data, response.final_url, publication_only=True)
+            ext = Extracted(kind='feed', entries=feed['entries'] if feed else [])
+        else:
+            ext = extract(data, response.final_url, response.content_type, self.settings)
+        if self.cancel.is_set() or time.monotonic() >= deadline:
+            raise FetchError('Crawl unfinished at deadline; content excluded', 'timeout')
+        final_url = web_url(response.final_url, self.settings.allow_private_hosts)
         if not final_url:
             raise FetchError('Unsafe result URL', 'blocked')
-        item = replace(candidate, provenance=list(candidate.provenance), images=list(candidate.images))
-        item.url = final_url
-        canonical = web_url(ext.canonical)
-        # Cross-origin canonicals can be spoofed and must not collapse unrelated sources.
-        if canonical and urlsplit(canonical).netloc == urlsplit(final_url).netloc:
+        header_robots = response.headers.get('x-robots-tag', '').lower()
+        nofollow = ext.nofollow or 'nofollow' in header_robots or 'none' in header_robots
+        noindex = ext.noindex or 'noindex' in header_robots or 'none' in header_robots
+        links = []
+        if not nofollow:
+            links.extend((link[0], link[1], 'page') for link in ext.links if not link[2])
+            links.extend((link, '', 'feed') for link in ext.feeds)
+            links.extend((row['url'], row.get('title', ''), 'page') for row in ext.entries)
+            links.extend((row[0], '', 'page') for row in ext.sitemap_urls)
+        maps = [] if nofollow else list(policy.sitemaps) + [row[0] for row in ext.sitemaps]
+        page = CrawledPage(final_url, links=links[:self.settings.max_sitemap_urls],
+                           sitemaps=maps[:self.settings.max_sitemap_urls], kind=ext.kind)
+        if not ext.text or noindex or ext.kind in ('binary', 'empty', 'feed', 'sitemap'):
+            return page
+        item = WebCandidate(ext.title[:300] or urlsplit(final_url).path.rsplit('/', 1)[-1] or urlsplit(final_url).hostname,
+                            final_url, content=ext.text[:self.settings.max_text_chars],
+                            headings=ext.headings[:50], language=ext.lang, fetched_at=utc_now(),
+                            content_type=response.content_type, http_status=response.status,
+                            detected_kind=ext.source_type if ext.kind == 'office' else ext.kind)
+        canonical = web_url(ext.canonical, self.settings.allow_private_hosts)
+        if canonical and origin_of(canonical) == origin_of(final_url):
             item.canonical = canonical
-        item.title = ext.title[:300] or item.title
-        item.content = ext.text[:self.settings.live_max_text_chars]
-        item.headings = ext.headings[:50]
-        item.links = ext.links[:self.settings.discovery_sitemap_limit]
-        item.feeds = [] if ext.nofollow else [url for url in ext.feeds[:10] if web_url(url)]
-        item.language = ext.lang or item.language
-        if ext.published_at:
-            inferred = ext.metadata.get('publication_date_source') == 'url_inferred'
-            if inferred:
-                item.provenance.append({'provider': 'url_date', 'url': final_url,
-                                        'published_at': ext.published_at, 'evidence_level': 'inferred_url_date'})
-            elif item.published_at and item.published_at != ext.published_at:
-                item.provenance.append({'provider': 'page_metadata', 'url': final_url,
-                                        'published_at': ext.published_at, 'evidence_level': 'conflicting_publication_metadata'})
-                item.publication_conflict = True
-                item.published_at = ext.published_at
-                item.publication_source = 'page_metadata'
-            elif not inferred:
-                item.published_at = ext.published_at
-                item.publication_source = 'page_metadata'
-        item.fetched_at = utc_now()
-        item.content_type = response.content_type
-        item.detected_kind = ext.kind
-        item.http_status = response.status
-        item.fetch_status = 'fetched'
-        item.source_type = 'web_page'
-        item.provenance.append({'provider': 'page_fetch', 'url': final_url, 'evidence_level': 'fetched_page',
-                                'retrieved_at': item.fetched_at})
-        item.injection_risk = bool(injection_flags(item.content))
-        metadata = ext.metadata
-        # Open Graph/Twitter images are page metadata, never verified query-specific images.
-        image = web_url(urljoin(final_url, metadata.get('og:image') or metadata.get('twitter:image') or '')) if metadata.get('og:image') or metadata.get('twitter:image') else None
-        if image:
-            item.images.append({'image_url': image, 'thumbnail_url': None, 'page_url': final_url,
-                                'caption': '', 'provider': 'page_metadata', 'attribution': 'page metadata',
-                                'relevance_verified': False})
-        return item
-
-
-class EnrichmentJob:
-    def __init__(self, session, name):
-        self.session, self.name = session, name
-    def search(self, item, deadline):
-        return self.session.enrich(item, deadline)
+        if ext.metadata.get('publication_date_source') != 'url_inferred':
+            item.published_at, item.publication_source = ext.published_at, 'page_metadata' if ext.published_at else None
+        item.injection_risk = bool(injection_flags(item.title+' '+item.content))
+        item.provenance = [{'provider': 'ownsearch_crawler', 'url': final_url,
+                            'retrieved_at': item.fetched_at, 'evidence_level': 'fetched_page'}]
+        images = list(ext.metadata.get('images', []))
+        og = ext.metadata.get('og:image') or ext.metadata.get('twitter:image')
+        if og:
+            images.append({'src': og, 'alt': ''})
+        for row in images[:20]:
+            image_url = web_url(urljoin(final_url, row.get('src', '')), self.settings.allow_private_hosts)
+            if image_url:
+                item.images.append({'image_url': image_url, 'page_url': final_url,
+                                    'caption': row.get('alt', '') or item.title,
+                                    'provider': 'fetched_page', 'relevance_verified': False})
+        item.video = str(ext.metadata.get('og:type', '')).startswith('video') or bool(ext.metadata.get('og:video'))
+        page.item = item
+        return page

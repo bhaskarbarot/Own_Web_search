@@ -1,3 +1,5 @@
+> Historical dependent-engine evaluation data. Independent measurements are under `runs/independent/`; run `python3 benchmark.py`. Human-review files and sealed queries remain preserved.
+
 # Live evaluation — Phase 0
 
 The current plan is [docs/plan/phase-0.md](../docs/plan/phase-0.md), with the

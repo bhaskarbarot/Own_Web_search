@@ -1,3 +1,5 @@
+> Historical report for branch `dependent`. The active `Independent` rebuild is documented in [PROGRESS.md](PROGRESS.md).
+
 # Phase 1 discovery report
 
 Current implementation: 5709c59. Date: 2026-10-21, Asia/Kolkata.

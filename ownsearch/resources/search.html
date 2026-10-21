@@ -26,7 +26,7 @@
 <body>
 <main>
   <h1>OwnSearch</h1>
-  <p class="muted">Search the web and inspect results, sources and response time.</p>
+  <p class="muted">Independent web crawling from your starting sites. Pages are cached in memory; coverage grows through discovered links.</p>
   <p id="connection" class="muted" role="status">Checking the search server…</p>
   <button id="reconnect" type="button" hidden>Retry connection</button>
   <form id="search-form">
@@ -53,9 +53,10 @@
       </div>
       <p class="muted">You can also use query operators such as site:example.org, filetype:pdf, after:2026-01-01 and quoted phrases. Files open at the source.</p>
     </details>
+    <label>Starting URLs (optional, one per line)<textarea id="seeds" rows="2" style="width:100%" placeholder="Use configured sites, or enter starting page URLs"></textarea></label>
     <div class="checks">
       <label><input id="answer-mode" type="checkbox" checked>Show answer when available</label>
-      <label><input id="fetch-pages" type="checkbox" checked>Inspect selected pages</label>
+      <label><input id="fetch-pages" type="checkbox" checked>Crawl new pages (uncheck to search memory cache only)</label>
       <label><input id="explain" type="checkbox">Include ranking details</label>
     </div>
   </form>
@@ -87,7 +88,7 @@ async function checkConnection() {
   try {
     const response = await fetch('/health', {cache:'no-store', signal:ping.signal});
     const health = await response.json();
-    connectionMessage(response.ok && health.ok === true && typeof health.engine === 'string' && health.engine.startsWith('OwnSearch '));
+    connectionMessage(response.ok && health.ok === true && typeof health.engine === 'string' && health.engine.startsWith('OwnSearch ') && health.mode === 'independent');
   } catch { connectionMessage(false); }
   finally { clearTimeout(timer); $('reconnect').disabled = false; }
 }
@@ -118,7 +119,7 @@ function updateFilters() {
   $('custom-filetype').required = !$('custom-wrap').hidden;
   if (!$('custom-wrap').hidden) $('custom-wrap').closest('details').open = true;
   $('mode-note').hidden = mode === 'web';
-  $('mode-note').textContent = mode === 'video' ? 'Video links use web search with “video” added to your query. A dedicated video search is not available.' : 'Images use source-supplied image links. File filters do not apply.';
+  $('mode-note').textContent = mode === 'video' ? 'Shows matching fetched pages that declare video metadata.' : 'Images come from matching fetched pages. File filters do not apply.';
 }
 $('search-type').addEventListener('change', updateFilters);
 $('filetype').addEventListener('change', updateFilters);
@@ -174,7 +175,8 @@ function render(data, elapsed, mode) {
     }
     if (!seen.size) $('images').append(node('p', 'No image previews are available from the returned sources.', 'muted'));
   }
-  const notes = [...(Array.isArray(data.provider_errors) ? data.provider_errors : []), ...(Array.isArray(data.limitations) ? data.limitations : [])];
+  const crawlNotes = (data.crawl_status || []).filter(s => s.status !== 'fetched').map(s => s.url + ': ' + s.detail);
+  const notes = [...crawlNotes, ...(Array.isArray(data.limitations) ? data.limitations : [])];
   if (data.notice) notes.push(data.notice);
   $('warning-list').replaceChildren(...[...new Set(notes.filter(v => typeof v === 'string' && v))].map(text => node('li', text)));
   $('warnings').hidden = !$('warning-list').childElementCount;
@@ -185,7 +187,8 @@ $('search-form').addEventListener('submit', async event => {
   if (!['http:', 'https:'].includes(location.protocol)) { connectionMessage(false); return; }
   const query = $('query').value.trim(); if (!query) { $('query').focus(); return; }
   const mode = $('search-type').value;
-  const payload = {query: mode === 'video' ? query + ' video' : query, limit:Number($('limit').value), search_type:mode === 'images' ? 'images' : 'web', answer_mode:$('answer-mode').checked, fetch_pages:$('fetch-pages').checked, explain:$('explain').checked};
+  const payload = {query: query, limit:Number($('limit').value), search_type:mode, answer_mode:$('answer-mode').checked, fetch_pages:$('fetch-pages').checked, explain:$('explain').checked};
+  if ($('seeds').value.trim()) payload.seeds = $('seeds').value.trim().split(/\s+/);
   for (const id of ['freshness','site','lang','timezone']) if ($(id).value.trim()) payload[id] = $(id).value.trim();
   if (mode === 'web' && $('filetype').value) payload.filetype = $('filetype').value === 'custom' ? $('custom-filetype').value.trim().toLowerCase() : $('filetype').value;
   const headers = {'Content-Type':'application/json'};
@@ -194,7 +197,7 @@ $('search-form').addEventListener('submit', async event => {
   $('submit').disabled = true; $('cancel').hidden = false; $('status').className = '';
   for (const id of ['answer','warnings','images','debug']) $(id).hidden = true;
   $('results').replaceChildren();
-  const progress = () => { $('status').textContent = 'Searching… ' + ((performance.now()-started)/1000).toFixed(1) + ' s'; };
+  const progress = () => { $('status').textContent = 'Crawling and ranking… ' + ((performance.now()-started)/1000).toFixed(1) + ' s'; };
   progress(); const ticker = setInterval(progress, 100);
   const timeout = setTimeout(() => { timeoutReached = true; controller?.abort(); }, 30000);
   let responseReceived = false;

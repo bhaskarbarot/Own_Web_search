@@ -1,2 +1,2 @@
-"""OwnSearch: self-hosted web retrieval with a standard-library fallback and optional local models."""
-__version__ = "1.1.0"
+"""OwnSearch: independent direct crawling and memory-only web retrieval."""
+__version__ = "2.0.0"

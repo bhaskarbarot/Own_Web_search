@@ -114,20 +114,13 @@ class IntentModel:
 def get_model(data_dir=None):
     key = str(data_dir or "")
     extra = Path(data_dir) / "intent_examples.tsv" if data_dir else None
-    entity_files=[Path(data_dir)/name for name in ('entities.db','entities.db-wal')] if data_dir else []
-    entity_mtime=tuple(path.stat().st_mtime_ns if path.exists() else 0 for path in entity_files)
-    mtime = (entity_mtime, os.path.getmtime(RESOURCE) if RESOURCE.exists() else 0,
+    mtime = (os.path.getmtime(RESOURCE) if RESOURCE.exists() else 0,
              os.path.getmtime(extra) if extra and extra.exists() else 0)
     with _lock:
         hit = _models.get(key)
         if hit and hit[0] == mtime:
             return hit[1]
         examples = _read(RESOURCE) + (_read(extra) if extra else [])
-        if data_dir and (Path(data_dir)/'entities.db').exists():
-            from .entities import EntityIndex, mask
-            local=EntityIndex(data_dir)
-            if local.db.one('SELECT 1 FROM entities LIMIT 1'):
-                examples=[(label,mask(text,local.link(text))) for label,text in examples]
         model = IntentModel(examples)
         _models[key] = (mtime, model)
         return model

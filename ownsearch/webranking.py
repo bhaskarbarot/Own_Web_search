@@ -11,7 +11,7 @@ from .evidence import passages
 from .intent import get_model, requested_format
 from .quality import simhash, hamming
 from .query import FILETYPE_ALIASES
-from .ranking import FIELD_WEIGHTS, FIELD_B, K1, DEFAULT_WEIGHTS, linear_score
+from .rankweights import FIELD_WEIGHTS, FIELD_B, K1, DEFAULT_WEIGHTS, linear_score
 from .textproc import analyze, exact_tokens
 from .util import iso_to_ts
 from .webquery import literal_identifiers, literal_names, documentation_affinity, relation_terms
@@ -66,6 +66,11 @@ def constraints(item, q, final=True):
         ext = FILETYPE_ALIASES.get(ext, ext)
         kinds = ({'web' if item.detected_kind == 'html' else item.detected_kind}
                  if item.detected_kind else {'web' if item.kind == 'web' else item.kind, ext})
+        if item.detected_kind == 'text':
+            kinds.add(ext)
+            media = (item.content_type or '').split(';')[0].strip().lower()
+            kinds.update({'text/csv': {'csv'}, 'text/tab-separated-values': {'tsv'},
+                          'application/json': {'json'}}.get(media, set()))
         if not set(q.filetypes) & kinds:
             return False
     stamp = iso_to_ts(item.published_at)
@@ -128,10 +133,6 @@ def rank(candidates, q, final=True):
         focus = ' '+' '.join(exact_tokens(item.title+' '+' '.join(item.headings)))+' '
         if any(not _contains(focus, name) for name in literal_names(q)):
             continue
-        if q.intent == 'financial' and item.source_type != 'market_data':
-            predicted, _ = get_model().classify(item.title)
-            if predicted not in ('finance_quote', 'finance_history', 'financial'):
-                continue
         if q.intent == 'tech_docs' and not (required & set(f[0]+f[2])):
             continue
         text = item.content if item.fetch_status == 'fetched' else item.snippet
@@ -155,10 +156,6 @@ def rank(candidates, q, final=True):
         weights = dict(DEFAULT_WEIGHTS)
         if q.fresh_intent or q.freshness or q.intent == 'news':
             weights['freshness'] = .5
-        # Source order is useful evidence after relevance checks, not a substitute for them.
-        positions = [p.get('rank') for p in item.provenance if type(p.get('rank')) is int and p['rank'] > 0]
-        features['retrieval_rank'] = 1/math.sqrt(min(positions)) if positions else 0
-        weights['retrieval_rank'] = .25
         location = urlsplit(item.url)
         project_terms = required & set(analyze(location.hostname or ''))
         inspected_project = item.fetch_status == 'fetched' and coverage >= .8 and len(project_terms) >= min(2, len(required))

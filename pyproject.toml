@@ -4,15 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ownsearch"
-version = "1.1.0"
-description = "Self-hosted incremental web retrieval with optional local model adapters"
+version = "2.0.0"
+description = "Independent query-time web crawling and memory-only search"
 requires-python = ">=3.10"
-dependencies = ["regex>=2024.11.6,<2027", "stopwordsiso==0.7.1", "dateparser>=1.2,<2", "holidays>=0.60,<1", "charset-normalizer>=3.4,<4"]
+dependencies = []
 
 [project.optional-dependencies]
-full = ["onnxruntime>=1.20,<2", "sentence-transformers[onnx]>=5,<6", "lingua-language-detector>=2,<3", "faiss-cpu>=1.9,<2"]
-translation = ["argostranslate>=1.9,<2"]
-ner = ["spacy>=3.8,<4"]
+text = ["regex>=2024.11.6,<2027", "stopwordsiso==0.7.1", "dateparser>=1.2,<2", "holidays>=0.60,<1", "charset-normalizer>=3.4,<4"]
 
 [project.scripts]
 ownsearch = "ownsearch.cli:main"

@@ -1,0 +1,10 @@
+# Editable starting sites, requested by the owner: Wikipedia, news, Python, Stack Overflow.
+# Configuration only; these pages are fetched directly, never queried as search services.
+# Crawling remains within the origins listed here. Add an article's origin if needed.
+https://en.wikipedia.org/
+https://docs.python.org/3/
+https://stackoverflow.com/questions
+https://feeds.bbci.co.uk/news/rss.xml
+https://www.bbc.com/news
+https://www.bbc.co.uk/news
+https://www.theguardian.com/world/rss
