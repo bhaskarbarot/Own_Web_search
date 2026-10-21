@@ -241,6 +241,36 @@ class IndependentTests(unittest.TestCase):
         for kw in ({'limit':51},{'timeout_ms':1},{'search_type':'bad'},{'seeds':'url'},{'offset':-1}):
             with self.subTest(kw=kw), self.assertRaises(ValueError):self.engine().search('query',**kw)
 
+class QueryUnderstandingTests(unittest.TestCase):
+    def test_uncertain_intent_does_not_add_an_unrequested_date_filter(self):
+        q=parse_query('orbital research');q.intent='news';q.freshness='week';q.after=123
+        q.intent_scores={'news':.24,'tech_docs':.23}
+        q.intent_confidence={'status':'uncalibrated','margin':.01}
+        q.explicit_date_filter=False;q.fresh_intent=False
+        with patch('ownsearch.coordinator.parse_query',return_value=q):
+            out=IndependentSearch(settings()).search('orbital research',fetch_pages=False)
+        self.assertEqual(out['query_understanding']['intent'],'general')
+        self.assertIsNone(out['query_understanding']['after'])
+    def test_explicit_dates_survive_uncertain_intent(self):
+        q=parse_query('orbital after:2026-01-01');q.intent='news'
+        expected=q.after
+        q.intent_scores={'news':.24,'tech_docs':.23}
+        q.intent_confidence={'status':'uncalibrated','margin':.01}
+        with patch('ownsearch.coordinator.parse_query',return_value=q):
+            out=IndependentSearch(settings()).search('orbital after:2026-01-01',fetch_pages=False)
+        self.assertEqual(out['query_understanding']['after'],expected)
+    def test_unicode_subject_tokens_are_preserved(self):
+        from ownsearch.textproc import tokenize,exact_tokens
+        for text in ('પાણી સંગ્રહ','पानी संरक्षण','潮汐原理','المد والجزر'):
+            self.assertTrue(tokenize(text))
+            self.assertTrue(exact_tokens(text))
+    def test_calendar_timezone_remains_explicit(self):
+        q=parse_query('published last month',timezone_name='Asia/Kolkata')
+        from ownsearch.webquery import conservative_intent
+        q=conservative_intent(q)
+        self.assertEqual(q.temporal['timezone'],'Asia/Kolkata')
+        self.assertLess(q.after,q.before)
+
 class DocumentationRankingTests(unittest.TestCase):
     def test_project_documentation_with_version_only_title_uses_fetched_evidence(self):
         q=parse_query('orbital tutorial');q.intent='tech_docs'

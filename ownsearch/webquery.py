@@ -26,7 +26,7 @@ def conservative_intent(q):
 
 def live_dates(q, now=None):
     """Explicit calendar/duration grammar; 'latest' alone is a ranking preference."""
-    if q.explicit_date_filter or q.intent == 'financial':
+    if q.explicit_date_filter:
         return q
     zone = ZoneInfo(q.temporal.get('timezone') or 'UTC')
     now = (now or datetime.now(timezone.utc)).astimezone(zone)

@@ -111,3 +111,18 @@ budget never exceeds 700 bytes (see `byte-budget-ablation.json`). All 88 tests p
 The same 11-case benchmark preserves Recall@10 1.000, strict P@5 0.23636, both
 negative controls and all cached URL signatures. Warm p50 6.239 ms, zero repeat
 network requests; no additional speed claim. Raw: `fixture-byte-budget.json`.
+
+## Step 6: preserve conservative query and calendar handling
+
+Baseline `9507a6e`. The independent coordinator now calls the existing conservative
+intent/date logic. An uncalibrated news guess cannot impose an unrequested week
+filter; explicit dates survive. Calendar grammar also applies to financial-page
+queries now that there is no separate market API path. Four new regressions cover
+these behaviors, Unicode subject tokens and explicit timezones.
+
+All 92 tests pass. An initial new timezone regression exposed the obsolete
+financial-path date exemption; it was fixed before this step was committed.
+`fixture-query-confidence-final.json`: fixture Recall@10 1.000, strict P@5 0.23636,
+both negative controls and all warm signatures preserved. No live accuracy claim.
+The earlier `fixture-query-confidence.json` predates that date correction and is
+retained as intermediate evidence rather than presented as release validation.
