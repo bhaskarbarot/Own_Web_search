@@ -257,3 +257,35 @@ Implemented the architectural enhancements specified in goal.md and user require
      - Warm network requests: 0 (pure local-first cache retrieval)
      - All warm URL signatures preserved, negative controls passed.
 
+# Phase: Full-Coverage Tiered Engine (80/20 Hubs, Continuous Crawler, Common Crawl CDX) (2026-10-21)
+
+Implemented complete coverage architecture mapped to all 12 AI-agent categories in `query.md`:
+
+1. Expanded 80/20 Curated Authority Hubs (`sources.txt`):
+   - Coding: React (`react.dev`), Python (`docs.python.org`), PostgreSQL (`postgresql.org`), Docker (`docs.docker.com`), Ubuntu (`help.ubuntu.com`, `askubuntu.com`), LangGraph (`python.langchain.com`), Rust (`doc.rust-lang.org`), Stack Overflow.
+   - Research & AI: arXiv (`arxiv.org`), Hugging Face (`huggingface.co`), PapersWithCode (`paperswithcode.com`), Semantic Scholar.
+   - News, Releases & Advisories: Ubuntu Security Notices (`usn.ubuntu.com`), Python Blog releases, Hacker News, TechCrunch, BBC, The Guardian feeds.
+   - Business & India: GST India (`gst.gov.in`), CBIC (`cbic.gov.in`), ERPNext (`docs.erpnext.com`), Odoo (`odoo.com`).
+   - Hardware & Reference: Notebookcheck, Tom's Hardware, Internet Archive, Stanford Encyclopedia of Philosophy, MIT OpenCourseWare.
+
+2. Common Crawl CDX & WARC Archive Resolver (`ownsearch/commoncrawl.py`):
+   - Queries public Common Crawl CDX API (`index.commoncrawl.org`) for domain and URL patterns.
+   - Fetches WARC byte-range slices and decompresses archived HTML without hitting live origins or triggering anti-bot blocks.
+   - Integrated into coordinator for `site:` queries when `cdx_discovery_enabled` is active.
+   - Unit tests in `tests/test_commoncrawl.py` (4 tests passing).
+
+3. Background Batch & Sitemap Crawler (`ownsearch/crawler.py`):
+   - Discovers and parses XML sitemaps (`/sitemap.xml`, nested sitemaps) and RSS/Atom feeds.
+   - Follows internal links up to configured depth with per-host concurrency and robots.txt compliance.
+   - Ingests parsed documents directly into persistent SQLite cache and in-memory BM25F inverted index.
+   - CLI command: `main.py crawl --site <url> --sitemap <url> --max-pages <N> --depth <D> --workers <W>`.
+   - Unit tests in `tests/test_crawler.py` (3 tests passing).
+
+4. Query Coordinator CDX Integration & Validation:
+   - Configurable `cdx_discovery_enabled: bool = True` in `ownsearch/config.py`.
+   - When `site:` filters are specified, discovers archived URLs and enqueues with priority.
+   - Preserves zero fabrication: adversarial query D05 (`SuperVectorDB9000`) returns 0 results rather than hallucinating.
+   - 147 / 147 unit tests pass normally and under `python3 -S`.
+   - Benchmark: 100% fixture recall preserved, warm p50 4.859 ms, warm p95 8.910 ms, 0 network requests.
+
+

@@ -203,6 +203,8 @@ class IndependentSearch:
                     priority += 20
                 if kind == 'native_result':
                     priority += 15
+                if kind == 'cdx_discovered':
+                    priority += 5
                 if kind == 'sitemap':
                     priority += .2
                 sequence += 1
@@ -210,6 +212,17 @@ class IndependentSearch:
 
             for url in valid:
                 enqueue(url)
+            if self.settings.cdx_discovery_enabled and q.sites and fetch_pages:
+                try:
+                    from .commoncrawl import query_cdx
+                    for host in q.sites:
+                        records = query_cdx(f"{host}/*", limit=10, timeout=2.0)
+                        for rec in records:
+                            rec_url = independent_url(rec.url, self.settings.allow_private_hosts)
+                            if rec_url and origin_of(rec_url) in origins:
+                                enqueue(rec_url, anchor='', depth=1, kind='cdx_discovered')
+                except Exception:
+                    pass
             for page in cached_pages:
                 if origin_of(page.url) in origins:
                     for link, anchor, kind in page.links:

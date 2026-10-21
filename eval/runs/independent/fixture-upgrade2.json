@@ -1,0 +1,263 @@
+{
+  "settings_overrides": {},
+  "scope": "Controlled synthetic website only. Not live web accuracy or human relevance judgments.",
+  "git_head": "cd35fa89fe34ea0c65d489b812f38496fbf2edf1",
+  "runtime_sha256": "5ec2bc78de75b211a9eb4e244f2150a5790f72309fd1772e069c539b50f01a29",
+  "dev_queries_parsed": 300,
+  "dev_parse_p50_ms": 2.3462730005121557,
+  "dev_parse_p95_ms": 4.315419650811236,
+  "preserved_fingerprints": {
+    "eval/dev.jsonl": "db3fb6d1325a76dc08ff814ed5dd0d0b9ae5106903e66abc38e1194dab54048c",
+    "eval/splits.json": "59c87f10198ea5f8ff2c9647d0830e365716467acac09829ef71932dd3ef4671",
+    "eval/human_review_queue.csv": "47496c53d253349995a3edded4ef98ef46ffeabdfc2a8e3c6b83777df824c4a6",
+    "eval/human_review_candidates.csv": "540ed88966d753370168746258933a11bbdb826f255aca2531b777f1646cccfa"
+  },
+  "sealed_queries_used": 0,
+  "case_count": 11,
+  "positive_cases": 9,
+  "fixture_mean_recall_at_10": 1.0,
+  "fixture_mean_strict_precision_at_5": 0.2363636363636364,
+  "cold_p50_ms": 56.63,
+  "cold_p95_ms": 282.69,
+  "warm_p50_ms": 4.859,
+  "warm_p95_ms": 8.910499999999999,
+  "warm_requests": 0,
+  "all_warm_signatures_preserved": true,
+  "negative_controls_passed": true,
+  "live_relevance_metrics": null,
+  "cases": [
+    {
+      "query": "orbital guidance",
+      "starting_path": "/",
+      "filters": {},
+      "expected_paths": [
+        "/guide",
+        "/mapped"
+      ],
+      "result_paths": [
+        "/guide",
+        "/mapped",
+        "/"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 71.666,
+      "warm_ms": 9.355,
+      "requests": 7,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.4,
+      "negative_control_passed": null
+    },
+    {
+      "query": "orbital guidance",
+      "starting_path": "/feed",
+      "filters": {},
+      "expected_paths": [
+        "/guide",
+        "/mapped"
+      ],
+      "result_paths": [
+        "/guide",
+        "/mapped"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 58.315,
+      "warm_ms": 7.645,
+      "requests": 6,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.4,
+      "negative_control_passed": null
+    },
+    {
+      "query": "\"orbital guidance\"",
+      "starting_path": "/",
+      "filters": {},
+      "expected_paths": [
+        "/guide",
+        "/mapped"
+      ],
+      "result_paths": [
+        "/guide",
+        "/mapped"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 63.058,
+      "warm_ms": 8.466,
+      "requests": 7,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.4,
+      "negative_control_passed": null
+    },
+    {
+      "query": "orbital guidance",
+      "starting_path": "/pdf",
+      "filters": {
+        "filetype": "pdf"
+      },
+      "expected_paths": [
+        "/pdf"
+      ],
+      "result_paths": [
+        "/pdf"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 306.622,
+      "warm_ms": 3.958,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.2,
+      "negative_control_passed": null
+    },
+    {
+      "query": "orbital guidance",
+      "starting_path": "/office",
+      "filters": {
+        "filetype": "docx"
+      },
+      "expected_paths": [
+        "/office"
+      ],
+      "result_paths": [
+        "/office"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 258.758,
+      "warm_ms": 4.116,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.2,
+      "negative_control_passed": null
+    },
+    {
+      "query": "orbital guidance",
+      "starting_path": "/image",
+      "filters": {
+        "search_type": "images"
+      },
+      "expected_paths": [
+        "/image"
+      ],
+      "result_paths": [
+        "/image"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 55.882,
+      "warm_ms": 4.859,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.2,
+      "negative_control_passed": null
+    },
+    {
+      "query": "orbital guidance",
+      "starting_path": "/video",
+      "filters": {
+        "search_type": "video"
+      },
+      "expected_paths": [
+        "/video"
+      ],
+      "result_paths": [
+        "/video"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 55.402,
+      "warm_ms": 4.75,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.2,
+      "negative_control_passed": null
+    },
+    {
+      "query": "orbital guidance",
+      "starting_path": "/foreign",
+      "filters": {
+        "lang": "hi"
+      },
+      "expected_paths": [
+        "/foreign"
+      ],
+      "result_paths": [
+        "/foreign"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 54.3,
+      "warm_ms": 5.616,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.2,
+      "negative_control_passed": null
+    },
+    {
+      "query": "orbital guidance",
+      "starting_path": "/guide",
+      "filters": {
+        "freshness": "day"
+      },
+      "expected_paths": [
+        "/guide",
+        "/mapped"
+      ],
+      "result_paths": [
+        "/guide",
+        "/mapped"
+      ],
+      "empty_cache_results": 0,
+      "cold_ms": 55.199,
+      "warm_ms": 7.429,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": 1.0,
+      "strict_precision_at_5": 0.4,
+      "negative_control_passed": null
+    },
+    {
+      "query": "unfindable synthetic entity",
+      "starting_path": "/guide",
+      "filters": {},
+      "expected_paths": [],
+      "result_paths": [],
+      "empty_cache_results": 0,
+      "cold_ms": 56.63,
+      "warm_ms": 1.997,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": null,
+      "strict_precision_at_5": 0.0,
+      "negative_control_passed": true
+    },
+    {
+      "query": "orbital guidance -spacecraft",
+      "starting_path": "/guide",
+      "filters": {},
+      "expected_paths": [],
+      "result_paths": [],
+      "empty_cache_results": 0,
+      "cold_ms": 53.004,
+      "warm_ms": 3.518,
+      "requests": 5,
+      "warm_requests": 0,
+      "warm_signature_preserved": true,
+      "recall_at_10": null,
+      "strict_precision_at_5": 0.0,
+      "negative_control_passed": true
+    }
+  ]
+}

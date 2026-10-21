@@ -1,9 +1,35 @@
 # User-editable TSV: starting URL<TAB>description. No query-specific URL/answer rules.
 # Sources remain eligible when similarity is uncertain. Website denials stay binding.
-https://en.wikipedia.org/	General encyclopedia: people, biographies, identity, history, geography, science and definitions.
+https://en.wikipedia.org/	General encyclopedia: people, biographies, history, geography, science, definitions, products and concepts.
 https://docs.python.org/3/	Python programming language documentation, standard library modules, functions, reference manuals and tutorials.
-https://stackoverflow.com/questions	Programming questions, code errors, debugging and developer explanations. Access depends on robots permissions.
-https://feeds.bbci.co.uk/news/rss.xml	BBC publisher feed with dated world news, reporting and current events.
-https://www.bbc.com/news	BBC world news reporting, current events, politics, business and science journalism.
-https://www.bbc.co.uk/news	BBC news articles, dated reporting, current events and journalism.
-https://www.theguardian.com/world/rss	Guardian publisher feed with world news, current events and international reporting.
+https://react.dev/	React official documentation, hooks, useEffect, state management, components and frontend architecture.
+https://www.postgresql.org/docs/	PostgreSQL relational database official documentation, connection pooling, SQL, administration and performance.
+https://docs.docker.com/	Docker container documentation, Docker Desktop troubleshooting, networking, Dockerfile, engine and compose.
+https://developer.mozilla.org/	MDN Web Docs: HTML, CSS, JavaScript, Web APIs, browser standards, and web development references.
+https://help.ubuntu.com/	Ubuntu Linux official community and server documentation, package management, administration and troubleshooting.
+https://askubuntu.com/	Ubuntu Linux community questions, command troubleshooting, nvidia-smi, git credentials, and system administration.
+https://stackoverflow.com/questions	Programming questions, code errors, debugging, language libraries, and developer explanations.
+https://doc.rust-lang.org/	Rust programming language official book, standard library reference, cargo documentation, and error indices.
+https://python.langchain.com/	LangChain and LangGraph official documentation, multi-agent systems, state persistence, human-in-the-loop and tool calling.
+https://huggingface.co/docs	Hugging Face machine learning models, transformers, datasets, model cards, CPU inference and open-weight LLMs.
+https://arxiv.org/	Scientific research preprints, computer science, machine learning, information retrieval, physics, mathematics, and RAG studies.
+https://paperswithcode.com/	Machine learning papers, open-source code implementations, benchmark evaluation leaderboards, and MTEB datasets.
+https://www.semanticscholar.org/	Scientific research literature search, academic citations, information retrieval evaluation, and author indices.
+https://feeds.bbci.co.uk/news/rss.xml	BBC publisher feed with dated world news, reporting, international events, and business journalism.
+https://www.bbc.com/news	BBC world news reporting, current events, politics, business, technology and science journalism.
+https://www.theguardian.com/world/rss	Guardian publisher feed with world news, current events, international reporting and opinion.
+https://news.ycombinator.com/rss	Hacker News technology links, software development discussions, startup announcements, and technical news.
+https://techcrunch.com/feed/	TechCrunch technology news feed, startup developments, AI model releases, venture funding and industry analysis.
+https://blog.python.org/feeds/posts/default	Python Software Foundation official blog and release announcements for Python versions and security updates.
+https://ubuntu.com/security/notices/rss.xml	Ubuntu Security Notices (USN) official advisory feed, package vulnerabilities, CVE identifiers and security patches.
+https://cve.mitre.org/	Common Vulnerabilities and Exposures (CVE) database, security advisory IDs, vulnerability summaries and affected software versions.
+https://www.gst.gov.in/	Goods and Services Tax (GST) India official portal, e-invoicing requirements, GST rules, returns and business compliance.
+https://www.cbic.gov.in/	Central Board of Indirect Taxes and Customs India official regulations, circulars, notifications and trade guidance.
+https://docs.erpnext.com/	ERPNext open-source enterprise resource planning documentation, accounting, inventory, GST compliance and invoicing.
+https://www.odoo.com/documentation/	Odoo open-source ERP and business applications official documentation, accounting, POS, inventory and sales.
+https://www.notebookcheck.net/	Laptop and mobile hardware reviews, notebook benchmarks, processor specs, RAM configurations, and GPU performance.
+https://www.tomshardware.com/	Computer hardware reviews, desktop PC specifications, SSD storage tests, RAM benchmarks, and PC build guides.
+https://archive.org/	Internet Archive digital library, historical web archives, open books, public domain texts and audio.
+https://plato.stanford.edu/	Stanford Encyclopedia of Philosophy, peer-reviewed academic reference covering logic, philosophy of science, and history.
+https://ocw.mit.edu/	MIT OpenCourseWare free lecture notes, exams, courses, and educational videos across computer science and engineering.
+https://data.worldbank.org/	World Bank open global development data, country economic indicators, population statistics and research reports.

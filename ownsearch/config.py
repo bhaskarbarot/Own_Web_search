@@ -38,6 +38,7 @@ class Settings:
     native_search_enabled: bool = False
     persistent_cache_enabled: bool = False
     source_memory_enabled: bool = False
+    cdx_discovery_enabled: bool = True
     cache_ttl_docs: float = 3600.0
     cache_ttl_feed: float = 60.0
     cache_ttl_news: float = 30.0

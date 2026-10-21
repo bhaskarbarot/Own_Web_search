@@ -31,6 +31,13 @@ def main(argv=None):
     serve_parser.add_argument('--seed', action='append', default=None)
     sub.add_parser('status')
     sub.add_parser('mcp')
+    crawl_parser = sub.add_parser('crawl', help='Background crawl sitemaps and seeds into persistent index')
+    crawl_parser.add_argument('--site', default=None, help='Single site root URL to crawl')
+    crawl_parser.add_argument('--sitemap', default=None, help='Sitemap URL to discover and crawl')
+    crawl_parser.add_argument('--max-pages', type=int, default=100, help='Maximum pages to index')
+    crawl_parser.add_argument('--depth', type=int, default=1, help='Maximum link follow depth')
+    crawl_parser.add_argument('--workers', type=int, default=4, help='Concurrent crawl workers')
+    crawl_parser.add_argument('--all-sources', action='store_true', help='Crawl all seeds from sources.txt')
     key = sub.add_parser('create-key')
     key.add_argument('agent')
     args = parser.parse_args(argv)
@@ -45,6 +52,29 @@ def main(argv=None):
         run_mcp_server()
         return 0
     engine = IndependentSearch(settings)
+    if args.command == 'crawl':
+        from .crawler import BackgroundCrawler
+        from .sourceplan import load_registry
+        crawler = BackgroundCrawler(settings=settings, cache=engine.cache, max_workers=args.workers)
+        seeds = []
+        if args.site:
+            seeds.append(args.site)
+        elif args.all_sources or not args.sitemap:
+            sources = load_registry(settings.sources_file)
+            seeds = [s.url for s in sources]
+        sitemaps = [args.sitemap] if args.sitemap else []
+        print(f"Starting crawl with {len(seeds)} seeds, {len(sitemaps)} sitemaps (max_pages={args.max_pages}, depth={args.depth})...")
+        def progress(msg, stats):
+            print(f"[{stats.elapsed_seconds():.1f}s] {msg} ({stats.pages_indexed}/{args.max_pages})")
+        stats = crawler.crawl_seeds(
+            seeds=seeds,
+            max_pages=args.max_pages,
+            max_depth=args.depth,
+            sitemaps=sitemaps,
+            on_progress=progress,
+        )
+        print(f"Crawl finished. {stats.summary()}")
+        return 0
     if args.command == 'serve':
         if args.seed:
             engine.starting_urls = list(dict.fromkeys(args.seed + engine.starting_urls))
