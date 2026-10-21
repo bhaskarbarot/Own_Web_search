@@ -231,6 +231,17 @@ class IndependentTests(unittest.TestCase):
         for kw in ({'limit':51},{'timeout_ms':1},{'search_type':'bad'},{'seeds':'url'},{'offset':-1}):
             with self.subTest(kw=kw), self.assertRaises(ValueError):self.engine().search('query',**kw)
 
+class DocumentationRankingTests(unittest.TestCase):
+    def test_project_documentation_with_version_only_title_uses_fetched_evidence(self):
+        q=parse_query('orbital tutorial');q.intent='tech_docs'
+        page=WebCandidate('3.15 Documentation','https://docs.orbital.example/3/',
+                          content='Orbital documentation describes the orbital programming tutorial and reference.')
+        self.assertEqual([p.url for p in rank([page],q)],[page.url])
+    def test_matching_hostname_cannot_rank_unrelated_content(self):
+        q=parse_query('orbital tutorial');q.intent='tech_docs'
+        page=WebCandidate('3.15 Documentation','https://docs.orbital.example/3/',content='Cooking recipes and vegetable preparation.')
+        self.assertEqual(rank([page],q),[])
+
 class SecurityTests(unittest.TestCase):
     def test_ssrf_private_literals_blocked(self):
         for url in ('http://127.0.0.1/','http://169.254.169.254/','http://[::1]/','file:///etc/passwd','http://user:pass@example.org/'):

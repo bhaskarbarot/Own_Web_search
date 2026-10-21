@@ -134,7 +134,11 @@ def rank(candidates, q, final=True):
         if any(not _contains(focus, name) for name in literal_names(q)):
             continue
         if q.intent == 'tech_docs' and not (required & set(f[0]+f[2])):
-            continue
+            host_terms = set(analyze(urlsplit(item.url).hostname or ''))
+            inspected_project = (item.fetch_status == 'fetched' and coverage >= .8
+                                 and len(required & host_terms) >= min(2, len(required)))
+            if not inspected_project:
+                continue
         text = item.content if item.fetch_status == 'fetched' else item.snippet
         evidence_terms = list(dict.fromkeys(terms + relation_terms(q)))
         ps = passages(text, evidence_terms, q.surface, idf=idf, max_passages=3, scan_chars=60_000)

@@ -1,0 +1,15 @@
+{
+  "scope": "Two controlled fetched-page fixtures; not live accuracy",
+  "cases": [
+    {
+      "variant": "before",
+      "relevant_returned": 0,
+      "unrelated_returned": 0
+    },
+    {
+      "variant": "after",
+      "relevant_returned": 1,
+      "unrelated_returned": 0
+    }
+  ]
+}

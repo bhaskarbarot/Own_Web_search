@@ -87,3 +87,13 @@ p95 47.085 → 7.677 ms, zero repeat network requests. Fixture Recall@10 remains
 1.000 and strict P@5 0.23636. Cold p50 55.382 ms; no cold improvement claimed.
 These are small controlled fixtures with test-only zero crawl delay, not a promise
 of that latency for a large cache or public website. Runtime SHA recorded in JSON.
+
+## Step 4: fetched documentation with version-only titles
+
+Baseline `77b2ed7`. Allow an inspected technical document whose literal project
+name matches its hostname and fetched body, even if its title only names a version.
+Content coverage is still required; hostname alone cannot rank unrelated content.
+Two-fixture ablation: relevant document returned 0 → 1, unrelated 0 → 0.
+All 87 tests pass. Same 11-case benchmark preserves Recall@10 1.000, strict P@5
+0.23636, both negative controls and all warm signatures. Warm p50 6.144 ms; no
+additional speed claim. Evidence: `doc-title-ablation.json`, `fixture-doc-title.json`.
