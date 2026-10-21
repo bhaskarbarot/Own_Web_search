@@ -18,7 +18,7 @@ import urllib.request
 logger = logging.getLogger(__name__)
 
 # Fallback default collection if collinfo is unreachable
-DEFAULT_CC_INDEX = "CC-MAIN-2024-38-index"
+DEFAULT_CC_INDEX = "CC-MAIN-2026-43-index"
 CC_INDEX_BASE = "https://index.commoncrawl.org"
 CC_DATA_BASE = "https://data.commoncrawl.org"
 
@@ -35,7 +35,7 @@ class CDXRecord:
     length: int
 
 
-def get_latest_index(timeout: float = 5.0) -> str:
+def get_latest_index(timeout: float = 3.0) -> str:
     """Fetch the latest available Common Crawl index collection identifier."""
     collinfo_url = f"{CC_INDEX_BASE}/collinfo.json"
     req = urllib.request.Request(
@@ -46,7 +46,8 @@ def get_latest_index(timeout: float = 5.0) -> str:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             data = json.loads(resp.read().decode("utf-8", errors="replace"))
             if data and isinstance(data, list) and "id" in data[0]:
-                return data[0]["id"]
+                raw_id = data[0]["id"]
+                return raw_id if raw_id.endswith("-index") else f"{raw_id}-index"
     except Exception as exc:
         logger.debug("Failed to retrieve latest CC collinfo, using default %s: %s", DEFAULT_CC_INDEX, exc)
     return DEFAULT_CC_INDEX
