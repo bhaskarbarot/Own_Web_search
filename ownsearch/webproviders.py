@@ -234,4 +234,7 @@ def configured(settings):
     if settings.marginalia_api_key.strip():
         from .generalapis import MarginaliaWebProvider
         sources.append(MarginaliaWebProvider(settings))
+    if settings.mojeek_api_key.strip():
+        from .generalapis import MojeekWebProvider
+        sources.append(MojeekWebProvider(settings))
     return sources + configured_verticals(settings)

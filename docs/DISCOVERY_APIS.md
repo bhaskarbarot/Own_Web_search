@@ -95,3 +95,14 @@ with the configured API-Key header. Disabled without an explicit key, including
 the shared public key. No email/account provisioning is performed. Returned
 license text is retained in result provenance; consumers must display required
 attribution and follow their key's commercial/noncommercial terms.
+
+
+## Optional Mojeek
+
+Uses [JSON search](https://www.mojeek.com/support/api/search/json_response.html),
+explicit API key and HTTPS only. API errors are redacted because its documented
+credential is a query parameter. Only pdate is used as publication metadata;
+last-modified/crawl dates are not. No key/account is provisioned. Follow your
+plan's [storage rights](https://www.mojeek.com/services/search/web-search-api/)
+before recording raw results: Startup permits one-hour caching; Business and
+Enterprise include storage rights. The Phase 1 capture leaves this source off.

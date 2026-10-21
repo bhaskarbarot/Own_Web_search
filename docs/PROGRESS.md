@@ -476,3 +476,13 @@ improvement is inferred. Continue to optional general APIs.
 returned licensing in provenance. Three schema/HTTPS/default-off tests pass;
 legacy offline scores unchanged. No configured key, so no real API success or
 coverage/accuracy improvement claimed. Remains disabled. Continue to Mojeek.
+
+
+### Phase 1 optional adapter — Mojeek
+
+2026-10-21, parent 2467d28. Added independent opt-in JSON adapter with HTTPS-only
+credential transport, redacted body errors, and publication vs modification
+date separation. Five optional-adapter tests pass; all legacy offline scores
+unchanged. No key is configured; no live probe or availability claim. Storage
+rights documented; source stays disabled for this capture. General adapters
+complete. Continue to conservative query variants and RRF.

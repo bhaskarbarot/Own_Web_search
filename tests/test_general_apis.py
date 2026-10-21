@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 from ownsearch.config import Settings
 from ownsearch.fetcher import Fetcher,FetchResult
-from ownsearch.generalapis import MarginaliaWebProvider
+from ownsearch.generalapis import MarginaliaWebProvider,MojeekWebProvider
 from ownsearch.webmodels import WebCandidate,WebRequest
 from ownsearch.query import parse_query
 from ownsearch.webproviders import configured
@@ -32,3 +32,19 @@ class GeneralApiTests(unittest.TestCase):
         with patch.object(Fetcher,'fetch') as fetch:
             with self.assertRaisesRegex(Exception,'require HTTPS'):p.search(request(),time.monotonic()+1)
             fetch.assert_not_called()
+    def test_mojeek_default_off_and_publication_uses_only_pdate(self):
+        self.assertNotIn('mojeek',[p.name for p in configured(Settings())])
+        p=MojeekWebProvider(Settings(mojeek_api_key='fixture-key'))
+        data={'response':{'status':'OK','results':[{'url':'https://pages.example.org/real','title':'Sensor',
+                'desc':'Orbital sensor','timestamp':1577836800}]}}
+        with patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,{},json.dumps(data).encode())):
+            batch=p.search(request(),time.monotonic()+1)
+        self.assertIsNone(batch.rows[0]['published_at'])
+        self.assertEqual(batch.rows[0]['url'],'https://pages.example.org/real')
+    def test_mojeek_body_error_redacts_secret(self):
+        p=MojeekWebProvider(Settings(mojeek_api_key='fixture-key'))
+        data={'response':{'status':'ERROR fixture-key'}}
+        with patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,{},json.dumps(data).encode())):
+            with self.assertRaises(Exception) as caught:p.search(request(),time.monotonic()+1)
+        self.assertNotIn('fixture-key',str(caught.exception))
+        self.assertEqual(p.health_snapshot()['circuit'],'open')
