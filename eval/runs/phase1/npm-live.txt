@@ -1,0 +1,1 @@
+{"provider": "npm", "considered": 300, "eligible": 2, "attempted": 2, "statuses": ["error", "ok"], "returned_rows": 10}

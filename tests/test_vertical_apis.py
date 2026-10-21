@@ -8,7 +8,7 @@ from urllib.parse import parse_qs,urlsplit
 from ownsearch.fetcher import Fetcher,FetchResult
 from ownsearch.query import parse_query
 from ownsearch.webmodels import WebRequest
-from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,configured_verticals
+from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,configured_verticals
 from ownsearch.coordinator import LiveSearch
 from tests.test_live_web import settings,Source,row
 
@@ -71,6 +71,14 @@ class VerticalApiTests(unittest.TestCase):
                 p.minimum_interval=0
                 self.assertEqual(p.search(self.request('Python MissingNebula package'),time.monotonic()+1).rows,[])
         self.assertEqual(p.health_snapshot()['errors'],0)
+    def test_npm_returns_only_actual_package_links_with_bounded_rows(self):
+        p=NpmApiProvider(settings())
+        package={'name':'orbital-sensor','description':'Orbital sensor calibration library.',
+                 'date':'2026-10-21','links':{'npm':'https://registry.example.org/actual-package','homepage':'http://127.0.0.1/admin'}}
+        with self.payload({'objects':[{'package':package},{'package':{'name':'No links'}}]}):batch=p.search(self.request('JavaScript orbital sensor npm'),time.monotonic()+1)
+        self.assertEqual(len(batch.rows),1)
+        self.assertEqual(batch.rows[0]['url'],'https://registry.example.org/actual-package')
+        self.assertIsNone(batch.rows[0]['published_at'])
 
 
 if __name__=='__main__':unittest.main()

@@ -414,3 +414,12 @@ URLs in total, with one source error retained and one successful response.
 Fifteen focused tests pass; all offline preservation metrics are unchanged.
 See pypi-live.json and pypi-offline.json. No accuracy/recall inference is made
 from these counts. Continue to npm.
+
+
+### Phase 1 adapter — npm
+
+2026-10-21, parent 254cabc. Added independent opt-in npm registry search.
+Two of 300 fixed dev cases were applicable; actual probes recorded one error
+and one successful response, with ten source-provided URLs overall. Eight
+vertical-adapter tests pass and all five offline scores remain unchanged.
+Source errors remain in npm-live.json. Continue to crates.io.

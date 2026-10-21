@@ -42,3 +42,10 @@ the ordinary two-megabyte response budget.
 
 Contracts: [PyPI JSON API](https://docs.pypi.org/api/json/) and
 [project URLs](https://docs.pypi.org/project_metadata/).
+
+## npm
+
+Full-text registry search uses the documented objects/package/links response.
+Only returned npm, homepage and repository links become candidates; absent links
+are not generated. Version modification metadata is not used as a page's
+publication timestamp. [Official registry API](https://github.com/npm/registry/blob/main/docs/REGISTRY-API.md).

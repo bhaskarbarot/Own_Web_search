@@ -156,7 +156,33 @@ class PyPIApiProvider(ApiProvider):
         return SourceBatch(rows)
 
 
-ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider}
+class NpmApiProvider(ApiProvider):
+    name='npm'
+
+    def accepts(self,request):
+        return super().accepts(request) and bool(re.search(r'\b(?:npm|javascript|typescript|node(?:\.js)?)\b',request.query,re.I))
+
+    def search(self,request,deadline):
+        data=self.get(request,self.settings.npm_api_url,{'text':api_query(request),'size':10},deadline)
+        items=data.get('objects')
+        if not isinstance(items,list):raise ProviderError('npm API returned an invalid objects array.')
+        rows=[];seen=set()
+        for obj in items[:10]:
+            item=obj.get('package') if isinstance(obj,dict) else None
+            if not isinstance(item,dict) or not isinstance(item.get('name'),str):continue
+            links=item.get('links')
+            if not isinstance(links,dict):continue
+            for label in ('npm','homepage','repository'):
+                url=links.get(label)
+                if not isinstance(url,str) or url in seen:continue
+                seen.add(url)
+                row=self.row(request,url,item['name']+' '+label,item.get('description',''))
+                if row:rows.append(row)
+                if len(rows)>=10:return SourceBatch(rows)
+        return SourceBatch(rows)
+
+
+ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider}
 
 
 def configured_verticals(settings):
