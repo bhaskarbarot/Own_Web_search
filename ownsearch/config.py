@@ -110,6 +110,9 @@ class Settings:
     live_cache_entries: int = 32
     provider_cooldown: float = 30.0
     provider_min_interval: float = 1.0
+    provider_request_budget: int = 60
+    provider_budget_window: float = 60.0
+    provider_failure_threshold: int = 3
     searxng_allow_private: bool = False # only the explicitly configured instance, not result-page fetching
     brave_search_url: str = "https://api.search.brave.com/res/v1/web/search"
     brave_images_url: str = "https://api.search.brave.com/res/v1/images/search"

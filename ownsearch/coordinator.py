@@ -30,6 +30,7 @@ def _validated(settings):
                       'live_early_results': (1, 50), 'live_provider_grace_ms': (0, 2000),
                       'live_max_page_bytes': (1024, 4_000_000),
                       'live_max_total_bytes': (1024, 16_000_000), 'live_max_text_chars': (100, 100_000)}
+    integer_limits.update(provider_request_budget=(1, 10000), provider_failure_threshold=(1, 20))
     for key, (lo, hi) in integer_limits.items():
         value = getattr(settings, key)
         if type(value) is not int or not lo <= value <= hi:
@@ -43,6 +44,8 @@ def _validated(settings):
         value = getattr(settings, key)
         if not isinstance(value, (float, int)) or not math.isfinite(value) or not 0 <= value <= 3600:
             raise ValueError(key+' must be finite and between 0 and 3600 seconds')
+    if not isinstance(settings.provider_budget_window, (int, float)) or not math.isfinite(settings.provider_budget_window) or not 1 <= settings.provider_budget_window <= 86400:
+        raise ValueError('provider_budget_window must be finite and between 1 and 86400 seconds')
     return settings
 
 
@@ -91,6 +94,7 @@ class LiveSearch:
         job = self.calls.start(provider, request, deadline)
         job['cancel'] = getattr(request, 'cancel', threading.Event())
         job['general_web'] = getattr(provider, 'general_web', False)
+        job['health_provider'] = provider
         return job
 
     def _collect(self, jobs, deadline, useful=None):
@@ -107,6 +111,9 @@ class LiveSearch:
                                      'result_count': len(response.results.rows) if isinstance(response.results, SourceBatch)
                                      else len(response.results) if isinstance(response.results, list) else int(response.results is not None),
                                      **({'error': response.error} if response.error else {})})
+                    snapshot = getattr(job['health_provider'], 'health_snapshot', None)
+                    if callable(snapshot):
+                        statuses[-1]['health'] = snapshot()
                 elif time.monotonic() >= job['deadline']:
                     pending.remove(job)
                     job['cancel'].set()

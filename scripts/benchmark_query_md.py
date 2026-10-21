@@ -52,6 +52,10 @@ class Recorder:
         with self.lock:
             return [copy.deepcopy(row) for row in self.rows if row['query'] == query]
 
+    def health_snapshot(self):
+        snapshot = getattr(self.source, 'health_snapshot', None)
+        return snapshot() if callable(snapshot) else None
+
 
 def summarize(runs):
     latencies = [r['response']['took_ms'] for r in runs if 'took_ms' in r['response']]

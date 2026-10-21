@@ -39,7 +39,7 @@ class Calls:
         def run():
             started=time.perf_counter()
             try:result=Response(provider.name,provider.search(query,deadline))
-            except Exception as exc:result=Response(provider.name,status='error',error=f'{type(exc).__name__}: {exc}')
+            except Exception as exc:result=Response(provider.name,status=getattr(exc,'status','error'),error=f'{type(exc).__name__}: {exc}')
             result.elapsed_ms=round((time.perf_counter()-started)*1000,2)
             state['response']=result;state['event'].set();self.slots.release()
         threading.Thread(target=run,name='provider-'+provider.name,daemon=True).start()

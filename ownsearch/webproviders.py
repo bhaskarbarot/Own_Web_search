@@ -5,7 +5,8 @@ import time
 from dataclasses import dataclass, field, replace
 from urllib.parse import urlencode, urlsplit
 
-from .fetcher import Fetcher, FetchError
+from .fetcher import Fetcher, FetchError, _retry_after
+from .provider_health import ProviderHealth, ProviderUnavailable
 from .webmodels import WebRequest
 
 
@@ -16,8 +17,9 @@ class SourceBatch:
     answer: dict = None
 
 
-class ProviderError(Exception):
-    pass
+class ProviderError(ProviderUnavailable):
+    def __init__(self, message, status='error', retry_after=None, http_status=None):
+        super().__init__(message, status, retry_after, http_status)
 
 
 def provider_query(request):
@@ -37,24 +39,18 @@ class JsonProvider:
 
     def __init__(self, settings):
         self.settings = settings
-        self.lock = threading.Lock()
-        self.next_request = 0.0
-        self.cooldown_until = 0.0
-        self.failures = 0
+        self.health = ProviderHealth(settings)
 
-    def request(self, request, url, deadline, headers=None, allow_private=False):
+    def health_snapshot(self):
+        return self.health.snapshot()
+
+    def request(self, request, url, deadline, headers=None, allow_private=False, decoder=None, accept='application/json'):
         if headers and urlsplit(url).scheme != 'https':
             raise ProviderError('Credentialed provider endpoints require HTTPS.')
-        now = time.monotonic()
-        with self.lock:
-            if now < self.cooldown_until:
-                raise ProviderError('Provider cooldown active; request not sent.')
-            start = max(now, self.next_request)
-            if start >= deadline:
-                raise ProviderError('Provider rate limit exceeds request deadline; request not sent.')
-            self.next_request = start + max(0, self.settings.provider_min_interval)
-        if request.cancel.wait(max(0, start - now)) or time.monotonic() >= deadline:
-            raise ProviderError('Request cancelled or deadline expired.')
+        try:
+            generation = self.health.reserve(request, deadline, getattr(self, 'minimum_interval', 0))
+        except ProviderUnavailable as exc:
+            raise ProviderError(str(exc), exc.status, exc.retry_after) from None
         try:
             cfg = replace(self.settings, allow_private_hosts=allow_private or self.settings.allow_private_hosts)
             if allow_private and not self.settings.allow_private_hosts:
@@ -70,33 +66,26 @@ class JsonProvider:
             else:
                 fetcher = Fetcher(cfg)
             fetcher.check_url(url)
-            result = fetcher.fetch(url, accept='application/json', extra_headers=headers,
+            result = fetcher.fetch(url, accept=accept, extra_headers=headers,
                                    max_bytes=2_000_000, max_decompressed_bytes=2_000_000,
                                    retries=0, deadline=deadline, preserve_query=True)
             if result.status != 200:
-                with self.lock:
-                    self.failures += 1
-                    if result.status in (429, 503) or self.failures >= 3:
-                        try:
-                            delay = float(result.headers.get('x-retry-after') or result.headers.get('retry-after') or self.settings.provider_cooldown)
-                        except (TypeError, ValueError):
-                            delay = self.settings.provider_cooldown
-                        self.cooldown_until = time.monotonic() + max(1, min(delay, 3600))
-                raise ProviderError('HTTP ' + str(result.status) + ('; enable JSON format on the configured SearXNG instance if disabled.' if result.status == 403 and self.name == 'searxng' else ''))
+                if result.status == 404 and getattr(self, 'missing_is_empty', False):
+                    self.health.success(404, generation)
+                else:
+                    self.health.failure(result.status, _retry_after(result.headers.get('retry-after') or result.headers.get('x-retry-after')))
+                raise ProviderError('HTTP ' + str(result.status) + ('; enable JSON format on the configured SearXNG instance if disabled.' if result.status == 403 and self.name == 'searxng' else ''),
+                                    'rate_limited' if result.status == 429 else 'error', http_status=result.status)
             if result.truncated:
-                raise ProviderError('Provider response exceeds size limit.')
-            payload = json.loads(result.body.decode('utf-8'))
-            if not isinstance(payload, dict):
-                raise ProviderError('Provider returned an invalid JSON schema.')
-            with self.lock:
-                self.failures = 0
+                raise ValueError('Provider response exceeds size limit.')
+            payload = decoder(result.body) if decoder else json.loads(result.body.decode('utf-8'))
+            if not decoder and not isinstance(payload, dict):
+                raise ValueError('Provider returned an invalid JSON schema.')
+            self.health.success(generation=generation)
             return payload
         except (FetchError, ValueError, UnicodeError) as exc:
             # Avoid copying URLs, headers or credentials into errors/logs.
-            with self.lock:
-                self.failures += 1
-                if self.failures >= 3:
-                    self.cooldown_until = time.monotonic() + self.settings.provider_cooldown
+            self.health.failure()
             raise ProviderError('Provider request failed: ' + getattr(exc, 'kind', type(exc).__name__)) from None
 
 

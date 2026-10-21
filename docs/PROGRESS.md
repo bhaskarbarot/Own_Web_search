@@ -7,8 +7,8 @@ Date: 2026-10-21, Asia/Kolkata. Instructions: win_win.md and AGENTS.md.
 | Phase | Work | Required evidence before advancing |
 | --- | --- | --- |
 | 0 (awaiting review) | Freeze baseline, dataset, split, judging and metrics | Reproducible dev recording and judged quality measurements with CIs |
-| 1 (pending) | Provider resilience, intent-safe vertical discovery, operators, query variants | Lower zero-result rate, better pooled recall, no strict P@5 regression, failure-injection pass |
-| 2 (started by user request) | URL deduplication, passage relevance, trust signals, entity focus, snippets | Better strict P@5/NDCG, reduced duplicates and broken snippets, component ablations |
+| 1 (in progress) | Provider resilience, intent-safe vertical discovery, operators, query variants | Lower zero-result rate, better pooled recall, no strict P@5 regression, failure-injection pass |
+| 2 (snippet component retained; remaining work deferred) | URL deduplication, passage relevance, trust signals, entity focus, snippets | Better strict P@5/NDCG, reduced duplicates and broken snippets, component ablations |
 | 3 (pending) | Profile, progressive delivery, deadlines and bounded freshness-aware caching | Cold/warm latency measurements and unchanged quality within uncertainty |
 | 4 (pending) | Evidence-grounded claims, conflict handling and abstention | Citation support, answer correctness and unsupported-claim measurements |
 | 5 (sealed, pending) | Once-only baseline/final holdout comparison; no code changes | Full saved report, uncertainty, limitations and human review |
@@ -20,7 +20,12 @@ never claims about unmeasured performance.
 
 ## Current phase and preserved baseline
 
-**Current: Phase 2 started at the user's explicit request.** Its first rendering
+**Current: Phase 1 restored by the user’s explicit sequencing correction.**
+Retain the verified Phase 2 snippet component and defer further ranking work.
+The user requested autonomous work through the hierarchy, without routine
+confirmation stops. Earlier judgments remain missing and are never invented.
+
+Historical Phase 2 start: Its first rendering
 component is implemented and measured below. Phase 0 still awaits human grades
 and five reference pools; Phase 1 has not been executed. Do not infer that the
 missing gates passed, or advance to Phase 3. See docs/plan/phase-2.md.
@@ -327,3 +332,38 @@ than a fabricated partial identifier. No such omissions occurred in this dev run
 Human next action remains reviewing eval/human_review_queue.csv (copy first) and
 collecting references for eval/empty_pool_queries.csv. Those grades are needed
 to qualify scoring/selection changes and eventually evaluate the full Phase 2 gate.
+
+
+## Phase 1, step 1 — provider health and request budgets
+
+2026-10-21, Asia/Kolkata. Starting commit b02f1dd. Plan: docs/plan/phase-1.md.
+The user corrected the order and requested completing all phases hierarchically;
+work returns to Phase 1 without reverting the measured snippet fix.
+
+Added per-provider budgets, failure backoff, immediate suspension on access
+and rate denials, one half-open probe, Retry-After HTTP-date handling, and health
+snapshots in source statuses. Late inflight successes cannot erase newer
+suspensions. JSON/schema failures count toward the circuit. Budgets constrain
+requests across queries; no automatic retry or alternate bypass is added.
+
+Controlled ablation on all 300 fixed dev queries, using recorded source rows and
+two injected HTTP 403 sources plus one healthy fixture (not a live benchmark):
+
+| Measurement | Previous provider layer | Health layer |
+| --- | ---: | ---: |
+| HTTP attempts to the two denied sources | 6 | 2 |
+| HTTP attempts to healthy recorded-source fixture | 300 | 300 |
+| Ranked URL signatures | reference | identical for every dev query |
+| Two-source failure-injection gate | checked | pass |
+
+Raw evidence: eval/runs/phase1/health-ablation.json. Each denied source is now
+contacted once before suspension, rather than three times. Suppressed calls have
+explicit circuit_open status. Result counts in this fixture are not live accuracy.
+All five legacy offline metrics are unchanged; NDCG@10 remains 0.914425, Recall@10
+0.880117, P@5 0.200000, MRR@10 0.947368, zero-result rate 0.084746.
+
+**276 tests passed in 44.953 s**, including seven new health regressions.
+Artifacts: health-full-tests.txt, health-offline.json and health-ablation.json in
+eval/runs/phase1/. Continue with independent adapters, one tested/measured commit
+at a time. No Phase 1 quality gate has been declared passed: strict P@5 and pooled
+recall still need real relevance labels. The sealed set remains unused.
