@@ -225,7 +225,8 @@ class IndependentSearch:
                     'notice': NOTICE, 'images': [image for item in selected for image in item.images],
                     'coverage': {'starting_urls': len(valid), 'observed_urls': len(observed),
                                  'attempted_pages': attempted, 'requests': session.requests if session else 0,
-                                 'decoded_bytes': session.decoded_bytes if session else 0, 'cache_reuses': reused,
+                                 'decoded_bytes': session.decoded_bytes if session else 0,
+                                 'budget_bytes': getattr(session, 'budget_bytes', session.decoded_bytes) if session else 0, 'cache_reuses': reused,
                                  'unfinished_pages': unfinished, 'exhaustive': False},
                     'cached': bool(selected) and all(item.cached for item in selected),
                     'timed_out': bool(unfinished), 'took_ms': took, 'cache': self.cache.stats()}

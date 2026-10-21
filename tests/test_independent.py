@@ -153,6 +153,16 @@ class IndependentTests(unittest.TestCase):
         self.assertEqual(out['results'],[])
         self.assertTrue(any(s['status']=='too_large' for s in out['crawl_status']))
 
+    def test_failed_responses_cannot_bypass_total_byte_budget(self):
+        with Site(robots='User-agent: *\nAllow: /') as site:
+            for path in ('/oversize-a','/oversize-b','/oversize-c'):
+                site.rows[path]=(200,'text/plain',b'x'*20000,{})
+            out=self.engine(max_page_bytes=512,max_bytes_per_query=700).search('orbital guidance',
+                seeds=[site.base+p for p in ('/oversize-a','/oversize-b','/oversize-c')])
+            self.assertLessEqual(out['coverage']['budget_bytes'],700)
+            self.assertNotIn('/oversize-c',site.hits)
+            self.assertEqual(out['results'],[])
+
     def test_gzip_page_can_be_ranked(self):self.assertTrue(self.query('/gzip')['results'])
     def test_noindex_page_not_ranked(self):self.assertEqual(self.query('/noindex')['results'],[])
     def test_header_noindex_page_not_ranked(self):self.assertEqual(self.query('/header-noindex')['results'],[])

@@ -97,3 +97,17 @@ Two-fixture ablation: relevant document returned 0 → 1, unrelated 0 → 0.
 All 87 tests pass. Same 11-case benchmark preserves Recall@10 1.000, strict P@5
 0.23636, both negative controls and all warm signatures. Warm p50 6.144 ms; no
 additional speed claim. Evidence: `doc-title-ablation.json`, `fixture-doc-title.json`.
+
+## Step 5: failed responses consume the byte budget
+
+Baseline `f14f8cc`. Oversized, undecodable and failed request attempts now consume
+reserved byte allowance conservatively. Successfully decoded bytes and charged
+budget bytes are reported separately. Failed requests cannot repeatedly obtain
+fresh allowance under the same query budget. One regression reproduces the defect.
+
+Controlled 700-byte ablation: before, all three oversized targets received request
+attempts despite rejected content; after, at most two are attempted and charged
+budget never exceeds 700 bytes (see `byte-budget-ablation.json`). All 88 tests pass.
+The same 11-case benchmark preserves Recall@10 1.000, strict P@5 0.23636, both
+negative controls and all cached URL signatures. Warm p50 6.239 ms, zero repeat
+network requests; no additional speed claim. Raw: `fixture-byte-budget.json`.

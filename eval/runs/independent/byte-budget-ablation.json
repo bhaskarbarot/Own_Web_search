@@ -1,0 +1,44 @@
+{
+  "scope": "Conservative charging for failed responses under a 700-byte query budget, fixture only",
+  "cases": [
+    {
+      "variant": "before",
+      "requests_by_path": {
+        "/robots.txt": 1,
+        "/oversize-a": 1,
+        "/oversize-b": 1,
+        "/oversize-c": 1
+      },
+      "coverage": {
+        "starting_urls": 3,
+        "observed_urls": 3,
+        "attempted_pages": 3,
+        "requests": 4,
+        "decoded_bytes": 22,
+        "budget_bytes": 22,
+        "cache_reuses": 0,
+        "unfinished_pages": 0,
+        "exhaustive": false
+      }
+    },
+    {
+      "variant": "after",
+      "requests_by_path": {
+        "/robots.txt": 1,
+        "/oversize-a": 1,
+        "/oversize-b": 1
+      },
+      "coverage": {
+        "starting_urls": 3,
+        "observed_urls": 3,
+        "attempted_pages": 3,
+        "requests": 3,
+        "decoded_bytes": 22,
+        "budget_bytes": 700,
+        "cache_reuses": 0,
+        "unfinished_pages": 0,
+        "exhaustive": false
+      }
+    }
+  ]
+}

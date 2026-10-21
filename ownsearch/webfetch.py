@@ -61,7 +61,7 @@ class WebFetchSession(Fetcher):
         self.cancel = cancel
         self.origins = origins or OriginState(settings.origin_cache_entries)
         self.guard = threading.Lock()
-        self.requests = self.decoded_bytes = self.reserved_bytes = 0
+        self.requests = self.decoded_bytes = self.reserved_bytes = self.budget_bytes = 0
         self.allowed_origins = None
 
     def _request_once(self, url, headers, max_bytes, method='GET', deadline=None):
@@ -72,7 +72,8 @@ class WebFetchSession(Fetcher):
         gate = self.origins.get(origin)
         if not gate.lock.acquire(timeout=max(0, deadline-time.monotonic())):
             raise FetchError('Origin capacity deadline', 'timeout')
-        capacity = 0
+        capacity = charged = 0
+        attempted = completed = False
         try:
             if gate.cooldown > time.monotonic():
                 raise FetchError('Origin in cooldown after access denial or rate limit', 'cooldown')
@@ -84,11 +85,12 @@ class WebFetchSession(Fetcher):
             with self.guard:
                 if self.requests >= self.settings.max_requests_per_query:
                     raise FetchError('Query request limit reached', 'budget')
-                capacity = max(0, min(max_bytes, self.settings.max_bytes_per_query-self.decoded_bytes-self.reserved_bytes))
+                capacity = max(0, min(max_bytes, self.settings.max_bytes_per_query-self.budget_bytes-self.reserved_bytes))
                 if not capacity:
                     raise FetchError('Query byte limit reached', 'too_large')
                 self.reserved_bytes += capacity
                 self.requests += 1
+            attempted = True
             status, response_headers, body, truncated = super()._request_once(url, headers, capacity, method, deadline)
             if status in (401, 403, 429, 503):
                 seconds = 60.0
@@ -103,7 +105,10 @@ class WebFetchSession(Fetcher):
                 gate.cooldown = time.monotonic() + seconds
             if truncated:
                 raise FetchError('Response exceeds page byte limit', 'too_large')
+            wire_size = len(body)
             body = decode_content(body, response_headers.get('content-encoding'), capacity)
+            charged = max(wire_size, len(body))
+            completed = True
             response_headers = dict(response_headers)
             response_headers.pop('content-encoding', None)
             with self.guard:
@@ -112,6 +117,7 @@ class WebFetchSession(Fetcher):
         finally:
             with self.guard:
                 self.reserved_bytes -= capacity
+                self.budget_bytes += charged if completed else capacity if attempted else 0
             gate.next_request = time.monotonic() + max(self.settings.default_delay,
                                                       getattr(gate.policy, 'crawl_delay', 0) or 0)
             gate.lock.release()
