@@ -228,7 +228,10 @@ $('search-form').addEventListener('submit', async event => {
                 render(event, performance.now()-started, mode);
                 $('status').textContent = 'Instant local match · Crawling new pages… ' + ((performance.now()-started)/1000).toFixed(1) + ' s';
               } else if (event.stage === 'progress') {
-                $('status').textContent = 'Crawling… (' + (event.attempted || '') + ' pages attempted) ' + ((performance.now()-started)/1000).toFixed(1) + ' s';
+                if (event.results && event.results.length) {
+                  render(event, performance.now()-started, mode);
+                }
+                $('status').textContent = 'Live matches found · Crawling… (' + (event.attempted || '') + ' pages attempted) ' + ((performance.now()-started)/1000).toFixed(1) + ' s';
               } else if (event.stage === 'final') {
                 clearInterval(ticker);
                 render(event, performance.now()-started, mode);

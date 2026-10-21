@@ -51,6 +51,9 @@ def main(argv=None):
         from .mcp import run_mcp_server
         run_mcp_server()
         return 0
+    if args.command in ('serve', 'search', 'crawl'):
+        settings.persistent_cache_enabled = True
+        settings.source_planning_enabled = True
     engine = IndependentSearch(settings)
     if args.command == 'crawl':
         from .crawler import BackgroundCrawler

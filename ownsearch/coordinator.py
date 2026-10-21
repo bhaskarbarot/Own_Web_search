@@ -4,7 +4,7 @@ import queue
 import re
 import threading
 import time
-from urllib.parse import unquote, urlsplit
+from urllib.parse import unquote, urljoin, urlsplit
 from pathlib import Path
 
 from .cache import PageCache
@@ -199,6 +199,8 @@ class IndependentSearch:
                 priority = 5*(match(anchor_terms)+2*match(path_terms))/max(1, len(terms)+.75*len(qualifiers)) - .15*depth
                 if url in root_scores:
                     priority += 10*root_scores[url]
+                if kind == 'entity_path':
+                    priority += 25
                 if kind == 'native_search':
                     priority += 20
                 if kind == 'native_result':
@@ -212,6 +214,26 @@ class IndependentSearch:
 
             for url in valid:
                 enqueue(url)
+                if fetch_pages and (q.entity or q.scoring_terms):
+                    entity_terms = q.entity or q.scoring_terms
+                    slug_capitalized = '_'.join(t.capitalize() for t in entity_terms[:4])
+                    slug_exact = '_'.join(entity_terms[:4])
+                    origin = origin_of(url)
+                    if 'wikipedia.org' in origin or 'wiki' in urlsplit(url).path:
+                        for s in (slug_capitalized, slug_exact):
+                            cand = independent_url(urljoin(origin, f"/wiki/{s}"), self.settings.allow_private_hosts)
+                            if cand:
+                                enqueue(cand, anchor=' '.join(entity_terms), depth=0, kind='entity_path')
+                    elif 'docs.python.org' in origin:
+                        for s in entity_terms[:2]:
+                            cand = independent_url(urljoin(url, f"library/{s}.html"), self.settings.allow_private_hosts)
+                            if cand:
+                                enqueue(cand, anchor=s, depth=0, kind='entity_path')
+                    elif 'plato.stanford.edu' in origin:
+                        for s in entity_terms[:2]:
+                            cand = independent_url(urljoin(url, f"entries/{s.lower()}/"), self.settings.allow_private_hosts)
+                            if cand:
+                                enqueue(cand, anchor=s, depth=0, kind='entity_path')
             if self.settings.cdx_discovery_enabled and q.sites and fetch_pages:
                 try:
                     from .commoncrawl import query_cdx
@@ -304,6 +326,9 @@ class IndependentSearch:
                 if not active:
                     if attempted >= self.settings.max_pages_per_query or not frontier:
                         break
+                    matching = [c for c in candidates if terms and any(t in c.title.lower() or t in c.content[:2000].lower() for t in terms)]
+                    if (len(matching) >= min(limit, 3) and attempted >= 2) or (matching and time.perf_counter() - started > 1.5):
+                        break
                     cancel.wait(min(.01, max(0, deadline-time.monotonic())))
                     continue
                 try:
@@ -326,6 +351,20 @@ class IndependentSearch:
                             self.cache.put(page.url, page)
                         consume(page, depth, map_depth)
                         statuses.append({'url': page.url, 'status': 'fetched', 'kind': page.kind})
+                        if on_progress and page.item:
+                            try:
+                                cur_ranked = rank(candidates, q)[:limit]
+                                if cur_ranked:
+                                    on_progress({
+                                        'stage': 'progress',
+                                        'attempted': attempted,
+                                        'results': [it.result(i+1, explain, q.scoring_terms) for i, it in enumerate(cur_ranked)]
+                                    })
+                            except Exception:
+                                pass
+                        matching = [c for c in candidates if terms and any(t in c.title.lower() or t in c.content[:2000].lower() for t in terms)]
+                        if len(matching) >= limit or (matching and time.perf_counter() - started > 2.0):
+                            break
             unfinished = len(active)
             if unfinished:
                 statuses.extend({'url': url, 'status': 'unfinished', 'detail': 'Deadline reached; late content excluded.'} for url in active)
