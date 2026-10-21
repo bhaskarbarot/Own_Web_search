@@ -36,7 +36,7 @@ def _child(el, *names):
     return None
 
 
-def parse_feed(data, base_url=""):
+def parse_feed(data, base_url="", publication_only=False):
     """-> {"title", "entries": [{"url", "title", "summary", "published_at"}]} or None."""
     stripped = data.lstrip()[:1]
     if stripped == b"{":
@@ -52,7 +52,7 @@ def parse_feed(data, base_url=""):
                 entries.append({"url": it.get("url") or it.get("external_url"),
                                 "title": normalize_text(it.get("title", "")),
                                 "summary": normalize_text(it.get("summary") or it.get("content_text") or "")[:1000],
-                                "published_at": parse_date(it.get("date_published") or it.get("date_modified"))})
+                                "published_at": parse_date(it.get("date_published") or (None if publication_only else it.get("date_modified")))})
         return {"title": normalize_text(obj.get("title", "")), "entries": entries}
     try:
         root = _parse_xml(data)
@@ -74,7 +74,7 @@ def parse_feed(data, base_url=""):
             if not url:
                 continue
             date = None
-            for name in ("pubdate", "date", "published", "updated", "modified"):
+            for name in (("pubdate", "date", "published") if publication_only else ("pubdate", "date", "published", "updated", "modified")):
                 d = _child(it, name)
                 if d is not None:
                     date = parse_date(_text(d))
@@ -95,7 +95,7 @@ def parse_feed(data, base_url=""):
             if not url:
                 continue
             date = None
-            for name in ("published", "updated", "issued", "modified"):
+            for name in (("published", "issued") if publication_only else ("published", "updated", "issued", "modified")):
                 d = _child(it, name)
                 if d is not None:
                     date = parse_date(_text(d))

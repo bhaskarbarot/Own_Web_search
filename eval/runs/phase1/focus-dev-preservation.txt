@@ -1,0 +1,2 @@
+{"dev_queries": 300, "two_source_failure_injection_passed": true, "ranked_url_signatures_preserved": true}
+{"before_calls": {"healthy": 300, "denied_two": 3, "denied_one": 3}, "after_calls": {"healthy": 300, "denied_one": 1, "denied_two": 1}}

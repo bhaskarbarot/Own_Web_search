@@ -253,8 +253,9 @@ class LiveSearch:
         fetch_pages = fetch_pages and not structured_market
         normalized_count = len(candidates)
         selection_started = time.perf_counter()
-        from .webfocus import seeds, links, sitemap_links
+        from .webfocus import seeds, links, sitemap_links, named_site_seed, feed_links
         focus_seeds = seeds(candidates, q) if fetch_pages and search_type == 'web' else []
+        if fetch_pages and search_type == 'web':focus_seeds += named_site_seed(candidates,q)
         candidates = rank(candidates, q, final=False)[:self.settings.live_max_candidates]
         candidates.extend(item for item in focus_seeds if item.url not in {c.url for c in candidates})
         selection_ms = (time.perf_counter()-selection_started)*1000
@@ -287,7 +288,7 @@ class LiveSearch:
             # One focused link wave shares the same deadline, robots policy and byte/request budget.
             known_urls = {item.url for item in candidates}
             focused = []
-            if q.intent == 'tech_docs':
+            if q.intent == 'tech_docs' or q.sites:
                 for item in list(candidates):
                     if item.fetch_status == 'fetched':
                         for linked in links(item, q):
@@ -297,7 +298,7 @@ class LiveSearch:
             focus_deadline = page_deadline
             sufficient_doc = any(item.fetch_status == 'fetched' and item.features.get('documentation_structure', 0) >= .5
                                  and item.features.get('coverage', 0) >= .8 for item in candidates)
-            if q.intent == 'tech_docs' and focus_seeds and not focused and not sufficient_doc:
+            if (q.intent == 'tech_docs' or q.sites) and focus_seeds and not focused and not sufficient_doc:
                 # The bounded direct-fetch window has ended; focused discovery can use
                 # the remaining global budget, sharing the same request/byte limits.
                 focus_deadline = deadline
@@ -308,6 +309,17 @@ class LiveSearch:
                         focused = sitemap_links(session, seed, q, focus_deadline)
                     except (FetchError, ValueError) as exc:
                         errors.append('Focused sitemap unavailable: '+str(exc)[:160])
+            if (q.intent == 'news' or q.fresh_intent) and len(focused)<2:
+                for item in candidates:
+                    if item.fetch_status!='fetched' or not item.feeds:continue
+                    try:
+                        discovered=feed_links(session,item,q,deadline)
+                        focused.extend(link for link in discovered if link.url not in known_urls)
+                        known_urls.update(link.url for link in discovered)
+                    except (FetchError,ValueError) as exc:
+                        errors.append('Declared feed unavailable: '+str(exc)[:160])
+                    focus_deadline=deadline
+                    break
             # Link labels are often short; inspect a bounded specific link before
             # applying the final page-content coverage threshold.
             focused = [item for item in focused if constraints(item, q, final=False)][:2]

@@ -22,6 +22,8 @@ def _contains(text, tokens):
 
 
 def constraints(item, q, final=True):
+    if final and item.source_type == 'origin_seed':
+        return False  # A requested origin is a fetch target, never an unfetched result.
     host = urlsplit(item.url).hostname or ''
     if q.sites and not any(host == s or host.endswith('.'+s) for s in q.sites):
         return False

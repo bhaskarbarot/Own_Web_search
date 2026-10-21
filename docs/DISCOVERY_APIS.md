@@ -96,3 +96,17 @@ does not configure or call them. Existing Brave compatibility remains opt-in and
 disabled here. No paid service, new key or account is required. SearXNG runs locally;
 the local index/crawler are owned code. External sites and free official APIs still
 apply their own limits. They are supplements, not an unlimited independent index.
+
+
+## Origin, sitemap and feed discovery
+
+A single explicit site: operand can seed its public HTTPS origin when general
+discovery returned no candidate for that site. This is only a fetch target; an
+unfetched origin cannot become a result. Fetch robots and page normally; follow
+actual same-origin page links or a robots-declared sitemap with at most one
+actual child index. Never guess an internal search route or undocumented API.
+
+For news/freshness requests, one same-origin RSS/Atom/JSON Feed link from fetched
+HTML can supply at most two candidate URLs. Preserve the declaration and feed
+entry provenance. Follow nofollow, robots, pinned DNS, shared bytes/requests and
+the search deadline. Feed updated/modified dates are not publication evidence.

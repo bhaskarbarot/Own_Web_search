@@ -81,6 +81,7 @@ class WebCandidate:
     content: str = ''
     headings: list = field(default_factory=list)
     links: list = field(default_factory=list)
+    feeds: list = field(default_factory=list)
     fetch_status: str = 'not_fetched'
     provenance: list = field(default_factory=list)
     images: list = field(default_factory=list)

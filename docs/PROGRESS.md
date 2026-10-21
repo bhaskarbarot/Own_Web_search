@@ -521,3 +521,28 @@ Retained an independent recorder correction: delegate adapter accepts() so live
 measurements route verticals honestly. No previous result source, review CSV or
 sealed query was changed. Continue site/sitemap/feed discovery; variants remain
 an unresolved Phase 1 improvement, not claimed complete.
+
+
+### Phase 1 focused discovery — site origins, sitemaps and feeds
+
+2026-10-21, parent c3baf75. Added an explicit-site origin fetch target when general
+discovery has no candidate for the named site; it cannot become an unfetched
+result. A declared sitemap index may yield one actual same-origin child (two
+maps total). Fetched HTML may supply one same-origin feed and at most two actual
+entry candidates; honors nofollow and existing session robots/DNS/byte/request/
+deadline checks. New feed discovery distinguishes publication from update dates.
+
+Focused regression suite: 84 tests pass. The confirmed empty-general/site case
+returns zero without the new origin path and one actually fetched declared-map
+article with it (five fixture HTTP requests: robots, origin, declared index,
+child, article). A declared feed yields one observed entry; no invented feed,
+private link, cross-origin index recursion or unfetched-origin result is accepted.
+These are deterministic contract fixtures, not live relevance measurements.
+Full-dev preservation replay and complete suite are recorded alongside the live
+combined capture below. Continue to provider-schema health audit and final dev run.
+
+Focused-discovery verification complete: full suite 298 tests passed (45.662 s).
+The 300-dev frozen-source preservation run retained every ranked URL signature
+(204 nonempty), and two-failing-source injection passed.
+Denied fixture calls 6 → 2, healthy calls 300 → 300. Legacy offline scores
+remain unchanged. Fixture/preservation results do not establish live accuracy.
