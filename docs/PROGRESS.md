@@ -42,7 +42,7 @@ local HTTP fixtures; that failure is retained in phase0-tests-before.txt and was
 resolved by granting the test command socket access, without changing tests or
 search implementation. A ResourceWarning was emitted but no test failed.
 
-## Step 2 — live capture and judging pipeline (in progress)
+## Step 2 — live capture and judging pipeline implemented
 
 - eval/live_eval.py captures only fixed dev IDs, checkpoints each query, refuses
   mismatched resume settings, retains provider batches and safety statuses.
@@ -55,11 +55,34 @@ search implementation. A ResourceWarning was emitted but no test failed.
 - Confirmed evaluation regression: deduplicating ranks before P@5 moved a sixth
   result into the first five. Fixed in the new evaluator and covered by a
   hand-calculated test; duplicate URLs retain their original rank positions.
-- Eleven evaluation regression tests pass. Full suite after this step is pending.
+- Twelve new evaluation regression tests pass, including human-review import,
+  spreadsheet-text handling, stale judgment rejection, null measurements and
+  rank-preserving duplicate scoring. Full suite: **258 passed in 47.308 s**
+  (eval/runs/phase0-tests-after-pipeline-final.txt).
 - Live provider observations already show Brave rate limits, Google access
   denials and DuckDuckGo timeouts; preserved without bypass or relabeling.
 - The installed local discovery backend was stopped at session start. It was
   started using existing configuration for measurement; no provider config changed.
+
+- Offline preservation metrics after the complete evaluator step are identical
+  to Step 1 and baseline: eval/runs/phase0-offline-after-pipeline.json.
+- All **82 tracked engine files** match baseline-v0 byte-for-byte; see
+  eval/runs/baseline-source-manifest.json. This is stronger than the legacy
+  fingerprint, which excludes some resource suffixes.
+- User explicitly selected **Prepare CSVs for my review**. No LLM grading is run.
+  The importer accepts completed human fields and preserves judgment history.
+- Dataset step commit: 92ea64b. This pipeline step follows it without any
+  search-behaviour change. The raw capture's code_git_hash identifies the engine
+  checkout at capture start; the engine manifest establishes exact equivalence.
+
+## Step 3 — full dev recording (in progress)
+
+The sequential 300-case recording is still running; do not treat a checkpoint
+as the complete baseline. The 30 repeat cases are fixed by hash, not selected
+from successful queries. Early capture overlaps local evaluation/test work;
+shared-host load is not controlled, so latency is observational rather than an
+isolated machine performance guarantee. No tests need to be repeated unless
+new code changes justify it.
 
 ## Blocking and next work
 
