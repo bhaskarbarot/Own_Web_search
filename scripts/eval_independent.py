@@ -15,6 +15,7 @@ import json
 import math
 from pathlib import Path
 import random
+import signal
 import subprocess
 import sys
 import tempfile
@@ -125,8 +126,12 @@ def judged_metrics(records, pool, grades):
     known_direct, known_absent, complete_queries = set(), set(), 0
     for record in records:
         rows = by_query.get(record['id'], [])
-        if any(grades.get(key, -1) >= 2 for key, _ in rows):
+        own_keys = {(record['id'], page['item']['url'], evidence(page['item']))
+                    for page in record.get('pages', []) if page.get('item')}
+        if any(grades.get(key, -1) >= 2 for key in own_keys):
             known_direct.add(record['id'])
+        elif own_keys and all(key in grades for key in own_keys):
+            known_absent.add(record['id'])
         if not rows or any(key not in grades for key, _ in rows):
             continue
         complete_queries += 1
@@ -135,8 +140,6 @@ def judged_metrics(records, pool, grades):
         qrels = {}
         for key, row in rows:
             qrels[row['url']] = max(qrels.get(row['url'], 0), grades[key])
-        if not any(g >= 2 for g in qrels.values()):
-            known_absent.add(record['id'])
         urls, seen = [], set()
         for item in record['cold'].get('results', [])[:10]:
             url = item['url']
@@ -145,14 +148,16 @@ def judged_metrics(records, pool, grades):
             else:
                 urls.append(url)
                 seen.add(url)
-        ranked = [qrels.get(url, 0) for url in urls]
+        captured_grades = {page['item']['url']: grades.get((record['id'], page['item']['url'], evidence(page['item'])), 0)
+                           for page in record.get('pages', []) if page.get('item')}
+        ranked = [captured_grades.get(url, 0) for url in urls]
         values['strict_p_at_5'].append(sum(g >= 2 for g in ranked[:5]) / 5)
         dcg = sum((2**g - 1) / math.log2(i + 2) for i, g in enumerate(ranked))
         ideal = sum((2**g - 1) / math.log2(i + 2) for i, g in enumerate(sorted(qrels.values(), reverse=True)[:10]))
         values['ndcg_at_10'].append(dcg / ideal if ideal else 0)
         positives = {u for u, g in qrels.items() if g > 0}
         if positives:
-            values['recall_at_10'].append(len(set(urls) & positives) / len(positives))
+            values['recall_at_10'].append(len({url for url, grade in zip(urls, ranked) if grade > 0} & positives) / len(positives))
         values['mrr_at_10'].append(next((1/(i+1) for i, g in enumerate(ranked) if g > 0), 0))
     count = len(records)
     complete = count > 0 and len(known_direct | known_absent) == count
@@ -166,7 +171,7 @@ def judged_metrics(records, pool, grades):
             'reason_if_unmeasured': 'Human relevance grades are missing; unjudged is not irrelevant.' if not complete else None}
 
 
-def report(directory, review_csvs=(), extras=()):
+def report(directory, review_csvs=(), extras=(), output=None):
     directory = Path(directory)
     records = read_records(directory / 'records.jsonl.gz')
     ids = [r['id'] for r in records]
@@ -189,7 +194,9 @@ def report(directory, review_csvs=(), extras=()):
                'errors': sum(bool(r['cold'].get('error')) for r in records),
                'timing': timings, 'relevance': judged_metrics(records, pool, grades),
                'sealed_queries_used': 0}
-    review = directory / 'review'
+    destination = Path(output) if output else directory
+    destination.mkdir(parents=True, exist_ok=True)
+    review = destination / 'review'
     review.mkdir(exist_ok=True)
     target = review / 'human_review_queue.csv'
     if target.exists():
@@ -198,13 +205,21 @@ def report(directory, review_csvs=(), extras=()):
                 raise ValueError('Refusing to overwrite human review edits; choose a new report directory')
     fields = ['id','query','url','title','snippet','evidence_sha256','human_grade','human_rationale','human_reviewer','reviewed_at']
     ordered = sorted(pool.items())
-    for name, selected in [('human_review_queue.csv', ordered), ('human_review_candidates.csv', [x for i, x in enumerate(ordered) if i % 10 == 0])]:
+    sample = random.Random(SEED).sample(ordered, math.ceil(len(ordered)*.1))
+    details = {}
+    for review_csv in review_csvs:
+        with Path(review_csv).open(newline='', encoding='utf-8') as source:
+            for row in csv.DictReader(source):
+                if (row.get('human_grade') or '').strip():
+                    details[(row['id'], row['url'], row['evidence_sha256'])] = row
+    for name, selected in [('human_review_queue.csv', ordered), ('human_review_candidates.csv', sample)]:
         with (review / name).open('w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fields);writer.writeheader()
             for key, row in selected:
                 writer.writerow({**{k: csv_safe(row.get(k, '')) for k in ('id','query','url','title','evidence_sha256')},
-                                 'snippet': csv_safe(row['content'][:2000]), 'human_grade': grades.get(key, '')})
-    (directory / 'summary.json').write_text(json.dumps(summary, indent=2, ensure_ascii=False)+'\n')
+                                 'snippet': csv_safe(row['content'][:2000]), 'human_grade': grades.get(key, ''),
+                                 **{k: csv_safe(details.get(key, {}).get(k, '')) for k in ('human_rationale','human_reviewer','reviewed_at')}})
+    (destination / 'summary.json').write_text(json.dumps(summary, indent=2, ensure_ascii=False)+'\n')
     return summary
 
 
@@ -217,13 +232,16 @@ def record(args):
     directory = Path(args.output).resolve()
     directory.mkdir(parents=True, exist_ok=True)
     rows = load_dev()
+    overrides = json.loads(Path(args.settings_json).read_text()) if args.settings_json else {}
+    if not isinstance(overrides, dict) or any(key in overrides for key in ('data_dir','sources_file','allow_private_hosts')):
+        raise ValueError('Unsupported capture overrides')
     manifest = {'runtime_files': runtime_fingerprint(root),
                 'dev_sha256': digest((ROOT/'eval/dev.jsonl').read_bytes()),
                 'protocol': {'concurrency': args.concurrency, 'global_fetch_workers': 4,
                              'search_timeout_ms': args.timeout_ms, 'cold': 'New page cache for each query; shared robots/politeness state',
                              'warm_live': 'Immediate live repeat for stable-hash-selected 10% subset',
                              'warm_cache_only': 'Immediate cache-only repeat for every query; distinct from warm_live',
-                             'timezone': 'Asia/Kolkata', 'os_and_upstream_caches_controlled': False},
+                             'timezone': 'Asia/Kolkata', 'overrides': overrides, 'os_and_upstream_caches_controlled': False},
                 'started_at': datetime.now(timezone.utc).isoformat(), 'python': sys.version}
     manifest_path = directory/'manifest.json'
     if manifest_path.exists():
@@ -240,10 +258,15 @@ def record(args):
     if args.limit:
         rows = rows[:args.limit]
     cfg = Settings(sources_file=str(root/'sources.txt'), search_timeout_ms=args.timeout_ms,
-                   timezone='Asia/Kolkata', data_dir=Path(tempfile.mkdtemp(prefix='ownsearch-eval-config-')))
+                   timezone='Asia/Kolkata', data_dir=Path(tempfile.mkdtemp(prefix='ownsearch-eval-config-')), **overrides)
     manifest_path.write_text(json.dumps({**manifest, 'settings': {k: str(v) for k,v in vars(cfg).items()}}, indent=2)+'\n')
     origins, workers = OriginState(cfg.origin_cache_entries), threading.BoundedSemaphore(4)
+    stop = threading.Event()
+    signal.signal(signal.SIGTERM, lambda *_: stop.set())
+    signal.signal(signal.SIGINT, lambda *_: stop.set())
     def one(row):
+        if stop.is_set():
+            return None
         engine = IndependentSearch(cfg)
         engine.origins, engine.workers = origins, workers
         result = {'id': row['id'], 'query': row['text'], 'category': row['category'],
@@ -268,10 +291,14 @@ def record(args):
             futures = [pool.submit(one,row) for row in rows]
             for future in as_completed(futures):
                 result = future.result()
+                if result is None:
+                    continue
                 stream.write(json.dumps(result,ensure_ascii=False)+'\n');stream.flush()
                 done.add(result['id'])
                 if len(done) % 10 == 0 or len(done) == 300:
                     print(json.dumps({'recorded':len(done),'last_id':result['id'],'last_result_count':len(result['cold']['results'])}),flush=True)
+    if stop.is_set():
+        (directory/'STOPPED.json').write_text(json.dumps({'recorded':len(done),'reason':'Capture stopped by signal; queued queries were not executed.'})+'\n')
     print(json.dumps(report(directory),indent=2),flush=True)
 
 
@@ -283,14 +310,16 @@ def main(argv=None):
     rec.add_argument('--output',required=True)
     rec.add_argument('--concurrency',type=int,choices=(1,2,3,4),default=1)
     rec.add_argument('--timeout-ms',type=int,default=12000)
+    rec.add_argument('--settings-json', help='Explicit experimental settings; recorded in protocol')
     rec.add_argument('--limit',type=int,default=0,help='Diagnostic partial capture; never presented as full DEV')
     rep = sub.add_parser('report')
     rep.add_argument('directory')
     rep.add_argument('--review-csv',action='append',default=[])
     rep.add_argument('--extra-run',action='append',default=[])
+    rep.add_argument('--report-output',help='New review/report directory; preserves edited CSVs')
     args = parser.parse_args(argv)
     if args.command == 'record':record(args)
-    else:print(json.dumps(report(args.directory,args.review_csv,args.extra_run),indent=2))
+    else:print(json.dumps(report(args.directory,args.review_csv,args.extra_run,args.report_output),indent=2))
     return 0
 
 if __name__ == '__main__':raise SystemExit(main())

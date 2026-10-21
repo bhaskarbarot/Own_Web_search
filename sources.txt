@@ -1,10 +1,9 @@
-# Editable starting sites, requested by the owner: Wikipedia, news, Python, Stack Overflow.
-# Configuration only; these pages are fetched directly, never queried as search services.
-# Crawling remains within the origins listed here. Add an article's origin if needed.
-https://en.wikipedia.org/
-https://docs.python.org/3/
-https://stackoverflow.com/questions
-https://feeds.bbci.co.uk/news/rss.xml
-https://www.bbc.com/news
-https://www.bbc.co.uk/news
-https://www.theguardian.com/world/rss
+# User-editable TSV: starting URL<TAB>description. No query-specific URL/answer rules.
+# Sources remain eligible when similarity is uncertain. Website denials stay binding.
+https://en.wikipedia.org/	General encyclopedia: people, biographies, identity, history, geography, science and definitions.
+https://docs.python.org/3/	Python programming language documentation, standard library modules, functions, reference manuals and tutorials.
+https://stackoverflow.com/questions	Programming questions, code errors, debugging and developer explanations. Access depends on robots permissions.
+https://feeds.bbci.co.uk/news/rss.xml	BBC publisher feed with dated world news, reporting and current events.
+https://www.bbc.com/news	BBC world news reporting, current events, politics, business and science journalism.
+https://www.bbc.co.uk/news	BBC news articles, dated reporting, current events and journalism.
+https://www.theguardian.com/world/rss	Guardian publisher feed with world news, current events and international reporting.

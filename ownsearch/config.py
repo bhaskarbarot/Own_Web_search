@@ -33,6 +33,16 @@ class Settings:
     max_concurrent_searches: int = 4
     search_timeout_ms: int = 12000
     max_search_timeout_ms: int = 20000
+    source_planning_enabled: bool = False  # experiment; activate only after ablation
+    focused_links_enabled: bool = False
+    native_search_enabled: bool = False
+    persistent_cache_enabled: bool = False
+    source_memory_enabled: bool = False
+    cache_ttl_docs: float = 3600.0
+    cache_ttl_feed: float = 60.0
+    cache_ttl_news: float = 30.0
+    source_memory_ttl: float = 604800.0
+    source_memory_entries: int = 256
     cache_ttl: float = 900.0
     cache_entries: int = 128
     cache_max_bytes: int = 16_000_000

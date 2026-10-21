@@ -38,6 +38,15 @@ class EvaluationTests(unittest.TestCase):
         row,pool,grades=self.rows([3])
         row['cold']['results']*=2
         self.assertEqual(judged_metrics([row],pool,grades)['strict_p_at_5']['value'],.2)
+    def test_other_capture_cannot_lend_relevance_to_wrong_snapshot(self):
+        row,pool,grades=self.rows([0])
+        other={'url':row['pages'][0]['item']['url'],'title':'Captured page','content':'different relevant evidence'}
+        key=('fixture',other['url'],evidence(other))
+        pool[key]={'id':'fixture','url':other['url']};grades[key]=3
+        out=judged_metrics([row],pool,grades)
+        self.assertEqual(out['strict_p_at_5']['value'],0)
+        self.assertEqual(out['recall_at_10']['value'],0)
+        self.assertEqual(out['coverage_ceiling']['value'],0)
     def test_ci_and_loader_are_deterministic(self):
         self.assertEqual(ci([0,1,1]),ci([0,1,1]))
         self.assertEqual(len(load_dev()),300)

@@ -28,8 +28,10 @@ def quantile(values,p):
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--settings-json', help='Explicit experimental settings')
     parser.add_argument('--output',default='eval/runs/independent/fixture-baseline.json')
     args=parser.parse_args(argv)
+    overrides=json.loads(Path(args.settings_json).read_text()) if args.settings_json else {}
     dev=ROOT/'eval/dev.jsonl'
     rows=[json.loads(line) for line in dev.read_text().splitlines() if line.strip()]
     parse_times=[]
@@ -51,7 +53,7 @@ def main(argv=None):
     measured=[]
     with Site() as site:
         for query,start_path,positive_paths,kw in cases:
-            engine=IndependentSearch(settings())
+            engine=IndependentSearch(settings(**overrides))
             empty=engine.search(query,fetch_pages=False,**kw)
             cold=engine.search(query,seeds=[site.base+start_path],**kw)
             with patch.object(Fetcher,'_request_once',side_effect=AssertionError('warm cache made request')):
@@ -68,7 +70,7 @@ def main(argv=None):
                              'requests':cold['coverage']['requests'],'warm_requests':warm['coverage']['requests'],
                              'warm_signature_preserved':actual==warm_actual,'recall_at_10':recall,
                              'strict_precision_at_5':precision,'negative_control_passed':not actual if not expected else None})
-    report={'scope':'Controlled synthetic website only. Not live web accuracy or human relevance judgments.',
+    report={'settings_overrides':overrides,'scope':'Controlled synthetic website only. Not live web accuracy or human relevance judgments.',
             'git_head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
             'runtime_sha256':hashlib.sha256(b''.join(p.read_bytes() for p in sorted((ROOT/'ownsearch').rglob('*.py')))).hexdigest(),
             'dev_queries_parsed':len(rows),'dev_parse_p50_ms':quantile(parse_times,.5),'dev_parse_p95_ms':quantile(parse_times,.95),

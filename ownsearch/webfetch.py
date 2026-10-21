@@ -12,7 +12,8 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 
 from .evidence import injection_flags
-from .extract import extract, sniff, Extracted
+from .extract import extract, sniff, Extracted, decode_text
+from .native_search import discover_search_forms, independent_url
 from .extract.feeds import parse_feed
 from .fetcher import Fetcher, FetchError, decode_content
 from .robots import RobotsPolicy
@@ -60,6 +61,8 @@ class CrawledPage:
     links: list = field(default_factory=list)
     sitemaps: list = field(default_factory=list)
     kind: str = ''
+    search_forms: list = field(default_factory=list)
+    search_result_links: list = field(default_factory=list)
 
 class WebFetchSession(Fetcher):
     def __init__(self, settings, cancel, origins=None):
@@ -69,9 +72,12 @@ class WebFetchSession(Fetcher):
         self.guard = threading.Lock()
         self.requests = self.decoded_bytes = self.reserved_bytes = self.budget_bytes = 0
         self.allowed_origins = None
+        self.native_targets = set()
 
     def _request_once(self, url, headers, max_bytes, method='GET', deadline=None):
         deadline = deadline or time.monotonic() + self.settings.fetch_timeout
+        if not independent_url(url, self.settings.allow_private_hosts):
+            raise FetchError('Search services or unsafe URLs are not crawl sources', 'blocked')
         origin = origin_of(url)
         if self.allowed_origins is not None and origin not in self.allowed_origins:
             raise FetchError('Redirect outside configured crawl origins', 'scope')
@@ -204,6 +210,13 @@ class WebFetchSession(Fetcher):
         maps = [] if nofollow else list(policy.sitemaps) + [row[0] for row in ext.sitemaps]
         page = CrawledPage(final_url, links=links[:self.settings.max_sitemap_urls],
                            sitemaps=maps[:self.settings.max_sitemap_urls], kind=ext.kind)
+        if self.settings.native_search_enabled and ext.kind == 'html' and not nofollow:
+            page.search_forms = discover_search_forms(decode_text(data, response.content_type), final_url, self.settings.allow_private_hosts)
+            if url in self.native_targets:
+                # DOM-derived heading text identifies result headings. It grants
+                # crawl priority only, never relevance or entity identity.
+                page.search_result_links = [(link, anchor) for link, anchor, nofollow in ext.links
+                                            if not nofollow and anchor and any(anchor in h for h in ext.headings)][:10]
         if not ext.text or noindex or ext.kind in ('binary', 'empty', 'feed', 'sitemap'):
             return page
         item = WebCandidate(ext.title[:300] or urlsplit(final_url).path.rsplit('/', 1)[-1] or urlsplit(final_url).hostname,
