@@ -1,0 +1,6 @@
+{
+  "reason": "Explicit-profile fixture recall regressed: 1.0 to 0.77778. Rejected; capture stopped to avoid unnecessary public requests.",
+  "recovered_complete_records": 83,
+  "original_compressed_sha256": "9f08f3e03361e2938c675671c51a4a0224ef01a15c37b239cb689158bbd743c1",
+  "protocol_note": "Recovered complete JSON lines only. Incomplete final compressed member is retained unchanged. Not a full DEV result."
+}

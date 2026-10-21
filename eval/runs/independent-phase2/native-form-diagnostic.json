@@ -1,0 +1,22 @@
+{
+  "query": "gandhiji",
+  "root_url": "https://www.nobelprize.org/",
+  "form": {
+    "action": "https://www.nobelprize.org/search/",
+    "fields": [
+      [
+        "s",
+        "",
+        true
+      ]
+    ]
+  },
+  "requested_url": "https://www.nobelprize.org/search/?s=gandhiji",
+  "final_url": "https://www.nobelprize.org/search/?s=gandhiji",
+  "http_status": 403,
+  "title": "Just a moment...",
+  "text": "",
+  "headings": [],
+  "links": [],
+  "requests": 3
+}

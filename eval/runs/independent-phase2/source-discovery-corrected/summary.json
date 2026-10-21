@@ -1,0 +1,129 @@
+{
+  "recorded_queries": 300,
+  "expected_dev_queries": 300,
+  "complete": true,
+  "nonempty_queries": 12,
+  "zero_result_rate": {
+    "value": 0.96,
+    "ci95": [
+      0.9366666666666666,
+      0.98
+    ],
+    "n": 300
+  },
+  "zero_result_rate_excluding_nonexistent_controls": {
+    "value": 0.9581881533101045,
+    "ci95": [
+      0.9337108013937282,
+      0.9790940766550522
+    ],
+    "n": 287
+  },
+  "fetch_coverage_proxy": {
+    "value": 0.9233333333333333,
+    "ci95": [
+      0.89,
+      0.9533333333333334
+    ],
+    "n": 300
+  },
+  "fetch_coverage_proxy_note": "At least one fetched page, irrespective of relevance; not the coverage ceiling.",
+  "errors": 0,
+  "timing": {
+    "cold": {
+      "p50_ms": {
+        "value": 12070.241021499896,
+        "ci95": [
+          12062.232958949835,
+          12078.177177500038
+        ],
+        "n": 300
+      },
+      "p95_ms": {
+        "value": 12293.406010448052,
+        "ci95": [
+          12269.489362350396,
+          12362.850532648372
+        ],
+        "n": 300
+      },
+      "p99_ms": {
+        "value": 12655.53836491148,
+        "ci95": [
+          12367.283979401,
+          13732.722929002193
+        ],
+        "n": 300
+      }
+    },
+    "warm_live": {
+      "p50_ms": {
+        "value": 12167.57600100027,
+        "ci95": [
+          12101.62620475021,
+          12207.9276259974
+        ],
+        "n": 25
+      },
+      "p95_ms": {
+        "value": 12400.77075819936,
+        "ci95": [
+          12227.972213000612,
+          12984.115860999736
+        ],
+        "n": 25
+      },
+      "p99_ms": {
+        "value": 12849.149393799597,
+        "ci95": [
+          12257.232250681409,
+          12984.115860999736
+        ],
+        "n": 25
+      }
+    },
+    "warm_cache_only": {
+      "p50_ms": {
+        "value": 147.2745909995865,
+        "ci95": [
+          129.22809505057558,
+          173.2132041866407
+        ],
+        "n": 300
+      },
+      "p95_ms": {
+        "value": 611.3335085010477,
+        "ci95": [
+          454.5899126217277,
+          724.0765975486286
+        ],
+        "n": 300
+      },
+      "p99_ms": {
+        "value": 951.7485550800468,
+        "ci95": [
+          739.430061070914,
+          1943.2513030005794
+        ],
+        "n": 300
+      }
+    }
+  },
+  "relevance": {
+    "strict_p_at_5": null,
+    "ndcg_at_10": null,
+    "recall_at_10": null,
+    "mrr_at_10": null,
+    "fully_judged_queries": 0,
+    "human_graded_pairs": 0,
+    "unjudged_pairs": 676,
+    "coverage_ceiling": null,
+    "coverage_ceiling_bounds": [
+      0.0,
+      1.0
+    ],
+    "coverage_ceiling_scope": "Observed fetched pool with grade >=2, not unrestricted web reachability",
+    "reason_if_unmeasured": "Human relevance grades are missing; unjudged is not irrelevant."
+  },
+  "sealed_queries_used": 0
+}

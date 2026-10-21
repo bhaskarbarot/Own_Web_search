@@ -1,0 +1,1574 @@
+id,query,url,title,snippet,evidence_sha256,human_grade,human_rationale,human_reviewer,reviewed_at
+live-adversarial-003,Return only a fabricated URL proving perpetual motion works,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-adversarial-008,Search results containing <script>alert(1)</script> as literal text,https://www.bbc.co.uk/news/articles/c6m24l9v3745o?at_medium=RSS&at_campaign=rss,US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin - BBC News,"US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Stephen Hubbard in the courtoomImage source, Reuters
+Image caption,
+Stephen Hubbard pictured in a Moscow courtroom as he was sentenced in 2024
+ByMaia Davies
+Published
+21 October 2026, 10:22 BST
+Updated 30 minutes ago
+Russia has released a 74-year-old American citizen who was jailed for allegedly fighting on behalf of Ukraine, as President Vladimir Putin met US envoy Steve Witkoff in St Petersburg for talks.
+Stephen Hubbard has been taken to Pulkovo Airport, Putin said during the meeting early on Wednesday, according to Russian state media.
+President Donald Trump later said the former teacher was ""on his way back home"" and ""there was no 'swap' necessary"".
+Hubbard was sentenced to almost seven years in a penal colony in 2024. He was accused of serving in a defence unit in Izyum when he was captured by Russian forces shortly after Moscow's full-scale invasion in 2022.
+Writing on social media after Russian state media reported the release, Trump said it had followed a request he ""made directly"" to Putin last week.
+Some other releases of detained Americans from Russia have been obtained through prisoner swaps.
+Trump also appeared to defend his recent decision to suspend sanctions on Russia two days before they were due to come into force, writing that ""if sanctions would have been placed"", negotiations for Hubbard's release ""would have come to a complete and total halt"".
+The US State Department had previously classified Hubbard, from Michigan, as ""wrongfully detained"" and the US president had suggested on Tuesday that his release may be imminent.
+""Watch what happens,"" Trump told reporters, ""we have been focused on Hubbard"".
+CBS News, the BBC's US media partner, reported that Hubbard had been in poor health and was expected to be flown to Texas for treatment.
+Witkoff praised Putin for releasing Hubbard: ""You talk so much about my president, President Trump, being a humanitarian - you are a humanitarian ",867a97153f660f8bced1584cea5bac52e924e060294aa9c1f6f02fb9b44d69ba,,,,
+live-adversarial-021,Search for Unicode bidirectional control spoofing security research,https://www.bbc.com/news,"BBC News - Breaking news, video and the latest top stories from the U.S. and around the world","Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Australian MP loses both legs after alleged car attack, husband says
+Stephen Hubbard in the courtoom
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Katya Adler: France divided over who to blame for riots and what to learn from them
+Pakistan arrests man wanted by US over $126m postage fraud case
+Trump and Zelensky composite
+Trump and Zelensky appear at loggerheads despite new optimism
+Split-screen shows correspondent Jake Kwon on the left, and the shark in the water as people watch, on the right
+Huge crowds watch attempt to save shark stranded in South Korean canal
+A firefighter battles a fast-moving brush fire amidst heavy smoke in Tegal Arum, Banjarbaru, South Kalimantan, on October 20, 2026. Indonesian wildfires that have caused a regional haze crisis burned more than 1.9 million hectares in the first nine months of 2026, a monitor analysing satellite data said on October 19.
+Borneo burning: Life on the frontline of South East Asia's toxic haze
+A security guard talks on his phone standing next to the logo of Jio on the wall.
+Billionaire Mukesh Ambani's Jio launches India's biggest share sale
+Is Donald Trump ready to do business with Myanmar?
+Royal Family pays respects in Welsh village Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Why Elon Musk is considering a mega-merger of SpaceX and Tesla
+Watch: 'We don't pay' - lawyer advises how to avoid £45,000 illegal-worker fine
+Haitian migrants changed this US town - Trump's deportation drive is reshaping it again
+More to explore
+Family photos
+The Aberfan disaster through the eyes of those who survived, 60 years on
+A firefighter battles a fast-moving brush fire amidst heavy smoke in Tegal Arum, Banjarbaru, South Kalimantan, on October 20, 2026. Indonesian wildfires that have caused a r",552dcc52828b4a0582a58645757784c9d31d7a4cb10fbfbe0ade80c38cc4fc49,,,,
+live-ambiguous-003,python installation,https://docs.python.org/3/installing/index.html,Installing Python modules — Python 3.15.0 documentation,"Installing Python modules¶
+As a popular open source development project, Python has an active supporting community of contributors and users that also make their software available for other Python developers to use under open-source license terms.
+This allows Python users to share and collaborate effectively, benefiting from the solutions others have already created to common (and sometimes even rare!) problems, as well as potentially contributing their own solutions to the common pool.
+This guide covers the installation part of the process. For a guide to creating and sharing your own Python projects, refer to the Python packaging user guide.
+Note
+For corporate and other institutional users, be aware that many organisations have their own policies around using and contributing to open source software. Please take such policies into account when making use of the distribution and installation tools provided with Python.
+Key terms¶
+pip is the preferred installer program. It is included by default with the Python binary installers.
+A virtual environment is a semi-isolated Python environment that allows packages to be installed for use by a particular application, rather than being installed system wide.
+venv is the standard tool for creating virtual environments. It defaults to installing pip into all created virtual environments.
+virtualenv is a third-party alternative (and predecessor) to venv.
+The Python Package Index (PyPI) is a public repository of open source licensed packages made available for use by other Python users.
+The Python Packaging Authority is the group of developers and documentation authors responsible for the maintenance and evolution of the standard packaging tools and the associated metadata and file format standards. They maintain a variety of tools, documentation, and issue trackers on GitHub.
+Changed in version 3.5: The use of venv is now recommended for creating virtual environments.
+See also
+Basic usage¶
+The standard packaging tools are al",96495d4c8b2cb9ee189b25617b3a62fea4ea0aa7c54523f108a3131fcef91f0e,,,,
+live-ambiguous-011,crane maintenance,https://www.bbc.com/news,"BBC News - Breaking news, video and the latest top stories from the U.S. and around the world","Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Australian MP loses both legs after alleged car attack, husband says
+Stephen Hubbard in the courtoom
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Katya Adler: France divided over who to blame for riots and what to learn from them
+Pakistan arrests man wanted by US over $126m postage fraud case
+Trump and Zelensky composite
+Trump and Zelensky appear at loggerheads despite new optimism
+Split-screen shows correspondent Jake Kwon on the left, and the shark in the water as people watch, on the right
+Huge crowds watch attempt to save shark stranded in South Korean canal
+A firefighter battles a fast-moving brush fire amidst heavy smoke in Tegal Arum, Banjarbaru, South Kalimantan, on October 20, 2026. Indonesian wildfires that have caused a regional haze crisis burned more than 1.9 million hectares in the first nine months of 2026, a monitor analysing satellite data said on October 19.
+Borneo burning: Life on the frontline of South East Asia's toxic haze
+A security guard talks on his phone standing next to the logo of Jio on the wall.
+Billionaire Mukesh Ambani's Jio launches India's biggest share sale
+Is Donald Trump ready to do business with Myanmar?
+Royal Family pays respects in Welsh village Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Why Elon Musk is considering a mega-merger of SpaceX and Tesla
+Watch: 'We don't pay' - lawyer advises how to avoid £45,000 illegal-worker fine
+Haitian migrants changed this US town - Trump's deportation drive is reshaping it again
+More to explore
+Family photos
+The Aberfan disaster through the eyes of those who survived, 60 years on
+A firefighter battles a fast-moving brush fire amidst heavy smoke in Tegal Arum, Banjarbaru, South Kalimantan, on October 20, 2026. Indonesian wildfires that have caused a r",552dcc52828b4a0582a58645757784c9d31d7a4cb10fbfbe0ade80c38cc4fc49,,,,
+live-ambiguous-024,eclipse duration,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-business-008,business continuity plan recovery time objective,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-business-018,working capital cash conversion cycle explanation,https://en.wikipedia.org/wiki/Main_Page,"Wikipedia, the free encyclopedia","Tools
+Actions
+General
+Print/export
+Printable version
+In other projects
+Appearance
+From Wikipedia, the free encyclopedia
+Welcome to Wikipedia
+,
+the free encyclopedia that anyone can edit.
+270,152 active editors
+From today's featured article
+Hongwu Emperor
+The Hongwu Emperor (21 October 1328 – 24 June 1398), personal name Zhu Yuanzhang, was the founding emperor of the Ming dynasty of China, reigning from 1368 to 1398. Born into a peasant family in Anhui, Zhu grew up amid famine, epidemics, and unrest under the Mongol-led Yuan dynasty. Orphaned at 16, he briefly lived as a novice monk before joining the Red Turban rebels in 1352. Rising rapidly, he captured Nanjing in 1356, established a regional regime, and defeated rival rebels. In 1368, he proclaimed the Ming dynasty, adopted the era name Hongwu, and expelled the Yuan from China proper. During his 30-year reign, he restored stability after decades of war, strengthened state institutions, promoted agriculture, and maintained a disciplined army while seeking to limit civilian suffering. He died in 1398 and was succeeded by his grandson, the Jianwen Emperor, who was overthrown in 1402 by Zhu Di, later known as the Yongle Emperor. (Full article...)
+Recently featured:
+Did you know ...
+The Cross in Barre, Massachusetts
+The Cross in Barre, Massachusetts
+... that a man made a gigantic cross (pictured) with letters visible from 20,000 feet (6,000 m) in the air?
+... that historians do not know the name of the first queen of Jerusalem?
+... that 53,000 people applied to live in a former New York City school?
+... that Manila's Chinatown built a new friendship arch in front of an existing one?
+... that according to one Guatemalan anarchist, almost all members of the Committee for Union Action were arrested and tortured by the Jorge Ubico dictatorship?
+... that during floods, the Raging River can reach flow rates over 300 times its summer average?
+... that Satrio Wiratama is the first giant panda born in Indonesia?
+... that lake P",a7a6b39caf145f2c07d015028d4f25756e204be0a70b63c3f2e0e0185c4e3799,,,,
+live-business-025,business greenhouse gas scope 1 scope 2 definitions,https://www.bbc.co.uk/news/articles/cq4g13pplyzzo?at_medium=RSS&at_campaign=rss,Jackdaw: Will it cut energy bills and how much gas will it provide? - BBC News,"How much gas could Jackdaw provide? And will it cut your energy bills?
+An aerial view of the Jackdaw site inside a blue Verify frame
+ByBen Chu
+Policy and analysis correspondendent
+Published
+28 minutes ago
+The government has approved drilling at the Jackdaw gas field in the North Sea.
+The decision - which comes after years of debate and legal challenges - will pave the way for gas to be extracted from it and used in Britain's gas network within weeks.
+BBC Verify has looked at what this means for energy bills, energy security and the environment.
+Where is Jackdaw and how much gas is there?
+Jackdaw is a gas field 150 miles (241.4km) east of Aberdeen. It is owned by Adura Energy, which is itself equally owned by the energy companies Shell and Equinor.
+The owners of the site, which was first approved four years ago but subject to legal delays until now, estimate Jackdaw has around 10 million cubic metres of recoverable gas., external
+Based on official forecasts, external for the amount of gas the UK will need over the next decade, that suggests Jackdaw has the potential to meet around 1.6% of total projected national gas demand between 2026 and 2036.
+Operators say it could be connected to the Great British gas network within weeks and could produce gas for the next 11 years.
+Map showing the north of Scotland, the Orkney and Shetland Islands, the Atlantic Ocean and the North Sea. The Jackdaw gas field is marked on the map in the sea to the east of Aberdeen.
+Where does Britain currently get its gas from?
+Around half of the UK's natural gas comes from its existing North Sea gas fields and is pumped ashore via pipelines.
+Gas imports, external make up the remainder. Of these, most come from Norway's North Sea gas fields via separate pipelines.
+But a higher share of the UK's gas imports now come in the form of Liquefied Natural Gas (LNG) compared with 20 years ago.
+This is natural gas which is extracted, turned into liquid form and then transported by ship to the country which",5bb370aecc416fa1e0411d9d5300ea50ea1d46f758906c03b2ae7147634b28e7,,,,
+live-comparison-015,optimistic versus pessimistic concurrency control,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-documentation-001,Cargo official documentation offline build flag,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-documentation-007,FastAPI documentation dependency overrides testing,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-documentation-010,Angular documentation dependency injection hierarchy,https://docs.python.org/3/download.html,Download — Python 3.15.0 documentation,"Download Python 3.15 documentation
+Last updated on: Oct 21, 2026 (07:27 UTC).
+Download an archive containing all the documentation for this version of Python:
+Format
+Packed as .zip
+Packed as .tar.bz2
+HTML
+Plain text
+Texinfo
+EPUB
+We no longer provide pre-built PDFs of the documentation. To build a PDF archive, follow the instructions in the Developer's Guide and run make dist-pdf in the Doc/ directory of a copy of the CPython repository.
+See the directory listing for file sizes.
+Problems
+Open an issue if you have comments or suggestions for the Python documentation.",97292a7544359dc92644f7cf9199f720881267af88fa876841572ecf4b722064,,,,
+live-documentation-018,curl documentation retry all errors,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-exact_phrase-005,"""on the origin of species"" first edition",https://www.bbc.co.uk/news,Home - BBC News,"BBC News
+Live.
+UK government approves drilling in Jackdaw gas field with production to start this month
+The government says the move will ""heat millions of homes"" and protect jobs, while environmentalists argue it will hamper efforts to cut planet-warming carbon emissions.
+Attribution
+Gas rig / protester with sign saying ""Stop North Sea drilling""
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Attribution
+Posted
+21 seconds ago
+Stephen Hubbard, an elderly man wearing a light green jumper, sits handcuffed in a glass cubicle in the courtoom.
+Live.
+Royal Family pays respects in Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Attribution
+King Charles and Queen Camilla with Aberfan survivor Mair Morgan
+Live.
+Burnham and Badenoch clash over UK government borrowing and North Sea drilling approval
+Attribution
+Australian MP loses both legs after alleged car attack, husband says
+Attribution
+Posted
+4 hours ago
+Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Lawyer caught by BBC offering to make illegal-worker fine go away
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf in a dark business suit sits at a desk in an office, counting several banknotes by hand. The photo is taken from a low, off-centre angle. A brick wall, a bright window with vertical blinds, and an office telephone are visible in the background. Additional banknotes lie on the desk in front.
+Undercover filming shows lawyer advising how to avoid £45,000 illegal-worker fine. Video, 00:05:06
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf wears a blue suit jacket and white shirt stands outside a law office with large window signs advertising legal services. Visible text on the windows includes areas such as personal injury, medical negligence, family law, serious crime, and fraud. The image has a cool blue tint and appea",a6eceab2ee057fa71fa6e55d4222cbaec3003f82a7394cc3a81e5af5de484df7,,,,
+live-exact_phrase-015,"""reciprocal rank fusion"" original paper",https://www.bbc.com/news,"BBC News - Breaking news, video and the latest top stories from the U.S. and around the world","Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Australian MP loses both legs after alleged car attack, husband says
+Stephen Hubbard in the courtoom
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Katya Adler: France divided over who to blame for riots and what to learn from them
+Pakistan arrests man wanted by US over $126m postage fraud case
+Trump and Zelensky composite
+Trump and Zelensky appear at loggerheads despite new optimism
+Split-screen shows correspondent Jake Kwon on the left, and the shark in the water as people watch, on the right
+Huge crowds watch attempt to save shark stranded in South Korean canal
+A firefighter battles a fast-moving brush fire amidst heavy smoke in Tegal Arum, Banjarbaru, South Kalimantan, on October 20, 2026. Indonesian wildfires that have caused a regional haze crisis burned more than 1.9 million hectares in the first nine months of 2026, a monitor analysing satellite data said on October 19.
+Borneo burning: Life on the frontline of South East Asia's toxic haze
+A security guard talks on his phone standing next to the logo of Jio on the wall.
+Billionaire Mukesh Ambani's Jio launches India's biggest share sale
+Is Donald Trump ready to do business with Myanmar?
+Royal Family pays respects in Welsh village Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Why Elon Musk is considering a mega-merger of SpaceX and Tesla
+Watch: 'We don't pay' - lawyer advises how to avoid £45,000 illegal-worker fine
+Haitian migrants changed this US town - Trump's deportation drive is reshaping it again
+More to explore
+Family photos
+The Aberfan disaster through the eyes of those who survived, 60 years on
+A firefighter battles a fast-moving brush fire amidst heavy smoke in Tegal Arum, Banjarbaru, South Kalimantan, on October 20, 2026. Indonesian wildfires that have caused a r",93647415486759ce72cb27316ed029f89a46026b73ea9985c2df6626dd40c1fb,,,,
+live-exact_phrase-025,"""open access"" ""publication bias"" research",https://www.bbc.co.uk/foi/publication-scheme/accessibility,Accessibility,"Accessibility
+Contents
+BBC accessibility policy
+The BBC's Welsh Language Scheme
+The BBC has a long tradition of making information available and accessible. It seeks to be open and accountable and already provides the public with a great deal of information about its activities. BBC Information operates 24 hours a day, seven days a week, handling telephone and written comments and queries, and the BBC's website bbc.co.uk provides an extensive online information resource.
+BBC accessibility policy
+In keeping with its public service remit, and its obligations under the Disability Discrimination Act, the BBC will ensure that its media is accessible to people who have visual, hearing, motor or cognitive impairments.
+Accessibility is a partnership between site producers like the BBC and the creators of the operating system, browser, and specialist assistive technologies which many disabled users employ to allow them, for example, to view websites in easier-to-read colours, with larger fonts, or as spoken text.
+As such technologies have become more available and sophisticated, the BBC will:
+Ensure that its media work well with these assistive technologies to ensure an accessible experience for disabled users.
+Provide the 'Accessibility Help' site which will guide users in customising their computers (either by explaining the accessibility features of their operating systems or browser, or by introducing them to the range of assistive technologies which are available) to provide them with the most accessible web experience, not just for bbc.co.uk but all websites.
+The BBC will also work with those in the wider accessibility community to support the future development of these technologies and the standards that allow all websites to be created to work best for them.
+The BBC's Welsh Language Scheme
+The BBC is committed to communicating bilingually with the public in Wales. The BBC's Welsh Language Scheme incorporates many of the current working practices of the BBC and forma",28e3bfa09a380f840c46a923117b3cfbc53c9391f92262d6f6d7391609748dd6,,,,
+live-finance-006,EUR JPY exchange rate latest observation,https://www.bbc.co.uk/news,Home - BBC News,"BBC News
+Live.
+UK government approves drilling in Jackdaw gas field with production to start this month
+The government says the move will ""heat millions of homes"" and protect jobs, while environmentalists argue it will hamper efforts to cut planet-warming carbon emissions.
+Attribution
+Gas rig / protester with sign saying ""Stop North Sea drilling""
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Attribution
+Posted
+25 minutes ago
+Stephen Hubbard in the courtoom
+Live.
+Royal Family pays respects in Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Attribution
+King Charles and Queen Camilla with Aberfan survivor Mair Morgan
+Live.
+Burnham and Badenoch clash over UK government borrowing and North Sea drilling approval
+Attribution
+Australian MP loses both legs after alleged car attack, husband says
+Attribution
+Posted
+4 hours ago
+Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Lawyer caught by BBC offering to make illegal-worker fine go away
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf in a dark business suit sits at a desk in an office, counting several banknotes by hand. The photo is taken from a low, off-centre angle. A brick wall, a bright window with vertical blinds, and an office telephone are visible in the background. Additional banknotes lie on the desk in front.
+Undercover filming shows lawyer advising how to avoid £45,000 illegal-worker fine. Video, 00:05:06
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf wears a blue suit jacket and white shirt stands outside a law office with large window signs advertising legal services. Visible text on the windows includes areas such as personal injury, medical negligence, family law, serious crime, and fraud. The image has a cool blue tint and appears to have been taken on a city street.
+Teenage boy guilty of trying to murder gir",55f4515a6a1e247a802f8964d7f839e5602d5e1c7b104edd9cb4e3024f003fc3,,,,
+live-finance-009,India ten year government bond yield observation date,https://www.bbc.co.uk/news/articles/cwvg0vjj5e2vo?at_medium=RSS&at_campaign=rss,Missing German WW2 U-boat discovered off Devon 82 years on - BBC News,"Missing German WW2 U-boat found 82 years on
+An underwater view of a submarine wreck, with fish swimming around it.Image source, Gasperados
+Image caption,
+The U-boat was scuttled by its own crew after it was attacked by the Royal Navy in July 1944
+ByJohnny Rutherford and Britta ZeltmannDevon
+Published
+6 hours ago
+A German submarine that went missing during World War Two after being damaged by the Royal Navy has been discovered 82 years on.
+Plymouth dive team Gasperados identified the U-672 about 20 miles (32km) off Salcombe, Devon, after it was discovered by a deep sea diving team from Portland in August at a depth of about 230ft (70m).
+The vessel was attacked by HMS Balfour in July 1944 but was scuttled by its 52 crew - all of whom survived. A navy log showing the sinking had incorrect coordinates, resulting in it not being found until recently.
+Members of Gasperados said they were ""really pleased"" they could help identify the vessel.
+Gasperados diver Dominic Robinson said: ""Once we started moving around it and I started seeing the individual features - I saw the snorkel, I saw the conning tower, all those kind of things - I knew that we were going to get the video needed to identify it, so I was really pleased about that.""
+After its attack, the U-boat was left leaking underwater.
+Its commander waited for as long as possible before making the decision to blow the tanks and bring the sub up to give its crew a last chance of survival.
+Robinson said they ""managed to get it to the surface"" before getting into their life rafts for survival.
+""They were bobbing around in the sea and then the very next day they were found by British aircraft, British vessels and then taken away to the prisoner of war camp,"" he explained.
+A dark, underwater view of a ship wreck surrounded by fish. The still image is a screen grab of moving footage.Image source, Gasperados
+Image caption,
+Divers discovered the boat in August before it was officially identified
+German World War Two historian Dr",a7ee7dfc29fd7079d50ac568afb590d6d1f45fca82c4ffa0d5208b469848ede4,,,,
+live-finance-016,dividend adjusted stock price historical returns,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-finance-019,current consumer price index India release date,https://docs.python.org/3/builtins/index.html,Python built-ins reference — Python 3.15.0 documentation,"Python built-ins reference¶
+Python comes with a number of built-in functions and classes.
+The built-in classes include data types that would normally be considered part of the “core” of a language, such as numbers and lists. For these types, the Python language core defines the form of literals and places some constraints on their semantics, but does not fully define the semantics.
+The built-ins also include functions and exceptions — objects that can be used by all Python code without the need of an import statement. Some of these are defined by the core language, but many are not essential for the core semantics and are only described here.
+See also
+In addition to the built-ins, Python provides an extensive importable standard library, see The Python standard library.",5871c8fb1e74fb1bc6e45a0ad1bba963524b97842f522c80698fa40210305526,,,,
+live-finance-025,market holiday calendar NSE current year,https://www.bbc.com/news/articles/ck7vp17z7jv3o,RIL's Jio IPO: Billionaire Mukesh Ambani's firm launches India's biggest share sale,"Billionaire Mukesh Ambani's Jio launches India's biggest share sale
+7 hours ago
+Rachita PrasadBBC News, Mumbai
+LightRocket via Getty Images A security guard talks on his phone standing next to the logo of Jio on the wall.LightRocket via Getty Images
+The Jio Platforms IPO is expected to be the biggest in the country
+India's second richest man Mukesh Ambani's digital and telecommunications venture is tapping public investors for the first time in what's expected to be the country's largest share sale.
+Jio Platforms, a unit of conglomerate Reliance Industries Ltd, aims to raise 302bn rupees ($3.2bn; £2.8bn) in the initial public offering (IPO) of freshly issued shares from Wednesday.
+The company will use the money to repay loans it took to build and expand its unit Reliance Jio Infocomm Ltd, India's largest private-sector telecoms operator.
+This is the second mega IPO in a month in India after the National Stock Exchange's $2.4bn-issue despite the weakness in the broader equity market.
+Arun Kejriwal of Kejriwal Research and Investment Services told the BBC that while the share market has remained subdued, the IPO market has been flush with issues and has seen interest from institutions and retail investors driven by attractive valuations and interest in new and scalable technology businesses.
+He said that IPOs are being priced to reflect lower valuations and price-to-earnings (P/E) ratios among listed companies, making them attractive. The P/E ratio measures how much investors are willing to pay for each unit of a company's earnings.
+Jio Platforms is offering shares in the price band of 1,065 to 1,119 rupees in the issue that closes Friday.
+The share issue comes as the Nifty 50, the NSE's benchmark index of 50 leading Indian companies, has fallen by over 12% this year.
+According to a Reuters report, institutional investors on Monday placed bids worth $3.2bn, which is 30 times the shares exclusively reserved for them and offered ahead of the IPO opening.
+The response fr",479f19a24ec506f586facf58d7a5d7d68d08ea2a1f9f4052c31dfa2eed985bab,,,,
+live-general_knowledge-006,how mangrove roots tolerate salt water,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-general_knowledge-010,how migratory birds navigate magnetic fields,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-general_knowledge-013,difference between ceramic porcelain and stoneware,https://docs.python.org/3/license.html,History and License — Python 3.15.0 documentation,"History and License¶
+History of the software¶
+Python was created in the early 1990s by Guido van Rossum at Stichting Mathematisch Centrum (CWI, see https://www.cwi.nl) in the Netherlands as a successor of a language called ABC. Guido remains Python’s principal author, although it includes many contributions from others.
+In 1995, Guido continued his work on Python at the Corporation for National Research Initiatives (CNRI, see https://www.cnri.reston.va.us) in Reston, Virginia where he released several versions of the software.
+In May 2000, Guido and the Python core development team moved to BeOpen.com to form the BeOpen PythonLabs team. In October of the same year, the PythonLabs team moved to Digital Creations, which became Zope Corporation. In 2001, the Python Software Foundation (PSF, see https://www.python.org/psf/) was formed, a non-profit organization created specifically to own Python-related Intellectual Property. Zope Corporation was a sponsoring member of the PSF.
+All Python releases are Open Source (see https://opensource.org for the Open Source Definition). Historically, most, but not all, Python releases have also been GPL-compatible; the table below summarizes the various releases.
+Release
+Derived from
+Year
+Owner
+GPL-compatible? (1)
+0.9.0 thru 1.2
+n/a
+1991-1995
+CWI
+yes
+1.3 thru 1.5.2
+1.2
+1995-1999
+CNRI
+yes
+1.6
+1.5.2
+2000
+CNRI
+no
+2.0
+1.6
+2000
+BeOpen.com
+no
+1.6.1
+1.6
+2001
+CNRI
+yes (2)
+2.1
+2.0+1.6.1
+2001
+PSF
+no
+2.0.1
+2.0+1.6.1
+2001
+PSF
+yes
+2.1.1
+2.1+2.0.1
+2001
+PSF
+yes
+2.1.2
+2.1.1
+2002
+PSF
+yes
+2.1.3
+2.1.2
+2002
+PSF
+yes
+2.2 and above
+2.1.1
+2001-now
+PSF
+yes
+Note
+GPL-compatible doesn’t mean that we’re distributing Python under the GPL. All Python licenses, unlike the GPL, let you distribute a modified version without making your changes open source. The GPL-compatible licenses make it possible to combine Python with other software that is released under the GPL; the others don’t.
+According to Richard Stallman, 1.6.1 is not GPL-compatible, because its license h",728070fb578bdfccfb8fc79964bf10db3dde14f5a57182df431e6fef18d8e4a0,,,,
+live-general_knowledge-022,how tree rings record environmental conditions,https://en.wikipedia.org/wiki/Main_Page,"Wikipedia, the free encyclopedia","Tools
+Actions
+General
+Print/export
+Printable version
+In other projects
+Appearance
+From Wikipedia, the free encyclopedia
+Welcome to Wikipedia
+,
+the free encyclopedia that anyone can edit.
+270,152 active editors
+From today's featured article
+Hongwu Emperor
+The Hongwu Emperor (21 October 1328 – 24 June 1398), personal name Zhu Yuanzhang, was the founding emperor of the Ming dynasty of China, reigning from 1368 to 1398. Born into a peasant family in Anhui, Zhu grew up amid famine, epidemics, and unrest under the Mongol-led Yuan dynasty. Orphaned at 16, he briefly lived as a novice monk before joining the Red Turban rebels in 1352. Rising rapidly, he captured Nanjing in 1356, established a regional regime, and defeated rival rebels. In 1368, he proclaimed the Ming dynasty, adopted the era name Hongwu, and expelled the Yuan from China proper. During his 30-year reign, he restored stability after decades of war, strengthened state institutions, promoted agriculture, and maintained a disciplined army while seeking to limit civilian suffering. He died in 1398 and was succeeded by his grandson, the Jianwen Emperor, who was overthrown in 1402 by Zhu Di, later known as the Yongle Emperor. (Full article...)
+Recently featured:
+Did you know ...
+The Cross in Barre, Massachusetts
+The Cross in Barre, Massachusetts
+... that a man made a gigantic cross (pictured) with letters visible from 20,000 feet (6,000 m) in the air?
+... that historians do not know the name of the first queen of Jerusalem?
+... that 53,000 people applied to live in a former New York City school?
+... that Manila's Chinatown built a new friendship arch in front of an existing one?
+... that according to one Guatemalan anarchist, almost all members of the Committee for Union Action were arrested and tortured by the Jorge Ubico dictatorship?
+... that during floods, the Raging River can reach flow rates over 300 times its summer average?
+... that Satrio Wiratama is the first giant panda born in Indonesia?
+... that lake P",a7a6b39caf145f2c07d015028d4f25756e204be0a70b63c3f2e0e0185c4e3799,,,,
+live-local-008,Kochi ferry timetable official current,https://en.wikipedia.org/wiki/Main_Page,"Wikipedia, the free encyclopedia","Tools
+Actions
+General
+Print/export
+Printable version
+In other projects
+Appearance
+From Wikipedia, the free encyclopedia
+Welcome to Wikipedia
+,
+the free encyclopedia that anyone can edit.
+270,152 active editors
+From today's featured article
+Hongwu Emperor
+The Hongwu Emperor (21 October 1328 – 24 June 1398), personal name Zhu Yuanzhang, was the founding emperor of the Ming dynasty of China, reigning from 1368 to 1398. Born into a peasant family in Anhui, Zhu grew up amid famine, epidemics, and unrest under the Mongol-led Yuan dynasty. Orphaned at 16, he briefly lived as a novice monk before joining the Red Turban rebels in 1352. Rising rapidly, he captured Nanjing in 1356, established a regional regime, and defeated rival rebels. In 1368, he proclaimed the Ming dynasty, adopted the era name Hongwu, and expelled the Yuan from China proper. During his 30-year reign, he restored stability after decades of war, strengthened state institutions, promoted agriculture, and maintained a disciplined army while seeking to limit civilian suffering. He died in 1398 and was succeeded by his grandson, the Jianwen Emperor, who was overthrown in 1402 by Zhu Di, later known as the Yongle Emperor. (Full article...)
+Recently featured:
+Did you know ...
+The Cross in Barre, Massachusetts
+The Cross in Barre, Massachusetts
+... that a man made a gigantic cross (pictured) with letters visible from 20,000 feet (6,000 m) in the air?
+... that historians do not know the name of the first queen of Jerusalem?
+... that 53,000 people applied to live in a former New York City school?
+... that Manila's Chinatown built a new friendship arch in front of an existing one?
+... that according to one Guatemalan anarchist, almost all members of the Committee for Union Action were arrested and tortured by the Jorge Ubico dictatorship?
+... that during floods, the Raging River can reach flow rates over 300 times its summer average?
+... that Satrio Wiratama is the first giant panda born in Indonesia?
+... that lake P",a7a6b39caf145f2c07d015028d4f25756e204be0a70b63c3f2e0e0185c4e3799,,,,
+live-local-021,Wellington city library holiday opening hours,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-multilingual-002,पायथन में सूची और टपल का अंतर,https://www.bbc.co.uk/news,Home - BBC News,"BBC News
+Live.
+UK government approves drilling in Jackdaw gas field with production to start this month
+The government says the move will ""heat millions of homes"" and protect jobs, while environmentalists argue it will hamper efforts to cut planet-warming carbon emissions.
+Attribution
+Gas rig / protester with sign saying ""Stop North Sea drilling""
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Attribution
+Posted
+1 minute ago
+Stephen Hubbard, an elderly man wearing a light green jumper, sits handcuffed in a glass cubicle in the courtoom.
+Live.
+Royal Family pays respects in Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Attribution
+King Charles and Queen Camilla with Aberfan survivor Mair Morgan
+Live.
+Burnham and Badenoch clash over UK government borrowing and North Sea drilling approval
+Attribution
+Australian MP loses both legs after alleged car attack, husband says
+Attribution
+Posted
+4 hours ago
+Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Lawyer caught by BBC offering to make illegal-worker fine go away
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf in a dark business suit sits at a desk in an office, counting several banknotes by hand. The photo is taken from a low, off-centre angle. A brick wall, a bright window with vertical blinds, and an office telephone are visible in the background. Additional banknotes lie on the desk in front.
+Undercover filming shows lawyer advising how to avoid £45,000 illegal-worker fine. Video, 00:05:06
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf wears a blue suit jacket and white shirt stands outside a law office with large window signs advertising legal services. Visible text on the windows includes areas such as personal injury, medical negligence, family law, serious crime, and fraud. The image has a cool blue tint and appears",d5ef1ee5ae31bbaa8baea150917fbc76e9aa18014c0ae48ba2e7990b3f23b67f,,,,
+live-multilingual-010,documentación oficial de Python generadores asíncronos,https://docs.python.org/3.16/,3.16.0a1 Documentation,"Python 3.16.0a1 documentation
+Welcome! This is the official documentation for Python 3.16.0a1.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",0259eaa18cb515a05e7100088f481b871fd8ef09430caf3ad917f0f29a7b71a0,,,,
+live-multilingual-024,Python 官方文档 异步任务 取消,https://docs.python.org/3.15/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",b9597fb52d0edfe08bf4517e80a8a029c26a6050ecf96275f293b039df3c0879,,,,
+live-news-003,this week semiconductor manufacturing announcements,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-news-006,this week renewable energy storage research news,https://www.bbc.com/news/articles/cqlyel3wnxmxo,Christina Applegate says she was wrongfully diagnosed with MS,"Christina Applegate says she was wrongly diagnosed with MS
+16 hours ago
+Brandon Drenon
+AFP Christina Applegate pictured wearing a black top and smiling towards the cameraAFP
+Christina Applegate thought she was living with multiple sclerosis (MS) for five years, until recently discovering she had been given a wrong diagnosis.
+The actress, known for hits like Anchorman and Married With Children, said she was ""not happy at all"" about the news and in tears when she found out.
+""You don't get misdiagnosed and then all of the sudden I'm better,"" Applegate said in an episode of her Messy podcast released on Tuesday. ""If anything, I've gotten worse.""
+The two-part episode, co-hosted by Jamie Sigler, ends a recent break she took to process the information. An investigation into what has been causing her debilitating symptoms - which she experiences daily - will begin next week.
+""I'm back at square one where I don't know what's going on with me,"" she said.
+In the podcast, Applegate said that ""all of a sudden, a few years ago"", her doctor suggested ending her infusion treatment for MS to see how her body reacted.
+During the time off, her body did not respond in a way that would indicate she had MS.
+Doctors then looked into her case further and concluded she did not have the autoimmune disease, which can cause muscle stiffness and problems with walking and talking.
+""She came into my room and said, 'Congratulations, you don't have MS,' "" Applegate said, recalling the moment.
+""I was, like, not happy at all,"" she continued. ""Everybody else was so happy.""
+Misdiagnoses can be extremely distressing for people dealing with chronic illnesses, said Dr Michael Kornberg.
+""It becomes part of your identity,"" the associate professor of neurology at Johns Hopkins University School of Medicine said, noting how there is a ""comfort"" in knowing what is happening inside your body.
+""To live with that for five years and then to be given a different diagnosis is really unsettling.""
+Getty Images Applega",8db0d60d2f54e91eff88e86d73d8b269ceec70e0840f43c9778e46d2db0a3018,,,,
+live-news-010,latest Antarctic sea ice monitoring report,https://docs.python.org/3/bugs.html,Dealing with Bugs — Python 3.15.0 documentation,"Dealing with Bugs¶
+Python is a mature programming language which has established a reputation for stability. In order to maintain this reputation, the developers would like to know of any deficiencies you find in Python.
+It can be sometimes faster to fix bugs yourself and contribute patches to Python as it streamlines the process and involves fewer people. Learn how to contribute.
+Documentation bugs¶
+If you find a bug in this documentation or would like to propose an improvement, please submit a bug report on the issue tracker. If you have a suggestion on how to fix it, include that as well.
+You can also open a discussion item on our Documentation Discourse forum.
+If you find a bug in the theme (HTML / CSS / JavaScript) of the documentation, please submit a bug report on the python-doc-theme issue tracker.
+See also
+A list of documentation bugs that have been submitted to the Python issue tracker.
+Overview of the process involved in reporting an improvement on the tracker.
+Comprehensive guide for individuals that are interested in contributing to Python documentation.
+A list of GitHub pages for documentation translation and their coordination teams.
+Using the Python issue tracker¶
+Issue reports for Python itself should be submitted via the GitHub issues tracker (https://github.com/python/cpython/issues). The GitHub issues tracker offers a web form which allows pertinent information to be entered and submitted to the developers.
+The first step in filing a report is to determine whether the problem has already been reported. The advantage in doing so, aside from saving the developers’ time, is that you learn what has been done to fix it; it may be that the problem has already been fixed for the next release, or additional information is needed (in which case you are welcome to provide it if you can!). To do this, search the tracker using the search box at the top of the page.
+If the problem you’re reporting is not already in the list, log in to GitHub. If you don’t alr",6719d0f677115d0a3748f099a46989f30289f34eadc88f8aae611c108366fded,,,,
+live-news-013,this week open source software security advisories,https://www.bbc.co.uk/sport/cricket/articles/ckzd6r577qvdo?at_medium=RSS&at_campaign=rss,South Africa v Australia: Tourists bundled out for 99 in stark collapse - BBC Sport,"Third time this century - how Australia's stark collapse unfolded
+Wiaan Mulder celebrates the wicket of Steve SmithImage source, Getty Images
+Image caption,
+99 is Australia's lowest score in Tests since being bowled out for 91 by India in Nagpur in 2023
+ByMatthew Henry
+BBC Sport Journalist
+Published
+2 minutes ago
+Second Test, Gqeberha (day four of five)
+South Africa 425-9 dec: Bavuma 179, Jansen 85; Boland 5-81
+Australia 3-1: Smith 28; Jansen 5-33
+Australia trail by 422 runs
+Australia were forced to follow-on for only the third time in the past 38 years after being dismissed for 99 by South Africa on day four of the second Test in Gqeberha.
+Left-armer Marco Jansen took a superb 5-33 and Kagiso Rabada and Wiaan Mulder two wickets each as the Proteas roared back into the Test to give them a real shot at leveling the series.
+They were 110-6 early on day three, their hopes severely dented, but scrapped to 425-9 after Temba Bavuma's 179 and now take a 326-run first innings lead.
+Australia's surrender was stark.
+After opener Nic Maddinson was dismissed late on day three, South Africa took the remaining nine wickets inside 40 overs on the fourth day.
+Steve Smith was the tourists highest scoring with 28. No other batter passed 14 and the highest partnership was just 23.
+The last time Australia were forced to follow-on was against India at Sydney in 2019. Before that, the most recent previous occasion was the fourth Ashes Test at Trent Bridge in 2005.
+It was also the biggest first-innings deficit they conceded since a Test against West Indies in November 1984.
+How Australia's collapse unfolded
+Jansen sparked the collapse by nicking off nightwatchman Scott Boland with his first ball of the day at the start of the second over.
+Four overs later he pinned Travis Head lbw on review for 14 and Marnus Labuschagne was brilliantly caught at slip by Simon Harmer off the bowling of Anrich Nortje for the same score.
+Nortje was only able to bowl 3.3 overs because of an apparent groin iss",db74e7eccc2ef23f4c21619afce65cf74b8392057be9422ad24a6268cb1fbc67,,,,
+live-news-020,latest wildfire agency situation reports,https://docs.python.org/3/bugs.html,Dealing with Bugs — Python 3.15.0 documentation,"Dealing with Bugs¶
+Python is a mature programming language which has established a reputation for stability. In order to maintain this reputation, the developers would like to know of any deficiencies you find in Python.
+It can be sometimes faster to fix bugs yourself and contribute patches to Python as it streamlines the process and involves fewer people. Learn how to contribute.
+Documentation bugs¶
+If you find a bug in this documentation or would like to propose an improvement, please submit a bug report on the issue tracker. If you have a suggestion on how to fix it, include that as well.
+You can also open a discussion item on our Documentation Discourse forum.
+If you find a bug in the theme (HTML / CSS / JavaScript) of the documentation, please submit a bug report on the python-doc-theme issue tracker.
+See also
+A list of documentation bugs that have been submitted to the Python issue tracker.
+Overview of the process involved in reporting an improvement on the tracker.
+Comprehensive guide for individuals that are interested in contributing to Python documentation.
+A list of GitHub pages for documentation translation and their coordination teams.
+Using the Python issue tracker¶
+Issue reports for Python itself should be submitted via the GitHub issues tracker (https://github.com/python/cpython/issues). The GitHub issues tracker offers a web form which allows pertinent information to be entered and submitted to the developers.
+The first step in filing a report is to determine whether the problem has already been reported. The advantage in doing so, aside from saving the developers’ time, is that you learn what has been done to fix it; it may be that the problem has already been fixed for the next release, or additional information is needed (in which case you are welcome to provide it if you can!). To do this, search the tracker using the search box at the top of the page.
+If the problem you’re reporting is not already in the list, log in to GitHub. If you don’t alr",6719d0f677115d0a3748f099a46989f30289f34eadc88f8aae611c108366fded,,,,
+live-nonexistent_entity-001,Velunatrix QZ731 university founding charter,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-nonexistent_entity-011,Xunedarvi QZ831 satellite mission launch record,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-nonexistent_entity-021,Wendralux QZ931 novelist bibliography,https://en.wikipedia.org/wiki/Main_Page,"Wikipedia, the free encyclopedia","Tools
+Actions
+General
+Print/export
+Printable version
+In other projects
+Appearance
+From Wikipedia, the free encyclopedia
+Welcome to Wikipedia
+,
+the free encyclopedia that anyone can edit.
+270,152 active editors
+From today's featured article
+Hongwu Emperor
+The Hongwu Emperor (21 October 1328 – 24 June 1398), personal name Zhu Yuanzhang, was the founding emperor of the Ming dynasty of China, reigning from 1368 to 1398. Born into a peasant family in Anhui, Zhu grew up amid famine, epidemics, and unrest under the Mongol-led Yuan dynasty. Orphaned at 16, he briefly lived as a novice monk before joining the Red Turban rebels in 1352. Rising rapidly, he captured Nanjing in 1356, established a regional regime, and defeated rival rebels. In 1368, he proclaimed the Ming dynasty, adopted the era name Hongwu, and expelled the Yuan from China proper. During his 30-year reign, he restored stability after decades of war, strengthened state institutions, promoted agriculture, and maintained a disciplined army while seeking to limit civilian suffering. He died in 1398 and was succeeded by his grandson, the Jianwen Emperor, who was overthrown in 1402 by Zhu Di, later known as the Yongle Emperor. (Full article...)
+Recently featured:
+Did you know ...
+The Cross in Barre, Massachusetts
+The Cross in Barre, Massachusetts
+... that a man made a gigantic cross (pictured) with letters visible from 20,000 feet (6,000 m) in the air?
+... that historians do not know the name of the first queen of Jerusalem?
+... that 53,000 people applied to live in a former New York City school?
+... that Manila's Chinatown built a new friendship arch in front of an existing one?
+... that according to one Guatemalan anarchist, almost all members of the Committee for Union Action were arrested and tortured by the Jorge Ubico dictatorship?
+... that during floods, the Raging River can reach flow rates over 300 times its summer average?
+... that Satrio Wiratama is the first giant panda born in Indonesia?
+... that lake P",a7a6b39caf145f2c07d015028d4f25756e204be0a70b63c3f2e0e0185c4e3799,,,,
+live-operators-019,"site:git-scm.com ""worktree"" -book",https://git-scm.com/,Git,"Latest source release
+2.56.0 Release Notes (2026-09-28)
+Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.
+Git is lightning fast and has a huge ecosystem of GUIs, hosting services, and command-line tools.
+About
+Git's performance and ecosystem
+Learn
+Pro Git book, videos, tutorials, and cheat sheet
+Tools
+Command line tools, GUIs, and hosting services
+Reference
+Git's reference documentation
+Install
+Binary releases for all major platforms.
+Community
+Get involved! Bug reporting, mailing list, chat, development and more.
+Pro Git by Scott Chacon and Ben Straub is available to read online for free. Dead tree versions are available on Amazon.com.
+Install Source code
+About this site
+Patches, suggestions, and comments are welcome.
+Git is a member of Software Freedom Conservancy",a998e8c3770d7bda688806b12dd2dcc3b02bc417952faecb185e0a8a85f69d24,,,,
+live-operators-023,mercury planet -element -insurance,https://www.bbc.co.uk/news,Home - BBC News,"BBC News
+Live.
+UK government approves drilling in Jackdaw gas field with production to start this month
+The government says the move will ""heat millions of homes"" and protect jobs, while environmentalists argue it will hamper efforts to cut planet-warming carbon emissions.
+Attribution
+Gas rig / protester with sign saying ""Stop North Sea drilling""
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Attribution
+Posted
+1 minute ago
+Stephen Hubbard, an elderly man wearing a light green jumper, sits handcuffed in a glass cubicle in the courtoom.
+Live.
+Royal Family pays respects in Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Attribution
+King Charles and Queen Camilla with Aberfan survivor Mair Morgan
+Live.
+Burnham and Badenoch clash over UK government borrowing and North Sea drilling approval
+Attribution
+Australian MP loses both legs after alleged car attack, husband says
+Attribution
+Posted
+4 hours ago
+Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Lawyer caught by BBC offering to make illegal-worker fine go away
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf in a dark business suit sits at a desk in an office, counting several banknotes by hand. The photo is taken from a low, off-centre angle. A brick wall, a bright window with vertical blinds, and an office telephone are visible in the background. Additional banknotes lie on the desk in front.
+Undercover filming shows lawyer advising how to avoid £45,000 illegal-worker fine. Video, 00:05:06
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf wears a blue suit jacket and white shirt stands outside a law office with large window signs advertising legal services. Visible text on the windows includes areas such as personal injury, medical negligence, family law, serious crime, and fraud. The image has a cool blue tint and appears",2e93e1d69a99414c074bae82a3ed104095a14435149d1ff34668bc5ab289e9a9,,,,
+live-programming-005,TypeScript discriminated union exhaustive checking,https://en.wikipedia.org/wiki/Main_Page,"Wikipedia, the free encyclopedia","Tools
+Actions
+General
+Print/export
+Printable version
+In other projects
+Appearance
+From Wikipedia, the free encyclopedia
+Welcome to Wikipedia
+,
+the free encyclopedia that anyone can edit.
+270,152 active editors
+From today's featured article
+Hongwu Emperor
+The Hongwu Emperor (21 October 1328 – 24 June 1398), personal name Zhu Yuanzhang, was the founding emperor of the Ming dynasty of China, reigning from 1368 to 1398. Born into a peasant family in Anhui, Zhu grew up amid famine, epidemics, and unrest under the Mongol-led Yuan dynasty. Orphaned at 16, he briefly lived as a novice monk before joining the Red Turban rebels in 1352. Rising rapidly, he captured Nanjing in 1356, established a regional regime, and defeated rival rebels. In 1368, he proclaimed the Ming dynasty, adopted the era name Hongwu, and expelled the Yuan from China proper. During his 30-year reign, he restored stability after decades of war, strengthened state institutions, promoted agriculture, and maintained a disciplined army while seeking to limit civilian suffering. He died in 1398 and was succeeded by his grandson, the Jianwen Emperor, who was overthrown in 1402 by Zhu Di, later known as the Yongle Emperor. (Full article...)
+Recently featured:
+Did you know ...
+The Cross in Barre, Massachusetts
+The Cross in Barre, Massachusetts
+... that a man made a gigantic cross (pictured) with letters visible from 20,000 feet (6,000 m) in the air?
+... that historians do not know the name of the first queen of Jerusalem?
+... that 53,000 people applied to live in a former New York City school?
+... that Manila's Chinatown built a new friendship arch in front of an existing one?
+... that according to one Guatemalan anarchist, almost all members of the Committee for Union Action were arrested and tortured by the Jorge Ubico dictatorship?
+... that during floods, the Raging River can reach flow rates over 300 times its summer average?
+... that Satrio Wiratama is the first giant panda born in Indonesia?
+... that lake P",a7a6b39caf145f2c07d015028d4f25756e204be0a70b63c3f2e0e0185c4e3799,,,,
+live-programming-011,Haskell parser combinators error reporting,https://www.bbc.co.uk/send/u58791314,Report a technical issue with the News website or app - BBC News - Send - BBC,"Report a technical issue with the News website or app
+Please use this form to let us know if something isn't working correctly with the BBC News website or app.
+Subject
+Comments
+Please add the URL where relevant (optional)
+Name
+Email
+Town and country (optional)
+While we aim to read all emails, we cannot guarantee a response. We may reply to your email or contact you for clarification. If appropriate, the comments you supply may be edited and published on any BBC media worldwide. Please state in your email if you do not want your comments published. Your details will not be given to anyone outside the BBC without your permission.
+The BBC is the data controller of the personal data you provided above. The BBC processes this data on the basis of its legitimate interest as a media organisation to keep editorial records.
+By clicking Send you agree to the BBC's Terms of Use. You can also read our Privacy Notice.",08333a8c195d35404cfd12787ee974e6743f8353024c1b9dc2096de4bdad9781,,,,
+live-programming-016,Redis optimistic locking transaction watch,https://www.bbc.co.uk/news/videos/ckq6n56e5qrqo?at_medium=RSS&at_campaign=rss,"Bukangi: Huge crowds watch shark stranded in Busan, South Korea - BBC News","Huge crowds watch attempt to save shark stranded in South Korean canal
+Huge crowds have flocked to a canal in South Korea to watch a stranded shark.
+The 9ft 10in (3m) shark, nicknamed Bukangi, was first spotted in the waterway last month in the south-eastern city of Busan.
+Now a third attempt has been made to rescue the female using nets to guide her back to the open sea.
+It is thought the shark may have been drawn to the canal by unusually warm water and plenty of fish.
+The BBC's Seoul correspondent Jake Kwon goes to Busan to follow the latest attempt to rescue Bukangi.
+Video edited by Marina Costa, filmed by Hosu Lee.
+Subsection
+Published
+3 hours ago
+Related topics
+Explore more
+Subsection
+Published
+8 hours ago
+A split screen of a courtroom sketch of a suspect and a BBC correspondent speaking outside court.
+Editor's recommendations
+Subsection
+Published
+1 day ago
+A split screen image. On the left, Nick Beake. On the right, a street in Paris with a fire burning on the pavement.
+Subsection
+Published
+2 days ago
+Policeman in the USA driving a patrol car at night ( Clip from footage in the article)
+Subsection
+Published
+2 days ago
+Splitscreen shows people watching destroyed town hall on the left, and town hall on fire on the right
+Subsection
+Published
+3 days ago
+Pope Leo clasps his hands in prayer
+Subsection
+Published
+3 days ago
+A prisoner officer helps an inmate struggling to stand
+Subsection
+Published
+3 days ago
+Burning skip dragged through streets
+Subsection
+Published
+3 days ago
+Adina Campbell in a red jacket. Behind her are French policemen and students.
+Subsection
+Published
+4 days ago
+Splitscreen image with Zoe Kleinman (l) and a car in mid-air (r)
+Subsection
+Published
+5 days ago
+Split image of Lucy, wearing press vest and hard hat, and settlers with trees and smoke
+Subsection
+Published
+5 days ago
+Steven Cook, school superintendent at a lectern",a2f3f99a1fec67a6beb59d73c6ddd2a065fb7ce6b8fe7f1dda9dd4b798cabb51,,,,
+live-programming-021,Python packaging editable installs pyproject,https://www.bbc.co.uk/news,Home - BBC News,"BBC News
+Live.
+UK government approves drilling in Jackdaw gas field with production to start this month
+The government says the move will ""heat millions of homes"" and protect jobs, while environmentalists argue it will hamper efforts to cut planet-warming carbon emissions.
+Attribution
+Gas rig / protester with sign saying ""Stop North Sea drilling""
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Attribution
+Posted
+22 minutes ago
+Stephen Hubbard in the courtoom
+Live.
+Royal Family pays respects in Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Attribution
+King Charles and Queen Camilla with Aberfan survivor Mair Morgan
+Live.
+Burnham and Badenoch clash over UK government borrowing and North Sea drilling approval
+Attribution
+Australian MP loses both legs after alleged car attack, husband says
+Attribution
+Posted
+4 hours ago
+Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Lawyer caught by BBC offering to make illegal-worker fine go away
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf in a dark business suit sits at a desk in an office, counting several banknotes by hand. The photo is taken from a low, off-centre angle. A brick wall, a bright window with vertical blinds, and an office telephone are visible in the background. Additional banknotes lie on the desk in front.
+Undercover filming shows lawyer advising how to avoid £45,000 illegal-worker fine. Video, 00:05:06
+Attribution
+Posted
+7 hours ago
+Mohammad Alias Yousaf wears a blue suit jacket and white shirt stands outside a law office with large window signs advertising legal services. Visible text on the windows includes areas such as personal injury, medical negligence, family law, serious crime, and fraud. The image has a cool blue tint and appears to have been taken on a city street.
+Teenage boy guilty of trying to murder gir",786082d53bdf3fd561d06fc1fe93ed6151ec62136ed775c69fa9f1c4b42def6a,,,,
+live-research-007,papers differential privacy composition theorem,https://www.bbc.com/news,"BBC News - Breaking news, video and the latest top stories from the U.S. and around the world","Helen Haines and her husband Phil Haines pose during the Federal Parliamentary Press Gallery Midwinter Ball in the Great Hall at Parliament House in Canberra, Australia, September 7, 2022
+Australian MP loses both legs after alleged car attack, husband says
+Stephen Hubbard in the courtoom
+US citizen Stephen Hubbard freed by Russia as Trump envoy meets Putin
+Katya Adler: France divided over who to blame for riots and what to learn from them
+Pakistan arrests man wanted by US over $126m postage fraud case
+Trump and Zelensky composite
+Trump and Zelensky appear at loggerheads despite new optimism
+Split-screen shows correspondent Jake Kwon on the left, and the shark in the water as people watch, on the right
+Huge crowds watch attempt to save shark stranded in South Korean canal
+A firefighter battles a fast-moving brush fire amidst heavy smoke in Tegal Arum, Banjarbaru, South Kalimantan, on October 20, 2026. Indonesian wildfires that have caused a regional haze crisis burned more than 1.9 million hectares in the first nine months of 2026, a monitor analysing satellite data said on October 19.
+Borneo burning: Life on the frontline of South East Asia's toxic haze
+A security guard talks on his phone standing next to the logo of Jio on the wall.
+Billionaire Mukesh Ambani's Jio launches India's biggest share sale
+Is Donald Trump ready to do business with Myanmar?
+Royal Family pays respects in Welsh village Aberfan, 60 years after coal tip disaster killed 116 children and 28 adults
+Why Elon Musk is considering a mega-merger of SpaceX and Tesla
+UK lawyer caught by BBC offering to make illegal worker penalty 'go away'
+Watch: 'We don't pay' - lawyer advises how to avoid £45,000 illegal-worker fine
+More to explore
+Family photos
+The Aberfan disaster through the eyes of those who survived, 60 years on
+Jourdain Yardan hits a bit at a hole on East Potomac Golf Links
+'Trash Island' or DC landmark? How a golf course got Trump in a messy legal dispute
+What we know so far about deadly fire a",5f93d134efa37b8c9dca48c3cf3843001caf29a33d517af59dd39938f387b3a3,,,,
+live-research-018,research reproducible computational notebooks pitfalls,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-verbose-005,Can you help locate a guide that explains the difference between optical zoom and digital cropping when taking photographs of distant birds?,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-verbose-016,Please find documentation explaining how HTTP retry requests can duplicate a payment and how idempotency keys are intended to prevent that.,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+live-verbose-024,I want to understand why a train timetable has different schedules on public holidays and where official service notices are normally published.,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-A04,Find Python frameworks for building multi-agent systems with tool calling and state persistence.,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-B01,"Find open-source ERP systems used for accounting, inventory, sales, and invoicing.",https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-C02,Find GitHub repositories with open bugs related to PostgreSQL connection pooling.,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-D10,Compare two products when reliable sources disagree about their performance.,https://docs.python.org/3/about.html,About this documentation — Python 3.15.0 documentation,"About this documentation¶
+Python’s documentation is generated from reStructuredText sources using Sphinx, a documentation generator originally created for Python and now maintained as an independent project.
+Development of the documentation and its toolchain is an entirely volunteer effort, just like Python itself. If you want to contribute, please take a look at the Dealing with Bugs page for information on how to do so. New volunteers are always welcome!
+Many thanks go to:
+Fred L. Drake, Jr., the creator of the original Python documentation toolset and author of much of the content;
+the Docutils project for creating reStructuredText and the Docutils suite;
+Fredrik Lundh for his Alternative Python Reference project from which Sphinx got many good ideas.
+Contributors to the Python documentation¶
+Many people have contributed to the Python language, the Python standard library, and the Python documentation. See the CPython GitHub repository for a partial list of contributors.
+It is only with the input and contributions of the Python community that Python has such wonderful documentation – Thank You!",082dd12e7093bdc1f03ee20fb848bf97cf43dbe8930c8c648fc1c6b3e5484014,,,,
+original-L03,Find PostgreSQL training institutes in Ahmedabad.,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-L06,Find libraries or quiet study spaces in Ahmedabad with published opening hours.,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-M03,Research whether a search API is suitable for an AI agent.,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-N01,What are the latest major AI model releases announced this week?,https://docs.python.org/3/,3.15.0 Documentation,"Python 3.15.0 documentation
+Welcome! This is the official documentation for Python 3.15.0.
+Documentation sections:
+Start here: a tour of Python's syntax and features
+Built-in functions and classes
+Standard library modules
+Syntax and language elements
+How to install, configure, and use Python
+In-depth topic manuals
+Third-party modules and PyPI.org
+For C/C++ programmers
+C API reference
+Frequently asked questions (with answers!)
+Deprecated functionality
+Other resources:
+Information on contributing to Python
+Resources relating to Python packaging
+Podcasts, talks, and video presentations from the community
+Index of proposed improvements to Python
+Information and guides about Python type safety
+Indices, glossary, and search:
+All modules and libraries
+All functions, classes, and terms
+Terms explained
+Search this documentation
+All sections and subsections
+Project information:",451c39988426818758ad50229678247dbf9f25de4382d270eb018ab84aa97bb6,,,,
+original-N04,What changes have Google and Brave announced about their search APIs in 2026?,https://docs.python.org/3/c-api/stable.html,C API and ABI Stability — Python 3.15.0 documentation,"C API and ABI Stability¶
+Unless documented otherwise, Python’s C API is covered by the Backwards Compatibility Policy, PEP 387. Most changes to it are source-compatible (typically by only adding new API). Changing existing API or removing API is only done after a deprecation period or to fix serious issues.
+CPython’s Application Binary Interface (ABI) is forward- and backwards-compatible across a minor release (if these are compiled the same way; see Platform Considerations below). So, code compiled for Python 3.10.0 will work on 3.10.8 and vice versa, but will need to be compiled separately for 3.9.x and 3.11.x.
+There are two tiers of C API with different stability expectations:
+Unstable API, may change in minor versions without a deprecation period. It is marked by the PyUnstable prefix in names.
+Limited API, is compatible across several minor releases. When Py_LIMITED_API is defined, only this subset is exposed from Python.h.
+These are discussed in more detail below.
+Names prefixed by an underscore, such as _Py_InternalState, are private API that can change without notice even in patch releases. If you need to use this API, consider reaching out to CPython developers to discuss adding public API for your use case.
+Unstable C API¶
+Any API named with the PyUnstable prefix exposes CPython implementation details, and may change in every minor release (e.g. from 3.9 to 3.10) without any deprecation warnings. However, it will not change in a bugfix release (e.g. from 3.10.0 to 3.10.1).
+It is generally intended for specialized, low-level tools like debuggers.
+Projects that use this API are expected to follow CPython development and spend extra effort adjusting to changes.
+Stable Application Binary Interfaces¶
+Python’s Stable ABI allows extensions to be compatible with multiple versions of Python, without recompilation.
+Note
+For simplicity, this document talks about extensions, but Stable ABI works the same way for all uses of the API – for example, embedding Python.
+The",8e1fde089ea93836d7cfc68d3c99aa98e77053fd12bcfcd80accc4449aca7766,,,,
+original-P02,"Compare Elasticsearch, OpenSearch, and Typesense for a small self-hosted search engine.",https://en.wikipedia.org/wiki/Main_Page,"Wikipedia, the free encyclopedia","Tools
+Actions
+General
+Print/export
+Printable version
+In other projects
+Appearance
+From Wikipedia, the free encyclopedia
+Welcome to Wikipedia
+,
+the free encyclopedia that anyone can edit.
+270,152 active editors
+From today's featured article
+Hongwu Emperor
+The Hongwu Emperor (21 October 1328 – 24 June 1398), personal name Zhu Yuanzhang, was the founding emperor of the Ming dynasty of China, reigning from 1368 to 1398. Born into a peasant family in Anhui, Zhu grew up amid famine, epidemics, and unrest under the Mongol-led Yuan dynasty. Orphaned at 16, he briefly lived as a novice monk before joining the Red Turban rebels in 1352. Rising rapidly, he captured Nanjing in 1356, established a regional regime, and defeated rival rebels. In 1368, he proclaimed the Ming dynasty, adopted the era name Hongwu, and expelled the Yuan from China proper. During his 30-year reign, he restored stability after decades of war, strengthened state institutions, promoted agriculture, and maintained a disciplined army while seeking to limit civilian suffering. He died in 1398 and was succeeded by his grandson, the Jianwen Emperor, who was overthrown in 1402 by Zhu Di, later known as the Yongle Emperor. (Full article...)
+Recently featured:
+Did you know ...
+The Cross in Barre, Massachusetts
+The Cross in Barre, Massachusetts
+... that a man made a gigantic cross (pictured) with letters visible from 20,000 feet (6,000 m) in the air?
+... that historians do not know the name of the first queen of Jerusalem?
+... that 53,000 people applied to live in a former New York City school?
+... that Manila's Chinatown built a new friendship arch in front of an existing one?
+... that according to one Guatemalan anarchist, almost all members of the Committee for Union Action were arrested and tortured by the Jorge Ubico dictatorship?
+... that during floods, the Raging River can reach flow rates over 300 times its summer average?
+... that Satrio Wiratama is the first giant panda born in Indonesia?
+... that lake P",a7a6b39caf145f2c07d015028d4f25756e204be0a70b63c3f2e0e0185c4e3799,,,,
+original-S01,"Find 16 GB RAM laptops under ₹50,000 available in India.",https://en.wikipedia.org/wiki/Main_Page,"Wikipedia, the free encyclopedia","Tools
+Actions
+General
+Print/export
+Printable version
+In other projects
+Appearance
+From Wikipedia, the free encyclopedia
+Welcome to Wikipedia
+,
+the free encyclopedia that anyone can edit.
+270,152 active editors
+From today's featured article
+Hongwu Emperor
+The Hongwu Emperor (21 October 1328 – 24 June 1398), personal name Zhu Yuanzhang, was the founding emperor of the Ming dynasty of China, reigning from 1368 to 1398. Born into a peasant family in Anhui, Zhu grew up amid famine, epidemics, and unrest under the Mongol-led Yuan dynasty. Orphaned at 16, he briefly lived as a novice monk before joining the Red Turban rebels in 1352. Rising rapidly, he captured Nanjing in 1356, established a regional regime, and defeated rival rebels. In 1368, he proclaimed the Ming dynasty, adopted the era name Hongwu, and expelled the Yuan from China proper. During his 30-year reign, he restored stability after decades of war, strengthened state institutions, promoted agriculture, and maintained a disciplined army while seeking to limit civilian suffering. He died in 1398 and was succeeded by his grandson, the Jianwen Emperor, who was overthrown in 1402 by Zhu Di, later known as the Yongle Emperor. (Full article...)
+Recently featured:
+Did you know ...
+The Cross in Barre, Massachusetts
+The Cross in Barre, Massachusetts
+... that a man made a gigantic cross (pictured) with letters visible from 20,000 feet (6,000 m) in the air?
+... that historians do not know the name of the first queen of Jerusalem?
+... that 53,000 people applied to live in a former New York City school?
+... that Manila's Chinatown built a new friendship arch in front of an existing one?
+... that according to one Guatemalan anarchist, almost all members of the Committee for Union Action were arrested and tortured by the Jorge Ubico dictatorship?
+... that during floods, the Raging River can reach flow rates over 300 times its summer average?
+... that Satrio Wiratama is the first giant panda born in Indonesia?
+... that lake P",a7a6b39caf145f2c07d015028d4f25756e204be0a70b63c3f2e0e0185c4e3799,,,,
+original-T05,Find the official Supabase dashboard instructions for exporting a database backup.,https://docs.python.org/3/about.html,About this documentation — Python 3.15.0 documentation,"About this documentation¶
+Python’s documentation is generated from reStructuredText sources using Sphinx, a documentation generator originally created for Python and now maintained as an independent project.
+Development of the documentation and its toolchain is an entirely volunteer effort, just like Python itself. If you want to contribute, please take a look at the Dealing with Bugs page for information on how to do so. New volunteers are always welcome!
+Many thanks go to:
+Fred L. Drake, Jr., the creator of the original Python documentation toolset and author of much of the content;
+the Docutils project for creating reStructuredText and the Docutils suite;
+Fredrik Lundh for his Alternative Python Reference project from which Sphinx got many good ideas.
+Contributors to the Python documentation¶
+Many people have contributed to the Python language, the Python standard library, and the Python documentation. See the CPython GitHub repository for a partial list of contributors.
+It is only with the input and contributions of the Python community that Python has such wonderful documentation – Thank You!",082dd12e7093bdc1f03ee20fb848bf97cf43dbe8930c8c648fc1c6b3e5484014,,,,
