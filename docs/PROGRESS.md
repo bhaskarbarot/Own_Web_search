@@ -77,3 +77,13 @@ budget. They occurred at different times, so this is a functional observation,
 not an independent relevance or controlled network latency improvement.
 Raw: `public-python-link-priority.json`. Remaining attempts reported delay/deadline
 errors honestly. No fabricated fetch successes or late content were admitted.
+
+## Step 3: cache-only searches skip network-client setup
+
+Baseline commit: `6066f49`. Cache-only requests no longer construct a TLS/network
+fetch session. Ranking and result signatures are unchanged. All 85 tests pass.
+Same 11-case benchmark, `fixture-cache-client.json`: warm p50 44.867 → 6.089 ms,
+p95 47.085 → 7.677 ms, zero repeat network requests. Fixture Recall@10 remains
+1.000 and strict P@5 0.23636. Cold p50 55.382 ms; no cold improvement claimed.
+These are small controlled fixtures with test-only zero crawl delay, not a promise
+of that latency for a large cache or public website. Runtime SHA recorded in JSON.

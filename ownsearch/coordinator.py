@@ -117,8 +117,9 @@ class IndependentSearch:
                         enqueue(link, anchor, 1, kind=kind)
                     for link in page.sitemaps:
                         enqueue(link, depth=0, map_depth=1, kind='sitemap')
-            session = WebFetchSession(self.settings, cancel, self.origins)
-            session.allowed_origins = origins
+            session = WebFetchSession(self.settings, cancel, self.origins) if fetch_pages else None
+            if session:
+                session.allowed_origins = origins
             completed, active, attempted, reused = queue.Queue(), {}, 0, 0
             by_url = {page.url: page for page in cached_pages}
             active_origins = set()
@@ -223,8 +224,8 @@ class IndependentSearch:
                     'query_understanding': q.normalized(), 'crawl_status': statuses, 'limitations': notes,
                     'notice': NOTICE, 'images': [image for item in selected for image in item.images],
                     'coverage': {'starting_urls': len(valid), 'observed_urls': len(observed),
-                                 'attempted_pages': attempted, 'requests': session.requests,
-                                 'decoded_bytes': session.decoded_bytes, 'cache_reuses': reused,
+                                 'attempted_pages': attempted, 'requests': session.requests if session else 0,
+                                 'decoded_bytes': session.decoded_bytes if session else 0, 'cache_reuses': reused,
                                  'unfinished_pages': unfinished, 'exhaustive': False},
                     'cached': bool(selected) and all(item.cached for item in selected),
                     'timed_out': bool(unfinished), 'took_ms': took, 'cache': self.cache.stats()}
