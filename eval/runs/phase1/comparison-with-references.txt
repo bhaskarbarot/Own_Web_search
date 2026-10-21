@@ -1,0 +1,28 @@
+{
+  "gate": {
+    "all_tests_pass": true,
+    "two_source_failure_injection_pass": true,
+    "dev_zero_result_rate_drops_excluding_nonexistent": true,
+    "recall_improves": null,
+    "strict_p5_does_not_regress": null,
+    "judged_quality_comparison_available": false,
+    "passed": false
+  },
+  "zero_rate_before": {
+    "value": 0.28223,
+    "ci95": [
+      0.233449,
+      0.338066
+    ],
+    "queries": 287
+  },
+  "zero_rate_after": {
+    "value": 0.236934,
+    "ci95": [
+      0.188153,
+      0.292683
+    ],
+    "queries": 287
+  },
+  "pool_rows": 6931
+}

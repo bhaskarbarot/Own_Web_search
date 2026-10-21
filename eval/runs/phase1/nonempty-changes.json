@@ -1,0 +1,2790 @@
+{
+  "scope": "Observed live nonempty changes; provider availability/time differences prevent attributing these changes to code alone. No relevance judgment.",
+  "gained_count": 21,
+  "lost_count": 8,
+  "gained": [
+    {
+      "id": "original-R02",
+      "query": "Find research papers on retrieval-augmented generation published in 2025 or 2026.",
+      "category": "benchmark/2. Research agent"
+    },
+    {
+      "id": "original-R04",
+      "query": "Find studies on how search result quality affects large language model responses.",
+      "category": "benchmark/2. Research agent"
+    },
+    {
+      "id": "original-R05",
+      "query": "Explain the difference between web crawling, indexing, ranking, and content extraction using authoritative sources.",
+      "category": "benchmark/2. Research agent"
+    },
+    {
+      "id": "original-R08",
+      "query": "Find documented limitations of using LLMs as search relevance evaluators.",
+      "category": "benchmark/2. Research agent"
+    },
+    {
+      "id": "original-A01",
+      "query": "Find free or open-weight LLMs suitable for CPU inference on a machine with 16 GB RAM.",
+      "category": "benchmark/3. AI and machine-learning agent"
+    },
+    {
+      "id": "original-A02",
+      "query": "Find official documentation for the Gemini embedding models API.",
+      "category": "benchmark/3. AI and machine-learning agent"
+    },
+    {
+      "id": "original-A03",
+      "query": "Compare Groq and Google Gemini APIs for building an AI assistant, including rate limits and pricing.",
+      "category": "benchmark/3. AI and machine-learning agent"
+    },
+    {
+      "id": "original-A04",
+      "query": "Find Python frameworks for building multi-agent systems with tool calling and state persistence.",
+      "category": "benchmark/3. AI and machine-learning agent"
+    },
+    {
+      "id": "live-news-011",
+      "query": "today world athletics competition results",
+      "category": "news"
+    },
+    {
+      "id": "live-exact_phrase-006",
+      "query": "\"retrieval augmented generation\" evaluation",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-007",
+      "query": "\"water hammer\" pipe pressure",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-010",
+      "query": "\"equation of time\" sundial",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-011",
+      "query": "\"memory mapped files\" operating system",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-012",
+      "query": "\"negative capability\" Keats letter",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-014",
+      "query": "\"lossless compression\" information theory",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-015",
+      "query": "\"reciprocal rank fusion\" original paper",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-023",
+      "query": "\"read your writes\" consistency",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-exact_phrase-025",
+      "query": "\"open access\" \"publication bias\" research",
+      "category": "exact_phrase"
+    },
+    {
+      "id": "live-comparison-015",
+      "query": "optimistic versus pessimistic concurrency control",
+      "category": "comparison"
+    },
+    {
+      "id": "live-comparison-017",
+      "query": "symmetric versus asymmetric encryption key management",
+      "category": "comparison"
+    },
+    {
+      "id": "live-comparison-024",
+      "query": "Unicode normalization NFC versus NFD",
+      "category": "comparison"
+    }
+  ],
+  "lost": [
+    {
+      "id": "original-P02",
+      "query": "Compare Elasticsearch, OpenSearch, and Typesense for a small self-hosted search engine.",
+      "category": "benchmark/7. Product comparison agent",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "Typesense vs Elasticsearch vs OpenSearch: Self-Hosted E-Commerce Search ...",
+          "url": "https://contracollective.com/blog/typesense-vs-elasticsearch-opensearch-ecommerce-search-2026",
+          "display_url": "https://contracollective.com/blog/typesense-vs-elasticsearch-opensearch-ecommerce-search-2026",
+          "host": "contracollective.com",
+          "snippet": "Typesense, Elasticsearch, and OpenSearch for e-commerce product search. Self-hosted costs, deployment complexity, and when to choose each platform.",
+          "score": 2.174198,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "error",
+          "crawl_status": "error",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 4,
+              "url": "https://contracollective.com/blog/typesense-vs-elasticsearch-opensearch-ecommerce-search-2026",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T05:36:30+00:00",
+              "snippet": "Comparison of Typesense, Elasticsearch, and OpenSearch for e-commerce product search. Self-hosted costs, deployment complexity, and when to choose each platform.",
+              "published_at": null,
+              "query": "Elasticsearch Compare Elasticsearch, OpenSearch, and Typesense for a small self-hosted search engine.",
+              "upstream_engines": [
+                "duckduckgo"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.9712597123247256,
+            "coverage": 0.7142857142857143,
+            "title": 0.7142857142857143,
+            "url": 0.42857142857142855,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.43166666666666664,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.5,
+            "documentation_structure": 0.13930402594416633,
+            "project_host": 0.0,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 9,
+              "text": "Typesense"
+            },
+            {
+              "start": 11,
+              "end": 24,
+              "text": "Elasticsearch"
+            },
+            {
+              "start": 26,
+              "end": 29,
+              "text": "and"
+            },
+            {
+              "start": 30,
+              "end": 40,
+              "text": "OpenSearch"
+            },
+            {
+              "start": 41,
+              "end": 44,
+              "text": "for"
+            },
+            {
+              "start": 64,
+              "end": 70,
+              "text": "search"
+            },
+            {
+              "start": 72,
+              "end": 76,
+              "text": "Self"
+            },
+            {
+              "start": 77,
+              "end": 83,
+              "text": "hosted"
+            },
+            {
+              "start": 114,
+              "end": 117,
+              "text": "and"
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "id": null,
+          "title": "Self-Hosted Search Engines 2026 Deep Dive - Meilisearch, Typesense ...",
+          "url": "https://labhub.hopto.org/blog/culture/2026-05-16-self-hosted-search-engines-2026-meilisearch-typesense-manticore-opensearch-vespa-paradedb-orama-deep-dive?lang=en",
+          "display_url": "https://labhub.hopto.org/blog/culture/2026-05-16-self-hosted-search-engines-2026-meilisearch-typesense-manticore-opensearch-vespa-paradedb-orama-deep-dive?lang=en",
+          "host": "labhub.hopto.org",
+          "snippet": "engine landscape was redrawn as self-hosted alternatives like Meilisearch, Typesense, Manticore, OpenSearch, Vespa, ParadeDB, and Orama exp",
+          "score": 1.974116,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "timeout",
+          "crawl_status": "timeout",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 10,
+              "url": "https://labhub.hopto.org/blog/culture/2026-05-16-self-hosted-search-engines-2026-meilisearch-typesense-manticore-opensearch-vespa-paradedb-orama-deep-dive?lang=en",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T05:36:30+00:00",
+              "snippet": "The 2026 search engine landscape was redrawn as self-hosted alternatives like Meilisearch, Typesense, Manticore, OpenSearch, Vespa, ParadeDB, and Orama exp",
+              "published_at": null,
+              "query": "Elasticsearch Compare Elasticsearch, OpenSearch, and Typesense for a small self-hosted search engine.",
+              "upstream_engines": [
+                "duckduckgo"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 0.7142857142857143,
+            "title": 0.5714285714285714,
+            "url": 0.7142857142857143,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.43166666666666664,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.31622776601683794,
+            "documentation_structure": 0.0,
+            "project_host": 0.0,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 6,
+              "text": "engine"
+            },
+            {
+              "start": 32,
+              "end": 36,
+              "text": "self"
+            },
+            {
+              "start": 37,
+              "end": 43,
+              "text": "hosted"
+            },
+            {
+              "start": 75,
+              "end": 84,
+              "text": "Typesense"
+            },
+            {
+              "start": 97,
+              "end": 107,
+              "text": "OpenSearch"
+            },
+            {
+              "start": 126,
+              "end": 129,
+              "text": "and"
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "id": null,
+          "title": "Elasticsearch vs OpenSearch vs Typesense: Search Infrastructure ...",
+          "url": "https://www.askantech.com/elasticsearch-opensearch-typesense-search-infrastructure-comparison-2026/",
+          "display_url": "https://www.askantech.com/elasticsearch-opensearch-typesense-search-infrastructure-comparison-2026/",
+          "host": "www.askantech.com",
+          "snippet": "This comparison guide covers Elasticsearch, OpenSearch, and Typesense across architecture, feature depth, licensing, operational complexity, and use case fit for backend engineers and solution architects.",
+          "score": 1.443275,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 2,
+              "url": "https://www.askantech.com/elasticsearch-opensearch-typesense-search-infrastructure-comparison-2026/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T05:36:30+00:00",
+              "snippet": "Choosing the right search infrastructure is a real architectural decision in 2026. This comparison guide covers Elasticsearch, OpenSearch, and Typesense across architecture, feature depth, licensing, operational complexity, and use case fit for backend engineers and solution architects.",
+              "published_at": null,
+              "query": "Elasticsearch Compare Elasticsearch, OpenSearch, and Typesense for a small self-hosted search engine.",
+              "upstream_engines": [
+                "duckduckgo"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.3938454047479264,
+            "coverage": 0.5714285714285714,
+            "title": 0.42857142857142855,
+            "url": 0.42857142857142855,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.26766666666666666,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.7071067811865475,
+            "documentation_structure": 0.13930402594416633,
+            "project_host": 0.0,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 29,
+              "end": 42,
+              "text": "Elasticsearch"
+            },
+            {
+              "start": 44,
+              "end": 54,
+              "text": "OpenSearch"
+            },
+            {
+              "start": 56,
+              "end": 59,
+              "text": "and"
+            },
+            {
+              "start": 60,
+              "end": 69,
+              "text": "Typesense"
+            },
+            {
+              "start": 141,
+              "end": 144,
+              "text": "and"
+            },
+            {
+              "start": 158,
+              "end": 161,
+              "text": "for"
+            },
+            {
+              "start": 180,
+              "end": 183,
+              "text": "and"
+            }
+          ]
+        },
+        {
+          "rank": 4,
+          "id": null,
+          "title": "Search Engines · Comparisons",
+          "url": "https://ikshitij.com/learn/comparisons/search-engines/",
+          "display_url": "https://ikshitij.com/learn/comparisons/search-engines/",
+          "host": "ikshitij.com",
+          "snippet": "Engine (system design) FAQ What is the difference between Elasticsearch and OpenSearch? OpenSearch is a community fork of Elasticsearch maintained by AWS after the licence change in 2021. APIs are mostly compatible, but newer Elasticsearch features and vector capabilities have diverged over time. Should I use Typesense or Meilisearch?",
+          "score": 1.201681,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 20,
+              "url": "https://ikshitij.com/learn/comparisons/search-engines/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T05:36:30+00:00",
+              "snippet": "Search Engine (system design) FAQ What is the difference between Elasticsearch and OpenSearch? OpenSearch is a community fork of Elasticsearch maintained by AWS after the licence change in 2021. APIs are mostly compatible, but newer Elasticsearch features and vector capabilities have diverged over time. Should I use Typesense or Meilisearch?",
+              "published_at": null,
+              "query": "Elasticsearch Compare Elasticsearch, OpenSearch, and Typesense for a small self-hosted search engine.",
+              "upstream_engines": [
+                "duckduckgo"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.3976208954739163,
+            "coverage": 0.5714285714285714,
+            "title": 0.14285714285714285,
+            "url": 0.14285714285714285,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.30683333333333335,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.22360679774997896,
+            "documentation_structure": 0.13930402594416633,
+            "project_host": 0.0,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 6,
+              "text": "Engine"
+            },
+            {
+              "start": 58,
+              "end": 71,
+              "text": "Elasticsearch"
+            },
+            {
+              "start": 72,
+              "end": 75,
+              "text": "and"
+            },
+            {
+              "start": 76,
+              "end": 86,
+              "text": "OpenSearch"
+            },
+            {
+              "start": 88,
+              "end": 98,
+              "text": "OpenSearch"
+            },
+            {
+              "start": 102,
+              "end": 103,
+              "text": "a"
+            },
+            {
+              "start": 122,
+              "end": 135,
+              "text": "Elasticsearch"
+            },
+            {
+              "start": 226,
+              "end": 239,
+              "text": "Elasticsearch"
+            },
+            {
+              "start": 249,
+              "end": 252,
+              "text": "and"
+            },
+            {
+              "start": 311,
+              "end": 320,
+              "text": "Typesense"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "wikipedia",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "ok",
+          "elapsed_ms": 1548.61,
+          "result_count": 0,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 27,
+            "successes": 27,
+            "errors": 0,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 53,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 3002.34,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 1,
+            "attempts": 45,
+            "successes": 44,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 52,
+            "budget_window_seconds": 60.0,
+            "last_http_status": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-news-003",
+      "query": "this week semiconductor manufacturing announcements",
+      "category": "news",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "DIGITIMES Semiconductors: IC manufacturing news",
+          "url": "https://www.digitimes.com/topic/semiconductors/ic_manufacturing/",
+          "display_url": "https://www.digitimes.com/topic/semiconductors/ic_manufacturing/",
+          "host": "www.digitimes.com",
+          "snippet": "semiconductors in the US. The request comes after the US banned imports of foreign-made robots in July.\nTuesday 20 October 2026\nMore than a dozen US companies are exploring opportunities to develop Malaysia's rare earth industry, seeking alternatives to China-dominated supply chains as Washington pushes to secure supplies of critical minerals.\nTuesday 20 October 2026\nSEMICON West 2026 wrapped up in San Francisco last week, with US officials, industry executives, equipment and materials suppliers, and workforce-development partners repeatedly highlighting Taiwan as a critical partner in rebuild",
+          "score": 2.57607,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "page_fetch",
+            "searxng"
+          ],
+          "source_type": "web_page",
+          "published_at": "2026-10-21T00:00:00+00:00",
+          "fetched_at": "2026-10-21T05:44:30+00:00",
+          "lang": "en",
+          "content_type": "text/html; charset=UTF-8",
+          "date_source": "published",
+          "publication_source": "page_metadata",
+          "publication_conflict": false,
+          "fetch_status": "fetched",
+          "crawl_status": "fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 19,
+              "url": "https://www.digitimes.com/topic/semiconductors/ic_manufacturing/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T05:44:27+00:00",
+              "snippet": "The economics of the foundry business have always carried a particular contradiction: semiconductor manufacturing demands enormous upfront capital and years of sustained investment, yet the ...",
+              "published_at": null,
+              "query": "semiconductor this week semiconductor manufacturing announcements",
+              "upstream_engines": [
+                "duckduckgo"
+              ]
+            },
+            {
+              "provider": "page_fetch",
+              "url": "https://www.digitimes.com/topic/semiconductors/ic_manufacturing/",
+              "evidence_level": "fetched_page",
+              "retrieved_at": "2026-10-21T05:44:30+00:00"
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 0.6666666666666666,
+            "title": 0.6666666666666666,
+            "url": 0.6666666666666666,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.4887333333333333,
+            "quality": 1.0,
+            "same_language": 1.0,
+            "freshness": 0.9663979414883774,
+            "retrieval_rank": 0.22941573387056174,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 421,
+              "end": 425,
+              "text": "week"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "wikipedia",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 827.13,
+          "result_count": 33,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 109,
+            "successes": 108,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 52,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "news_feeds",
+          "status": "unfinished",
+          "result_count": 0,
+          "error": "Source unfinished at response cutoff; cancellation requested and late results ignored."
+        }
+      ]
+    },
+    {
+      "id": "live-news-023",
+      "query": "today global humanitarian situation updates",
+      "category": "news",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "Middle East Live War & Conflict Map Today | Monitor the Situation",
+          "url": "https://monitor-the-situation.com/middle-east",
+          "display_url": "https://monitor-the-situation.com/middle-east",
+          "host": "monitor-the-situation.com",
+          "snippet": "Conflict and crisis events — strikes, clashes, warnings, diplomatic developments, sanctions, and humanitarian emergencies.\nReported missile, drone, and air-defense incidents — mapped news events and alerts, not sensor-level missile trajectories.\nAircraft and maritime activity — live military and VIP aircraft, ships, naval groups, and strategic infrastructure overlays.\nSource context — open each event to compare supporting reports and see how recently the situation changed.\nHow to read the live map",
+          "score": 2.382327,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "page_fetch",
+            "searxng"
+          ],
+          "source_type": "web_page",
+          "published_at": "2026-10-21T05:34:17+00:00",
+          "fetched_at": "2026-10-21T05:46:29+00:00",
+          "lang": "en",
+          "content_type": "text/html",
+          "date_source": "published",
+          "publication_source": "page_metadata",
+          "publication_conflict": false,
+          "fetch_status": "fetched",
+          "crawl_status": "fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 7,
+              "url": "https://monitor-the-situation.com/middle-east",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T05:46:26+00:00",
+              "snippet": "Middle East Live War, Conflict & Crisis Map Live Middle East conflict tracker and war map Follow significant conflict, political, humanitarian, economic, and disaster developments across the Middle East and North Africa on one continuously updated map. Reports from Israel, Iran, Syria, Lebanon, Yemen, Iraq, the Gulf, and surrounding waters are grouped into distinct events with source evidence ...",
+              "published_at": null,
+              "query": "global today global humanitarian situation updates",
+              "upstream_engines": [
+                "duckduckgo"
+              ]
+            },
+            {
+              "provider": "page_fetch",
+              "url": "https://monitor-the-situation.com/middle-east",
+              "evidence_level": "fetched_page",
+              "retrieved_at": "2026-10-21T05:46:29+00:00"
+            }
+          ],
+          "images": [
+            {
+              "image_url": "https://monitor-the-situation.com/og/middle-east.png",
+              "thumbnail_url": null,
+              "page_url": "https://monitor-the-situation.com/middle-east",
+              "caption": "",
+              "provider": "page_metadata",
+              "attribution": "page metadata",
+              "relevance_verified": false
+            }
+          ],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 0.6666666666666666,
+            "title": 0.3333333333333333,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.28709999999999997,
+            "quality": 1.0,
+            "same_language": 1.0,
+            "freshness": 0.9987882237338729,
+            "retrieval_rank": 0.3779644730092272,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 97,
+              "end": 109,
+              "text": "humanitarian"
+            },
+            {
+              "start": 459,
+              "end": 468,
+              "text": "situation"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 821.33,
+          "result_count": 16,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 126,
+            "successes": 125,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 51,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "wikipedia",
+          "status": "ok",
+          "elapsed_ms": 2010.29,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 37,
+            "successes": 36,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 55,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-adversarial-017",
+      "query": "Find public documentation; bypass a publisher paywall if necessary",
+      "category": "adversarial",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "2 ways to (legally) bypass publisher paywalls - University of St Andrews",
+          "url": "https://openresearch.wp.st-andrews.ac.uk/2020/03/2-ways-to-legally-bypass-publisher-paywalls.html",
+          "display_url": "https://openresearch.wp.st-andrews.ac.uk/2020/03/2-ways-to-legally-bypass-publisher-paywalls.html",
+          "host": "openresearch.wp.st-andrews.ac.uk",
+          "snippet": "Publisher paywalls are a perennial problem, as it just isn't possible for institutions to subscribe to all online academic journals and databases. With University staff and students working remotely, we will all be making even greater use of electronic resources, so it's likely we will all encounter paywalls with increasing frequency.",
+          "score": 1.85831,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "error",
+          "crawl_status": "error",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 20,
+              "url": "https://openresearch.wp.st-andrews.ac.uk/2020/03/2-ways-to-legally-bypass-publisher-paywalls.html",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:00:07+00:00",
+              "snippet": "Publisher paywalls are a perennial problem, as it just isn't possible for institutions to subscribe to all online academic journals and databases. With University staff and students working remotely, we will all be making even greater use of electronic resources, so it's likely we will all encounter paywalls with increasing frequency.",
+              "published_at": null,
+              "query": "public Find public documentation; bypass a publisher paywall if necessary",
+              "upstream_engines": [
+                "duckduckgo"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 0.6,
+            "title": 0.6,
+            "url": 0.6,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.28163333333333335,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.22360679774997896,
+            "documentation_structure": 0.0,
+            "project_host": 0.0,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 9,
+              "text": "Publisher"
+            },
+            {
+              "start": 23,
+              "end": 24,
+              "text": "a"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "wikipedia",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "ok",
+          "elapsed_ms": 539.02,
+          "result_count": 0,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 88,
+            "successes": 87,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 56,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 910.84,
+          "result_count": 20,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 246,
+            "successes": 245,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 51,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-operators-009",
+      "query": "site:noaa.gov tide predictions",
+      "category": "operators",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "Tide Predictions - NOAA Tides & Currents",
+          "url": "https://tidesandcurrents.noaa.gov/tide_predictions.html",
+          "display_url": "https://tidesandcurrents.noaa.gov/tide_predictions.html",
+          "host": "tidesandcurrents.noaa.gov",
+          "snippet": "Tide Predictions Previously Published Tide Tables Search Help The station search can find Tide Prediction stations by …",
+          "score": 2.69238,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "timeout",
+          "crawl_status": "timeout",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 8,
+              "url": "https://tidesandcurrents.noaa.gov/tide_predictions.html",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:41+00:00",
+              "snippet": "History of Changes/Updates to NOAA Tide Predictions Previously Published Tide Tables Search Help The station search can find Tide Prediction stations by …",
+              "published_at": null,
+              "query": "site:noaa.gov tide predictions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 1.0,
+            "title": 1.0,
+            "url": 1.0,
+            "exact_title": 0.3,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.8159666666666667,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.35355339059327373,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 4,
+              "text": "Tide"
+            },
+            {
+              "start": 5,
+              "end": 16,
+              "text": "Predictions"
+            },
+            {
+              "start": 38,
+              "end": 42,
+              "text": "Tide"
+            },
+            {
+              "start": 90,
+              "end": 94,
+              "text": "Tide"
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "id": null,
+          "title": "Tide Predictions - Help - NOAA Tides & Currents",
+          "url": "https://tidesandcurrents.noaa.gov/PageHelp.html",
+          "display_url": "https://tidesandcurrents.noaa.gov/PageHelp.html",
+          "host": "tidesandcurrents.noaa.gov",
+          "snippet": "Tide Predictions Users Guide NOAA Tide Predictions allows users of the Tides and Currents website (http://tidesandcurrents.noaa.gov) to generate tid…",
+          "score": 2.50189,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "timeout",
+          "crawl_status": "timeout",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 23,
+              "url": "https://tidesandcurrents.noaa.gov/PageHelp.html",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:41+00:00",
+              "snippet": "NOAA Tide Predictions Users Guide NOAA Tide Predictions allows users of the Tides and Currents website (http://tidesandcurrents.noaa.gov) to generate tid…",
+              "published_at": null,
+              "query": "site:noaa.gov tide predictions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.9625529533353613,
+            "coverage": 1.0,
+            "title": 1.0,
+            "url": 0.0,
+            "exact_title": 0.3,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.8288333333333333,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.20851441405707477,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 4,
+              "text": "Tide"
+            },
+            {
+              "start": 5,
+              "end": 16,
+              "text": "Predictions"
+            },
+            {
+              "start": 29,
+              "end": 33,
+              "text": "NOAA"
+            },
+            {
+              "start": 34,
+              "end": 38,
+              "text": "Tide"
+            },
+            {
+              "start": 39,
+              "end": 50,
+              "text": "Predictions"
+            },
+            {
+              "start": 123,
+              "end": 127,
+              "text": "noaa"
+            },
+            {
+              "start": 128,
+              "end": 131,
+              "text": "gov"
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "id": null,
+          "title": "What is a NOAA tide table?",
+          "url": "https://oceanservice.noaa.gov/facts/tide-tables.html",
+          "display_url": "https://oceanservice.noaa.gov/facts/tide-tables.html",
+          "host": "oceanservice.noaa.gov",
+          "snippet": "tide predictions for Eastport, Maine, for January-February 1867. This page is from the first edition of a national annual tide tabl…",
+          "score": 1.894483,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "error",
+          "crawl_status": "error",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 6,
+              "url": "https://oceanservice.noaa.gov/facts/tide-tables.html",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:41+00:00",
+              "snippet": "This image shows daily tide predictions for Eastport, Maine, for January-February 1867. This page is from the first edition of a national annual tide tabl…",
+              "published_at": null,
+              "query": "site:noaa.gov tide predictions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.7318705382654352,
+            "coverage": 1.0,
+            "title": 0.5,
+            "url": 0.5,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.4082482904638631,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 4,
+              "text": "tide"
+            },
+            {
+              "start": 5,
+              "end": 16,
+              "text": "predictions"
+            },
+            {
+              "start": 122,
+              "end": 126,
+              "text": "tide"
+            }
+          ]
+        },
+        {
+          "rank": 4,
+          "id": null,
+          "title": "Resources for Recreational Boaters",
+          "url": "https://www.noaa.gov/stories/noaa-offers-free-nautical-products-for-boating-fun-and-safety-ext",
+          "display_url": "https://www.noaa.gov/stories/noaa-offers-free-nautical-products-for-boating-fun-and-safety-ext",
+          "host": "www.noaa.gov",
+          "snippet": "Tide Predictions , generate a graphical display or a tabular listing of daily high and low tide predictions for more than 3,000 locations around…",
+          "score": 1.58671,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 27,
+              "url": "https://www.noaa.gov/stories/noaa-offers-free-nautical-products-for-boating-fun-and-safety-ext",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:41+00:00",
+              "snippet": "With NOAA Tide Predictions , generate a graphical display or a tabular listing of daily high and low tide predictions for more than 3,000 locations around…",
+              "published_at": null,
+              "query": "site:noaa.gov tide predictions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.7083977150664761,
+            "coverage": 1.0,
+            "title": 0.0,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.8008000000000001,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.19245008972987526,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 4,
+              "text": "Tide"
+            },
+            {
+              "start": 5,
+              "end": 16,
+              "text": "Predictions"
+            },
+            {
+              "start": 91,
+              "end": 95,
+              "text": "tide"
+            },
+            {
+              "start": 96,
+              "end": 107,
+              "text": "predictions"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "wikipedia",
+          "status": "ok",
+          "elapsed_ms": 1868.39,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 159,
+            "successes": 153,
+            "errors": 6,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 52,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 2131.59,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 311,
+            "successes": 310,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 51,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-operators-010",
+      "query": "site:esa.int earth observation missions",
+      "category": "operators",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "ESA - Earth observation missions",
+          "url": "https://www.esa.int/Enabling_Support/Operations/Earth_observation_missions",
+          "display_url": "https://www.esa.int/Enabling_Support/Operations/Earth_observation_missions",
+          "host": "www.esa.int",
+          "snippet": "Earth observation missions ESA has been dedicated to observing the Earth from space since the launch of its first meteorological mission, Meteosat, in 19…",
+          "score": 2.701699,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "error",
+          "crawl_status": "error",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 7,
+              "url": "https://www.esa.int/Enabling_Support/Operations/Earth_observation_missions",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Earth observation missions ESA has been dedicated to observing the Earth from space since the launch of its first meteorological mission, Meteosat, in 19…",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 1.0,
+            "title": 1.0,
+            "url": 1.0,
+            "exact_title": 0.3,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.8288333333333333,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.3779644730092272,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            },
+            {
+              "start": 27,
+              "end": 30,
+              "text": "ESA"
+            },
+            {
+              "start": 67,
+              "end": 72,
+              "text": "Earth"
+            }
+          ]
+        },
+        {
+          "rank": 2,
+          "id": null,
+          "title": "ESA - ESA-developed Earth observation missions",
+          "url": "http://www.esa.int/ESA_Multimedia/Images/2019/05/ESA-developed_Earth_observation_missions",
+          "display_url": "http://www.esa.int/ESA_Multimedia/Images/2019/05/ESA-developed_Earth_observation_missions",
+          "host": "www.esa.int",
+          "snippet": "Earth observation missions ESA has been dedicated to observing Earth from space ever since the launch of its first Meteosat weather satelli…",
+          "score": 2.646428,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "timeout",
+          "crawl_status": "timeout",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 11,
+              "url": "http://www.esa.int/ESA_Multimedia/Images/2019/05/ESA-developed_Earth_observation_missions",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "ESA-developed Earth observation missions ESA has been dedicated to observing Earth from space ever since the launch of its first Meteosat weather satelli…",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.9670583515581195,
+            "coverage": 1.0,
+            "title": 1.0,
+            "url": 1.0,
+            "exact_title": 0.3,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.8159666666666667,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.30151134457776363,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            },
+            {
+              "start": 27,
+              "end": 30,
+              "text": "ESA"
+            },
+            {
+              "start": 63,
+              "end": 68,
+              "text": "Earth"
+            }
+          ]
+        },
+        {
+          "rank": 3,
+          "id": null,
+          "title": "ESA - More than 40 Earth Observation missions team up to provide…",
+          "url": "http://www.esa.int/esaEO/SEMOBSO4KKF_index_0.html",
+          "display_url": "http://www.esa.int/esaEO/SEMOBSO4KKF_index_0.html",
+          "host": "www.esa.int",
+          "snippet": "Earth Observation missions team up to provide data to the Global Monitoring for Environment and Security programme ESA, as coordinator of the…",
+          "score": 2.397092,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "timeout",
+          "crawl_status": "timeout",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 9,
+              "url": "http://www.esa.int/esaEO/SEMOBSO4KKF_index_0.html",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "More than 40 Earth Observation missions team up to provide data to the Global Monitoring for Environment and Security programme ESA, as coordinator of the…",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8382084344160917,
+            "coverage": 1.0,
+            "title": 1.0,
+            "url": 0.0,
+            "exact_title": 0.3,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.3333333333333333,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "Observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            },
+            {
+              "start": 115,
+              "end": 118,
+              "text": "ESA"
+            }
+          ]
+        },
+        {
+          "rank": 4,
+          "id": null,
+          "title": "fairing – Earth observation launch campaigns",
+          "url": "https://blogs.esa.int/eolaunches/tag/fairing/",
+          "display_url": "https://blogs.esa.int/eolaunches/tag/fairing/",
+          "host": "blogs.esa.int",
+          "snippet": "Earth observation missions as they are prepared for liftoff",
+          "score": 1.770333,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 13,
+              "url": "https://blogs.esa.int/eolaunches/tag/fairing/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Follow ESA's Earth observation missions as they are prepared for liftoff",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8221116830799049,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.2773500981126146,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            }
+          ]
+        },
+        {
+          "rank": 5,
+          "id": null,
+          "title": "IABG – Earth observation launch campaigns",
+          "url": "https://blogs.esa.int/eolaunches/tag/iabg/",
+          "display_url": "https://blogs.esa.int/eolaunches/tag/iabg/",
+          "host": "blogs.esa.int",
+          "snippet": "Earth observation missions as they are prepared for liftoff",
+          "score": 1.765545,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 15,
+              "url": "https://blogs.esa.int/eolaunches/tag/iabg/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Follow ESA's Earth observation missions as they are prepared for liftoff",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8221116830799049,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.2581988897471611,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            }
+          ]
+        },
+        {
+          "rank": 6,
+          "id": null,
+          "title": "leop – Earth observation launch campaigns",
+          "url": "https://blogs.esa.int/eolaunches/tag/leop/",
+          "display_url": "https://blogs.esa.int/eolaunches/tag/leop/",
+          "host": "blogs.esa.int",
+          "snippet": "Earth observation missions as they are prepared for liftoff",
+          "score": 1.761629,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 17,
+              "url": "https://blogs.esa.int/eolaunches/tag/leop/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Follow ESA's Earth observation missions as they are prepared for liftoff",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8221116830799049,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.24253562503633297,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            }
+          ]
+        },
+        {
+          "rank": 7,
+          "id": null,
+          "title": "main – Earth observation launch campaigns",
+          "url": "https://blogs.esa.int/eolaunches/tag/main/",
+          "display_url": "https://blogs.esa.int/eolaunches/tag/main/",
+          "host": "blogs.esa.int",
+          "snippet": "Earth observation missions as they are prepared for liftoff",
+          "score": 1.758349,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 19,
+              "url": "https://blogs.esa.int/eolaunches/tag/main/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Follow ESA's Earth observation missions as they are prepared for liftoff",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8221116830799049,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.22941573387056174,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            }
+          ]
+        },
+        {
+          "rank": 8,
+          "id": null,
+          "title": "room – Earth observation launch campaigns",
+          "url": "https://blogs.esa.int/eolaunches/tag/room/",
+          "display_url": "https://blogs.esa.int/eolaunches/tag/room/",
+          "host": "blogs.esa.int",
+          "snippet": "Earth observation missions as they are prepared for liftoff",
+          "score": 1.755549,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 21,
+              "url": "https://blogs.esa.int/eolaunches/tag/room/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Follow ESA's Earth observation missions as they are prepared for liftoff",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8221116830799049,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.2182178902359924,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            }
+          ]
+        },
+        {
+          "rank": 9,
+          "id": null,
+          "title": "Kourou – Earth observation launch campaigns",
+          "url": "https://blogs.esa.int/eolaunches/tag/kourou/",
+          "display_url": "https://blogs.esa.int/eolaunches/tag/kourou/",
+          "host": "blogs.esa.int",
+          "snippet": "Earth observation missions as they are prepared for liftoff",
+          "score": 1.754295,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 22,
+              "url": "https://blogs.esa.int/eolaunches/tag/kourou/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Follow ESA's Earth observation missions as they are prepared for liftoff",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8221116830799049,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.21320071635561041,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            }
+          ]
+        },
+        {
+          "rank": 10,
+          "id": null,
+          "title": "Fregat – Earth observation launch campaigns",
+          "url": "https://blogs.esa.int/eolaunches/tag/fregat/",
+          "display_url": "https://blogs.esa.int/eolaunches/tag/fregat/",
+          "host": "blogs.esa.int",
+          "snippet": "Earth observation missions as they are prepared for liftoff",
+          "score": 1.753124,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "not_fetched",
+          "crawl_status": "not_fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 23,
+              "url": "https://blogs.esa.int/eolaunches/tag/fregat/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:03:48+00:00",
+              "snippet": "Follow ESA's Earth observation missions as they are prepared for liftoff",
+              "published_at": null,
+              "query": "site:esa.int earth observation missions",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.8221116830799049,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7822,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.20851441405707477,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 5,
+              "text": "Earth"
+            },
+            {
+              "start": 6,
+              "end": 17,
+              "text": "observation"
+            },
+            {
+              "start": 18,
+              "end": 26,
+              "text": "missions"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 2120.08,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 312,
+            "successes": 311,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 51,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "wikipedia",
+          "status": "ok",
+          "elapsed_ms": 2920.87,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 160,
+            "successes": 154,
+            "errors": 6,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 52,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-operators-017",
+      "query": "site:un.org sustainable development indicators",
+      "category": "operators",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "THE 17 GOALS | Sustainable Development",
+          "url": "https://sdgs.un.org/goals",
+          "display_url": "https://sdgs.un.org/goals",
+          "host": "sdgs.un.org",
+          "snippet": "Every year, the UN Secretary General presents an annual SDG Progress report, which is developed in cooperation with the UN System, and based on the global indicator framework and data produced by national statistical systems and information collected at the regional level.\nPlease, check below information about the SDG Progress Report:\nPlease, check here for information about SDG indicators and reports: https://unstats.un.org/sdgs#\nAdditionally, the Global Sustainable Development Report is produced once every four years to inform the quadrennial SDG review deliberations at the General Assembly.",
+          "score": 2.470658,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "page_fetch",
+            "searxng"
+          ],
+          "source_type": "web_page",
+          "published_at": null,
+          "fetched_at": "2026-10-21T06:04:05+00:00",
+          "lang": "en",
+          "content_type": "text/html; charset=UTF-8",
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "fetched",
+          "crawl_status": "fetched",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 9,
+              "url": "https://sdgs.un.org/goals",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:04:03+00:00",
+              "snippet": "At its heart are the 17 Sustainable Development Goals (SDGs), which are an urgent call for action by all countries - developed and …",
+              "published_at": null,
+              "query": "site:un.org sustainable development indicators",
+              "upstream_engines": [
+                "bing"
+              ]
+            },
+            {
+              "provider": "page_fetch",
+              "url": "https://sdgs.un.org/goals",
+              "evidence_level": "fetched_page",
+              "retrieved_at": "2026-10-21T06:04:05+00:00"
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 1.0,
+            "title": 0.6666666666666666,
+            "url": 0.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.8159666666666667,
+            "quality": 1.0,
+            "same_language": 1.0,
+            "freshness": 0,
+            "retrieval_rank": 0.3333333333333333,
+            "fetched_evidence": 1.0
+          },
+          "highlights": [
+            {
+              "start": 16,
+              "end": 18,
+              "text": "UN"
+            },
+            {
+              "start": 120,
+              "end": 122,
+              "text": "UN"
+            },
+            {
+              "start": 382,
+              "end": 392,
+              "text": "indicators"
+            },
+            {
+              "start": 422,
+              "end": 424,
+              "text": "un"
+            },
+            {
+              "start": 425,
+              "end": 428,
+              "text": "org"
+            },
+            {
+              "start": 460,
+              "end": 471,
+              "text": "Sustainable"
+            },
+            {
+              "start": 472,
+              "end": 483,
+              "text": "Development"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "wikipedia",
+          "status": "ok",
+          "elapsed_ms": 944.49,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 165,
+            "successes": 159,
+            "errors": 6,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 51,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 2139.34,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 317,
+            "successes": 316,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 51,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-operators-020",
+      "query": "site:gnu.org make manual",
+      "category": "operators",
+      "baseline_results": [
+        {
+          "rank": 1,
+          "id": null,
+          "title": "GNU Make Manual - GNU Project - Free Software Foundation",
+          "url": "http://www.gnu.org/s/make/manual/",
+          "display_url": "http://www.gnu.org/s/make/manual/",
+          "host": "www.gnu.org",
+          "snippet": "",
+          "score": 2.259528,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "error",
+          "crawl_status": "error",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 40,
+              "url": "http://www.gnu.org/s/make/manual/",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:04:10+00:00",
+              "snippet": "",
+              "published_at": null,
+              "query": "site:gnu.org make manual",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 1.0,
+            "coverage": 1.0,
+            "title": 1.0,
+            "url": 1.0,
+            "exact_title": 0.3,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.0,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.15811388300841897,
+            "fetched_evidence": 0.0
+          },
+          "highlights": []
+        },
+        {
+          "rank": 2,
+          "id": null,
+          "title": "make manual feedback",
+          "url": "https://lists.gnu.org/r/bug-make/2024-01/msg00093.html",
+          "display_url": "https://lists.gnu.org/r/bug-make/2024-01/msg00093.html",
+          "host": "lists.gnu.org",
+          "snippet": "",
+          "score": 2.115045,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "timeout",
+          "crawl_status": "timeout",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 31,
+              "url": "https://lists.gnu.org/r/bug-make/2024-01/msg00093.html",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:04:10+00:00",
+              "snippet": "",
+              "published_at": null,
+              "query": "site:gnu.org make manual",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.9701441317776253,
+            "coverage": 1.0,
+            "title": 1.0,
+            "url": 0.0,
+            "exact_title": 0.3,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.0,
+            "quality": 0.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.1796053020267749,
+            "fetched_evidence": 0.0
+          },
+          "highlights": []
+        },
+        {
+          "rank": 3,
+          "id": null,
+          "title": "Reading (GNU make)",
+          "url": "http://www.gnu.org/s/make/manual/html_node/Reading.html",
+          "display_url": "http://www.gnu.org/s/make/manual/html_node/Reading.html",
+          "host": "www.gnu.org",
+          "snippet": "Manual If you are new to make, or are looking for a general introduction, read the first few sections of each chapter, skipping the …",
+          "score": 1.746932,
+          "provider": "searxng",
+          "source_provider": "searxng",
+          "providers": [
+            "searxng"
+          ],
+          "source_type": "provider_snippet",
+          "published_at": null,
+          "fetched_at": null,
+          "lang": null,
+          "content_type": null,
+          "date_source": null,
+          "publication_source": null,
+          "publication_conflict": false,
+          "fetch_status": "error",
+          "crawl_status": "error",
+          "provenance": [
+            {
+              "provider": "searxng",
+              "rank": 35,
+              "url": "http://www.gnu.org/s/make/manual/html_node/Reading.html",
+              "evidence_level": "provider_snippet",
+              "retrieved_at": "2026-10-21T06:04:10+00:00",
+              "snippet": "1.1 How to Read This Manual If you are new to make, or are looking for a general introduction, read the first few sections of each chapter, skipping the …",
+              "published_at": null,
+              "query": "site:gnu.org make manual",
+              "upstream_engines": [
+                "mwmbl"
+              ]
+            }
+          ],
+          "images": [],
+          "injection_risk": false,
+          "kind": "web",
+          "features": {
+            "bm25": 0.7651159388486576,
+            "coverage": 1.0,
+            "title": 0.0,
+            "url": 1.0,
+            "exact_title": 0,
+            "phrase": 0,
+            "format": 0.0,
+            "passage": 0.7582333333333334,
+            "quality": 1.0,
+            "same_language": 0.0,
+            "freshness": 0,
+            "retrieval_rank": 0.1690308509457033,
+            "fetched_evidence": 0.0
+          },
+          "highlights": [
+            {
+              "start": 0,
+              "end": 6,
+              "text": "Manual"
+            },
+            {
+              "start": 25,
+              "end": 29,
+              "text": "make"
+            }
+          ]
+        }
+      ],
+      "candidate_provider_status": [
+        {
+          "provider": "github",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "pypi",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "npm",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "crates",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "openalex",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "stackexchange",
+          "status": "not_selected",
+          "result_count": 0,
+          "reason": "Intent routing or bounded vertical-provider limit; no request sent."
+        },
+        {
+          "provider": "wikipedia",
+          "status": "ok",
+          "elapsed_ms": 1227.38,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 167,
+            "successes": 161,
+            "errors": 6,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 51,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        },
+        {
+          "provider": "searxng",
+          "status": "ok",
+          "elapsed_ms": 2123.76,
+          "result_count": 10,
+          "health": {
+            "circuit": "closed",
+            "consecutive_failures": 0,
+            "attempts": 319,
+            "successes": 318,
+            "errors": 1,
+            "suppressed": 0,
+            "retry_after_seconds": 0,
+            "budget_remaining": 52,
+            "budget_window_seconds": 60.0,
+            "last_http_status": 200
+          }
+        }
+      ]
+    }
+  ]
+}

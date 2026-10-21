@@ -1,0 +1,1 @@
+Fixture checks passed: reference supplements add review evidence only, do not alter captured result lists, and reject sealed/unknown query IDs. No network request or sealed query body read.

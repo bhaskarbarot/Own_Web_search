@@ -20,15 +20,26 @@ never claims about unmeasured performance.
 
 ## Current phase and preserved baseline
 
-**Current: Phase 1 implementation frozen at 5709c59; full live dev evaluation running.**
-Provider health, independent free supplements and declared site/feed discovery
-are implemented. All 299 runtime regressions pass, plus four comparison-gate
-checks. Fixed-dev replay preserves all 300 ranked URL signatures with two denied
-sources. Query variants were measured and reverted after no coverage gain.
-New account search adapters were removed per the user's free/self-hosted scope.
-Latest consolidated report: docs/PHASE1_REPORT.md. The complete candidate live
-capture is eval/runs/phase1/dev-free-candidate.json; do not mistake a partial run
-for a completed measurement.
+**Current: Phase 1 implementation/evaluation complete; quality gate pending human grades.**
+Runtime 5709c59 stayed fixed throughout the complete 300-dev/30-repeat capture.
+All 303 release regressions pass. Two-source failure injection passes, with all
+300 frozen-source ranked URL signatures preserved. New account search adapters
+were removed; unhelpful query variants were measured and reverted.
+
+The free/keyless candidate lowered empty queries (excluding 13 nonexistent
+controls) from 81/287 = 28.22% to 68/287 = 23.69%. Paired change −4.53 percentage
+points, 95% CI [−8.36, −1.05]. It gained 21 cases and lost 8. Cold median changed
+5.116 → 5.264 s, p95 8.035 → 8.054 s. These are temporally separate live runs,
+not causal relevance proof. API supplements remain opt-in in persistent config.
+
+Current review: eval/runs/phase1/review-with-references/human_review_queue.csv
+(6,931 pairs), starting sample human_review_candidates.csv (694 pairs), and
+reference_candidates.csv (4 observed, ungraded candidates for three previously
+empty non-control pools). The first 6,927-pair snapshot in review/ is preserved.
+No grades were fabricated; search observations are not full-page fetch successes.
+Read docs/PHASE1_REPORT.md and comparison-with-references.json in eval/runs/phase1 for full results,
+source contributions, limitations, commands and phase gate.
+
 Retain the verified Phase 2 snippet component and defer further ranking work.
 The user requested autonomous work through the hierarchy, without routine
 confirmation stops. Earlier judgments remain missing and are never invented.
@@ -587,3 +598,64 @@ excluded rather than converted to zero. Partial judged query coverage cannot
 turn the phase gate green. Four targeted review/comparison tests pass; baseline
 self-comparison returns identical zero-rate CIs and a false, ungraded quality gate.
 No runtime source file changed after capture began.
+
+
+### Phase 1 complete capture and exact remaining gate
+
+2026-10-21, runtime 5709c59; reporting parent 7ed8a5a. All 300 fixed dev cases and
+30 warm repeats captured; 303 release tests passed (51.861 s). Source fingerprint
+stayed unchanged. Baseline capture, fixed split and all original review files
+retain their saved hashes (preservation-final.json). Sealed queries run: 0.
+
+Observed zero-result rate excluding nonexistent controls: 28.223% → 23.693%.
+Paired bootstrap delta −4.530 percentage points, CI [−8.362, −1.045]. All 13
+nonexistent controls still abstain. There were 21 gains and 8 losses; raw cases
+are saved in nonempty-changes.json. Cold p50 5115.58 → 5264.03 ms; p95
+8034.89 → 8054.04 ms. Warm p50 5131.04 → 5166.56 ms; p95 8024.21 → 7890.32 ms.
+OS/upstream caches and availability were uncontrolled. Do not claim an accuracy
+improvement or activate the API profile from these availability counts alone.
+
+The general source completed every cold request. Many API responses were
+unfinished and discarded at the cutoff; recorded source batches can also include
+late metadata. Exact statuses and raw outputs are retained. Public API denials
+were not bypassed. Paid/account search integrations remain removed/disabled.
+
+Recall@10, strict P@5 and NDCG deltas remain null: zero grades over the 6,927-pair
+union pool. Three non-control pools still need actual reference URLs. New CSVs
+live in eval/runs/phase1/review; original eval/human_review*.csv stay untouched.
+The comparison tool imports completed CSV fields into a new output directory
+without replacing human edits. Fabricated-URL audits are unmeasured; provenance
+gaps are 0, which is not independent proof of URL existence.
+
+Phase 1 gate: tests PASS, failure injection PASS, observed zero-result drop PASS;
+recall improvement and strict P@5 preservation UNMEASURED; overall NOT PASSED.
+Next required work is human review under eval/RUBRIC.md and the commands in
+docs/PHASE1_REPORT.md. Keep working within Phase 1 after grades arrive; AGENTS.md
+requires: “Do NOT start the next phase.” This is an evidence dependency, not a
+request for repeated authorization. Existing Phase 2 snippet work is preserved;
+further Phase 2–5 work follows the gate. The user already authorized proceeding
+through the hierarchy when those prerequisites are met.
+
+
+### Phase 1 reference evidence completed, grades still required
+
+2026-10-21. Continued independent work rather than leaving the three empty
+reference pools for the user to locate. Found four real external-search
+observations for those three multilingual IDs. Saved short source excerpts and
+exact observed URLs; Gujarati/Korean direct opens failed and are not reported
+as fetched. Arabic includes Arabic/English candidates whose language adequacy
+requires human review. No relevance grades assigned, no engine results changed.
+
+Current pool: 6,931 query/URL pairs; no empty non-control pools; zero grades.
+Current CSVs are in eval/runs/phase1/review-with-references/ (full queue 6,931,
+starting sample 694, focused reference candidates 4). Original review/ snapshot
+and eval/human_review*.csv remain unchanged. The comparison CLI now accepts
+--extra-source; all 16 review/evaluation tests pass, with explicit checks that
+reference supplements cannot alter recorded results or include sealed IDs.
+The complete release suite remains 303 passed; runtime is unchanged since it.
+
+Phase 1 gate remains NOT PASSED solely because required relevance comparisons
+are ungraded. Use comparison-with-references.json and docs/PHASE1_REPORT.md for
+the complete current handoff and CSV import command. Continue the authorized
+phase hierarchy after real judgments satisfy the gate; do not substitute
+nonempty/source availability counts for Recall@10 or strict P@5.

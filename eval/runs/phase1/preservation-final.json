@@ -1,0 +1,15 @@
+{
+  "all_preserved": true,
+  "files": {
+    "eval/dev.jsonl": true,
+    "eval/splits.json": true,
+    "eval/human_review.csv": true,
+    "eval/human_review_candidates.csv": true,
+    "eval/human_review_queue.csv": true,
+    "eval/runs/baseline-dev.json": true
+  },
+  "runtime_matches_capture": true,
+  "dev_queries": 300,
+  "warm_repeats": 30,
+  "sealed_queries_run": 0
+}

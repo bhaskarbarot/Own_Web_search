@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 import sys
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-from eval.live_eval import assess,blinded,digest,load_dev,load_judgments,pool_runs,review_csv,validate_report,url_key
+from eval.live_eval import assess,blinded,digest,load_dev,load_judgments,pool_runs,review_csv,validate_report,url_key,jsonl
 from eval.run_eval import bootstrap
 from scripts.benchmark_query_md import save_report
 
@@ -56,18 +56,20 @@ def main():
     p.add_argument('--baseline',default='eval/runs/baseline-dev.json')
     p.add_argument('--candidate',required=True);p.add_argument('--output',required=True)
     p.add_argument('--review-dir',required=True);p.add_argument('--judgments')
+    p.add_argument('--extra-source',action='append',default=[],help='Observed dev reference candidates; does not change recorded results.')
     p.add_argument('--review-csv',help='Completed CSV from the same baseline/candidate union pool.')
     p.add_argument('--independent-review',action='store_true',help='Only for a reviewer independent of development.')
     p.add_argument('--failure-injection',default='eval/runs/phase1/final-dev-preservation.json')
-    p.add_argument('--tests',default='eval/runs/phase1/final-tests.txt');a=p.parse_args()
+    p.add_argument('--tests',default='eval/runs/phase1/release-tests.txt');a=p.parse_args()
     reports=[json.loads(Path(path).read_text()) for path in (a.baseline,a.candidate)]
     cases,split=load_dev()
     for report in reports:
         validate_report(report)
         if {r['id'] for r in report['runs']}!=set(split['dev_ids']):raise ValueError('Both captures must include all fixed dev IDs.')
     pooled={}
-    for report in reports:
-        for row in pool_runs(report):
+    extras=[row for path in a.extra_source for row in jsonl(path)]
+    for index,report in enumerate(reports):
+        for row in pool_runs(report,extras if index==0 else ()):
             key=(row['id'],row['url'])
             if key not in pooled:pooled[key]=row
             else:

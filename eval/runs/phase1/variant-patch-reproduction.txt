@@ -1,0 +1,1 @@
+Saved rejected-experiment patch applies cleanly to isolated c3baf75 source/tests. No active runtime changed and no public request sent.
