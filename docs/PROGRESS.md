@@ -287,5 +287,28 @@ Implemented complete coverage architecture mapped to all 12 AI-agent categories 
    - Preserves zero fabrication: adversarial query D05 (`SuperVectorDB9000`) returns 0 results rather than hallucinating.
    - 147 / 147 unit tests pass normally and under `python3 -S`.
    - Benchmark: 100% fixture recall preserved, warm p50 4.859 ms, warm p95 8.910 ms, 0 network requests.
+## Phase: Live Knowledge Search & UI Rendering Upgrade (2026-10-21)
 
+Resolved live query search freezes and improved entity path expansion across diverse query domains:
 
+1. Web UI Robustness & Bug Fix (`ownsearch/resources/search.html`):
+   - Fixed strict mode `ReferenceError` caused by undeclared `responseReceived` variable that halted rendering on response reception.
+   - Streamlined client retrieval to POST `/search` with instant DOM rendering, eliminating SSE chunk reader buffering hangs.
+   - Added automatic `?q=` URL parameter handling on page load for seamless browser search bar queries.
+
+2. Multi-Word Knowledge Path Expansion (`ownsearch/coordinator.py`):
+   - Implemented n-gram sub-slug generation (lengths 3 down to 1) for entity candidate discovery (e.g. `Mount Everest elevation` -> `Mount_Everest`, `Albert Einstein` -> `Albert_Einstein`).
+   - Standardized lowercase module paths for technical documentation roots (`docs.python.org/3/library/{module}.html`).
+   - Added restricted sitemap filtering to bypass blocked Wikimedia endpoints (`/w/rest.php/site/v1/sitemap/0`), preventing erroneous 403 origin cooldown lockouts.
+
+3. Live End-to-End Browser Subagent Validation:
+   - Verified in headless Chrome with recorded session (`live_ui_e2e_test_1792593019266.webp`):
+     - `who is gandhiji?`: 1 result, title: `Mahatma Gandhi - Wikipedia`, URL: `https://en.wikipedia.org/wiki/Gandhiji` (5,428 ms cold).
+     - `who is gandhiji?` (Cache-only filter): 1 result, instant render (704 ms browser round trip, 1 ms internal query cache lookup).
+     - `Mount Everest elevation`: 1 result, title: `Mount Everest - Wikipedia`, URL: `https://en.wikipedia.org/wiki/Mount_Everest`, accurate elevation excerpt in answer box (7,570 ms cold).
+     - `what is photosynthesis?`: 1 result, title: `Photosynthesis - Wikipedia` (4,276 ms cold).
+     - `who is albert einstein?`: 1 result, title: `Albert Einstein - Wikipedia` (5,195 ms cold).
+
+4. Test Suite:
+   - 147 / 147 unit tests pass in standard Python.
+   - 147 / 147 unit tests pass under `python3 -S` (standard library only).
