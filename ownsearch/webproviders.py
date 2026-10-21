@@ -69,11 +69,17 @@ class JsonProvider:
             result = fetcher.fetch(url, accept=accept, extra_headers=headers,
                                    max_bytes=2_000_000, max_decompressed_bytes=2_000_000,
                                    retries=0, deadline=deadline, preserve_query=True)
+            retry_delay = _retry_after(result.headers.get('retry-after') or result.headers.get('x-retry-after'))
+            if result.headers.get('x-ratelimit-remaining') == '0':
+                try:
+                    retry_delay = max(retry_delay or 0, float(result.headers['x-ratelimit-reset'])-time.time())
+                except (KeyError, ValueError, TypeError):
+                    retry_delay = max(retry_delay or 0, self.settings.provider_cooldown)
             if result.status != 200:
                 if result.status == 404 and getattr(self, 'missing_is_empty', False):
                     self.health.success(404, generation)
                 else:
-                    self.health.failure(result.status, _retry_after(result.headers.get('retry-after') or result.headers.get('x-retry-after')))
+                    self.health.failure(result.status, retry_delay)
                 raise ProviderError('HTTP ' + str(result.status) + ('; enable JSON format on the configured SearXNG instance if disabled.' if result.status == 403 and self.name == 'searxng' else ''),
                                     'rate_limited' if result.status == 429 else 'error', http_status=result.status)
             if result.truncated:
@@ -82,6 +88,8 @@ class JsonProvider:
             if not decoder and not isinstance(payload, dict):
                 raise ValueError('Provider returned an invalid JSON schema.')
             self.health.success(generation=generation)
+            if result.headers.get('x-ratelimit-remaining') == '0':
+                self.health.defer(retry_delay)
             return payload
         except (FetchError, ValueError, UnicodeError) as exc:
             # Avoid copying URLs, headers or credentials into errors/logs.

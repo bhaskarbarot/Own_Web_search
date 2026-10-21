@@ -1,0 +1,60 @@
+{
+  "provider": "github",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 14,
+  "runs": [
+    {
+      "id": "live-news-013",
+      "query": "this week open source software security advisories",
+      "checked_at": "2026-10-21T07:08:07.797546+00:00",
+      "status": "ok",
+      "rows": [],
+      "warnings": [],
+      "elapsed_ms": 3554.28,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 1,
+        "successes": 1,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 59,
+        "budget_window_seconds": 3600,
+        "last_http_status": 200
+      }
+    },
+    {
+      "id": "original-B06",
+      "query": "Find open-source point-of-sale systems that integrate inventory and accounting.",
+      "checked_at": "2026-10-21T07:08:17.451963+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://github.com/codebangla/terp-public-release",
+          "title": "codebangla/terp-public-release",
+          "snippet": "TERP: Comprehensive Enterprise Resource Planning (ERP) Solution TERP is an open-source, modular ERP system designed to streamline business operations across various industries. Built using modern technologies, TERP integrates essential modules to manage ecommerce, point-of-sale, accounting, project management, inventory, and customer relationships.",
+          "published_at": null,
+          "lang": null,
+          "source_query": "point sale systems integrate inventory accounting open source"
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 538.58,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 2,
+        "successes": 2,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 58,
+        "budget_window_seconds": 3600,
+        "last_http_status": 200
+      }
+    }
+  ]
+}

@@ -8,7 +8,7 @@ from urllib.parse import parse_qs,urlsplit
 from ownsearch.fetcher import Fetcher,FetchResult
 from ownsearch.query import parse_query
 from ownsearch.webmodels import WebRequest
-from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,configured_verticals
+from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,configured_verticals
 from ownsearch.coordinator import LiveSearch
 from tests.test_live_web import settings,Source,row
 
@@ -44,6 +44,15 @@ class VerticalApiTests(unittest.TestCase):
         p=WikipediaApiProvider(settings())
         for url in ('http://127.0.0.1/admin','file:///etc/passwd','https://user:secret@example.org/'):
             self.assertIsNone(p.row(self.request(),url,'Unsafe'))
+    def test_github_issue_search_preserves_real_links_and_open_status_qualifier(self):
+        p=GitHubApiProvider(settings())
+        with self.payload({'items':[{'html_url':'https://code.example.org/a/issues/9','title':'Orbital bug','body':'Sensor calibration error.'}], 'incomplete_results':True}) as fetch:
+            batch=p.search(self.request('GitHub open bugs orbital sensor'),time.monotonic()+1)
+        self.assertEqual(batch.rows[0]['url'],'https://code.example.org/a/issues/9')
+        query=parse_qs(urlsplit(fetch.call_args.args[0]).query)['q'][0]
+        self.assertIn('is:issue',query);self.assertIn('is:open',query)
+        self.assertTrue(batch.warnings)
+        self.assertEqual(p.health_snapshot()['budget_window_seconds'],3600)
 
 
 if __name__=='__main__':unittest.main()

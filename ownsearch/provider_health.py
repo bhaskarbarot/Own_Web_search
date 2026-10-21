@@ -84,6 +84,15 @@ class ProviderHealth:
                     delay = max(delay, retry_after)
                 self.suspended_until = max(self.suspended_until, self.clock()+delay)
 
+    def defer(self, seconds):
+        """Respect a successful response's quota/backoff without calling it a failure."""
+        if not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or seconds <= 0:
+            return
+        with self.lock:
+            self.generation += 1
+            self.probing = False
+            self.suspended_until = max(self.suspended_until, self.clock()+seconds)
+
     def snapshot(self):
         now = self.clock()
         with self.lock:

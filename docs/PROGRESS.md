@@ -386,3 +386,18 @@ unchanged. Raw probes and tests are saved in eval/runs/phase1/. Result URLs are
 read from fullurl/concepturi; missing/unsafe URLs are discarded. Revision dates
 are not used as publication dates. Adapter defaults stay opt-in pending the
 combined dev ablation. Continue to GitHub; no new user confirmation is required.
+
+
+### Phase 1 adapter — GitHub
+
+2026-10-21, parent a2968ef. Added opt-in public repository/issue search,
+source-provided URLs, explicit open-issue qualifiers, source issue creation
+timestamps, optional header-only token and provider-specific spacing/hourly
+budget. Successful quota exhaustion is deferred without being called a failure;
+Retry-After and rate-limit reset headers are respected.
+
+Stable-hash probe across 300 dev IDs: 14 eligible; two successful actual API
+requests returned one row. Raw output: github-live.json. Thirteen focused tests
+pass (github-tests.txt); all five offline preservation scores remain unchanged
+(github-offline.json). API rows are ungraded, not a claimed recall gain.
+Continue to PyPI exact metadata without a confirmation stop.

@@ -78,5 +78,15 @@ class ProviderHealthTests(unittest.TestCase):
         self.assertEqual(fetch.call_count, 3)
         self.assertEqual(p.health_snapshot()['errors'], 3)
 
+    def test_successful_response_quota_is_not_called_a_failure(self):
+        p=JsonProvider(settings());p.name='fixture'
+        headers={'x-ratelimit-remaining':'0','x-ratelimit-reset':str(time.time()+120)}
+        with patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,headers,b'{}')) as fetch:
+            self.assertEqual(p.request(self.request(),'https://api.example.org/search',time.monotonic()+1),{})
+            with self.assertRaises(ProviderError):p.request(self.request(),'https://api.example.org/search',time.monotonic()+1)
+        self.assertEqual(fetch.call_count,1)
+        self.assertEqual(p.health_snapshot()['errors'],0)
+        self.assertGreater(p.health_snapshot()['retry_after_seconds'],110)
+
 
 if __name__ == '__main__': unittest.main()
