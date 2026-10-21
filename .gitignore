@@ -10,10 +10,10 @@ build/
 dist/
 *.egg-info/
 
-# Provider credentials remain local.
+# Local configuration secrets remain local.
 .env
 .env.*
 !.env.example
 
-# Local SearXNG service environment, state, credentials and logs.
+# Local development server logs and runtime state.
 .runtime/

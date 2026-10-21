@@ -142,6 +142,13 @@ class IndependentTests(unittest.TestCase):
         self.assertEqual(out['results'],[])
         self.assertTrue(out['timed_out'] or any(s['status']=='timeout' for s in out['crawl_status']))
 
+    def test_page_deadline_is_reported_as_partial_even_when_worker_finishes(self):
+        with patch.object(WebFetchSession,'crawl',side_effect=FetchError('Page deadline exceeded','timeout')):
+            out=self.engine().search('orbital guidance',seeds=[self.site.base+'/guide'])
+        self.assertTrue(out['timed_out'])
+        self.assertEqual(out['coverage']['unfinished_pages'],0)
+        self.assertTrue(any('deadline' in note for note in out['limitations']))
+
     def test_no_late_cache_write_after_cutoff(self):
         engine=self.engine()
         engine.search('orbital guidance',seeds=[self.site.base+'/slow'],timeout_ms=50)

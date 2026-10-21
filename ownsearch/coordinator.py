@@ -215,8 +215,9 @@ class IndependentSearch:
                     answer = {'type': 'extractive', 'text': safe.evidence[0]['text'],
                               'citations': [{'url': safe.url, 'title': safe.title, 'fetched_at': safe.fetched_at}],
                               'disclaimer': 'Source excerpt; not independently verified.'}
-            if unfinished:
-                notes.append('Crawl deadline reached; unfinished work was excluded.')
+            timed_out = bool(unfinished or any(row['status'] == 'timeout' for row in statuses))
+            if timed_out:
+                notes.append('Some pages exceeded a crawl deadline; unfinished content was excluded.')
             if fetch_pages and frontier:
                 notes.append('More discovered pages remain beyond this request’s crawl budget.')
             notes.append('Coverage is limited to configured sites, observed links and unexpired cached pages.')
@@ -231,7 +232,7 @@ class IndependentSearch:
                                  'budget_bytes': getattr(session, 'budget_bytes', session.decoded_bytes) if session else 0, 'cache_reuses': reused,
                                  'unfinished_pages': unfinished, 'exhaustive': False},
                     'cached': bool(selected) and all(item.cached for item in selected),
-                    'timed_out': bool(unfinished), 'took_ms': took, 'cache': self.cache.stats()}
+                    'timed_out': timed_out, 'took_ms': took, 'cache': self.cache.stats()}
         finally:
             cancel.set()
             self.slots.release()

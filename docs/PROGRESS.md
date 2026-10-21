@@ -44,14 +44,14 @@ Public direct probe: `eval/runs/independent/public-python-smoke-initial.json`.
 priority and title-only technical-document gating problems. Do not call this a
 successful live search. Fix and remeasure these problems next.
 
-## Remaining work and limits
+## Original follow-up list (completed below)
 
-- Fix generic link prioritization and documentation evidence gating; ablate each.
-- Remove avoidable network-client setup from cache-only searches; measure separately.
-- Finish documentation/audit and run the final regression and controlled benchmark.
+- Generic link priority and documentation evidence gating: steps 2 and 4.
+- Cache-only network-client overhead: step 3.
+- Documentation, removal audit and release checks: final handoff below.
 - Public coverage is bounded by configured origins, observed links, cache lifetime
   and query budget. No full-web index is present. Cold crawling can take seconds.
-- Wikipedia/Stack Overflow/news site availability is not yet established here.
+- Starting-site availability was subsequently probed; see step 7.
 - Answers are source excerpts, not independently confirmed facts. Human relevance
   judgments are still needed; no old phase quality gate has been declared passed.
 - Next phase: only after these runtime acceptance checks pass, expand measured
@@ -146,3 +146,38 @@ no API, alternate identity, proxy or search-provider fallback was substituted.
 
 Standard-library startup smoke: `python3 -S main.py status` and cache-only search
 both succeed. UI JavaScript passes `node --check`; launcher passes `bash -n`.
+
+
+## Final handoff: independent runtime acceptance
+
+All rebuild steps are complete and committed in order; see
+[INDEPENDENT_REPORT.md](INDEPENDENT_REPORT.md) for the complete outcome and limits.
+Final response reporting also marks per-page deadline failures as partial even
+when the worker returns before the overall coordinator cutoff; one regression
+covers that case.
+
+Release validation: 95/95 tests pass normally and 95/95 with site-packages disabled
+(`python3 -S`). The unchanged 11-case benchmark preserves Recall@10 1.000, strict
+P@5 0.23636, all warm URL signatures and both controls. Final controlled warm p50
+6.091 ms, p95 7.684 ms, zero network requests; cold fixture p50 54.100 ms, p95
+180.475 ms. Source: `fixture-final.json`, runtime SHA
+`179cfb0cd94f4534d4b75d6604bde0bbe30d1c2b66765c3b83778f2b9c4b61fe`.
+These are synthetic fixture metrics, not live relevance or public-web latency.
+
+Running UI: http://127.0.0.1:8765/ui (started through `run.sh`, browser launch disabled).
+Actual health: OwnSearch 2.0.0, independent, database false; UI HTTP 200 and API
+cache-only zero network verified. Restart with `./run.sh` if this session ends.
+No old discovery service is running on the checked ports 8765/8080; the active
+8765 server was subsequently started with the independent code.
+
+Limitations: Stack Overflow `/questions` is robots-disallowed. Other configured
+starting pages were fetched once, which does not establish broad query coverage.
+No whole-web index, persistent document database, provider API or paid requirement
+exists. Source excerpts are not independent factual verification. Live relevance
+metrics remain unjudged and the historical phase quality gate is unresolved.
+
+Next phase: improve measured independent discovery coverage, record DEV-only
+results with the current runtime fingerprint, and prepare a new ungraded review
+pool. Keep original reviews intact. Do not tune on sealed queries or claim a live
+accuracy gain without actual grades. The earlier provider-based Phase 2–5 roadmap
+must be revised for this independent architecture before further phase execution.
