@@ -1,0 +1,14 @@
+test_confirmed_fixed_width_cut_does_not_split_a_word (tests.test_phase2_snippets.Phase2SnippetTests.test_confirmed_fixed_width_cut_does_not_split_a_word) ... FAIL
+
+======================================================================
+FAIL: test_confirmed_fixed_width_cut_does_not_split_a_word (tests.test_phase2_snippets.Phase2SnippetTests.test_confirmed_fixed_width_cut_does_not_split_a_word)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/pc-117/Documents/own_web_search_engine/tests/test_phase2_snippets.py", line 20, in test_confirmed_fixed_width_cut_does_not_split_a_word
+    self.assertFalse(body and body[-1].isalnum() and source[len(body)].isalnum())
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (failures=1)

@@ -6,21 +6,29 @@ Date: 2026-10-21, Asia/Kolkata. Instructions: win_win.md and AGENTS.md.
 
 | Phase | Work | Required evidence before advancing |
 | --- | --- | --- |
-| 0 (current) | Freeze baseline, dataset, split, judging and metrics | Reproducible dev recording and judged quality measurements with CIs |
+| 0 (awaiting review) | Freeze baseline, dataset, split, judging and metrics | Reproducible dev recording and judged quality measurements with CIs |
 | 1 (pending) | Provider resilience, intent-safe vertical discovery, operators, query variants | Lower zero-result rate, better pooled recall, no strict P@5 regression, failure-injection pass |
-| 2 (pending) | URL deduplication, passage relevance, trust signals, entity focus, snippets | Better strict P@5/NDCG, reduced duplicates and broken snippets, component ablations |
+| 2 (started by user request) | URL deduplication, passage relevance, trust signals, entity focus, snippets | Better strict P@5/NDCG, reduced duplicates and broken snippets, component ablations |
 | 3 (pending) | Profile, progressive delivery, deadlines and bounded freshness-aware caching | Cold/warm latency measurements and unchanged quality within uncertainty |
 | 4 (pending) | Evidence-grounded claims, conflict handling and abstention | Citation support, answer correctness and unsupported-claim measurements |
 | 5 (sealed, pending) | Once-only baseline/final holdout comparison; no code changes | Full saved report, uncertainty, limitations and human review |
 
-This is the execution order from win_win.md. Detailed later-phase plans are
-written only after the preceding phase passes. Numeric targets are goals,
+This is the original execution order from win_win.md. On 2026-10-21 the user
+explicitly requested starting Phase 2; its initial presentation work is recorded
+below. Phase 0 and Phase 1 gates remain unresolved, not implicitly passed. Numeric targets are goals,
 never claims about unmeasured performance.
 
 ## Current phase and preserved baseline
 
-Phase 0 implementation and full dev capture are complete; its quality gate is awaiting human judgments and five missing reference pools. No search-behaviour files have changed. Do not start
-Phase 1 until the Phase 0 gate passes.
+**Current: Phase 2 started at the user's explicit request.** Its first rendering
+component is implemented and measured below. Phase 0 still awaits human grades
+and five reference pools; Phase 1 has not been executed. Do not infer that the
+missing gates passed, or advance to Phase 3. See docs/plan/phase-2.md.
+
+At the Phase 0 handoff the engine was unchanged. Phase 2 now changes only snippet
+presentation in snippet.py, webmodels.py and its coordinator call. The Phase 0
+source manifest below is a historical snapshot, not a claim about the current
+engine. Baseline data, review CSVs and the sealed split remain unchanged.
 
 - Baseline tag: baseline-v0 -> 344dedc3f50a2d4811ede23b25700d97c9f9a41d.
 - Engine fingerprint (legacy evaluator algorithm):
@@ -198,10 +206,124 @@ exactly what blocks it. Do NOT start the next phase.” No further search change
 can be qualified against an unjudged baseline.
 
 The installed discovery backend was started only for measurement and stopped
-after capture, restoring the session's initial service state. No provider
+after capture, restoring the session's initial service state. During Phase 0 no provider
 configuration, optional models, local corpus or production search code changed.
 
 After the gate is resolved, plan Phase 1 against these saved dev outputs:
 provider health/backoff, individually measured public vertical adapters,
 operator handling and conservative query variants. Leave the sealed set unused
 until Phase 5.
+
+
+## Phase 2, step 1 — query-aware snippet boundaries
+
+Date: 2026-10-21 (Asia/Kolkata). Starting code commit: 7012277.
+User instruction: “great now start phase 2 ok”. This authorizes starting Phase 2
+before the earlier gates; it does not supply missing judgments or Phase 1 scores.
+
+### Change and scope
+
+The confirmed defect was a fixed [:600] slice in WebCandidate.result. On the
+recorded dev cases it cut 74 snippets between source word characters. Added
+sentence_excerpt in ownsearch/snippet.py and applied it at that rendering point.
+The coordinator forwards analyzed query terms so a short complete sentence does
+not remove complete query-word matches in a longer following sentence. A whole-
+word fallback handles that case and long sentences; an ellipsis marks truncation.
+Original source excerpts, evidence passages, scores, URLs and ranking inputs are
+preserved. No discovery, URL-merging, ranking-weight, model or fetch-policy change.
+
+A first sentence-only variant was rejected: it removed 42 complete query-word
+matches that were visible before. The retained query-aware variant preserves
+all 5,981 complete matches while removing the confirmed extra mid-word cuts.
+The old naive lexical count was 5,983: the extra two were cut-off final words
+("sale" from "sales" and "introduce" from "introduced"), not complete source
+words. Both raw and complete-word diagnostics are retained, rather than hiding
+the distinction.
+
+### Recorded-dev component ablation
+
+Replayed **all 300 dev cases**, with 1,610 returned snippets and 1,574 evidence-
+backed snippets across 204 queries. This is offline **presentation replay** of
+captured passages, not re-running discovery, fetching or ranking.
+
+| Rendering component | Confirmed mid-word ends | Rate / eligible snippets | Complete query-word matches | Ends at sentence punctuation | Omitted snippets |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Recorded fixed-width renderer | 74 | 4.70% | 5,981 | 1,350 | 0 |
+| Sentence-only variant (rejected) | 0 | 0% | 5,939 | 1,459 | 0 |
+| Query-aware sentence/word renderer (retained) | 0 | 0% | 5,981 | 1,430 | 0 |
+
+Before mid-word-end rate 95% CI: **3.61–5.92%**. After: **0–0%** on this recorded
+sample. Paired rate delta: **−4.70 percentage points**, 95% CI **−5.92 to −3.61**.
+Intervals resample the 204 queries with eligible evidence, 1,000 times, seed
+20261021. This does not establish zero broken snippets for arbitrary live pages.
+
+There are 116 changed snippets, 0 invalid source prefixes, 0 newly omitted
+excerpts, 0 complete query-word losses in any individual changed snippet, and unchanged recorded result identities, ranks and scores. These are
+rendering invariants. They are not new independently judged strict P@5/NDCG
+scores, which remain null. The old and new renderers can be ablated explicitly.
+
+Offline retrieval preservation (59 legacy synthetic cases):
+
+| Metric | Before | After | Delta |
+| --- | ---: | ---: | ---: |
+| P@5 | 0.200000 | 0.200000 | 0 |
+| Recall@10 | 0.880117 | 0.880117 | 0 |
+| MRR@10 | 0.947368 | 0.947368 | 0 |
+| NDCG@10 | 0.914425 | 0.914425 | 0 |
+| Zero-result rate | 0.084746 | 0.084746 | 0 |
+
+**269 tests passed in 48.072 s**, including 11 new snippet/measurement regressions.
+The original fixed-width failure was reproduced before the fix; its failure
+log is retained. No public providers were called for this rendering step.
+
+### Saved artifacts and reproducible commands
+
+- eval/runs/phase2/snippets-before.json
+- eval/runs/phase2/snippets-sentence-only-rejected.json
+- eval/runs/phase2/snippets-after.json (query-level metrics and changed excerpts)
+- eval/runs/phase2/offline-before.json and offline-final.json
+- eval/runs/phase2/confirmed-failure.txt and tests-after.txt
+
+```bash
+python3 scripts/eval_phase2_snippets.py --renderer recorded --output /tmp/snippets-before.json
+python3 scripts/eval_phase2_snippets.py --renderer sentence-only --output /tmp/snippets-sentence-only.json
+python3 scripts/eval_phase2_snippets.py --renderer current --output /tmp/snippets-after.json
+python3 eval/run_eval.py --output /tmp/legacy-after.json
+python3 -m unittest discover -s tests -t .
+```
+
+The replay binds to the captured input SHA-256 and validates all run IDs against
+the fixed dev split. Its output records source hashes. Renderer timing is local
+observational work and must not be presented as a live latency improvement.
+The saved Phase 0 raw capture, human-review CSVs and dataset hashes are unchanged.
+
+### Phase 2 gate and next work
+
+PASS for this component: confirmed extra mid-word endings reduced; complete query
+word matches retained; no source-prefix violations or omissions on the captured
+sample; all tests pass; legacy offline quality unchanged.
+
+**Phase 2 is not complete.** Its strict P@5/NDCG improvement gate is unmeasured:
+there are still no relevance judgments and no measured Phase 1 reference. The
+retained change does not alter result scoring, but that does not replace the
+required independent judgments for later ranking changes. Do not advance to
+Phase 3.
+
+Still pending: evidence-backed URL variant/near-page deduplication, passage BM25
+ablation, structural ownership/trust prior, namesake discrimination and domain/
+provider diversity. Inspection of the saved provider rows found zero tracking-
+parameter examples, 17 mobile-host rows and one variant-shaped row; no confirmed
+same-path mobile/desktop pair was present. Blind stripping would risk merging
+different pages without a measurable dev improvement, so it was not implemented.
+
+Passage-start truncation and provider-supplied partial excerpts remain open.
+The separate --answer excerpt path is unchanged and still needs its later-phase
+evidence and boundary work.
+Complete original fetched bodies were not captured, so the replay cannot infer
+those boundaries honestly. Sentence detection uses punctuation and word fallback,
+not a language model; very long unbroken tokens produce only an ellipsis rather
+than a fabricated partial identifier. No such omissions occurred in this dev run.
+
+Human next action remains reviewing eval/human_review_queue.csv (copy first) and
+collecting references for eval/empty_pool_queries.csv. Those grades are needed
+to qualify scoring/selection changes and eventually evaluate the full Phase 2 gate.

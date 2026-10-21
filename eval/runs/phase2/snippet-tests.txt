@@ -1,0 +1,16 @@
+test_confirmed_fixed_width_cut_does_not_split_a_word (tests.test_phase2_snippets.Phase2SnippetTests.test_confirmed_fixed_width_cut_does_not_split_a_word) ... ok
+test_last_complete_sentence_within_budget_is_used (tests.test_phase2_snippets.Phase2SnippetTests.test_last_complete_sentence_within_budget_is_used) ... ok
+test_long_sentence_uses_whole_word_fallback (tests.test_phase2_snippets.Phase2SnippetTests.test_long_sentence_uses_whole_word_fallback) ... ok
+test_measurement_distinguishes_a_truncated_match_from_a_complete_word (tests.test_phase2_snippets.Phase2SnippetTests.test_measurement_distinguishes_a_truncated_match_from_a_complete_word) ... ok
+test_rendering_retains_passage_source_and_score (tests.test_phase2_snippets.Phase2SnippetTests.test_rendering_retains_passage_source_and_score) ... ok
+test_repeated_rendering_is_stable (tests.test_phase2_snippets.Phase2SnippetTests.test_repeated_rendering_is_stable) ... ok
+test_sentence_boundary_does_not_hide_matching_query_terms (tests.test_phase2_snippets.Phase2SnippetTests.test_sentence_boundary_does_not_hide_matching_query_terms) ... ok
+test_short_evidence_and_provider_only_snippets_are_unchanged (tests.test_phase2_snippets.Phase2SnippetTests.test_short_evidence_and_provider_only_snippets_are_unchanged) ... ok
+test_tiny_budget_empty_text_and_combining_characters (tests.test_phase2_snippets.Phase2SnippetTests.test_tiny_budget_empty_text_and_combining_characters) ... ok
+test_unbroken_long_token_is_not_presented_as_a_different_identifier (tests.test_phase2_snippets.Phase2SnippetTests.test_unbroken_long_token_is_not_presented_as_a_different_identifier) ... ok
+test_unicode_punctuation_and_closing_quotes (tests.test_phase2_snippets.Phase2SnippetTests.test_unicode_punctuation_and_closing_quotes) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.126s
+
+OK

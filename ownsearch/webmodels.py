@@ -6,6 +6,7 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit, urlunsplit
 
 from .dates import parse_date
+from .snippet import sentence_excerpt
 from .util import utc_now
 
 
@@ -128,11 +129,11 @@ class WebCandidate:
         item.injection_risk = bool(injection_flags(title+' '+snippet))
         return item
 
-    def result(self, rank, explain=False):
+    def result(self, rank, explain=False, query_terms=()):
         host = urlsplit(self.url).hostname
         result = {'rank': rank, 'id': None, 'title': self.title, 'url': self.url,
                   'display_url': self.url, 'host': host,
-                  'snippet': self.evidence[0]['text'][:600] if self.evidence else self.snippet,
+                  'snippet': sentence_excerpt(self.evidence[0]['text'], query_terms=query_terms) if self.evidence else self.snippet,
                   'score': round(self.score, 6), 'provider': self.provider,
                   'source_provider': self.provider,
                   'providers': sorted({p['provider'] for p in self.provenance}),

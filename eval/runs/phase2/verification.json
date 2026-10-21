@@ -1,0 +1,19 @@
+{
+  "complete_query_word_losses_in_any_changed_snippet": [],
+  "all_300_dev_queries_replayed": true,
+  "captured_rank_url_and_score_preserved": true,
+  "invalid_source_prefixes": 0,
+  "new_omitted_excerpts": 0,
+  "sealed_queries_run": 0,
+  "ranking_quality_measured": false,
+  "tests_passed": 269,
+  "test_log": "eval/runs/phase2/tests-after.txt",
+  "artifact_sha256": {
+    "eval/runs/phase2/offline-after.json": "f53d2449d08f81f08ea70617bb3dd0f819f963fb9e7d8d4c0fda86460e27a519",
+    "eval/runs/phase2/offline-before.json": "3c5b9c2751acf7b29f7ee219db9c998da5a131c5cccf5aca4d0f68bc148e1583",
+    "eval/runs/phase2/offline-final.json": "78bc5f6604758f893529acf4248e2f61bfc4eae897ce8bc247b252c30eed38aa",
+    "eval/runs/phase2/snippets-after.json": "c160f0557c73c4c958a7d98465711f687da83eba6b843c6729f1caf4bd165de9",
+    "eval/runs/phase2/snippets-before.json": "1c312a6716ab2bdaf5fcd482d544e212662ab1bf5f6afb59b1e2423449c8e6c8",
+    "eval/runs/phase2/snippets-sentence-only-rejected.json": "2c64f366a7741bfb925f5c826c7d770fe801cd7bc12235755fba8805fbff8cab"
+  }
+}

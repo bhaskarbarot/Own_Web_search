@@ -1,0 +1,49 @@
+{
+  "dev_queries": 300,
+  "returned_snippets": 1610,
+  "evidence_backed_snippets": 1574,
+  "changed_snippets": 116,
+  "invalid_source_prefixes": 0,
+  "recorded_result_identity_score_and_order_preserved": true,
+  "before": {
+    "mid_word_ends": 74,
+    "clipped": 116,
+    "sentence_boundary": 1350,
+    "omitted": 0,
+    "matched_query_terms_diagnostic": 5983,
+    "complete_query_word_matches_diagnostic": 5981,
+    "mid_word_end_rate": {
+      "value": 0.047014,
+      "ci95": [
+        0.036092,
+        0.059183
+      ],
+      "queries": 204
+    }
+  },
+  "after": {
+    "mid_word_ends": 0,
+    "clipped": 116,
+    "sentence_boundary": 1430,
+    "omitted": 0,
+    "matched_query_terms_diagnostic": 5981,
+    "complete_query_word_matches_diagnostic": 5981,
+    "mid_word_end_rate": {
+      "value": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "queries": 204
+    }
+  },
+  "paired_mid_word_end_rate_delta": {
+    "value": -0.047014,
+    "ci95": [
+      -0.059183,
+      -0.036092
+    ],
+    "queries": 204
+  },
+  "snippet_renderer_total_ms_observational": 256.409
+}

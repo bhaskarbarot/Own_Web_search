@@ -314,7 +314,8 @@ class LiveSearch:
         ranking_started = time.perf_counter()
         ranked = rank(candidates, q, final=True)
         chosen = ranked[offset:offset+limit]
-        result_rows = [item.result(index, explain) for index, item in enumerate(chosen, offset+1)]
+        snippet_terms = analyze(query)
+        result_rows = [item.result(index, explain, query_terms=snippet_terms) for index, item in enumerate(chosen, offset+1)]
         for row in result_rows:
             row['highlights'] = highlights(row['snippet'], query)
         evidence = []
