@@ -1,0 +1,2224 @@
+{
+  "schema_version": 1,
+  "mode": "offline_synthetic",
+  "engine_identity_sha256": "0aede2ad15dc6acdc822052c695670cd60977ba17224df7b03a6566d1bc6fc3d",
+  "python": "3.12.3",
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39",
+  "corpus_sha256": "cd6830271f986277aa0e4af8e8ae26bcc1643390c3cbd724ea45827aafcad414",
+  "queries_sha256": "3772afbb51f8ed28d41ed7b893745e050c4d54b24bc7c9602c456640a4fd9ddb",
+  "evaluation_time_utc": "2026-10-20T12:00:00+00:00",
+  "index_documents": 57,
+  "index_bytes": 290867,
+  "fixture_build_ms": 321.546,
+  "repeats": 3,
+  "bootstrap_samples": 1000,
+  "seed": 20261020,
+  "summary": {
+    "queries": 59,
+    "answerable_queries": 57,
+    "p@5": {
+      "value": 0.2,
+      "ci95": [
+        0.185965,
+        0.217544
+      ],
+      "queries": 57
+    },
+    "p@5_ceiling": {
+      "value": 0.242105,
+      "ci95": [
+        0.221053,
+        0.266667
+      ],
+      "queries": 57
+    },
+    "recall@10": {
+      "value": 0.880117,
+      "ci95": [
+        0.807018,
+        0.944444
+      ],
+      "queries": 57
+    },
+    "mrr@10": {
+      "value": 0.947368,
+      "ci95": [
+        0.894298,
+        1.0
+      ],
+      "queries": 57
+    },
+    "ndcg@10": {
+      "value": 0.914425,
+      "ci95": [
+        0.846799,
+        0.969706
+      ],
+      "queries": 57
+    },
+    "zero_result_rate": {
+      "value": 0.084746,
+      "ci95": [
+        0.016949,
+        0.169492
+      ],
+      "queries": 59
+    },
+    "empty_query_correct": {
+      "value": 1,
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "queries": 2
+    },
+    "latency_p50_ms": {
+      "value": 5.82218,
+      "ci95": [
+        5.54902,
+        6.090632
+      ],
+      "queries": 59
+    },
+    "latency_p95_ms": {
+      "value": 12.08187,
+      "ci95": [
+        8.53079,
+        20.668761
+      ],
+      "queries": 59
+    },
+    "latency_p99_ms": {
+      "value": 20.674472,
+      "ci95": [
+        11.498465,
+        20.684824
+      ],
+      "queries": 59
+    },
+    "live_discovery_success_rate": {
+      "value": null,
+      "ci95": null,
+      "queries": 0
+    }
+  },
+  "per_language": {
+    "en": {
+      "queries": 49,
+      "answerable_queries": 47,
+      "p@5": {
+        "value": 0.208511,
+        "ci95": [
+          0.191489,
+          0.225532
+        ],
+        "queries": 47
+      },
+      "p@5_ceiling": {
+        "value": 0.242553,
+        "ci95": [
+          0.217021,
+          0.27234
+        ],
+        "queries": 47
+      },
+      "recall@10": {
+        "value": 0.91844,
+        "ci95": [
+          0.854521,
+          0.971631
+        ],
+        "queries": 47
+      },
+      "mrr@10": {
+        "value": 0.978723,
+        "ci95": [
+          0.93617,
+          1.0
+        ],
+        "queries": 47
+      },
+      "ndcg@10": {
+        "value": 0.947828,
+        "ci95": [
+          0.88704,
+          0.990947
+        ],
+        "queries": 47
+      },
+      "zero_result_rate": {
+        "value": 0.061224,
+        "ci95": [
+          0.0,
+          0.142857
+        ],
+        "queries": 49
+      },
+      "empty_query_correct": {
+        "value": 1,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "queries": 2
+      },
+      "latency_p50_ms": {
+        "value": 5.648204,
+        "ci95": [
+          5.333812,
+          5.887246
+        ],
+        "queries": 49
+      },
+      "latency_p95_ms": {
+        "value": 9.375405,
+        "ci95": [
+          7.476296,
+          14.901292
+        ],
+        "queries": 49
+      },
+      "latency_p99_ms": {
+        "value": 14.450184,
+        "ci95": [
+          9.159619,
+          17.156829
+        ],
+        "queries": 49
+      },
+      "live_discovery_success_rate": {
+        "value": null,
+        "ci95": null,
+        "queries": 0
+      }
+    },
+    "gu": {
+      "queries": 3,
+      "answerable_queries": 3,
+      "p@5": {
+        "value": 0.2,
+        "ci95": [
+          0.2,
+          0.2
+        ],
+        "queries": 3
+      },
+      "p@5_ceiling": {
+        "value": 0.266667,
+        "ci95": [
+          0.2,
+          0.4
+        ],
+        "queries": 3
+      },
+      "recall@10": {
+        "value": 0.833333,
+        "ci95": [
+          0.5,
+          1.0
+        ],
+        "queries": 3
+      },
+      "mrr@10": {
+        "value": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "queries": 3
+      },
+      "ndcg@10": {
+        "value": 0.929052,
+        "ci95": [
+          0.787155,
+          1.0
+        ],
+        "queries": 3
+      },
+      "zero_result_rate": {
+        "value": 0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "queries": 3
+      },
+      "empty_query_correct": {
+        "value": null,
+        "ci95": null,
+        "queries": 0
+      },
+      "latency_p50_ms": {
+        "value": 6.038523,
+        "ci95": [
+          6.022301,
+          8.091656
+        ],
+        "queries": 3
+      },
+      "latency_p95_ms": {
+        "value": 7.886343,
+        "ci95": [
+          6.022301,
+          8.091656
+        ],
+        "queries": 3
+      },
+      "latency_p99_ms": {
+        "value": 8.050593,
+        "ci95": [
+          6.022301,
+          8.091656
+        ],
+        "queries": 3
+      },
+      "live_discovery_success_rate": {
+        "value": null,
+        "ci95": null,
+        "queries": 0
+      }
+    },
+    "hi": {
+      "queries": 3,
+      "answerable_queries": 3,
+      "p@5": {
+        "value": 0.2,
+        "ci95": [
+          0.2,
+          0.2
+        ],
+        "queries": 3
+      },
+      "p@5_ceiling": {
+        "value": 0.2,
+        "ci95": [
+          0.2,
+          0.2
+        ],
+        "queries": 3
+      },
+      "recall@10": {
+        "value": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "queries": 3
+      },
+      "mrr@10": {
+        "value": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "queries": 3
+      },
+      "ndcg@10": {
+        "value": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ],
+        "queries": 3
+      },
+      "zero_result_rate": {
+        "value": 0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "queries": 3
+      },
+      "empty_query_correct": {
+        "value": null,
+        "ci95": null,
+        "queries": 0
+      },
+      "latency_p50_ms": {
+        "value": 7.11445,
+        "ci95": [
+          6.556079,
+          10.171714
+        ],
+        "queries": 3
+      },
+      "latency_p95_ms": {
+        "value": 9.865988,
+        "ci95": [
+          6.556079,
+          10.171714
+        ],
+        "queries": 3
+      },
+      "latency_p99_ms": {
+        "value": 10.110569,
+        "ci95": [
+          6.556079,
+          10.171714
+        ],
+        "queries": 3
+      },
+      "live_discovery_success_rate": {
+        "value": null,
+        "ci95": null,
+        "queries": 0
+      }
+    },
+    "hi-Latn": {
+      "queries": 4,
+      "answerable_queries": 4,
+      "p@5": {
+        "value": 0.1,
+        "ci95": [
+          0.0,
+          0.2
+        ],
+        "queries": 4
+      },
+      "p@5_ceiling": {
+        "value": 0.25,
+        "ci95": [
+          0.2,
+          0.35
+        ],
+        "queries": 4
+      },
+      "recall@10": {
+        "value": 0.375,
+        "ci95": [
+          0.0,
+          0.75
+        ],
+        "queries": 4
+      },
+      "mrr@10": {
+        "value": 0.5,
+        "ci95": [
+          0.0,
+          1.0
+        ],
+        "queries": 4
+      },
+      "ndcg@10": {
+        "value": 0.446789,
+        "ci95": [
+          0.0,
+          0.893577
+        ],
+        "queries": 4
+      },
+      "zero_result_rate": {
+        "value": 0.5,
+        "ci95": [
+          0.0,
+          1.0
+        ],
+        "queries": 4
+      },
+      "empty_query_correct": {
+        "value": null,
+        "ci95": null,
+        "queries": 0
+      },
+      "latency_p50_ms": {
+        "value": 13.617239,
+        "ci95": [
+          6.389344,
+          20.684824
+        ],
+        "queries": 4
+      },
+      "latency_p95_ms": {
+        "value": 20.682147,
+        "ci95": [
+          6.567502,
+          20.684824
+        ],
+        "queries": 4
+      },
+      "latency_p99_ms": {
+        "value": 20.684289,
+        "ci95": [
+          6.567502,
+          20.684824
+        ],
+        "queries": 4
+      },
+      "live_discovery_success_rate": {
+        "value": null,
+        "ci95": null,
+        "queries": 0
+      }
+    }
+  },
+  "profile": [
+    {
+      "stage": "query_parse_and_intent",
+      "calls": 186,
+      "total_ms": 405.264,
+      "call_p95_ms": 2.38
+    },
+    {
+      "stage": "passage_selection",
+      "calls": 198,
+      "total_ms": 36.605,
+      "call_p95_ms": 0.528
+    },
+    {
+      "stage": "candidate_retrieval",
+      "calls": 186,
+      "total_ms": 24.239,
+      "call_p95_ms": 0.289
+    },
+    {
+      "stage": "document_metadata",
+      "calls": 165,
+      "total_ms": 13.775,
+      "call_p95_ms": 0.153
+    },
+    {
+      "stage": "positional_features",
+      "calls": 216,
+      "total_ms": 10.088,
+      "call_p95_ms": 0.065
+    },
+    {
+      "stage": "document_text_reads",
+      "calls": 165,
+      "total_ms": 9.911,
+      "call_p95_ms": 0.089
+    }
+  ],
+  "per_query": [
+    {
+      "id": "q001",
+      "query": "Python code for palindrome",
+      "language": "en",
+      "categories": [
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.4,
+      "p@5_ceiling": 0.6,
+      "recall@10": 0.6666666666666666,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.9580414003446834,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 11.517986000399105,
+      "result_urls": [
+        "https://tutorials.example/python-palindrome-code",
+        "https://docs.example/python/palindrome"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 43.70215200015082,
+      "repeat_latencies_ms": [
+        43.70215200015082,
+        11.517986000399105,
+        11.157145000197488
+      ]
+    },
+    {
+      "id": "q002",
+      "query": "Python palindrome program",
+      "language": "en",
+      "categories": [
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.7871546029909718,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.090631999995821,
+      "result_urls": [
+        "https://docs.example/python/palindrome"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.8589219999921625,
+      "repeat_latencies_ms": [
+        6.8589219999921625,
+        6.090631999995821,
+        5.979774000024918
+      ]
+    },
+    {
+      "id": "q003",
+      "query": "Python recursion",
+      "language": "en",
+      "categories": [
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.403825000030338,
+      "result_urls": [
+        "https://tutorials.example/python-recursion"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.2398799996117305,
+      "repeat_latencies_ms": [
+        6.2398799996117305,
+        5.403825000030338,
+        5.262947000119311
+      ]
+    },
+    {
+      "id": "q004",
+      "query": "Python requests library",
+      "language": "en",
+      "categories": [
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.544039999676897,
+      "result_urls": [
+        "https://docs.example/python-requests-guide"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.750324000222463,
+      "repeat_latencies_ms": [
+        6.750324000222463,
+        5.544039999676897,
+        5.505349000031856
+      ]
+    },
+    {
+      "id": "q005",
+      "query": "list comprehension Python",
+      "language": "en",
+      "categories": [
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 4.2819640002562664,
+      "result_urls": [
+        "https://docs.example/python/list-comprehensions"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.68473500015898,
+      "repeat_latencies_ms": [
+        5.68473500015898,
+        4.239704000156053,
+        4.2819640002562664
+      ]
+    },
+    {
+      "id": "q006",
+      "query": "what is artificial intelligence",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.9173194127129571,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.822179999995569,
+      "result_urls": [
+        "https://wiki.example/artificial-intelligence"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.494780999877548,
+      "repeat_latencies_ms": [
+        7.494780999877548,
+        5.822179999995569,
+        5.719238999972731
+      ]
+    },
+    {
+      "id": "q007",
+      "query": "machine learning algorithms",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.186457999774575,
+      "result_urls": [
+        "https://tutorials.example/ml-algorithms"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.907294999768055,
+      "repeat_latencies_ms": [
+        7.907294999768055,
+        6.186457999774575,
+        5.936837999797717
+      ]
+    },
+    {
+      "id": "q008",
+      "query": "neural network basics",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 4.616904000158684,
+      "result_urls": [
+        "https://wiki.example/neural-network"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.883650999749079,
+      "repeat_latencies_ms": [
+        5.883650999749079,
+        4.616904000158684,
+        4.521314000157872
+      ]
+    },
+    {
+      "id": "q009",
+      "query": "कृत्रिम बुद्धिमत्ता क्या है",
+      "language": "hi",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 7.11444999978994,
+      "result_urls": [
+        "https://wiki.example/krtrim-buddhimatta"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 8.13672599997517,
+      "repeat_latencies_ms": [
+        8.13672599997517,
+        7.11444999978994,
+        7.046326000363479
+      ]
+    },
+    {
+      "id": "q010",
+      "query": "मशीन लर्निंग क्या है",
+      "language": "hi",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 10.171714000080101,
+      "result_urls": [
+        "https://wiki.example/machine-learning-hindi",
+        "https://wiki.example/krtrim-buddhimatta"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 11.301610999908007,
+      "repeat_latencies_ms": [
+        11.301610999908007,
+        10.140692999812018,
+        10.171714000080101
+      ]
+    },
+    {
+      "id": "q011",
+      "query": "डीप लर्निंग ट्यूटोरियल",
+      "language": "hi",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.556078999892634,
+      "result_urls": [
+        "https://tutorials.example/deep-learning-hindi"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.998874999680993,
+      "repeat_latencies_ms": [
+        6.998874999680993,
+        6.556078999892634,
+        6.263093000143272
+      ]
+    },
+    {
+      "id": "q012",
+      "query": "કૃત્રિમ બુદ્ધિ શું છે",
+      "language": "gu",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.038522999915585,
+      "result_urls": [
+        "https://wiki.example/krutrim-buddhi"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.899745000282564,
+      "repeat_latencies_ms": [
+        6.899745000282564,
+        6.038522999915585,
+        5.844517000241467
+      ]
+    },
+    {
+      "id": "q013",
+      "query": "ગુજરાતીમાં કૃત્રિમ બુદ્ધિ સમજાવો",
+      "language": "gu",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.7871546029909718,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.022301000029984,
+      "result_urls": [
+        "https://wiki.example/ai-gujarati-explanation"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.792753999889101,
+      "repeat_latencies_ms": [
+        6.792753999889101,
+        6.022301000029984,
+        5.715982999845437
+      ]
+    },
+    {
+      "id": "q014",
+      "query": "મશીન લર્નિંગ ગુજરાતીમાં",
+      "language": "gu",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 8.091656000033254,
+      "result_urls": [
+        "https://wiki.example/machine-learning-gujarati"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 9.989261999635346,
+      "repeat_latencies_ms": [
+        9.989261999635346,
+        8.091656000033254,
+        7.747223000023951
+      ]
+    },
+    {
+      "id": "q015",
+      "query": "Kumkum Bhagya serial characters",
+      "language": "en",
+      "categories": [
+        "named_entity",
+        "list"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 8.460920000288752,
+      "result_urls": [
+        "https://example.com/kumkum-bhagya",
+        "https://example.com/kundali-bhagya"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 10.47704899974633,
+      "repeat_latencies_ms": [
+        10.47704899974633,
+        8.460920000288752,
+        8.386414000142395
+      ]
+    },
+    {
+      "id": "q016",
+      "query": "Kundali Bhagya serial characters",
+      "language": "en",
+      "categories": [
+        "named_entity",
+        "list"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.291041999702429,
+      "result_urls": [
+        "https://example.com/kundali-bhagya"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.801970000196889,
+      "repeat_latencies_ms": [
+        6.801970000196889,
+        6.291041999702429,
+        5.960455000149523
+      ]
+    },
+    {
+      "id": "q017",
+      "query": "Kumkum Bhagya latest episodes",
+      "language": "en",
+      "categories": [
+        "named_entity",
+        "list"
+      ],
+      "expected_empty": false,
+      "p@5": 0.0,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "ndcg@10": 0.0,
+      "zero_result_rate": 1,
+      "empty_query_correct": null,
+      "latency_ms": 4.539547000149469,
+      "result_urls": [],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 13.32078299992645,
+      "repeat_latencies_ms": [
+        13.32078299992645,
+        4.539547000149469,
+        4.325952999806759
+      ]
+    },
+    {
+      "id": "q018",
+      "query": "Claude official MCP documentation",
+      "language": "en",
+      "categories": [
+        "official_docs"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.7871546029909718,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.648203999953694,
+      "result_urls": [
+        "https://docs.anthropic.com/claude/mcp"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.434427999920445,
+      "repeat_latencies_ms": [
+        6.434427999920445,
+        5.648203999953694,
+        5.578793000040605
+      ]
+    },
+    {
+      "id": "q019",
+      "query": "Claude API reference",
+      "language": "en",
+      "categories": [
+        "official_docs"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.762202000369143,
+      "result_urls": [
+        "https://docs.anthropic.com/api/reference"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.213311000010435,
+      "repeat_latencies_ms": [
+        6.213311000010435,
+        5.762202000369143,
+        5.51892500016038
+      ]
+    },
+    {
+      "id": "q020",
+      "query": "latest AI news today",
+      "language": "en",
+      "categories": [
+        "news"
+      ],
+      "expected_empty": false,
+      "p@5": 0.4,
+      "p@5_ceiling": 0.4,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.814339000356995,
+      "result_urls": [
+        "https://news.example/ai-news-oct-2026",
+        "https://news.example/tech-news-oct-12-2026"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.219046000045637,
+      "repeat_latencies_ms": [
+        7.219046000045637,
+        6.800654000016948,
+        6.814339000356995
+      ]
+    },
+    {
+      "id": "q021",
+      "query": "Python code for xyz_nonexistent_123",
+      "language": "en",
+      "categories": [
+        "absent"
+      ],
+      "expected_empty": true,
+      "p@5": null,
+      "p@5_ceiling": null,
+      "recall@10": null,
+      "mrr@10": null,
+      "ndcg@10": null,
+      "zero_result_rate": 1,
+      "empty_query_correct": 1,
+      "latency_ms": 2.600595999865618,
+      "result_urls": [],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 2.678560000276775,
+      "repeat_latencies_ms": [
+        2.678560000276775,
+        2.600595999865618,
+        2.4908059999688703
+      ]
+    },
+    {
+      "id": "q022",
+      "query": "nonexistent_topic_abc999",
+      "language": "en",
+      "categories": [
+        "absent"
+      ],
+      "expected_empty": true,
+      "p@5": null,
+      "p@5_ceiling": null,
+      "recall@10": null,
+      "mrr@10": null,
+      "ndcg@10": null,
+      "zero_result_rate": 1,
+      "empty_query_correct": 1,
+      "latency_ms": 2.3425070003213477,
+      "result_urls": [],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 2.4835919998622558,
+      "repeat_latencies_ms": [
+        2.4835919998622558,
+        2.3425070003213477,
+        2.2950349998609454
+      ]
+    },
+    {
+      "id": "q023",
+      "query": "capital of France",
+      "language": "en",
+      "categories": [
+        "factual"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.528078000224923,
+      "result_urls": [
+        "https://wiki.example/paris"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.738661000326829,
+      "repeat_latencies_ms": [
+        6.738661000326829,
+        5.528078000224923,
+        5.431718999716395
+      ]
+    },
+    {
+      "id": "q024",
+      "query": "who wrote Romeo and Juliet",
+      "language": "en",
+      "categories": [
+        "factual"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.000987000130408,
+      "result_urls": [
+        "https://wiki.example/romeo-juliet"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.181792000006681,
+      "repeat_latencies_ms": [
+        6.181792000006681,
+        5.000987000130408,
+        4.842370000005758
+      ]
+    },
+    {
+      "id": "q025",
+      "query": "photosynthesis process",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 4.901933999917674,
+      "result_urls": [
+        "https://wiki.example/photosynthesis"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.177692000164825,
+      "repeat_latencies_ms": [
+        6.177692000164825,
+        4.901933999917674,
+        4.821493000235932
+      ]
+    },
+    {
+      "id": "q026",
+      "query": "water cycle explanation",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.591234999883454,
+      "result_urls": [
+        "https://wiki.example/water-cycle"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.959682999877259,
+      "repeat_latencies_ms": [
+        6.959682999877259,
+        5.591234999883454,
+        5.421002999810298
+      ]
+    },
+    {
+      "id": "q027",
+      "query": "Python vs JavaScript",
+      "language": "en",
+      "categories": [
+        "comparison"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.277511000007507,
+      "result_urls": [
+        "https://comparison.example/python-vs-javascript"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.006517000263557,
+      "repeat_latencies_ms": [
+        7.006517000263557,
+        6.2532030001420935,
+        6.277511000007507
+      ]
+    },
+    {
+      "id": "q028",
+      "query": "React vs Angular",
+      "language": "en",
+      "categories": [
+        "comparison"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.887245999929291,
+      "result_urls": [
+        "https://comparison.example/react-vs-angular"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.182363000083569,
+      "repeat_latencies_ms": [
+        7.182363000083569,
+        5.887245999929291,
+        5.792799999653653
+      ]
+    },
+    {
+      "id": "q029",
+      "query": "what causes diabetes",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 4.932257999826106,
+      "result_urls": [
+        "https://health.example/diabetes"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.5193250000229455,
+      "repeat_latencies_ms": [
+        5.5193250000229455,
+        4.932257999826106,
+        4.681513999912568
+      ]
+    },
+    {
+      "id": "q030",
+      "query": "common cold remedies",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.549020000216842,
+      "result_urls": [
+        "https://health.example/common-cold"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.646518999787077,
+      "repeat_latencies_ms": [
+        6.646518999787077,
+        5.549020000216842,
+        5.46264299964605
+      ]
+    },
+    {
+      "id": "q031",
+      "query": "stock market basics",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.143974000020535,
+      "result_urls": [
+        "https://finance.example/stock-market-basics"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.723672999920382,
+      "repeat_latencies_ms": [
+        5.723672999920382,
+        4.8427790002278925,
+        5.143974000020535
+      ]
+    },
+    {
+      "id": "q032",
+      "query": "mutual funds explained",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.919994000123552,
+      "result_urls": [
+        "https://finance.example/mutual-funds"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.2017570003263245,
+      "repeat_latencies_ms": [
+        6.2017570003263245,
+        5.819654999868362,
+        5.919994000123552
+      ]
+    },
+    {
+      "id": "q033",
+      "query": "best places to visit in India",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 7.03861500005587,
+      "result_urls": [
+        "https://travel.example/india-tourism",
+        "https://sports.example/cricket-world-cup"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.753770999897824,
+      "repeat_latencies_ms": [
+        7.753770999897824,
+        6.897932999891054,
+        7.03861500005587
+      ]
+    },
+    {
+      "id": "q034",
+      "query": "how to get a passport",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.1145959996574675,
+      "result_urls": [
+        "https://travel.example/passport-guide"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.734157000006235,
+      "repeat_latencies_ms": [
+        5.734157000006235,
+        5.1145959996574675,
+        5.010689999835449
+      ]
+    },
+    {
+      "id": "q035",
+      "query": "masala dosa recipe",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.080655999994633,
+      "result_urls": [
+        "https://recipes.example/masala-dosa"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.595280000055936,
+      "repeat_latencies_ms": [
+        6.595280000055936,
+        6.080655999994633,
+        5.865518000064185
+      ]
+    },
+    {
+      "id": "q036",
+      "query": "chocolate cake recipe",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.333812000117177,
+      "result_urls": [
+        "https://recipes.example/chocolate-cake"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.384071999946173,
+      "repeat_latencies_ms": [
+        6.384071999946173,
+        5.333812000117177,
+        5.264632999569585
+      ]
+    },
+    {
+      "id": "q037",
+      "query": "best strategy games 2026",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 7.451785999819549,
+      "result_urls": [
+        "https://gaming.example/strategy-games-2026",
+        "https://gaming.example/chess-guide"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 8.46326400005637,
+      "repeat_latencies_ms": [
+        8.46326400005637,
+        7.451785999819549,
+        7.208867999906943
+      ]
+    },
+    {
+      "id": "q038",
+      "query": "how to play chess",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.028612000387511,
+      "result_urls": [
+        "https://gaming.example/chess-guide"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.274923000091803,
+      "repeat_latencies_ms": [
+        6.274923000091803,
+        4.982819000360905,
+        5.028612000387511
+      ]
+    },
+    {
+      "id": "q039",
+      "query": "cricket world cup winners",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.930501999955595,
+      "result_urls": [
+        "https://sports.example/cricket-world-cup"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.117313999970065,
+      "repeat_latencies_ms": [
+        7.117313999970065,
+        5.930501999955595,
+        5.882069000108459
+      ]
+    },
+    {
+      "id": "q040",
+      "query": "olympic games history",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.593020999844157,
+      "result_urls": [
+        "https://sports.example/olympic-history"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.081283999923471,
+      "repeat_latencies_ms": [
+        7.081283999923471,
+        6.593020999844157,
+        6.301260000327602
+      ]
+    },
+    {
+      "id": "q041",
+      "query": "best smartphones under 30000",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.162041999938083,
+      "result_urls": [
+        "https://shopping.example/smartphones-under-30000"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.745062000187318,
+      "repeat_latencies_ms": [
+        5.745062000187318,
+        5.162041999938083,
+        4.9744959997042315
+      ]
+    },
+    {
+      "id": "q042",
+      "query": "wireless headphones comparison",
+      "language": "en",
+      "categories": [
+        "comparison"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 4.6942429999035085,
+      "result_urls": [
+        "https://shopping.example/headphones-comparison"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.543096000110381,
+      "repeat_latencies_ms": [
+        5.543096000110381,
+        4.6942429999035085,
+        4.594156000166549
+      ]
+    },
+    {
+      "id": "q043",
+      "query": "how to learn programming",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.130090999955428,
+      "result_urls": [
+        "https://education.example/learn-programming"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.831498999668838,
+      "repeat_latencies_ms": [
+        5.831498999668838,
+        5.130090999955428,
+        4.824821000056545
+      ]
+    },
+    {
+      "id": "q044",
+      "query": "UPSC exam preparation",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.74415399978534,
+      "result_urls": [
+        "https://education.example/upsc-preparation"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.80817800002842,
+      "repeat_latencies_ms": [
+        6.80817800002842,
+        5.681627000285516,
+        5.74415399978534
+      ]
+    },
+    {
+      "id": "q045",
+      "query": "what is cloud computing",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 7.492635999824415,
+      "result_urls": [
+        "https://tech.example/cloud-computing",
+        "https://news.example/tech-news-oct-12-2026"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 8.233243000177026,
+      "repeat_latencies_ms": [
+        8.233243000177026,
+        7.492635999824415,
+        7.368281999788451
+      ]
+    },
+    {
+      "id": "q046",
+      "query": "blockchain technology explained",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.785702000139281,
+      "result_urls": [
+        "https://tech.example/blockchain"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.314024999937828,
+      "repeat_latencies_ms": [
+        6.314024999937828,
+        5.785702000139281,
+        5.303288000050088
+      ]
+    },
+    {
+      "id": "q047",
+      "query": "software engineer interview questions",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.429669000022841,
+      "result_urls": [
+        "https://jobs.example/software-engineer-interview"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.362454999816691,
+      "repeat_latencies_ms": [
+        6.362454999816691,
+        5.429669000022841,
+        5.3769389996887185
+      ]
+    },
+    {
+      "id": "q048",
+      "query": "how to write a resume",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 4.850094999710564,
+      "result_urls": [
+        "https://jobs.example/resume-guide"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.041576999905374,
+      "repeat_latencies_ms": [
+        6.041576999905374,
+        4.850094999710564,
+        4.7442290001527
+      ]
+    },
+    {
+      "id": "q049",
+      "query": "weather in Mumbai",
+      "language": "en",
+      "categories": [
+        "informational"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 4.550081999695976,
+      "result_urls": [
+        "https://weather.example/mumbai"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 4.575085999931616,
+      "repeat_latencies_ms": [
+        4.575085999931616,
+        4.550081999695976,
+        3.9249930000551103
+      ]
+    },
+    {
+      "id": "q050",
+      "query": "krtrim buddhimatta kya hai",
+      "language": "hi-Latn",
+      "categories": [
+        "hinglish"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.567502000052627,
+      "result_urls": [
+        "https://wiki.example/krtrim-buddhimatta"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 7.642420000138372,
+      "repeat_latencies_ms": [
+        7.642420000138372,
+        6.55655199989269,
+        6.567502000052627
+      ]
+    },
+    {
+      "id": "q051",
+      "query": "artificial intelligence in hindi",
+      "language": "en",
+      "categories": [
+        "cross_language"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.3373519727104165,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.6714430002102745,
+      "result_urls": [
+        "https://wiki.example/artificial-intelligence"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 5.802064999897993,
+      "repeat_latencies_ms": [
+        5.802064999897993,
+        5.6714430002102745,
+        5.589933000010205
+      ]
+    },
+    {
+      "id": "q052",
+      "query": "give me doremon cartoon character names",
+      "language": "en",
+      "categories": [
+        "misspelling",
+        "list"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 9.308333000262792,
+      "result_urls": [
+        "https://fiction.example/doraemon-characters"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 10.442478000186384,
+      "repeat_latencies_ms": [
+        10.442478000186384,
+        9.277325000311976,
+        9.308333000262792
+      ]
+    },
+    {
+      "id": "q053",
+      "query": "Pythn palindrome program",
+      "language": "en",
+      "categories": [
+        "misspelling",
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.7871546029909718,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 9.420119999958843,
+      "result_urls": [
+        "https://docs.example/python/palindrome"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 9.939140999904339,
+      "repeat_latencies_ms": [
+        9.939140999904339,
+        9.374115000355232,
+        9.420119999958843
+      ]
+    },
+    {
+      "id": "q054",
+      "query": "reqests timeout library",
+      "language": "en",
+      "categories": [
+        "misspelling",
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 9.15961900000184,
+      "result_urls": [
+        "https://docs.example/python-requests-guide"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 10.37658499990357,
+      "repeat_latencies_ms": [
+        10.37658499990357,
+        9.067092999885062,
+        9.15961900000184
+      ]
+    },
+    {
+      "id": "q055",
+      "query": "mosam Mumbai",
+      "language": "hi-Latn",
+      "categories": [
+        "hinglish"
+      ],
+      "expected_empty": false,
+      "p@5": 0.0,
+      "p@5_ceiling": 0.2,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "ndcg@10": 0.0,
+      "zero_result_rate": 1,
+      "empty_query_correct": null,
+      "latency_ms": 20.684823999999935,
+      "result_urls": [],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 21.122711999851163,
+      "repeat_latencies_ms": [
+        21.122711999851163,
+        20.684823999999935,
+        20.464734000142926
+      ]
+    },
+    {
+      "id": "q056",
+      "query": "mausam Mumbai",
+      "language": "hi-Latn",
+      "categories": [
+        "hinglish"
+      ],
+      "expected_empty": false,
+      "p@5": 0.0,
+      "p@5_ceiling": 0.2,
+      "recall@10": 0.0,
+      "mrr@10": 0.0,
+      "ndcg@10": 0.0,
+      "zero_result_rate": 1,
+      "empty_query_correct": null,
+      "latency_ms": 20.666976000029535,
+      "result_urls": [],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 20.841385000039736,
+      "repeat_latencies_ms": [
+        20.841385000039736,
+        20.666976000029535,
+        20.553903999825707
+      ]
+    },
+    {
+      "id": "q057",
+      "query": "Python mein palindrome program",
+      "language": "hi-Latn",
+      "categories": [
+        "hinglish",
+        "coding"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.4,
+      "recall@10": 0.5,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.7871546029909718,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 6.389344000126584,
+      "result_urls": [
+        "https://docs.example/python/palindrome"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.709707000027265,
+      "repeat_latencies_ms": [
+        6.709707000027265,
+        6.26179900018542,
+        6.389344000126584
+      ]
+    },
+    {
+      "id": "q058",
+      "query": "give me Nebula museum exhibit names",
+      "language": "en",
+      "categories": [
+        "list",
+        "named_entity"
+      ],
+      "expected_empty": false,
+      "p@5": 0.4,
+      "p@5_ceiling": 0.4,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 0.9737576937588317,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 17.156829000214202,
+      "result_urls": [
+        "https://museum.example/nebula/list",
+        "https://news.example/nebula-old",
+        "https://news.example/nebula-undated",
+        "https://encyclopedia.example/nebula",
+        "https://news.example/nebula-current"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 18.861189999825,
+      "repeat_latencies_ms": [
+        18.861189999825,
+        17.05158000004303,
+        17.156829000214202
+      ]
+    },
+    {
+      "id": "q059",
+      "query": "Nebula museum gallery",
+      "language": "en",
+      "categories": [
+        "news",
+        "explicit_freshness"
+      ],
+      "expected_empty": false,
+      "p@5": 0.2,
+      "p@5_ceiling": 0.2,
+      "recall@10": 1.0,
+      "mrr@10": 1.0,
+      "ndcg@10": 1.0,
+      "zero_result_rate": 0,
+      "empty_query_correct": null,
+      "latency_ms": 5.1041709998571605,
+      "result_urls": [
+        "https://news.example/nebula-current"
+      ],
+      "provider_errors": [],
+      "discovery_attempted": false,
+      "discovery_success": 0,
+      "first_pass_ms": 6.095138000091538,
+      "repeat_latencies_ms": [
+        6.095138000091538,
+        5.042314000093029,
+        5.1041709998571605
+      ]
+    }
+  ],
+  "notes": [
+    "Ranking metrics exclude expected-empty cases; abstention is evaluated separately.",
+    "Precision@5 uses denominator 5. Its judgment ceiling is reported, not relabeled accuracy.",
+    "95% percentile bootstrap resamples queries within each reported language; small samples are uncertain.",
+    "Latency uses each query median across repeats; first-pass values remain available. Python/OS caches are not reset.",
+    "Stage timings include instrumentation overhead and describe this small corpus, not production-scale capacity.",
+    "Offline live-discovery success is null: no provider was contacted. No fact or financial-answer accuracy is inferred.",
+    "Fixtures are reused development judgments, not a held-out open-web or language-support certification."
+  ]
+}

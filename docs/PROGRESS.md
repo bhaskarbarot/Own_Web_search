@@ -2,6 +2,21 @@
 
 Date: 2026-10-21, Asia/Kolkata. Instructions: win_win.md and AGENTS.md.
 
+## Ordered roadmap and gates
+
+| Phase | Work | Required evidence before advancing |
+| --- | --- | --- |
+| 0 (current) | Freeze baseline, dataset, split, judging and metrics | Reproducible dev recording and judged quality measurements with CIs |
+| 1 (pending) | Provider resilience, intent-safe vertical discovery, operators, query variants | Lower zero-result rate, better pooled recall, no strict P@5 regression, failure-injection pass |
+| 2 (pending) | URL deduplication, passage relevance, trust signals, entity focus, snippets | Better strict P@5/NDCG, reduced duplicates and broken snippets, component ablations |
+| 3 (pending) | Profile, progressive delivery, deadlines and bounded freshness-aware caching | Cold/warm latency measurements and unchanged quality within uncertainty |
+| 4 (pending) | Evidence-grounded claims, conflict handling and abstention | Citation support, answer correctness and unsupported-claim measurements |
+| 5 (sealed, pending) | Once-only baseline/final holdout comparison; no code changes | Full saved report, uncertainty, limitations and human review |
+
+This is the execution order from win_win.md. Detailed later-phase plans are
+written only after the preceding phase passes. Numeric targets are goals,
+never claims about unmeasured performance.
+
 ## Current phase and preserved baseline
 
 Phase 0 is in progress. No search-behaviour files have changed. Do not start
@@ -74,6 +89,15 @@ search implementation. A ResourceWarning was emitted but no test failed.
 - Dataset step commit: 92ea64b. This pipeline step follows it without any
   search-behaviour change. The raw capture's code_git_hash identifies the engine
   checkout at capture start; the engine manifest establishes exact equivalence.
+
+## Step 2b — explicit CSV independence labels
+
+CSV review candidates now explicitly show independent_review=False rather than
+an empty cell. Twelve evaluator regression tests pass after the change, and
+all five offline quality measurements remain identical to baseline
+(eval/runs/phase0-offline-final.json). This affects review artifacts only.
+The full regression suite will run after the complete recording, avoiding
+additional benchmark overlap.
 
 ## Step 3 — full dev recording (in progress)
 

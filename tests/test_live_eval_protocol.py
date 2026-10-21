@@ -146,6 +146,7 @@ class LiveEvalProtocolTests(unittest.TestCase):
                 rows = list(csv.DictReader(handle))
             self.assertEqual(rows[0]['title'], "'=UNTRUSTED()")
             self.assertEqual(rows[0]['snippet'], "'+untrusted")
+            self.assertEqual(rows[0]['independent_review'], 'False')
             args = argparse.Namespace(recorded=recorded, extra_source=[], existing_judgments=None,
                                       output=output, csv=reviewed, independent_review=False)
             with self.assertRaisesRegex(ValueError, 'No completed'):

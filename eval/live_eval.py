@@ -320,6 +320,7 @@ def review_csv(path, pool, judgments, seed=20261021, candidates=False, fraction=
             obs = row['observations'][0]
             cells = {**{k: row[k] for k in ('id', 'query', 'url', 'evidence_sha256')},
                      'title': obs.get('title', ''), 'snippet': obs.get('snippet', ''),
+                     'independent_review': label.get('independent_review', False),
                      **{k: label[k] for k in fields if k in label}}
             # Retrieved titles/snippets can be spreadsheet formulas. Keep raw
             # evidence in the JSONL pool; make the review CSV safe to open.
