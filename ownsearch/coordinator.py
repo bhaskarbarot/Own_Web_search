@@ -10,7 +10,7 @@ from pathlib import Path
 from .cache import PageCache
 from .fetcher import FetchError
 from .query import parse_query
-from .textproc import analyze
+from .textproc import analyze, ALL_STOPWORDS
 from .util import origin_of
 from .webfetch import OriginState, WebFetchSession
 from .webmodels import web_url
@@ -212,25 +212,33 @@ class IndependentSearch:
                 sequence += 1
                 heapq.heappush(frontier, (-priority, sequence, url, depth, map_depth))
 
+            clean_words = [w for w in (q.entity or q.surface) if w.lower() not in ALL_STOPWORDS and len(w) > 1]
+            if not clean_words:
+                clean_words = [t for t in q.scoring_terms if len(t) > 1]
+            candidate_slugs = []
+            for length in range(min(len(clean_words), 3), 0, -1):
+                for i in range(len(clean_words) - length + 1):
+                    sub = clean_words[i:i+length]
+                    cap = '_'.join(w.capitalize() for w in sub)
+                    if cap not in candidate_slugs:
+                        candidate_slugs.append(cap)
+
             for url in valid:
                 enqueue(url)
-                if fetch_pages and (q.entity or q.scoring_terms):
-                    entity_terms = q.entity or q.scoring_terms
-                    slug_capitalized = '_'.join(t.capitalize() for t in entity_terms[:4])
-                    slug_exact = '_'.join(entity_terms[:4])
+                if fetch_pages and candidate_slugs:
                     origin = origin_of(url)
                     if 'wikipedia.org' in origin or 'wiki' in urlsplit(url).path:
-                        for s in (slug_capitalized, slug_exact):
+                        for s in candidate_slugs[:4]:
                             cand = independent_url(urljoin(origin, f"/wiki/{s}"), self.settings.allow_private_hosts)
                             if cand:
-                                enqueue(cand, anchor=' '.join(entity_terms), depth=0, kind='entity_path')
+                                enqueue(cand, anchor=s.replace('_', ' '), depth=0, kind='entity_path')
                     elif 'docs.python.org' in origin:
-                        for s in entity_terms[:2]:
-                            cand = independent_url(urljoin(url, f"library/{s}.html"), self.settings.allow_private_hosts)
+                        for s in clean_words[:3]:
+                            cand = independent_url(urljoin(url, f"library/{s.lower()}.html"), self.settings.allow_private_hosts)
                             if cand:
                                 enqueue(cand, anchor=s, depth=0, kind='entity_path')
                     elif 'plato.stanford.edu' in origin:
-                        for s in entity_terms[:2]:
+                        for s in clean_words[:2]:
                             cand = independent_url(urljoin(url, f"entries/{s.lower()}/"), self.settings.allow_private_hosts)
                             if cand:
                                 enqueue(cand, anchor=s, depth=0, kind='entity_path')
@@ -252,6 +260,8 @@ class IndependentSearch:
                             continue
                         enqueue(link, anchor, 1, kind=kind)
                     for link in page.sitemaps:
+                        if 'wikipedia.org' in link or 'rest.php' in link:
+                            continue
                         enqueue(link, depth=0, map_depth=1, kind='sitemap')
             session = WebFetchSession(self.settings, cancel, self.origins) if fetch_pages else None
             if session:
@@ -271,6 +281,8 @@ class IndependentSearch:
                     enqueue(link, anchor, depth+1 if page.kind not in ('sitemap', 'feed') else depth,
                             map_depth, kind)
                 for link in page.sitemaps:
+                    if 'wikipedia.org' in link or 'rest.php' in link:
+                        continue
                     enqueue(link, depth=depth, map_depth=map_depth+1, kind='sitemap')
                 if self.settings.native_search_enabled:
                     for link, anchor in getattr(page, 'search_result_links', []):

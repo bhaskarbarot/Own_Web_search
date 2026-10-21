@@ -193,7 +193,7 @@ $('search-form').addEventListener('submit', async event => {
   if (mode === 'web' && $('filetype').value) payload.filetype = $('filetype').value === 'custom' ? $('custom-filetype').value.trim().toLowerCase() : $('filetype').value;
   const headers = {'Content-Type':'application/json'};
   if ($('api-key').value.trim()) headers.Authorization = 'Bearer ' + $('api-key').value.trim();
-  controller = new AbortController(); const started = performance.now(); let timeoutReached = false;
+  controller = new AbortController(); const started = performance.now(); let timeoutReached = false; let responseReceived = false;
   $('submit').disabled = true; $('cancel').hidden = false; $('status').className = '';
   for (const id of ['answer','warnings','images','debug']) $(id).hidden = true;
   $('results').replaceChildren();
@@ -201,46 +201,15 @@ $('search-form').addEventListener('submit', async event => {
   progress(); const ticker = setInterval(progress, 100);
   const timeout = setTimeout(() => { timeoutReached = true; controller?.abort(); }, 30000);
   try {
-    const response = await fetch('/search/stream', {method:'POST', headers, body:JSON.stringify(payload), signal:controller.signal});
+    const response = await fetch('/search', {method:'POST', headers, body:JSON.stringify(payload), signal:controller.signal});
     responseReceived = true; connectionMessage(true);
     if (!response.ok) {
       const errData = await response.json().catch(() => ({}));
       throw new Error(errData.error || 'Search failed (HTTP ' + response.status + ')');
     }
-    const reader = response.body?.getReader();
-    if (!reader) {
-      const data = await response.json();
-      clearInterval(ticker); render(data, performance.now()-started, mode);
-    } else {
-      const decoder = new TextDecoder();
-      let buffer = '';
-      while (true) {
-        const {done, value} = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, {stream: true});
-        const lines = buffer.split('\n\n');
-        buffer = lines.pop();
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const event = JSON.parse(line.slice(6));
-              if (event.stage === 'cache' && event.results && event.results.length) {
-                render(event, performance.now()-started, mode);
-                $('status').textContent = 'Instant local match · Crawling new pages… ' + ((performance.now()-started)/1000).toFixed(1) + ' s';
-              } else if (event.stage === 'progress') {
-                if (event.results && event.results.length) {
-                  render(event, performance.now()-started, mode);
-                }
-                $('status').textContent = 'Live matches found · Crawling… (' + (event.attempted || '') + ' pages attempted) ' + ((performance.now()-started)/1000).toFixed(1) + ' s';
-              } else if (event.stage === 'final') {
-                clearInterval(ticker);
-                render(event, performance.now()-started, mode);
-              }
-            } catch (e) {}
-          }
-        }
-      }
-    }
+    const data = await response.json();
+    clearInterval(ticker);
+    render(data, performance.now()-started, mode);
   } catch (error) {
     clearInterval(ticker); $('status').className = 'error';
     if (!responseReceived && error.name !== 'AbortError') {
@@ -255,6 +224,11 @@ $('search-form').addEventListener('submit', async event => {
 });
 updateFilters();
 checkConnection();
+const urlParams = new URLSearchParams(location.search);
+if (urlParams.get('q')) {
+  $('query').value = urlParams.get('q');
+  $('search-form').dispatchEvent(new Event('submit'));
+}
 </script>
 </body>
 </html>
