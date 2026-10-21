@@ -367,3 +367,22 @@ Artifacts: health-full-tests.txt, health-offline.json and health-ablation.json i
 eval/runs/phase1/. Continue with independent adapters, one tested/measured commit
 at a time. No Phase 1 quality gate has been declared passed: strict P@5 and pooled
 recall still need real relevance labels. The sealed set remains unused.
+
+
+### Phase 1 adapters — Wikimedia
+
+2026-10-21, parent 3daeead. Added independent opt-in Wikipedia and Wikidata API
+adapters, per-query routing, bounded vertical concurrency and honest skipped
+statuses. General discovery is preserved; vertical-only configuration is not
+described as a general web index. Official API contracts: docs/DISCOVERY_APIS.md.
+
+All 300 dev IDs were considered; stable-hash probes selected two applicable
+cases per API. Wikipedia: 177 eligible cases, two successful requests, 20 actual
+returned URLs. Wikidata: 12 eligible cases, two successful requests, zero matches.
+These are source availability measurements, not relevance judgments.
+
+50 relevant regression tests pass; all five offline preservation metrics are
+unchanged. Raw probes and tests are saved in eval/runs/phase1/. Result URLs are
+read from fullurl/concepturi; missing/unsafe URLs are discarded. Revision dates
+are not used as publication dates. Adapter defaults stay opt-in pending the
+combined dev ablation. Continue to GitHub; no new user confirmation is required.

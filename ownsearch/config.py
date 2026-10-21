@@ -113,6 +113,10 @@ class Settings:
     provider_request_budget: int = 60
     provider_budget_window: float = 60.0
     provider_failure_threshold: int = 3
+    vertical_providers: str = ""       # comma-separated independent API adapters; explicitly enable measured sources
+    vertical_max_providers: int = 3
+    wikipedia_api_url: str = "https://{language}.wikipedia.org/w/api.php"
+    wikidata_api_url: str = "https://www.wikidata.org/w/api.php"
     searxng_allow_private: bool = False # only the explicitly configured instance, not result-page fetching
     brave_search_url: str = "https://api.search.brave.com/res/v1/web/search"
     brave_images_url: str = "https://api.search.brave.com/res/v1/images/search"

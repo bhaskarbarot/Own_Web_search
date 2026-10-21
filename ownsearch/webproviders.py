@@ -214,9 +214,10 @@ class MarketWebProvider:
 
 
 def configured(settings):
+    from .vertical import configured_verticals
     sources = []
     if settings.searxng_url.strip():
         sources.append(SearxWebProvider(settings))
     if settings.brave_api_key.strip():
         sources.append(BraveWebProvider(settings))
-    return sources
+    return sources + configured_verticals(settings)

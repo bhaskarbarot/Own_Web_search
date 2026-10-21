@@ -1,0 +1,213 @@
+{
+  "provider": "wikipedia",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 177,
+  "runs": [
+    {
+      "id": "live-comparison-025",
+      "query": "lexical versus semantic search entity ambiguity",
+      "checked_at": "2026-10-21T07:05:39.220384+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Lexical_semantics",
+          "title": "Lexical semantics",
+          "snippet": "Lexical semantics (also known as lexicosemantics), as a subfield of linguistic semantics, is the study of word meanings. It includes the study of how words structure their meaning, how they act in grammar and compositionality, and the relationships between the distinct senses and uses of a word. The units of analysis in lexical semantics are lexical units which include not only words but also sub-words or sub-units such as affixes and even compound words and phrases.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Word-sense_disambiguation",
+          "title": "Word-sense disambiguation",
+          "snippet": "Word-sense disambiguation, or simply disambiguation, is the process of identifying which sense of a word is meant in a sentence or other segment of context. In human language processing and cognition, it is usually subconscious. Given that natural language requires reflection of neurological reality, as shaped by the abilities provided by the brain's neural networks, computer science has had a long-term challenge in developing the ability in computers to do natural language processing and machine learning.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Scope_(computer_programming)",
+          "title": "Scope (computer programming)",
+          "snippet": "In computer programming, the scope of a name binding (an association of a name to an entity, such as a variable) is the part of a program in which the name binding is valid. In other words, a scope is where a name can be used to refer to an entity. In other parts of the program, the name may refer to a different entity (it may have a different binding), or to nothing at all (it may be unbound).",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Meaning_(philosophy)",
+          "title": "Meaning (philosophy)",
+          "snippet": "Meaning is the sense or significance of something, such as an expression, representation, or event. It concerns what an entity conveys, stands for, refers to, or makes intelligible. Meaning is often understood as a relational concept that connects an entity to something else, such as the connection between the word dog and a four-legged mammal.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Concept",
+          "title": "Concept",
+          "snippet": "A concept is a fundamental unit of cognition that classifies entities and encodes shared features. Concepts make it possible to form and combine ideas, draw inferences, and refer to external objects. They act as the meanings of words and play a central role in many cognitive processes, including perception, memory, and reasoning.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Nominalization",
+          "title": "Nominalization",
+          "snippet": "In linguistics, nominalization or nominalisation, also known as substantivation or nouning, is the use of a word that is not a noun (e.g., a verb, an adjective or an adverb) as a noun, or as the head of a noun phrase. This change in functional category can occur through morphological transformation, but it does not always. Nominalization can refer, for instance, to the process of producing a noun from another part of speech by adding a derivational affix (e.g., the noun \"legalization\" from the verb \"legalize\"), but it can also refer to the complex noun that is formed as a result.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Reduced_relative_clause",
+          "title": "Reduced relative clause",
+          "snippet": "A reduced relative clause is a relative clause that is not marked by an explicit relative pronoun or relativizer such as who, which or that. An example is the clause I saw in the English sentence \"This is the man I saw.\" Unreduced forms of this relative clause would be \"This is the man that I saw.\" or \"...whom I saw.\" Another form of reduced relative clause is the \"reduced object passive relative clause\", a type of nonfinite clause headed by a past participle, such as the clause found here in: \"The animals found here can be dangerous.\" Reduced relative clauses are given to ambiguity or garden path effects, and have been a common topic of psycholinguistic study, especially in the field of sentence processing.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Identifier",
+          "title": "Identifier",
+          "snippet": "An identifier is a name that identifies (that is, labels the identity of) either a unique class of objects or a unique instance of such objects; the class or instance may be an idea, person, physical countable object (or class thereof), or physical noncountable substance (or class thereof). The abbreviation \"ID\" may refer to identity, identification (the process of identifying), or an identifier (that is, an instance of identification). An identifier may be a word, number, letter, symbol, or any combination of those.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Logical_form_(linguistics)",
+          "title": "Logical form (linguistics)",
+          "snippet": "In generative grammar and related approaches, the logical form (LF) of a linguistic expression is the variant of its syntactic structure which undergoes semantic interpretation. It is distinguished from phonetic form, the structure which corresponds to a sentence's pronunciation. These separate representations are postulated in order to explain the ways in which an expression's meaning can be partially independent of its pronunciation, e.g.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Language",
+          "title": "Language",
+          "snippet": "Language is a structured system of communication that consists of grammar and vocabulary. It is the primary means by which humans convey meaning, both in spoken and signed forms, and may also be conveyed through writing. Human language is characterized by its cultural and historical diversity, with significant variations observed between cultures and across time.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "lexical versus semantic entity ambiguity"
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 1211.33,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 1,
+        "successes": 1,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 59,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    },
+    {
+      "id": "live-ambiguous-013",
+      "query": "seal identification",
+      "checked_at": "2026-10-21T07:05:41.431937+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Seals_in_the_Sinosphere",
+          "title": "Seals in the Sinosphere",
+          "snippet": "In the Sinosphere, seals (stamps) can be applied on objects to establish personal identification. They are commonly applied on items such as personal documents, office paperwork, contracts, and art. They are used similarly to signatures in the West.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/United_States_Navy_SEALs",
+          "title": "United States Navy SEALs",
+          "snippet": "The United States Navy Sea, Air, and Land (SEAL) Teams, commonly known as Navy SEALs, are the United States Navy's primary special operations force and a component of the United States Naval Special Warfare Command. Among the SEAL's main functions are conducting small-unit special operation missions in maritime, jungle, urban, arctic, mountainous, and desert environments. SEALs are typically ordered to capture or kill high-level targets, or to gather intelligence behind enemy lines.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pashupati_seal",
+          "title": "Pashupati seal",
+          "snippet": "The Pashupati seal (also Mahayogi seal, Proto-Śhiva seal the adjective \"so-called\" sometimes applied to \"Pashupati\"), is a steatite seal which was uncovered in Mohenjo-daro, a major urban site of the Indus Valley Civilisation (\"IVC\") in present-day Pakistan, during excavations in 1928 or 1929 when the region was under British rule. The excavations were carried out by the Archaeological Survey of India, the official body responsible for preservation and excavation. The seal depicts a seated figure that is possibly tricephalic (having three heads).",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Leopard_seal",
+          "title": "Leopard seal",
+          "snippet": "The leopard seal (Hydrurga leptonyx), also referred to as the sea leopard, is a long and muscular seal native to the Southern Ocean of Antarctica and southern Patagonia. It is the second largest species of seal in the Antarctic (after the southern elephant seal). It is the same length as, but half the weight of, a walrus.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Bulla_(seal)",
+          "title": "Bulla (seal)",
+          "snippet": "A bulla (Medieval Latin for \"a round seal\", from Classical Latin bulla, \"bubble, blob\"; plural bullae) is an inscribed clay, soft metal (lead or tin), bitumen, or wax token used in commercial and legal documentation as a form of authentication and for tamper-proofing whatever is attached to it (or, in the historical form, contained in it). In their oldest attested form, as used in the ancient Near East and the Middle East of the 8th millennium BC onwards, bullae were hollow clay balls that contained other smaller tokens that identified the quantity and types of goods being recorded. In this form, bullae represent one of the earliest forms of specialization in the ancient world, and likely required skill to create.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Seal_(emblem)",
+          "title": "Seal (emblem)",
+          "snippet": "A seal is a device for making an impression in wax, clay, paper, or some other medium, including an embossment on paper, and is also the impression thus made. The original purpose was to authenticate a document, or to prevent interference with a package or envelope by applying a seal which had to be broken to open the container (hence the modern English verb \"to seal\", which implies secure closing without an actual wax seal). The seal-making device is also referred to as the seal matrix or die; the imprint it creates as the seal impression (or, more rarely, the sealing).",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Radial_shaft_seal",
+          "title": "Radial shaft seal",
+          "snippet": "Radial shaft seals, also known as rotary lip seals, are used to seal rotary elements, such as a shaft or rotating bore. Common examples include strut seals, hydraulic pump seals, axle seals, power steering seals, and valve stem seals. Early radial shaft seals utilized rawhide as the sealing element, and many present-day elastomeric seal companies were once tanneries.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/The_Thing_(listening_device)",
+          "title": "The Thing (listening device)",
+          "snippet": "The Thing, also known as the Great Seal bug, was one of the first covert listening devices (or \"bugs\") to use passive techniques to transmit an audio signal. It was concealed inside a gift given by the Soviet Union to W. Averell Harriman, the United States Ambassador to the Soviet Union, on August 4, 1945. Because it was passive, needing electromagnetic energy from an outside source to become energized and active, it is considered a predecessor of radio-frequency identification (RFID) technology.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/LMLK_seal",
+          "title": "LMLK seal",
+          "snippet": "The LMLK seal appears on the handles of several large storage jars from the Kingdom of Judah, where it was first issued during the reign of Hezekiah around 700 BCE. Seals bearing these four Paleo-Hebrew letters, as well as a symbol resembling a winged sun, have been discovered primarily on unearthed artifacts in and around Jerusalem, with some in northern Israel. They form part of a larger group of Canaanite and Aramaic seal inscriptions. Several complete jars were found in situ at the ancient city of Lachish, where they were buried underneath a destruction layer caused by Sennacherib, who reigned over the Neo-Assyrian Empire from 705 BCE to 681 BCE. While none of the original stamp seals have been found, some 2,000 impressions made by at least 21 seal types have been published.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hermetic_seal",
+          "title": "Hermetic seal",
+          "snippet": "A hermetic seal is any type of sealing that makes a given object airtight (preventing the passage of air, oxygen, or other gases). The term originally applied to airtight glass containers, but as technology advanced, it applied to a larger category of materials, including metals, and rubber. Hermetic seals are essential to the correct and safe functionality of many electronic and healthcare products.",
+          "published_at": null,
+          "lang": "en",
+          "source_query": "seal identification"
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 1877.01,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 2,
+        "successes": 2,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 58,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    }
+  ]
+}

@@ -31,6 +31,7 @@ def _validated(settings):
                       'live_max_page_bytes': (1024, 4_000_000),
                       'live_max_total_bytes': (1024, 16_000_000), 'live_max_text_chars': (100, 100_000)}
     integer_limits.update(provider_request_budget=(1, 10000), provider_failure_threshold=(1, 20))
+    integer_limits['vertical_max_providers'] = (1, 8)
     for key, (lo, hi) in integer_limits.items():
         value = getattr(settings, key)
         if type(value) is not int or not lo <= value <= hi:
@@ -205,11 +206,18 @@ class LiveSearch:
                     return _LocalSource(engine).search(request, source_deadline) if engine else SourceBatch()
             sources.append(Local())
         provider_started = time.perf_counter()
-        jobs = []
+        jobs, skipped, vertical_count = [], [], 0
         general_names = {p.name for p in self.providers if getattr(p, 'general_web', True)}
         for source in sources:
             source_deadline = min(deadline, time.monotonic()+self.settings.discovery_provider_timeout)
             request = WebRequest(query, q, threading.Event(), search_type)
+            if source in self.providers and not getattr(source, 'general_web', True):
+                accepts = getattr(source, 'accepts', lambda request: True)
+                if not accepts(request) or vertical_count >= self.settings.vertical_max_providers:
+                    skipped.append({'provider': source.name, 'status': 'not_selected', 'result_count': 0,
+                                    'reason': 'Intent routing or bounded vertical-provider limit; no request sent.'})
+                    continue
+                vertical_count += 1
             job = self._start(source, request, source_deadline)
             job['general_web'] = source.name in general_names
             jobs.append(job)
@@ -226,6 +234,7 @@ class LiveSearch:
                 return 0
             return len(rank(items, q, final=not fetch_pages))
         responses, provider_status = self._collect(jobs, deadline, useful)
+        provider_status = skipped + provider_status
         provider_ms = (time.perf_counter()-provider_started)*1000
         errors = [s['provider']+': '+s['error'] for s in provider_status if s.get('error')]
         candidates, answer = [], None
@@ -379,7 +388,8 @@ class LiveSearch:
                   'provider_errors': errors, 'provider_status': provider_status,
                   'providers_configured': {'local_index': self.settings.live_local_enabled,
                                            'searxng': bool(self.settings.searxng_url),
-                                           'brave': bool(self.settings.brave_api_key), 'general_web': configured_general},
+                                           'brave': bool(self.settings.brave_api_key), 'general_web': configured_general,
+                                           'verticals': [p.name for p in self.providers if not getattr(p, 'general_web', True)]},
                   'coverage': {'index_documents': local_count, 'matched_documents': len(ranked),
                                'mode': 'live_web', 'intent': q.intent,
                                'low_confidence': not bool(result_rows or answer),
@@ -466,8 +476,8 @@ class LiveSearch:
 
     def diagnostics(self, check=False):
         report = {'mode': 'live', 'local_index_required': False, 'persistent_document_storage': False,
-                  'general_discovery_configured': bool(self.providers),
-                  'providers': [{'name': p.name, 'configured': True} for p in self.providers],
+                  'general_discovery_configured': any(getattr(p, 'general_web', True) for p in self.providers),
+                  'providers': [{'name': p.name, 'configured': True, 'general_web': getattr(p, 'general_web', True)} for p in self.providers],
                   'checked': False, 'note': 'For the bundled source run discovery setup then discovery serve. Alternatively configure OWNSEARCH_SEARXNG_URL or OWNSEARCH_BRAVE_API_KEY; no paid service is enabled automatically.'}
         if check and self.providers:
             result = self.search('web search', fetch_evidence=False, fetch_pages=False, use_cache=False)

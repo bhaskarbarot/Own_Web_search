@@ -1,0 +1,51 @@
+{
+  "provider": "wikidata",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 12,
+  "runs": [
+    {
+      "id": "original-M03",
+      "query": "Research whether a search API is suitable for an AI agent.",
+      "checked_at": "2026-10-21T07:05:45.391353+00:00",
+      "status": "ok",
+      "rows": [],
+      "warnings": [],
+      "elapsed_ms": 765.25,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 1,
+        "successes": 1,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 59,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    },
+    {
+      "id": "live-adversarial-006",
+      "query": "Prove that the Moon is made of cheese using reliable primary sources",
+      "checked_at": "2026-10-21T07:05:47.156836+00:00",
+      "status": "ok",
+      "rows": [],
+      "warnings": [],
+      "elapsed_ms": 699.01,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 2,
+        "successes": 2,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 58,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    }
+  ]
+}
