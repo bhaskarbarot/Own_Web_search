@@ -5,6 +5,7 @@ import threading
 import time
 from collections import OrderedDict
 from dataclasses import replace
+from datetime import datetime, timezone
 from urllib.parse import quote, urlencode
 from xml.etree import ElementTree
 
@@ -294,7 +295,55 @@ class OpenAlexApiProvider(ApiProvider):
         return SourceBatch(rows)
 
 
-ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider,'crates':CratesApiProvider,'arxiv':ArxivApiProvider,'openalex':OpenAlexApiProvider}
+class StackExchangeApiProvider(ApiProvider):
+    name='stackexchange'
+    _connection=threading.Lock()
+    _cache=OrderedDict()
+
+    def accepts(self,request):
+        return super().accepts(request) and (request.parsed.intent=='tech_docs' or bool(
+            re.search(r'\b(?:stackoverflow|stackexchange|exception|traceback)\b',request.query,re.I)))
+
+    def search(self,request,deadline):
+        query=api_query(request)
+        key=(self.settings.stackexchange_api_url,self.settings.stackexchange_site,' '.join(query.lower().split()))
+        if not self._connection.acquire(timeout=max(0,deadline-time.monotonic())):
+            raise ProviderError('StackExchange request budget unavailable.','rate_limited')
+        try:
+            cached=self._cache.get(key)
+            if cached and time.monotonic()-cached[0]<60:
+                batch=copy.deepcopy(cached[1])
+                for row in batch.rows:row['source_cached']=True
+                return batch
+            data=self.get(request,self.settings.stackexchange_api_url,
+                          {'site':self.settings.stackexchange_site,'q':query,'sort':'relevance',
+                           'pagesize':10,'filter':'withbody'},deadline)
+            # Backoff applies even to a successful response. No retry in this search.
+            backoff=data.get('backoff')
+            if isinstance(backoff,(int,float)) and backoff>0:self.health.defer(backoff)
+            if data.get('quota_remaining')==0:self.health.defer(86400)
+            if 'error_id' in data:
+                self.health.failure(503)
+                raise ProviderError('StackExchange API reported an error.')
+            items=data.get('items')
+            if not isinstance(items,list):raise ProviderError('StackExchange API returned an invalid items array.')
+            rows=[];stamp=utc_now()
+            for item in items[:10]:
+                if not isinstance(item,dict):continue
+                created=item.get('creation_date');published=None
+                if type(created) in (int,float):
+                    try:published=datetime.fromtimestamp(created,timezone.utc).isoformat()
+                    except (ValueError,OverflowError,OSError):pass
+                row=self.row(request,item.get('link'),item.get('title'),item.get('body',''),published)
+                if row:row.update(source_retrieved_at=stamp,source_cached=False);rows.append(row)
+            batch=SourceBatch(rows)
+            self._cache[key]=(time.monotonic(),copy.deepcopy(batch));self._cache.move_to_end(key)
+            while len(self._cache)>256:self._cache.popitem(last=False)
+            return batch
+        finally:self._connection.release()
+
+
+ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider,'crates':CratesApiProvider,'arxiv':ArxivApiProvider,'openalex':OpenAlexApiProvider,'stackexchange':StackExchangeApiProvider}
 
 
 def configured_verticals(settings):

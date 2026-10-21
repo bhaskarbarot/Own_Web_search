@@ -457,3 +457,14 @@ were verified. All 300 dev IDs considered; 32 eligible; two actual probes both
 succeeded with 20 URLs total. These are availability observations, not relevance
 grades. Twenty-one targeted tests pass; legacy offline scores unchanged. Quota
 tests cover decimal zero and relative reset seconds. Continue to StackExchange.
+
+
+### Phase 1 adapter — StackExchange
+
+2026-10-21, parent fdb95f9. Added independent opt-in advanced question search,
+source-provided links/body/publication timestamps and bounded one-minute metadata
+cache. Successful-response backoff and exhausted quota suspend requests; cached
+metadata retains original retrieval times. All 300 dev IDs considered; 110
+eligible; two actual probes succeeded with ten URLs overall. Twenty-three
+targeted tests pass; legacy offline quality metrics unchanged. No relevance
+improvement is inferred. Continue to optional general APIs.

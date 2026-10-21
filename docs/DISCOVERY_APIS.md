@@ -77,3 +77,12 @@ Basic requests currently work without a key; an optional key is sent in an HTTPS
 Bearer header. Decimal remaining-quota values and relative reset seconds are
 honored. Contract: https://help.openalex.org/api/authentication/ and
 https://developers.openalex.org/api-reference/works/get-a-list-of-works.
+
+
+## StackExchange
+
+Uses [advanced search](https://api.stackexchange.com/docs/advanced-search), actual
+question links/body and creation dates. The site is explicit configuration,
+not inferred from topic domains. Honors [body backoff and quota](https://api.stackexchange.com/docs/throttle),
+with a bounded 60-second cache to avoid repeating identical requests. Cache hits
+preserve source retrieval timestamps. No account or key is needed for basic calls.

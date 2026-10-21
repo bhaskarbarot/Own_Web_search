@@ -1,0 +1,152 @@
+{
+  "provider": "stackexchange",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 110,
+  "runs": [
+    {
+      "id": "live-exact_phrase-023",
+      "query": "\"read your writes\" consistency",
+      "checked_at": "2026-10-21T07:26:58.146890+00:00",
+      "status": "ok",
+      "rows": [
+        {
+          "url": "https://stackoverflow.com/questions/38414504/elasticsearch-read-and-write-consistency",
+          "title": "Elasticsearch read and write consistency",
+          "snippet": "Elasticsearch doesn't have \"read consistency\" param (like Cassandra). But it has \" write consistency \" and \" read preference \". Documentation says the following about Write Consistency Write Consistency To prevent writes from taking place on the \"wrong\" side of a network partition, by default, index operations only succeed if a quorum (>replicas/2+1) of active shards are available. This default can be overridden on a node-by-node basis using the action.write_consistency setting. To alter this behavior per-operation, the consistency request parameter can be used. Valid write consistency values are one, quorum, and all. Note, for the case where the number of replicas is 1 (total of 2 copies of the data), then the default behavior is to succeed if 1 copy (the primary) can perform the write. The index operation only returns after all active shards within the replication group have indexed the document (sync replication). My question is about the last paragraph: The index operation only returns after all active shards within the replication group have indexed the document (sync replication). If write_consistency=quorum (default) and all shards are live (no node failures, no network-part",
+          "published_at": "2016-07-16T18:50:32+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/6865545/read-your-own-writes-consistency-in-cassandra",
+          "title": "Read-your-own-writes consistency in Cassandra",
+          "snippet": "Read-your-own-writes consistency is great improvement from the so called eventual consistency: if I change my profile picture I don't care if others see the change a minute later, but it looks weird if after a page reload I still see the old one. Can this be achieved in Cassandra without having to do a full read-check on more than one node? Using ConsistencyLevel.QUORUM is fine while reading an unspecified data and n>1 nodes are actually being read. However when client reads from the same node as he writes in (and actually using the same connection) it can be wasteful - some databases will in this case always ensure that the previously written (my) data are returned, and not some older one. Using ConsistencyLevel.ONE does not ensure this and assuming it leads to race conditions. Some test showed this: http://cassandra-user-incubator-apache-org.3065146.n2.nabble.com/per-connection-quot-read-after-my-write-quot-consistency-td6018377.html My hypothetical setup for this scenario is 2 nodes, replication factor 2, read level 1, write level 1. This leads to eventual consistency, but I want read-your-own-writes consistency on reads. Using 3 nodes, RF=3, RL=quorum and WL=quorum in my opinio",
+          "published_at": "2011-07-28T20:56:03+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/12544487/read-your-own-writes-consistency-in-mongodb",
+          "title": "Read-your-own-writes consistency in Mongodb",
+          "snippet": "first, here is what is said in Pymongo Documentation By default, PyMongo starts a request for each thread when the thread first runs an operation on MongoDB. This guarantees **read-your-writes consistency . Within a request, the thread will continue to use the same socket exclusively, and no other thread will use this socket, until the thread calls end_request() or it terminates. At that point, the socket is returned to the connection pool for use by other threads. so when using an async library to Mongodb (like Asyncmongo, Motor), will the user have a consistency like the one in blocking calls or an eventual consistency?",
+          "published_at": "2012-09-22T14:11:46+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/59316960/strong-consistency-vs-read-after-write-consistency",
+          "title": "\"Strong Consistency\" vs. \"Read-after-write Consistency\"",
+          "snippet": "Why does AWS says \"strong consistency\" in DynamoDB and \"read-after-write consistency\" for S3? Do both of them mean the same thing?",
+          "published_at": "2019-12-13T06:02:19+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/75611608/how-do-i-apply-read-and-write-consistency-in-gocql",
+          "title": "How do I apply read and write consistency in gocql?",
+          "snippet": "I am using https://github.com/gocql/gocql . I want to set the read/write consistency of cassandra. cluster := gocql.NewCluster(hosts...) cluster.Consistency = gocql.ParseConsistency(consistency) If the consistency setting is applied as above, is both read/write consistency applied? Or is there a way to apply read and write consistency separately?",
+          "published_at": "2023-03-02T05:29:09+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/40101706/cassandra-read-write-consistency-level-in-networktopologystrategy",
+          "title": "Cassandra Read/Write CONSISTENCY Level in NetworkTopologyStrategy",
+          "snippet": "I have setup cassandra in 2 data centers with 4 nodes each with replication factor of 2. Consistency level is ONE (set by default) I was facing consistency issue when trying to read data at consistency level of ONE. As read in DataStax documentation, Consistency level (read + write) should be greater than replication factor. I decided to change the write consistency level to TWO and read consistency level as ONE which resolves the inconsistency problem in single data center. But in case of multiple data center, the problem would be resolved by consistency level as LOCAL_QUORUM. How would i achieve that write should be (LOCAL_QUORUM + TWO) so that i should write to the local data center and also on 2 nodes.",
+          "published_at": "2016-10-18T07:06:48+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/35731452/how-to-set-cassandra-read-and-write-consistency",
+          "title": "how to set cassandra read and write consistency",
+          "snippet": "I can not find the documentation for this. I know there is a consistency command in cqlsh, but there is no distinction between read and write consistency. How would I set different consistency levels for read and write? Furthermore, there is a mention of a \"default\" consistency level. Where is that default set? and is it for read or write?",
+          "published_at": "2016-03-01T19:13:56+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/52382414/read-your-own-writes-consistency-before-mongodb-3-6",
+          "title": "Read Your Own Writes Consistency Before MongoDB 3.6",
+          "snippet": "I was reading the documentation for mongdb, and I'm trying to understand what is necessary for \"read your own writes\" consistency before Mongo 3.6's causal consistency sessions were introduced. According to this page: https://docs.mongodb.com/manual/reference/read-concern-majority/#read-your-own-writes Prior to MongoDB 3.6, you must have issued your write operation with { w: \"majority\" } write concern and then use either \"majority\" or \"linearizable\" read concern for the read operations to ensure that a single thread can read its own writes. However, in the example that they provide on that same page above ( https://docs.mongodb.com/manual/reference/read-concern-majority/#example ), there seems to be information that does not agree with this. Specifically, they have a chart (that i've copied below): In this diagram, at time t3, the write is acknowledged. After receiving acknowledgement of the write, a majority read concern at t4 to either of the secondarys would return an old value, in contradiction with the first claim that \"a single thread could read its own writes\" as long as you use majority write + read concerns. If the statement was amended to be \"read from the primary with ma",
+          "published_at": "2018-09-18T08:40:54+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/42957531/what-does-read-after-write-consistency-really-mean-on-new-object-put-in-s3",
+          "title": "What does read-after-write consistency really mean on new object PUT in S3?",
+          "snippet": "Amazon documentation ( http://docs.aws.amazon.com/AmazonS3/latest/dev/Introduction.html#ConsistencyModel ) states: \"Amazon S3 provides read-after-write consistency for PUTS of new objects in your S3 bucket in all regions with one caveat.\" Ignoring the caveat, this means that a client issuing a GET following a PUT for a new object is guaranteed to get the correct result. My question is, would the guarantee also apply if the GET is issued from a different client not the one which did the PUT (assuming of course the GET follows the PUT chronologically)? In other words, is read-after-write consistency simply read-your-write consistency or it works for all clients? I suspect the answer is that it works globally but can't find a definitive answer.",
+          "published_at": "2017-03-22T16:29:17+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        },
+        {
+          "url": "https://stackoverflow.com/questions/37987044/apache-cassandra-explicit-read-write-consistencies-required",
+          "title": "Apache Cassandra: Explicit Read/Write consistencies required?",
+          "snippet": "My company is using Cassandra (2.1.8), running on debian servers. Without setting a consistency on my queries/preparedStatements, I would sometimes get \"null\" back from a \"SELECT * FROM table_name WHERE key = ?\" . After adding: statementGet.setConsistencyLevel(ConsistencyLevel.ONE); I get an answer every time. But from the article below: Read/Write Strategy For Consistency Level If you don't care about consistency, then this discussion is moot; read/write with whatever Consistency Level and let Cassandra's asynchronous replication and anti-entropy features do their work. That said, though your goal is minimizing network traffic/cost, if your workload is mostly reads then the added cost of doing writes at CL QUORUM or ALL may not actually be that much. it is said that my consistency levels do not matter, if I don't care about consistency. And I don't. It doesn't not matter much to me if the data is hours or days old. But I do care about getting data everytime. What I need to know is: Do I need to put a consistency level on my Writes as well, to ensure that they are actually written, and that my Read will always retrieve a value, if I have previously written anything. And what might ",
+          "published_at": "2016-06-23T09:06:54+00:00",
+          "lang": null,
+          "source_query": "read writes consistency",
+          "source_retrieved_at": "2026-10-21T07:26:58+00:00",
+          "source_cached": false
+        }
+      ],
+      "warnings": [],
+      "elapsed_ms": 581.48,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 1,
+        "successes": 1,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 59,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    },
+    {
+      "id": "live-local-025",
+      "query": "Cape Town water restriction status official current",
+      "checked_at": "2026-10-21T07:26:59.728504+00:00",
+      "status": "ok",
+      "rows": [],
+      "warnings": [],
+      "elapsed_ms": 524.28,
+      "health": {
+        "circuit": "closed",
+        "consecutive_failures": 0,
+        "attempts": 2,
+        "successes": 2,
+        "errors": 0,
+        "suppressed": 0,
+        "retry_after_seconds": 0,
+        "budget_remaining": 58,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 200
+      }
+    }
+  ]
+}

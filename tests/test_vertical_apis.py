@@ -8,7 +8,7 @@ from urllib.parse import parse_qs,urlsplit
 from ownsearch.fetcher import Fetcher,FetchResult
 from ownsearch.query import parse_query
 from ownsearch.webmodels import WebRequest
-from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,CratesApiProvider,ArxivApiProvider,OpenAlexApiProvider,atom_document,configured_verticals
+from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,CratesApiProvider,ArxivApiProvider,OpenAlexApiProvider,StackExchangeApiProvider,atom_document,configured_verticals
 from ownsearch.coordinator import LiveSearch
 from tests.test_live_web import settings,Source,row
 
@@ -110,6 +110,27 @@ class VerticalApiTests(unittest.TestCase):
         with patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,{'x-ratelimit-remaining':'0.0','x-ratelimit-reset':'3600'},b'{"results":[]}')):
             p.search(self.request('research orbital sensors'),time.monotonic()+1)
         self.assertGreater(p.health_snapshot()['retry_after_seconds'],3590)
+
+    def test_stackexchange_cache_retains_source_time_and_obeys_successful_backoff(self):
+        p=StackExchangeApiProvider(settings());p._cache.clear()
+        data={'items':[{'link':'https://questions.example.org/observed','title':'Sensor exception',
+                        'body':'<p>Actual question body.</p>','creation_date':1577836800}], 'backoff':120}
+        with self.payload(data) as fetch:
+            first=p.search(self.request('Sensor exception'),time.monotonic()+1)
+            second=p.search(self.request('Sensor exception'),time.monotonic()+1)
+            with self.assertRaises(Exception):p.search(self.request('Other exception'),time.monotonic()+1)
+        self.assertEqual(fetch.call_count,1)
+        self.assertEqual(first.rows[0]['url'],'https://questions.example.org/observed')
+        self.assertTrue(first.rows[0]['published_at'].startswith('2020-01-01'))
+        self.assertTrue(second.rows[0]['source_cached'])
+        self.assertEqual(first.rows[0]['source_retrieved_at'],second.rows[0]['source_retrieved_at'])
+        p._cache.clear()
+
+    def test_stackexchange_body_error_never_counts_as_successful_empty_results(self):
+        p=StackExchangeApiProvider(settings());p._cache.clear()
+        with self.payload({'error_id':502,'error_name':'throttle_violation','backoff':90}):
+            with self.assertRaisesRegex(Exception,'API reported an error'):p.search(self.request('Sensor exception'),time.monotonic()+1)
+        self.assertEqual(p.health_snapshot()['circuit'],'open')
 
 
 if __name__=='__main__':unittest.main()
