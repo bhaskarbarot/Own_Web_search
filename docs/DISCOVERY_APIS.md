@@ -86,3 +86,12 @@ question links/body and creation dates. The site is explicit configuration,
 not inferred from topic domains. Honors [body backoff and quota](https://api.stackexchange.com/docs/throttle),
 with a bounded 60-second cache to avoid repeating identical requests. Cache hits
 preserve source retrieval timestamps. No account or key is needed for basic calls.
+
+
+## Optional Marginalia
+
+Uses the [current API](https://about.marginalia-search.com/article/api/) at api2,
+with the configured API-Key header. Disabled without an explicit key, including
+the shared public key. No email/account provisioning is performed. Returned
+license text is retained in result provenance; consumers must display required
+attribution and follow their key's commercial/noncommercial terms.

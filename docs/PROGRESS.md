@@ -468,3 +468,11 @@ metadata retains original retrieval times. All 300 dev IDs considered; 110
 eligible; two actual probes succeeded with ten URLs overall. Twenty-three
 targeted tests pass; legacy offline quality metrics unchanged. No relevance
 improvement is inferred. Continue to optional general APIs.
+
+
+### Phase 1 optional adapter — Marginalia
+
+2026-10-21, parent 509cb21. Added current API header-key integration and retained
+returned licensing in provenance. Three schema/HTTPS/default-off tests pass;
+legacy offline scores unchanged. No configured key, so no real API success or
+coverage/accuracy improvement claimed. Remains disabled. Continue to Mojeek.
