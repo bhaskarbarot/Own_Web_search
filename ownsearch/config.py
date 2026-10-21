@@ -135,10 +135,6 @@ class Settings:
     searxng_timeout: float = 3.0
     searxng_categories: str = "general"
     brave_api_key: str = ""             # optional Brave Search API key
-    marginalia_api_key: str = ""        # optional; never automatically use the shared public key
-    marginalia_api_url: str = "https://api2.marginalia-search.com/search"
-    mojeek_api_key: str = ""            # optional account-based source; disabled without a key
-    mojeek_api_url: str = "https://api.mojeek.com/search"
     brave_timeout: float = 3.0
     news_feeds: str = ""                # comma/newline-separated list of RSS/Atom feed URLs
     discovery_mode: str = "background" # API never waits for page crawling; CLI opts into inline

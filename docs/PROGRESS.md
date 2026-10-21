@@ -486,3 +486,15 @@ date separation. Five optional-adapter tests pass; all legacy offline scores
 unchanged. No key is configured; no live probe or availability claim. Storage
 rights documented; source stays disabled for this capture. General adapters
 complete. Continue to conservative query variants and RRF.
+
+
+### User clarification — free/self-hosted scope
+
+2026-10-21, parent e33299f. User explicitly rejects adding paid/limited account
+tools and requests continuing with their own engine. Removed the newly added
+Mojeek/Marginalia runtime adapters and configuration. No paid provider was called,
+no account created and no credentials provisioned. Historical artifacts remain
+for audit. Existing Brave compatibility remains disabled; it is not required.
+Free public APIs remain independently optional and must obey external limits.
+The local crawler/index and self-hosted general discovery remain the foundation.
+Continue query variants/site/feed work; do not claim unlimited external service.

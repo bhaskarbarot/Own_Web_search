@@ -114,8 +114,6 @@ class WebCandidate:
             item.provenance[0]['cached'] = True
         if isinstance(row.get('source_query'), str):
             item.provenance[0]['query'] = row['source_query'][:1000]
-        if isinstance(row.get('source_license'), str):
-            item.provenance[0]['license'] = plain(row['source_license'], 500)
         if isinstance(row.get('upstream_engines'), list):
             item.provenance[0]['upstream_engines'] = [v[:80] for v in row['upstream_engines'] if isinstance(v, str)][:20]
         image = row.get('image_url')

@@ -88,21 +88,11 @@ with a bounded 60-second cache to avoid repeating identical requests. Cache hits
 preserve source retrieval timestamps. No account or key is needed for basic calls.
 
 
-## Optional Marginalia
+## Free/self-hosted scope (user clarification, 2026-10-21)
 
-Uses the [current API](https://about.marginalia-search.com/article/api/) at api2,
-with the configured API-Key header. Disabled without an explicit key, including
-the shared public key. No email/account provisioning is performed. Returned
-license text is retained in result provenance; consumers must display required
-attribution and follow their key's commercial/noncommercial terms.
-
-
-## Optional Mojeek
-
-Uses [JSON search](https://www.mojeek.com/support/api/search/json_response.html),
-explicit API key and HTTPS only. API errors are redacted because its documented
-credential is a query parameter. Only pdate is used as publication metadata;
-last-modified/crawl dates are not. No key/account is provisioned. Follow your
-plan's [storage rights](https://www.mojeek.com/services/search/web-search-api/)
-before recording raw results: Startup permits one-hour caching; Business and
-Enterprise include storage rights. The Phase 1 capture leaves this source off.
+The newly added Marginalia and Mojeek account integrations were removed. Their
+historical commits/probe-free fixture artifacts remain auditable, but the runtime
+does not configure or call them. Existing Brave compatibility remains opt-in and
+disabled here. No paid service, new key or account is required. SearXNG runs locally;
+the local index/crawler are owned code. External sites and free official APIs still
+apply their own limits. They are supplements, not an unlimited independent index.

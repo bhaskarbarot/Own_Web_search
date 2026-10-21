@@ -34,9 +34,10 @@ actually fetched seed and a robots-declared sitemap.
    unavailable or unqualified adapter disabled with an honest reason. Preserve
    ordinary general discovery for every intent. Capture actual permitted API
    observations and run adapter schema/safety tests after every adapter.
-3. Add optional general adapters where official APIs and user configuration
-   permit: Brave remains opt-in; Mojeek/Marginalia stay off without configured
-   credentials. No required paid API and no automatic account provisioning.
+3. Updated by user on 2026-10-21: keep the active path free and self-hosted.
+   Remove newly added Mojeek/Marginalia account integrations. Existing optional
+   Brave compatibility stays disabled. Free official APIs are optional supplements,
+   still subject to their limits, never a promise of unlimited external access.
 4. Conservative query variants (original plus <=2 bounded keyword/facet variants),
    preserved operators/literal identifiers and Reciprocal Rank Fusion. Retain
    the original query as fallback; bounded concurrency and per-source budgets
