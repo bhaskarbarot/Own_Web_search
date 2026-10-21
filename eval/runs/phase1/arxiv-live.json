@@ -1,0 +1,30 @@
+{
+  "provider": "arxiv",
+  "scope": "Small real official-API DEV probe, not accuracy or a full dev benchmark.",
+  "dataset_sha256": "a3a3a5cc6526abaa4100b82912a722c94b6bd5a59f9d0729e1329981956bd846",
+  "dev_cases_considered": 300,
+  "eligible_cases": 32,
+  "runs": [
+    {
+      "id": "original-M03",
+      "query": "Research whether a search API is suitable for an AI agent.",
+      "checked_at": "2026-10-21T07:16:11.729977+00:00",
+      "status": "rate_limited",
+      "error": "ProviderError: HTTP 429",
+      "rows": [],
+      "elapsed_ms": 1519.21,
+      "health": {
+        "circuit": "open",
+        "consecutive_failures": 1,
+        "attempts": 1,
+        "successes": 0,
+        "errors": 1,
+        "suppressed": 0,
+        "retry_after_seconds": 29.999,
+        "budget_remaining": 59,
+        "budget_window_seconds": 60.0,
+        "last_http_status": 429
+      }
+    }
+  ]
+}

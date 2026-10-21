@@ -57,3 +57,15 @@ used only if returned; no docs.rs or crate-page URL is generated from a name.
 [Official response types](https://github.com/rust-lang/crates.io/blob/main/crates/crates_io_api_types/src/lib.rs)
 and [data-access policy](https://crates.io/data-access). Existing identifying
 User-Agent, request spacing, response budgets and access-denial handling apply.
+
+## arXiv
+
+Uses Atom metadata only, with actual alternate page links and original published
+timestamps. DTD/entity declarations are rejected. A process-wide connection lock
+and at least three-second pacing cover adapter instances; a bounded 24-hour
+metadata cache retains source retrieval timestamps. Operators running multiple
+processes/machines must coordinate their aggregate traffic as required by the
+service. The adapter never follows an error into an access-denial bypass.
+
+[Official manual](https://info.arxiv.org/help/api/user-manual.html) and
+[API terms](https://info.arxiv.org/help/api/tou.html).

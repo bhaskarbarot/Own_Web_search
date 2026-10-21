@@ -1,11 +1,17 @@
 """Independent official-API adapters; URLs and descriptions come from responses."""
 import re
+import copy
+import threading
+import time
+from collections import OrderedDict
 from dataclasses import replace
 from urllib.parse import quote, urlencode
+from xml.etree import ElementTree
 
 from .webmodels import plain, web_url
 from .webproviders import JsonProvider, ProviderError, SourceBatch
 from .provider_health import ProviderHealth
+from .util import utc_now
 
 
 def api_query(request):
@@ -205,7 +211,62 @@ class CratesApiProvider(ApiProvider):
         return SourceBatch(rows)
 
 
-ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider,'crates':CratesApiProvider}
+def research_request(request):
+    return bool(re.search(r'\b(?:papers?|research|studies|study|preprints?|arxiv|meta[- ]analysis)\b',request.query,re.I))
+
+
+def atom_document(body):
+    text=body.decode('utf-8-sig')
+    if '<!DOCTYPE' in text.upper() or '<!ENTITY' in text.upper():raise ValueError('XML declarations are forbidden.')
+    try:return ElementTree.fromstring(text)
+    except ElementTree.ParseError:raise ValueError('Malformed Atom response.') from None
+
+
+class ArxivApiProvider(ApiProvider):
+    name='arxiv'
+    minimum_interval=3.0
+    _connection=threading.Lock()
+    _last_finished=0.0
+    _cache=OrderedDict()
+
+    def accepts(self,request):return super().accepts(request) and research_request(request)
+
+    def search(self,request,deadline):
+        key=(self.settings.arxiv_api_url,api_query(request))
+        if not self._connection.acquire(timeout=max(0,deadline-time.monotonic())):
+            raise ProviderError('arXiv single-connection budget unavailable.','rate_limited')
+        sent=False
+        try:
+            cached=self._cache.get(key)
+            if cached and time.monotonic()-cached[0]<86400:
+                batch=copy.deepcopy(cached[1])
+                for row in batch.rows:row['source_cached']=True
+                batch.warnings.append('arXiv metadata cache hit; original source retrieval and publication timestamps retained.')
+                return batch
+            wait=max(0,type(self)._last_finished+3-time.monotonic())
+            if time.monotonic()+wait>=deadline or request.cancel.wait(wait):
+                raise ProviderError('arXiv pacing exceeds deadline; no request sent.','rate_limited')
+            if not self.settings.arxiv_api_url.startswith('https://'):raise ProviderError('arXiv API requires HTTPS.')
+            sent=True
+            data=self.request(request,self.settings.arxiv_api_url+'?'+urlencode({'search_query':'all:'+api_query(request),
+                              'start':0,'max_results':10}),deadline,decoder=atom_document,accept='application/atom+xml')
+            ns='{http://www.w3.org/2005/Atom}';rows=[];stamp=utc_now()
+            for entry in data.findall(ns+'entry')[:10]:
+                links=[link.get('href') for link in entry.findall(ns+'link') if link.get('rel')=='alternate' and link.get('type') in (None,'text/html')]
+                url=next((u for u in links if web_url(u)),None)
+                if not url:continue
+                row=self.row(request,url,entry.findtext(ns+'title'),entry.findtext(ns+'summary') or '',entry.findtext(ns+'published'))
+                if row:row.update(source_retrieved_at=stamp,source_cached=False);rows.append(row)
+            batch=SourceBatch(rows)
+            self._cache[key]=(time.monotonic(),copy.deepcopy(batch));self._cache.move_to_end(key)
+            while len(self._cache)>128:self._cache.popitem(last=False)
+            return batch
+        finally:
+            if sent:type(self)._last_finished=time.monotonic()
+            self._connection.release()
+
+
+ADAPTERS={'wikipedia':WikipediaApiProvider,'wikidata':WikidataApiProvider,'github':GitHubApiProvider,'pypi':PyPIApiProvider,'npm':NpmApiProvider,'crates':CratesApiProvider,'arxiv':ArxivApiProvider}
 
 
 def configured_verticals(settings):

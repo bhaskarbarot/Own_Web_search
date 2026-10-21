@@ -434,3 +434,17 @@ Actual probe statuses: error, ok;
 returned URLs: 10. Nine vertical tests pass;
 all offline preservation scores unchanged. See crates-live.json and
 crates-offline.json. Continue to research APIs.
+
+
+### Phase 1 adapter — arXiv
+
+2026-10-21, parent 2008b66. Added safe Atom metadata discovery, real alternate
+URLs, first-publication dates, single-connection pacing and bounded metadata
+cache with honest source timestamps. Entity declarations are rejected.
+
+All 300 dev IDs considered; 32 applicable. The live probe
+returned rate_limited and zero results; probing
+stopped when the service circuit opened. No denial was bypassed or called a
+success. Fifty relevant tests pass, including Atom and source-cache regressions.
+All offline preservation scores unchanged (arxiv-offline.json). arxiv-live.json
+retains the actual service response error. Continue to OpenAlex alternative.

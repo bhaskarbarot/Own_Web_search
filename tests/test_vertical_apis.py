@@ -8,7 +8,7 @@ from urllib.parse import parse_qs,urlsplit
 from ownsearch.fetcher import Fetcher,FetchResult
 from ownsearch.query import parse_query
 from ownsearch.webmodels import WebRequest
-from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,CratesApiProvider,configured_verticals
+from ownsearch.vertical import WikipediaApiProvider,WikidataApiProvider,GitHubApiProvider,PyPIApiProvider,NpmApiProvider,CratesApiProvider,ArxivApiProvider,atom_document,configured_verticals
 from ownsearch.coordinator import LiveSearch
 from tests.test_live_web import settings,Source,row
 
@@ -84,6 +84,19 @@ class VerticalApiTests(unittest.TestCase):
         with self.payload({'crates':[{'id':'nebula-sensor','description':'Rust sensor library.','repository':'https://code.example.org/nebula'},
                                       {'id':'unknown-with-no-links'}]}):batch=p.search(self.request('Rust sensor crate'),time.monotonic()+1)
         self.assertEqual([r['url'] for r in batch.rows],['https://code.example.org/nebula'])
+    def test_arxiv_safe_atom_uses_actual_link_and_retains_cache_source_time(self):
+        p=ArxivApiProvider(settings());p._cache.clear()
+        xml=b'<feed xmlns="http://www.w3.org/2005/Atom"><entry><title>Orbital sensors</title><summary>Sensor calibration research.</summary><published>2020-01-01T00:00:00Z</published><link rel="alternate" type="text/html" href="https://papers.example.org/actual"/></entry></feed>'
+        with patch.object(ArxivApiProvider,'_last_finished',0),patch.object(Fetcher,'fetch',return_value=FetchResult('','',200,{},xml)) as fetch:
+            first=p.search(self.request('research orbital sensors'),time.monotonic()+1)
+            second=p.search(self.request('research orbital sensors'),time.monotonic()+1)
+        self.assertEqual(fetch.call_count,1)
+        self.assertEqual(first.rows[0]['url'],'https://papers.example.org/actual')
+        self.assertEqual(second.rows[0]['source_retrieved_at'],first.rows[0]['source_retrieved_at'])
+        self.assertTrue(second.rows[0]['source_cached'])
+        p._cache.clear()
+    def test_atom_entity_declarations_are_rejected(self):
+        with self.assertRaises(ValueError):atom_document(b'<!DOCTYPE x [<!ENTITY y "z">]><feed/>')
 
 
 if __name__=='__main__':unittest.main()

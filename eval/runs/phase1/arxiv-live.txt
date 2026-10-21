@@ -1,0 +1,1 @@
+{"provider": "arxiv", "considered": 300, "eligible": 32, "attempted": 1, "statuses": ["rate_limited"], "returned_rows": 0}

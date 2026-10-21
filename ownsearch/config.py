@@ -122,6 +122,7 @@ class Settings:
     pypi_api_url: str = "https://pypi.org/pypi/{name}/json"
     npm_api_url: str = "https://registry.npmjs.org/-/v1/search"
     crates_api_url: str = "https://crates.io/api/v1/crates"
+    arxiv_api_url: str = "https://export.arxiv.org/api/query"
     searxng_allow_private: bool = False # only the explicitly configured instance, not result-page fetching
     brave_search_url: str = "https://api.search.brave.com/res/v1/web/search"
     brave_images_url: str = "https://api.search.brave.com/res/v1/images/search"

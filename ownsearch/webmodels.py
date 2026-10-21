@@ -108,8 +108,10 @@ class WebCandidate:
         item.publication_source = provider if item.published_at else None
         item.language = row.get('lang') if isinstance(row.get('lang'), str) else None
         item.provenance = [{'provider': provider, 'rank': rank, 'url': url,
-                            'evidence_level': item.source_type, 'retrieved_at': utc_now(),
+                            'evidence_level': item.source_type, 'retrieved_at': parse_date(row.get('source_retrieved_at')) or utc_now(),
                             'snippet': snippet, 'published_at': item.published_at}]
+        if row.get('source_cached') is True:
+            item.provenance[0]['cached'] = True
         if isinstance(row.get('source_query'), str):
             item.provenance[0]['query'] = row['source_query'][:1000]
         if isinstance(row.get('upstream_engines'), list):
