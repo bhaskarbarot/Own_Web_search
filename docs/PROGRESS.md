@@ -181,3 +181,33 @@ results with the current runtime fingerprint, and prepare a new ungraded review
 pool. Keep original reviews intact. Do not tune on sealed queries or claim a live
 accuracy gain without actual grades. The earlier provider-based Phase 2–5 roadmap
 must be revised for this independent architecture before further phase execution.
+
+# Independent phase 2: goal.md accuracy-first work (2026-10-21)
+
+New owner brief `goal.md` was read fully, with Section 5 controlling this work.
+User changes (untracked goal.md and deletion of main.md) are left untouched.
+A bounded optional SQLite cache is now expressly authorized, superseding the
+previous memory-only preference. No provider or paid API will be added.
+Plan: `docs/plan/phase-independent-2.md`.
+
+Step 0 infrastructure: added a DEV-only independent recorder, pooled human review,
+bootstrap intervals and grading-aware metrics. Six evaluator regressions pass;
+all 101 current tests pass (95 original + 6 evaluation). Graded metrics never
+silently count missing grades as irrelevant. Both historical review queues have
+zero human grades. Strict P@5/NDCG/Recall/MRR and the judged coverage ceiling are
+therefore unmeasured; the unknown coverage interval is reported honestly.
+
+Baseline 2e7b700 is frozen under /tmp/ownsearch-phase2-baseline-2e7b700. All 300
+DEV queries are being captured under eval/runs/independent-phase2/baseline.
+Protocol: four concurrent agent queries share four global fetch workers and
+origin robots/politeness state; each cold query starts with an empty page cache.
+Cache-only repeats are recorded separately from actual live warm repeats on a
+stable-hash-selected ~10% subset. This is a concurrent-load protocol, not serial
+single-user latency; OS/upstream caches are uncontrolled. Capture manifest binds
+source/code hashes and protocol; changed-runtime resume is rejected.
+
+Diagnostic: the current pipeline starts all roots, follows zero-match news links
+and lacks source descriptions/native search discovery. Wikipedia's actual root
+HTML declares GET search forms, but their real submitted paths are robots-denied
+for this crawler. Those forms were inspected, not submitted. No article URL or
+alias answer was guessed. Native-form support must preserve that denial.
