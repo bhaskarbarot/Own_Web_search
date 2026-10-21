@@ -126,3 +126,23 @@ financial-path date exemption; it was fixed before this step was committed.
 both negative controls and all warm signatures preserved. No live accuracy claim.
 The earlier `fixture-query-confidence.json` predates that date correction and is
 retained as intermediate evidence rather than presented as release validation.
+
+## Step 7: origin-state lifetime and cancellation
+
+Baseline `4345622`. Origin gates are leased before lock acquisition, so cache
+pressure cannot evict a gate between lookup and locking and create two separate
+politeness clocks. Cancelled/unattempted requests no longer extend that clock.
+Two regressions reproduce the lifecycle boundaries. All 94 tests pass.
+`fixture-origin-lifecycle.json` preserves fixture Recall@10 1.000, strict P@5
+0.23636, both controls and all warm signatures; warm p50 6.086 ms, p95 7.783 ms.
+No additional latency improvement is claimed.
+
+Direct starting-page availability (`public-starting-sites.json`): six of seven
+configured targets fetched, including Wikipedia HTML, Python documentation, BBC
+HTML/feed and Guardian feed. Stack Overflow `/questions` was disallowed by its
+robots policy and was not requested. This is one availability probe per target,
+not relevance accuracy or domain-wide access. Website restrictions are respected;
+no API, alternate identity, proxy or search-provider fallback was substituted.
+
+Standard-library startup smoke: `python3 -S main.py status` and cache-only search
+both succeed. UI JavaScript passes `node --check`; launcher passes `bash -n`.

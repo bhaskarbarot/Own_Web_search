@@ -1,0 +1,94 @@
+{
+  "scope": "One direct starting-page attempt per configured URL; robots enforced. Not query relevance, domain-wide availability, or unlimited access.",
+  "sources": [
+    {
+      "requested_url": "https://en.wikipedia.org/",
+      "status": "fetched",
+      "final_url": "https://en.wikipedia.org/wiki/Main_Page",
+      "kind": "html",
+      "title": "Wikipedia, the free encyclopedia",
+      "fetched_text_chars": 7352,
+      "discovered_links": 500,
+      "took_ms": 5490.369,
+      "request_attempts": 3,
+      "decoded_bytes": 291990,
+      "budget_bytes": 291990
+    },
+    {
+      "requested_url": "https://docs.python.org/3/",
+      "status": "fetched",
+      "final_url": "https://docs.python.org/3/",
+      "kind": "html",
+      "title": "3.15.0 Documentation",
+      "fetched_text_chars": 880,
+      "discovered_links": 93,
+      "took_ms": 2883.765,
+      "request_attempts": 2,
+      "decoded_bytes": 20142,
+      "budget_bytes": 20142
+    },
+    {
+      "requested_url": "https://stackoverflow.com/questions",
+      "status": "robots",
+      "detail": "Disallowed by robots.txt",
+      "took_ms": 1185.162,
+      "request_attempts": 1,
+      "decoded_bytes": 5725,
+      "budget_bytes": 5725
+    },
+    {
+      "requested_url": "https://feeds.bbci.co.uk/news/rss.xml",
+      "status": "fetched",
+      "final_url": "https://feeds.bbci.co.uk/news/rss.xml",
+      "kind": "feed",
+      "title": null,
+      "fetched_text_chars": 0,
+      "discovered_links": 29,
+      "took_ms": 1279.866,
+      "request_attempts": 2,
+      "decoded_bytes": 23296,
+      "budget_bytes": 23296
+    },
+    {
+      "requested_url": "https://www.bbc.com/news",
+      "status": "fetched",
+      "final_url": "https://www.bbc.com/news",
+      "kind": "html",
+      "title": "BBC News - Breaking news, video and the latest top stories from the U.S. and around the world",
+      "fetched_text_chars": 5211,
+      "discovered_links": 233,
+      "took_ms": 1761.864,
+      "request_attempts": 2,
+      "decoded_bytes": 375564,
+      "budget_bytes": 375564
+    },
+    {
+      "requested_url": "https://www.bbc.co.uk/news",
+      "status": "fetched",
+      "final_url": "https://www.bbc.co.uk/news",
+      "kind": "html",
+      "title": "Home - BBC News",
+      "fetched_text_chars": 9734,
+      "discovered_links": 271,
+      "took_ms": 2897.675,
+      "request_attempts": 2,
+      "decoded_bytes": 935648,
+      "budget_bytes": 935648
+    },
+    {
+      "requested_url": "https://www.theguardian.com/world/rss",
+      "status": "fetched",
+      "final_url": "https://www.theguardian.com/world/rss",
+      "kind": "feed",
+      "title": null,
+      "fetched_text_chars": 0,
+      "discovered_links": 45,
+      "took_ms": 1664.204,
+      "request_attempts": 2,
+      "decoded_bytes": 156712,
+      "budget_bytes": 156712
+    }
+  ],
+  "fetched_count": 6,
+  "attempted": 7
+}

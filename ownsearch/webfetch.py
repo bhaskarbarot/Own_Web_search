@@ -27,6 +27,7 @@ class OriginGate:
     cooldown: float = 0.0
     policy: object = None
     policy_expires: float = 0.0
+    users: int = 0
 
 class OriginState:
     def __init__(self, limit):
@@ -35,17 +36,22 @@ class OriginState:
         with self.lock:
             if origin in self.gates:
                 self.gates.move_to_end(origin)
+                self.gates[origin].users += 1
                 return self.gates[origin]
             # Never evict a live politeness clock or a denial to make room.
             now = time.monotonic()
             for key, gate in list(self.gates.items()):
                 if (len(self.gates) >= self.limit and gate.next_request <= now and gate.cooldown <= now
-                        and gate.policy_expires <= now and not gate.lock.locked() and not gate.policy_lock.locked()):
+                        and gate.policy_expires <= now and not gate.users and not gate.lock.locked() and not gate.policy_lock.locked()):
                     del self.gates[key]
             if len(self.gates) >= self.limit:
                 raise FetchError('Origin capacity reached; wait for cache expiry', 'capacity')
-            gate = self.gates[origin] = OriginGate()
+            gate = self.gates[origin] = OriginGate(users=1)
             return gate
+
+    def release(self, gate):
+        with self.lock:
+            gate.users -= 1
 
 @dataclass
 class CrawledPage:
@@ -71,6 +77,7 @@ class WebFetchSession(Fetcher):
             raise FetchError('Redirect outside configured crawl origins', 'scope')
         gate = self.origins.get(origin)
         if not gate.lock.acquire(timeout=max(0, deadline-time.monotonic())):
+            self.origins.release(gate)
             raise FetchError('Origin capacity deadline', 'timeout')
         capacity = charged = 0
         attempted = completed = False
@@ -118,14 +125,17 @@ class WebFetchSession(Fetcher):
             with self.guard:
                 self.reserved_bytes -= capacity
                 self.budget_bytes += charged if completed else capacity if attempted else 0
-            gate.next_request = time.monotonic() + max(self.settings.default_delay,
-                                                      getattr(gate.policy, 'crawl_delay', 0) or 0)
+            if attempted:
+                gate.next_request = time.monotonic() + max(self.settings.default_delay,
+                                                          getattr(gate.policy, 'crawl_delay', 0) or 0)
             gate.lock.release()
+            self.origins.release(gate)
 
     def policy(self, url, deadline):
         origin = origin_of(url)
         gate = self.origins.get(origin)
         if not gate.policy_lock.acquire(timeout=max(0, deadline-time.monotonic())):
+            self.origins.release(gate)
             raise FetchError('Robots policy deadline', 'timeout')
         try:
             if gate.policy is None or gate.policy_expires <= time.monotonic():
@@ -142,6 +152,7 @@ class WebFetchSession(Fetcher):
             return gate.policy
         finally:
             gate.policy_lock.release()
+            self.origins.release(gate)
 
     def page(self, url, deadline):
         if not self.policy(url, deadline).allowed(url):

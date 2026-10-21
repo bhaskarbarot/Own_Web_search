@@ -318,6 +318,20 @@ class SecurityTests(unittest.TestCase):
             self.assertFalse(hasattr(cfg,'searxng_url'))
             with patch.object(Fetcher,'_request_once',side_effect=AssertionError('old provider called')):
                 self.assertEqual(IndependentSearch(cfg).search('query')['coverage']['requests'],0)
+    def test_origin_state_cannot_evict_a_gate_between_lookup_and_lock(self):
+        state=OriginState(1)
+        held=state.get('a')
+        with self.assertRaises(FetchError):state.get('b')
+        state.release(held)
+        self.assertIsNotNone(state.get('b'))
+    def test_cancelled_request_does_not_extend_politeness_clock(self):
+        state=OriginState(1);gate=state.get('https://example.org');state.release(gate)
+        cancel=threading.Event();cancel.set()
+        session=WebFetchSession(settings(),cancel,state)
+        with self.assertRaises(FetchError):
+            session._request_once('https://example.org/',{},100,deadline=time.monotonic()+1)
+        self.assertEqual(gate.next_request,0)
+        self.assertEqual(gate.users,0)
     def test_bounded_origin_state_cannot_drop_live_cooldown(self):
         state=OriginState(1)
         state.get('a').cooldown=time.monotonic()+10
