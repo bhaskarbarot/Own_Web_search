@@ -56,3 +56,24 @@ successful live search. Fix and remeasure these problems next.
   judgments are still needed; no old phase quality gate has been declared passed.
 - Next phase: only after these runtime acceptance checks pass, expand measured
   source coverage and improve ranking using actual review judgments.
+
+## Step 2: query qualifiers guide the crawl
+
+Baseline implementation commit: `94b4c6c`. Generic link priority now includes
+literal query qualifiers and URL-path evidence, rather than relying only on the
+ranker's required subject terms. No query/topic/domain mapping was added.
+
+Ablation `link-priority-ablation.json`: under the same two-page fixture budget,
+the old implementation fetched a version link and missed the tutorial; the new
+implementation fetches the observed tutorial link and returns it. Added a regression.
+All 85 tests pass. The unchanged 11-case benchmark preserves fixture Recall@10
+1.000, strict P@5 0.23636, all warm URL signatures and both negative controls.
+Cold p50 58.451 ms, warm p50 44.867 ms; these small timing changes are not claimed
+as improvements. See `fixture-link-priority.json` for raw per-case measurements.
+
+Repeated public Python probe: one ranked, fetched tutorial URL, versus zero
+initially; 3 actual requests, 5,081.941 ms. Both runs used the same 6-second/5-page
+budget. They occurred at different times, so this is a functional observation,
+not an independent relevance or controlled network latency improvement.
+Raw: `public-python-link-priority.json`. Remaining attempts reported delay/deadline
+errors honestly. No fabricated fetch successes or late content were admitted.

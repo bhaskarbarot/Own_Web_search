@@ -1,0 +1,47 @@
+{
+  "scope": "Frozen controlled navigation failure; two-page budget; not live relevance accuracy",
+  "cases": [
+    {
+      "variant": "baseline_94b4c6c",
+      "requests_by_path": {
+        "/robots.txt": 1,
+        "/navigation": 1,
+        "/v1/": 1
+      },
+      "tutorial_fetched": false,
+      "results": [],
+      "coverage": {
+        "starting_urls": 1,
+        "observed_urls": 4,
+        "attempted_pages": 2,
+        "requests": 3,
+        "decoded_bytes": 381,
+        "cache_reuses": 0,
+        "unfinished_pages": 0,
+        "exhaustive": false
+      }
+    },
+    {
+      "variant": "query_qualifiers",
+      "requests_by_path": {
+        "/robots.txt": 1,
+        "/navigation": 1,
+        "/tutorial/": 1
+      },
+      "tutorial_fetched": true,
+      "results": [
+        "/tutorial/"
+      ],
+      "coverage": {
+        "starting_urls": 1,
+        "observed_urls": 4,
+        "attempted_pages": 2,
+        "requests": 3,
+        "decoded_bytes": 818,
+        "cache_reuses": 0,
+        "unfinished_pages": 0,
+        "exhaustive": false
+      }
+    }
+  ]
+}

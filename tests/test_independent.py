@@ -45,6 +45,16 @@ class IndependentTests(unittest.TestCase):
         self.assertEqual(out['mode'],'independent')
         self.assertTrue(all(r['fetch_status']=='fetched' for r in out['results']))
 
+    def test_query_qualifier_prioritizes_observed_topic_link_over_versions(self):
+        with Site(robots='User-agent: *\nAllow: /') as site:
+            site.rows['/navigation']=(200,'text/html',article('Reference directory','Published navigation.').replace(b'</main>',
+                b'<a href="/v1/">Orbital version one</a><a href="/v2/">Orbital version two</a><a href="/tutorial/">Tutorial</a></main>'),{})
+            site.rows['/tutorial/']=(200,'text/html',article('Orbital tutorial'),{})
+            out=self.engine(max_pages_per_query=2).search('orbital tutorial',seeds=[site.base+'/navigation'])
+            self.assertIn('/tutorial/',site.hits)
+            self.assertNotIn('/v1/',site.hits)
+            self.assertIn(site.base+'/tutorial/',{r['url'] for r in out['results']})
+
     def test_answer_is_exact_fetched_excerpt_with_real_citation(self):
         engine=self.engine();out=engine.search('orbital guidance',seeds=[self.site.base+'/guide'],answer_mode=True)
         self.assertIsNotNone(out['answer'])

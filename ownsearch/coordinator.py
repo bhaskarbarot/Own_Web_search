@@ -86,6 +86,7 @@ class IndependentSearch:
             origins = {origin_of(url) for url in valid}
             frontier, observed, sequence = [], set(), 0
             terms = set(q.scoring_terms)
+            qualifiers = set(analyze(' '.join(q.surface))) - terms
 
             def enqueue(url, anchor='', depth=0, map_depth=0, kind='page'):
                 nonlocal sequence
@@ -98,8 +99,11 @@ class IndependentSearch:
                 if any(host == s or host.endswith('.'+s) for s in q.not_sites):
                     return
                 observed.add(url)
-                signal = set(analyze(anchor + ' ' + unquote(urlsplit(url).path)))
-                priority = 5*len(terms & signal)/max(1, len(terms)) - .15*depth
+                anchor_terms = set(analyze(anchor))
+                path_terms = set(analyze(unquote(urlsplit(url).path)))
+                def match(tokens):
+                    return len(terms & tokens) + .75*len(qualifiers & tokens)
+                priority = 5*(match(anchor_terms)+2*match(path_terms))/max(1, len(terms)+.75*len(qualifiers)) - .15*depth
                 if kind == 'sitemap':
                     priority += .2
                 sequence += 1
