@@ -1,6 +1,7 @@
 """Independent crawler HTTP API and same-origin HTML UI. No database or providers."""
 import json
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
@@ -22,6 +23,45 @@ def _boolean(value):
     raise ValueError('Expected a boolean value')
 
 
+def _log_search(query, res, elapsed_ms, options=None):
+    results = res.get('results', [])
+    cached = res.get('cached', False)
+    answer = res.get('answer')
+    status_tag = "⚡ [CACHE HIT]" if cached else "🌐 [LIVE WEB CRAWL]"
+
+    print("\n" + "=" * 76, flush=True)
+    print(f"🔍 [QUERY]     \"{query}\"", flush=True)
+    print(f"⏱️  [TIMING]    {elapsed_ms:.1f} ms {status_tag}", flush=True)
+
+    if answer:
+        if isinstance(answer, dict):
+            ans_text = answer.get('text') or answer.get('summary') or str(answer)
+        else:
+            ans_text = str(answer)
+        ans_preview = ans_text.strip()
+        if len(ans_preview) > 300:
+            ans_preview = ans_preview[:300] + "..."
+        ans_lines = ans_preview.splitlines()
+        print(f"🎯 [ANSWER]    {ans_lines[0]}", flush=True)
+        for line in ans_lines[1:]:
+            print(f"               {line}", flush=True)
+    else:
+        print("🎯 [ANSWER]    (None)", flush=True)
+
+    print(f"📊 [RESULTS]   {len(results)} items returned", flush=True)
+    for idx, r in enumerate(results[:3], start=1):
+        score = r.get('score', 0.0)
+        title = r.get('title') or '(No title)'
+        url = r.get('url', '')
+        print(f"   #{idx} [{score:.3f}] {title}", flush=True)
+        print(f"       URL: {url}", flush=True)
+
+    if not results:
+        print("   ⚠️  No matching pages found for this query", flush=True)
+
+    print("=" * 76 + "\n", flush=True)
+
+
 def make_handler(engine, require_auth=False):
     keys = KeyStore(engine.settings.keys_path)
     limiter = RateLimiter()
@@ -29,8 +69,12 @@ def make_handler(engine, require_auth=False):
     class Handler(BaseHTTPRequestHandler):
         server_version = 'OwnSearch/' + __version__
         timeout = 10
-        def log_message(self, *_):
-            pass
+        def log_message(self, format, *args):
+            # Print clean concise access log for UI visits
+            first_line = format % args if args else format
+            if '/ui' in first_line or 'GET / ' in first_line:
+                print(f"🖥️  [UI ACCESS] {first_line}", flush=True)
+
 
         def send(self, status, obj, content_type='application/json; charset=utf-8'):
             data = obj if isinstance(obj, bytes) else json.dumps(obj, ensure_ascii=False).encode()
@@ -131,14 +175,21 @@ def make_handler(engine, require_auth=False):
                     except (BrokenPipeError, ConnectionResetError):
                         pass
                     return
-                self.send(200, engine.search(query, **body))
+                t0 = time.time()
+                res = engine.search(query, **body)
+                elapsed_ms = (time.time() - t0) * 1000
+                _log_search(query, res, elapsed_ms, body)
+                self.send(200, res)
             except Busy as error:
+                print(f"⚠️  [BUSY] Server busy: {error}", flush=True)
                 self.send(503, {'error': str(error)})
             except (ValueError, TypeError) as error:
+                print(f"⚠️  [BAD REQUEST] {error}", flush=True)
                 self.send(400, {'error': str(error)[:300]})
             except (BrokenPipeError, ConnectionResetError):
                 pass
-            except Exception:
+            except Exception as e:
+                print(f"❌ [INTERNAL ERROR] {e}", flush=True)
                 self.send(500, {'error': 'Internal search error'})
 
         do_GET = route
