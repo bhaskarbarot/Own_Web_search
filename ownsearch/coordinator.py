@@ -192,7 +192,7 @@ class IndependentSearch:
             origins = {origin_of(url) for url in valid}
             frontier, observed, sequence = [], set(), 0
             terms = set(q.scoring_terms)
-            qualifiers = set(analyze(' '.join(q.surface))) - terms
+            qualifiers = (set(analyze(' '.join(q.surface))) - terms) - ALL_STOPWORDS
             opaque_sitemap_origins = set()
 
             def follow_link(page, link, anchor):
@@ -221,6 +221,9 @@ class IndependentSearch:
                     return
                 host = urlsplit(url).hostname or ''
                 if any(host == s or host.endswith('.'+s) for s in q.not_sites):
+                    return
+                path_segs = unquote(urlsplit(url).path).lower().split('/')
+                if any(ex in host.split('.') or ex in path_segs for ex in q.excluded if len(ex) >= 3):
                     return
                 observed.add(url)
                 anchor_terms = set(analyze(anchor))
@@ -251,8 +254,38 @@ class IndependentSearch:
             candidate_slugs = []
             clean_words = [w for w in (q.entity or q.surface) if w.lower() not in ALL_STOPWORDS and len(w) > 1]
             if getattr(q, 'intent', '') in ('reference', 'company', 'general'):
-                if clean_words and len(clean_words) <= 3:
+                QUESTION_START = frozenset({'who', 'what', 'where', 'when', 'which', 'how', 'why', 'list', 'find', 'show', 'tell', 'give', 'can', 'is', 'are'})
+                matches = re.finditer(r'\b[A-Z][a-zA-Z0-9]*(?:\s+[A-Z][a-zA-Z0-9]*)*\b', q.raw)
+                for m in matches:
+                    text = m.group(0)
+                    if m.start() == 0:
+                        parts = text.split()
+                        if parts[0].lower() in QUESTION_START:
+                            if len(parts) > 1:
+                                text = ' '.join(parts[1:])
+                            else:
+                                continue
+                    words = [w for w in text.split() if w.lower() not in ALL_STOPWORDS]
+                    if not words:
+                        continue
+                    if len(words) > 1:
+                        candidate_slugs.append('_'.join(words))
+                        candidate_slugs.append(words[0].capitalize() + '_' + '_'.join(w.lower() for w in words[1:]))
+                        for w in words:
+                            if len(w) > 2 and w.lower() not in ('desktop', 'page', 'url', 'official'):
+                                candidate_slugs.append(w)
+                    else:
+                        w = words[0]
+                        if len(w) > 2:
+                            candidate_slugs.append(w)
+                if 1 <= len(clean_words) <= 3:
                     candidate_slugs.append('_'.join(w.capitalize() for w in clean_words))
+                    if len(clean_words) > 1:
+                        candidate_slugs.append(clean_words[0].capitalize() + '_' + '_'.join(w.lower() for w in clean_words[1:]))
+            seen_slugs = set()
+            deduped = [s for s in candidate_slugs if not (s in seen_slugs or seen_slugs.add(s))]
+            deduped.sort(key=lambda s: 0 if (len(s) > 3 and not s.isupper()) else 1)
+            candidate_slugs = deduped[:5]
 
             for url in valid:
                 enqueue(url)
@@ -263,7 +296,7 @@ class IndependentSearch:
                             cand = independent_url(urljoin(origin, f"/wiki/{s}"), self.settings.allow_private_hosts)
                             if cand:
                                 enqueue(cand, anchor=s.replace('_', ' '), depth=0, kind='entity_path')
-                    elif 'github.com' in origin and clean_words and len(clean_words) <= 3:
+                    elif 'github.com' in origin and clean_words and len(clean_words) <= 3 and getattr(q, 'intent', '') not in ('reference', 'company'):
                         gh_slug = ''.join(clean_words).lower()
                         cand = independent_url(urljoin(origin, f"/{gh_slug}"), self.settings.allow_private_hosts)
                         if cand:

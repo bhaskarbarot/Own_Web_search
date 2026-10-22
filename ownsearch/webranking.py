@@ -32,7 +32,15 @@ def constraints(item, q, final=True):
     text = item.title+' '+(item.content if item.fetch_status == 'fetched' else item.snippet)
     terms = set(analyze(text))
     exact = ' '+' '.join(exact_tokens(text))+' '
-    if any(t in terms for t in q.excluded) or any(_contains(exact, p) for p in q.exact_excluded_phrases):
+    if any(_contains(exact, p) for p in q.exact_excluded_phrases):
+        return False
+    title_terms = set(analyze(item.title))
+    host_terms = set(analyze(host))
+    heading_terms = set(analyze(' '.join(item.headings[:5])))
+    if any(t in title_terms or t in host_terms or t in heading_terms for t in q.excluded):
+        return False
+    content_words = analyze(item.content if item.fetch_status == 'fetched' else item.snippet)
+    if content_words and any(content_words.count(t) / len(content_words) > 0.02 for t in q.excluded):
         return False
     if final and any(not _contains(exact, p) for p in q.exact_phrases):
         return False
@@ -140,8 +148,9 @@ def rank(candidates, q, final=True):
             continue
         if q.intent == 'tech_docs' and not (required & set(f[0]+f[2])):
             host_terms = set(analyze(urlsplit(item.url).hostname or ''))
+            matched_hosts = {r for r in required for h in host_terms if r == h or (len(r)>=3 and len(h)>=3 and (r.startswith(h) or h.startswith(r)))}
             inspected_project = (item.fetch_status == 'fetched' and coverage >= .8
-                                 and len(required & host_terms) >= min(2, len(required)))
+                                 and len(matched_hosts) >= min(2, len(required)))
             if not inspected_project:
                 continue
         text = item.content if item.fetch_status == 'fetched' else item.snippet

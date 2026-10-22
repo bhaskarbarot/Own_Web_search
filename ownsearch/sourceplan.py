@@ -43,7 +43,7 @@ def plan_sources(query, sources):
     All sources remain eligible. Scores order starting roots; source categories
     never appear as code branches or a query-to-domain lookup table.
     """
-    texts = [source.description or urlsplit(source.url).hostname or '' for source in sources]
+    texts = [f"{source.description} {urlsplit(source.url).hostname or ''}".strip() for source in sources]
     docs = [Counter(stem(t) for t in tokenize(text) if t.lower() not in ALL_STOPWORDS) for text in texts]
     query_terms = Counter(stem(t) for t in tokenize(query) if t.lower() not in ALL_STOPWORDS)
     if not query_terms:

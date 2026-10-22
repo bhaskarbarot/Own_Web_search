@@ -148,11 +148,13 @@ https://github.com/embeddings-benchmark/mteb	MTEB benchmark code, evaluation res
 https://research.google/pubs/	Google Research publications, search, ranking, information retrieval, machine learning research, Google Research publications covering search.
 
 # Programming languages and official documentation
-https://docs.python.org/3/	Python programming language documentation, standard library modules, functions, reference manuals, tutorials.
-https://www.python.org/	Python programming language website, releases and community resources.
+https://docs.python.org/3/	Python official documentation page, standard library reference manuals, guides, tutorials, official URL.
+https://docs.python.org/	Official URL for the Python documentation page, language reference, library manuals.
+https://www.python.org/	Python programming language official website, releases, downloads and community resources.
 https://blog.python.org/feeds/posts/default	Python Software Foundation official blog, release announcements for Python versions, security updates, Python official blog feed for releases.
+https://www.rust-lang.org/tools/install	Rust installation instructions, direct install guide, rustup installer, current version install.
 https://doc.rust-lang.org/	Rust programming language official book, standard library reference, cargo documentation, error indices, compiler resources.
-https://www.rust-lang.org/	Rust programming language, tools and official announcements.
+https://www.rust-lang.org/	Rust programming language official website, tools, current version and announcements.
 https://nodejs.org/docs/latest/api/	Node.js official API documentation, modules, runtime behavior, JavaScript development.
 https://www.typescriptlang.org/docs/	TypeScript official documentation, language reference, compiler configuration, compiler options, reference guides.
 https://go.dev/doc/	Go official documentation, language guides, standard library, tools, Go programming language documentation, tutorials.
@@ -178,6 +180,11 @@ https://whatwg.org/	WHATWG web standards, including HTML, browser APIs.
 https://fastapi.tiangolo.com/	FastAPI official documentation, OAuth2 authentication, async SQL databases, dependency injection, background tasks, asynchronous APIs.
 https://docs.djangoproject.com/	Django web framework official documentation, models, REST framework, JWT authentication, security.
 https://react.dev/	React official documentation, hooks, useEffect, state management, components, frontend architecture.
+https://angular.dev/	Angular official documentation, components, signals, routing, frontend framework architecture, Google frontend framework.
+https://svelte.dev/	Svelte official documentation, components, reactivity, stores, cybernetically enhanced frontend web framework.
+https://vuejs.org/	Vue.js official documentation, reactivity, composition API, components, progressive frontend framework.
+https://solidjs.com/	SolidJS official documentation, reactive primitives, JSX components, lightweight frontend framework.
+https://htmx.org/	htmx official documentation, high power tools for HTML, modern frontend framework without complex JavaScript.
 https://nextjs.org/docs	Next.js React framework official documentation, server components, hydration error troubleshooting, routing, deployment.
 https://playwright.dev/	Playwright browser automation official documentation, session state, authentication, selectors, API reference, sessions.
 https://pptr.dev/	Puppeteer official documentation, Chrome browser automation, page interaction.
@@ -214,6 +221,7 @@ https://central.sonatype.com/	Maven Central package registry and Java dependency
 https://packagist.org/	PHP Composer package registry and library metadata.
 
 # Cloud, DevOps, infrastructure and databases
+https://docs.docker.com/desktop/	Direct link to download Docker Desktop, Docker Desktop official download and installation guide for Mac, Windows and Linux.
 https://docs.docker.com/	Docker container documentation, Docker Desktop troubleshooting, networking, Dockerfile, engine, compose, containers, image management.
 https://kubernetes.io/docs/	Kubernetes official documentation, deployments, networking, storage, troubleshooting, orchestration.
 https://docs.aws.amazon.com/	AWS official documentation for cloud services, infrastructure, security.

@@ -73,7 +73,7 @@ def literal_identifiers(q):
     identifiers = []
     for value in q.entity:
         for word in re.findall(r'[^\W_]+', value, flags=re.UNICODE):
-            if model.is_query_language(word) or word.lower() in STOPWORDS:
+            if model.is_query_language(word) or word.lower() in STOPWORDS or word.lower() in ('url', 'uri', 'link', 'page', 'site', 'website', 'doc', 'docs', 'home', 'homepage'):
                 continue
             letters = [ch for ch in word if ch.isalpha()]
             mixed_case = any(ch.isupper() for ch in word[1:]) and not word.isupper()

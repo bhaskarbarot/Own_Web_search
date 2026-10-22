@@ -28,7 +28,9 @@ CONVERSATIONAL_MODIFIERS = frozenset({
     "popular", "completely", "exact", "detailed", "specific", "best", "top",
     "various", "several", "latest", "recent", "different", "main", "basic",
     "common", "overview", "summary", "guide", "tutorial", "information",
-    "requirements", "requirement", "version", "versions"
+    "requirements", "requirement", "version", "versions",
+    "url", "link", "links", "page", "pages", "site", "sites", "website", "websites",
+    "webpage", "webpages", "direct", "official", "download", "downloads", "install", "installation"
 })
 
 
@@ -124,7 +126,7 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
     q.language_info = identify(raw, preferred_language)
     model = get_model(data_dir)
     keyword_stopwords = ALL_STOPWORDS | stopwords(q.language_info.get("language", "en"))
-    excl_pattern = r'\b(?:completely\s+)?(?:excluding|exclude|without|except|not\s+including)\s+(?:any\s+)?(?:models?\s+)?(?:created\s+by\s+|from\s+)?([^,.;]+)'
+    excl_pattern = r'\b(?:completely\s+)?(?:excluding|exclude|without|except(?:\s+for)?|not\s+including|besides|other\s+than|apart\s+from)\s+(?:any\s+)?(?:models?\s+)?(?:created\s+by\s+|from\s+)?([^,.;]+)'
     input_text = raw or ""
     for match in re.finditer(excl_pattern, input_text, flags=re.I):
         clause = match.group(1)
