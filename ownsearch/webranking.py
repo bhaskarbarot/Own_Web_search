@@ -129,11 +129,14 @@ def rank(candidates, q, final=True):
         required = set(q.required or q.entity_terms or terms)
         coverage = len(required & present)/max(1, len(required))
         title = len(required & set(f[0]))/max(1, len(required))
-        # An incidental body mention cannot make an unrelated page about the query.
-        if not bm25 or coverage < .5 or (not title and coverage < .8):
+        header_match = len(required & set(f[0] + f[1] + f[2]))/max(1, len(required))
+        min_coverage = .5 if len(required) <= 4 else max(.3, 2.0 / len(required))
+        min_no_header = .75 if len(required) <= 4 else max(.4, 2.5 / len(required))
+        if not bm25 or coverage < min_coverage or (not header_match and coverage < min_no_header):
             continue
         focus = ' '+' '.join(exact_tokens(item.title+' '+' '.join(item.headings)))+' '
-        if any(not _contains(focus, name) for name in literal_names(q)):
+        body_focus = ' '+' '.join(exact_tokens(item.content if item.fetch_status == 'fetched' else item.snippet))+' '
+        if any(not _contains(focus, name) and not _contains(body_focus, name) for name in literal_names(q)):
             continue
         if q.intent == 'tech_docs' and not (required & set(f[0]+f[2])):
             host_terms = set(analyze(urlsplit(item.url).hostname or ''))

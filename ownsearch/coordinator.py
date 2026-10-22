@@ -151,11 +151,13 @@ class IndependentSearch:
                 cached_pages = self.cache.snapshot(max_age=fresh_cache_age)
             else:
                 cached_pages = self.cache.snapshot() if use_cache else []
+            terms = set(q.scoring_terms)
             candidates = []
             for page in cached_pages:
                 if page.item:
                     page.item.cached = True
-                    candidates.append(page.item)
+                    if not terms or any(t in page.item.title.lower() or t in page.item.content[:5000].lower() for t in terms):
+                        candidates.append(page.item)
             if on_progress and use_cache and candidates:
                 try:
                     init_ranked = self.cache.search_index(q, limit=limit, search_type=search_type)
@@ -220,14 +222,17 @@ class IndependentSearch:
                     return
                 observed.add(url)
                 anchor_terms = set(analyze(anchor))
-                path_terms = set(analyze(unquote(urlsplit(url).path)))
+                path_terms = set(analyze(unquote(urlsplit(url).netloc + ' ' + urlsplit(url).path)))
                 def match(tokens):
                     return len(terms & tokens) + .75*len(qualifiers & tokens)
-                priority = 5*(match(anchor_terms)+2*match(path_terms))/max(1, len(terms)+.75*len(qualifiers)) - .15*depth
+                anchor_match = match(anchor_terms)
+                path_match = match(path_terms)
+                priority = 3.0 * anchor_match + 4.5 * path_match - 0.2 * depth
                 if url in root_scores:
-                    priority += 10*root_scores[url]
+                    r_score = root_scores[url]
+                    priority += 15.0 * r_score if r_score >= 0.25 else 5.0 * r_score
                 if kind == 'entity_path':
-                    priority += 25
+                    priority += 5.0
                 if kind == 'native_search':
                     priority += 20
                 if kind == 'native_result':
@@ -239,53 +244,23 @@ class IndependentSearch:
                 sequence += 1
                 heapq.heappush(frontier, (-priority, sequence, url, depth, map_depth))
 
-            clean_words = [w for w in (q.entity or q.surface) if w.lower() not in ALL_STOPWORDS and len(w) > 1]
-            if not clean_words:
-                clean_words = [t for t in q.scoring_terms if len(t) > 1]
             candidate_slugs = []
-            for length in range(min(len(clean_words), 3), 0, -1):
-                for i in range(len(clean_words) - length + 1):
-                    sub = clean_words[i:i+length]
-                    cap = '_'.join(w.capitalize() for w in sub)
-                    if cap not in candidate_slugs:
-                        candidate_slugs.append(cap)
+            if getattr(q, 'intent', '') in ('reference', 'company'):
+                clean_words = [w for w in (q.entity or q.surface) if w.lower() not in ALL_STOPWORDS and len(w) > 1]
+                if clean_words and len(clean_words) <= 3:
+                    candidate_slugs.append('_'.join(w.capitalize() for w in clean_words))
+                    if len(clean_words) > 1:
+                        candidate_slugs.append(clean_words[0].capitalize())
 
             for url in valid:
                 enqueue(url)
                 if fetch_pages and candidate_slugs:
                     origin = origin_of(url)
-                    if 'wikipedia.org' in origin or 'wiki' in urlsplit(url).path:
-                        for s in candidate_slugs[:4]:
+                    if 'wikipedia.org' in origin:
+                        for s in candidate_slugs[:2]:
                             cand = independent_url(urljoin(origin, f"/wiki/{s}"), self.settings.allow_private_hosts)
                             if cand:
                                 enqueue(cand, anchor=s.replace('_', ' '), depth=0, kind='entity_path')
-                    elif 'britannica.com' in origin:
-                        for s in candidate_slugs[:3]:
-                            dash = s.replace('_', '-')
-                            for prefix in ('biography', 'topic', 'explore'):
-                                cand = independent_url(urljoin(origin, f"/{prefix}/{dash}"), self.settings.allow_private_hosts)
-                                if cand:
-                                    enqueue(cand, anchor=dash, depth=0, kind='entity_path')
-                    elif 'programiz.com' in origin:
-                        for s in clean_words[:3]:
-                            cand = independent_url(urljoin(origin, f"/python-programming/examples/{s.lower()}"), self.settings.allow_private_hosts)
-                            if cand:
-                                enqueue(cand, anchor=s, depth=0, kind='entity_path')
-                    elif 'geeksforgeeks.org' in origin:
-                        for s in clean_words[:3]:
-                            cand = independent_url(urljoin(origin, f"/python-program-check-string-{s.lower()}-not/"), self.settings.allow_private_hosts)
-                            if cand:
-                                enqueue(cand, anchor=s, depth=0, kind='entity_path')
-                    elif 'docs.python.org' in origin:
-                        for s in clean_words[:3]:
-                            cand = independent_url(urljoin(url, f"library/{s.lower()}.html"), self.settings.allow_private_hosts)
-                            if cand:
-                                enqueue(cand, anchor=s, depth=0, kind='entity_path')
-                    elif 'plato.stanford.edu' in origin:
-                        for s in clean_words[:2]:
-                            cand = independent_url(urljoin(url, f"entries/{s.lower()}/"), self.settings.allow_private_hosts)
-                            if cand:
-                                enqueue(cand, anchor=s, depth=0, kind='entity_path')
             if self.settings.cdx_discovery_enabled and q.sites and fetch_pages:
                 try:
                     from .commoncrawl import query_cdx
@@ -393,8 +368,8 @@ class IndependentSearch:
                 if not active:
                     if attempted >= self.settings.max_pages_per_query or not frontier:
                         break
-                    matching = [c for c in candidates if terms and any(t in c.title.lower() or t in c.content[:2000].lower() for t in terms)]
-                    if (len(matching) >= min(limit, 3) and attempted >= 2) or (matching and time.perf_counter() - started > 1.5):
+                    cur_ranked = rank(candidates, q)
+                    if len(cur_ranked) >= min(limit, 3) and attempted >= 2:
                         break
                     cancel.wait(min(.01, max(0, deadline-time.monotonic())))
                     continue
@@ -435,16 +410,15 @@ class IndependentSearch:
                                     })
                             except Exception:
                                 pass
-                        matching = [c for c in candidates if terms and any(t in c.title.lower() or t in c.content[:2000].lower() for t in terms)]
-                        if len(matching) >= limit:
+                        cur_ranked = rank(candidates, q)
+                        if len(cur_ranked) >= limit:
                             break
-                        if matching:
-                            elapsed = time.perf_counter() - started
+                        if cur_ranked:
                             if answer_mode:
-                                early_ans = _build_answer(matching, q, query)
+                                early_ans = _build_answer(cur_ranked, q, query)
                                 if early_ans and early_ans.get('type') in ('code', 'summary'):
                                     break
-                            if elapsed > 1.2 or (len(matching) >= min(limit, 3) and attempted >= 2):
+                            if len(cur_ranked) >= min(limit, 3) and attempted >= 3:
                                 break
             unfinished = len(active)
             if unfinished:

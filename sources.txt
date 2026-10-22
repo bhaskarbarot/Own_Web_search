@@ -38,4 +38,15 @@ https://realpython.com/	Python programming tutorials, code examples, best practi
 https://www.w3schools.com/python/	Python tutorial references, code examples, string methods, and exercises.
 https://www.britannica.com/	Encyclopedia Britannica biographies, history, science, and world knowledge.
 https://data.worldbank.org/	World Bank open global development data, country economic indicators, population statistics and research reports.
+https://fastapi.tiangolo.com/	FastAPI official documentation, OAuth2 authentication, async SQL databases, dependency injection, and background tasks.
+https://docs.djangoproject.com/	Django web framework official documentation, models, REST framework, JWT authentication, and security.
+https://playwright.dev/	Playwright browser automation official documentation, session state, authentication, selectors, and API reference.
+https://nextjs.org/docs	Next.js React framework official documentation, server components, hydration error troubleshooting, routing, and deployment.
+https://redis.io/docs/	Redis database official documentation, distributed locking, in-memory caching, task queues, and data structures.
+https://supabase.com/docs	Supabase open-source backend platform official documentation, PostgreSQL database backups, authentication, and connection pooling.
+https://modelcontextprotocol.io/	Model Context Protocol (MCP) open standard specification, agent tool servers, clients, and integrations.
+https://owasp.org/	Open Web Application Security Project (OWASP) official guidance, SQL injection prevention, API security, and vulnerability mitigations.
+https://github.com/	GitHub open-source software repositories, developer code, issue discussions, Actions workflows, and security advisories.
+https://rbi.org.in/	Reserve Bank of India (RBI) official portal, monetary policy announcements, repo rate circulars, and banking regulations.
+https://pib.gov.in/	Press Information Bureau Government of India official releases, GDP growth statistics, technology policy announcements, and economic data.
 

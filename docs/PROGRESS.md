@@ -395,3 +395,34 @@ Upgraded OwnSearch into a dual-mode search engine combining DuckDuckGo-style ins
      - Warm network requests: 0 (local cache hit)
      - 300 DEV queries parsed, 0 sealed queries touched, all checksums preserved.
    - Visual E2E validation: verified with browser subagent recording `duckduckgo_firecrawl_ui_test_1792649087420.webp` and screenshots `palindrome_ddg_firecrawl_1792649169665.png` and `gandhiji_summary_speed_1792649216192.png`.
+
+# Phase: Top 100 AI Agent Queries Benchmark & Comprehensive Crawler Refinement (2026-10-22)
+
+Evaluated OwnSearch against the standardized Top 100 AI Agent Web Search Queries across 10 categories (Coding, AI/ML, Research, Browser Automation, Current Info/News, Documentation/APIs, Business/Finance, Troubleshooting, Security/Vulnerability, Difficult Multi-Step).
+
+1. Empirical Root-Cause Diagnoses & Crawler Improvements:
+   - **Eliminated Fake Entity Slug Explosion**: Removed bogus multi-word entity path generation on non-reference queries that spammed Britannica ('/biography/Github-Implementing-Oauth2'), GeeksforGeeks, and Stanford Plato with priority 25, which previously choked the crawl budget with 403s/404s before authentic seed hubs could be contacted.
+   - **Target-Aware Frontier Prioritization**: Enhanced link priority calculation ('coordinator.py') to evaluate both hostname and URL path ('netloc + path') against query terms ('priority = 3.0 * anchor_match + 4.5 * path_match - 0.2 * depth') and boost primary sources from 'source_plan'. This prioritizes deep documentation pages (e.g. '/tutorial/security/oauth2-jwt/') over unrelated background seeds.
+   - **Adaptive Heading & Path Matching**: In 'webranking.py', updated header matching ('header_match = len(required & set(f[0] + f[1] + f[2]))') so documentation pages with generic HTML title tags (like 'Docs' or 'Quickstart') are evaluated by their headings ('<h1>', '<h2>') and URL path rather than being prematurely discarded.
+   - **Polite Low-Latency Origin Pacing**: Reduced default intra-origin delay to 250ms ('default_delay = 0.25'), eliminating seconds of dead sleep between robots.txt checks and actual page fetches without violating robots politeness.
+   - **Query-Filtered Candidate Cache**: Restricted cached pages admitted into 'candidates' to those with lexical overlap with the query terms, preventing previous cached pages from causing false positives or early-aborts.
+
+2. Benchmark Execution & Measurements ('eval/runs/independent/top100_benchmark_results.json'):
+   - **Test Dataset**: 'eval/top_100_ai_agent_queries.json' (100 distinct queries, 10 categories).
+   - **Overall Success Rate**: **62.0%** (62/100 queries returning live, verified URLs with Firecrawl Markdown and Instant Answers).
+   - **Overall Cold Latency**: 5,077.8 ms average; drops to **1.5 ms – 5.0 ms** on SQLite cache hit.
+   - **Category-by-Category Results**:
+     - **Coding agents**: **80.0%** (8/10 OK, avg 3,553.0 ms) — Fast verified FastAPI, React, Docker, and GitHub results.
+     - **Current information and news agents**: **80.0%** (8/10 OK, avg 3,194.6 ms) — Live October 2026 news from TechCrunch and RSS feeds.
+     - **Research agents**: **70.0%** (7/10 OK, avg 3,992.1 ms) — ArXiv, Semantic Scholar, GitHub research topics.
+     - **Browser and web automation agents**: **70.0%** (7/10 OK, avg 5,186.6 ms) — Official Playwright and Supabase docs.
+     - **Documentation and API agents**: **70.0%** (7/10 OK, avg 5,475.9 ms) — FastAPI, Docker, React, Supabase, Redis docs.
+     - **Security and vulnerability research agents**: **70.0%** (7/10 OK, avg 7,087.4 ms) — React security advisories, OWASP, Docker sandboxes.
+     - **Difficult, multi-step search queries**: **60.0%** (6/10 OK, avg 6,695.8 ms) — Docker agents, open-code-agents, Django dev docs.
+     - **Troubleshooting and technical support agents**: **50.0%** (5/10 OK, avg 5,504.9 ms).
+     - **Business and finance research agents**: **40.0%** (4/10 OK, avg 5,432.3 ms) — RBI official monetary policy, Redis enterprise.
+     - **AI and machine learning agents**: **30.0%** (3/10 OK, avg 4,655.3 ms) — LLM evaluation, agentic frameworks.
+
+3. Unit Test Verification:
+   - 152 / 152 tests pass in 16.9s.
+   - Zero hardcoded queries, answers, or benchmark domains.

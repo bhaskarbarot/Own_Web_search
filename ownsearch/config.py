@@ -25,7 +25,7 @@ class Settings:
     fetch_retries: int = 0
     max_redirects: int = 5
     allow_private_hosts: bool = False
-    default_delay: float = 1.0
+    default_delay: float = 0.25
     robots_ttl: float = 3600.0
     origin_cache_entries: int = 256
     crawl_threads: int = 4
