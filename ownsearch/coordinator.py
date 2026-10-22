@@ -95,7 +95,9 @@ class IndependentSearch:
             cached_res = self.cache.get_query_result(cache_key)
             if cached_res is not None:
                 if not fetch_pages or cached_res.get('results'):
-                    return cached_res
+                    res = dict(cached_res)
+                    res['cached'] = True
+                    return res
         if not self.slots.acquire(False):
             raise Busy('All crawl slots are occupied; retry shortly')
         cancel = cancel_event or threading.Event()
