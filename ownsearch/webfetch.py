@@ -17,7 +17,7 @@ from .native_search import discover_search_forms, independent_url
 from .extract.feeds import parse_feed
 from .fetcher import Fetcher, FetchError, decode_content
 from .robots import RobotsPolicy
-from .util import origin_of, utc_now
+from .util import origin_of, utc_now, registrable_domain
 from .webmodels import WebCandidate, web_url
 
 @dataclass
@@ -81,7 +81,15 @@ class WebFetchSession(Fetcher):
             raise FetchError('Search services or unsafe URLs are not crawl sources', 'blocked')
         origin = origin_of(url)
         if self.allowed_origins is not None and origin not in self.allowed_origins:
-            raise FetchError('Redirect outside configured crawl origins', 'scope')
+            host = urlsplit(origin).hostname or ''
+            is_ip = any(c.isdigit() for c in host) and all(c.isdigit() or c in '.:' for c in host)
+            if is_ip:
+                raise FetchError('Redirect outside configured crawl origins', 'scope')
+            origin_domain = registrable_domain(host)
+            allowed_domains = {registrable_domain(urlsplit(ao).hostname or '') for ao in self.allowed_origins}
+            if not origin_domain or origin_domain not in allowed_domains:
+                raise FetchError('Redirect outside configured crawl origins', 'scope')
+
         gate = self.origins.get(origin)
         if not gate.lock.acquire(timeout=max(0, deadline-time.monotonic())):
             self.origins.release(gate)
@@ -120,7 +128,7 @@ class WebFetchSession(Fetcher):
             if truncated:
                 raise FetchError('Response exceeds page byte limit', 'too_large')
             wire_size = len(body)
-            body = decode_content(body, response_headers.get('content-encoding'), capacity)
+            body = decode_content(body, response_headers.get('content-encoding'), max(capacity, self.settings.max_decompressed_bytes))
             charged = max(wire_size, len(body))
             completed = True
             response_headers = dict(response_headers)

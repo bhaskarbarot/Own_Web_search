@@ -107,7 +107,10 @@ https://docs.exa.ai/	Exa API documentation, neural search, content retrieval, re
 https://docs.crewai.com/	CrewAI documentation, multi-agent collaboration, tasks, workflows.
 https://microsoft.github.io/autogen/	AutoGen documentation, resources for multi-agent application development, AutoGen framework documentation.
 https://docs.llamaindex.ai/	LlamaIndex documentation, data ingestion, retrieval, agent workflows.
-https://python.langchain.com/	LangChain, LangGraph official documentation, multi-agent systems, state persistence, human-in-the-loop, tool calling, agent orchestration, memory.
+https://docs.langchain.com/	LangChain official documentation, RecursiveCharacterTextSplitter, text splitter, document chunking, prompt templates, agent workflows.
+https://python.langchain.com/	LangChain Python documentation, RecursiveCharacterTextSplitter, text splitters, vector stores, retrieval, tools.
+https://docs.langchain.com/oss/python/integrations/splitters/index.md	LangChain Python text splitters guide, RecursiveCharacterTextSplitter, character text splitter, code chunking, token splitters.
+https://raw.githubusercontent.com/langchain-ai/langchain/master/libs/text-splitters/langchain_text_splitters/character.py	LangChain RecursiveCharacterTextSplitter Python implementation source code.
 https://huggingface.co/docs	Hugging Face machine learning models, transformers, datasets, model cards, CPU inference, open-weight LLMs, Hugging Face documentation for models.
 https://huggingface.co/models	AI model discovery, model cards, model files and supported tasks.
 https://huggingface.co/datasets	Hugging Face datasets, machine learning training data, evaluation benchmarks, AI training datasets, machine learning data discovery.

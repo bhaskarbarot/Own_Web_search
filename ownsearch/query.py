@@ -30,7 +30,8 @@ CONVERSATIONAL_MODIFIERS = frozenset({
     "common", "overview", "summary", "guide", "tutorial", "information",
     "requirements", "requirement", "version", "versions",
     "url", "link", "links", "page", "pages", "site", "sites", "website", "websites",
-    "webpage", "webpages", "direct", "official", "download", "downloads", "install", "installation"
+    "webpage", "webpages", "direct", "official", "download", "downloads", "install", "installation",
+    "give", "show", "tell", "write", "provide", "create", "need", "want"
 })
 
 

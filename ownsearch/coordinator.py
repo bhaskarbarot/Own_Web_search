@@ -231,10 +231,10 @@ class IndependentSearch:
                 def match(tokens):
                     exact_m = len(terms & tokens)
                     prefix_m = sum(1 for tok in tokens if any(t.startswith(tok) or tok.startswith(t) for t in terms if len(tok) >= 3 and len(t) >= 3 and tok != t))
-                    return exact_m + 0.5 * prefix_m + .75*len(qualifiers & tokens)
+                    return (exact_m + 0.5 * prefix_m + .75*len(qualifiers & tokens)) / max(1, len(terms))
                 anchor_match = match(anchor_terms)
                 path_match = match(path_terms)
-                priority = 3.0 * anchor_match + 4.5 * path_match - 0.2 * depth
+                priority = 4.0 * anchor_match + 6.0 * path_match - 0.2 * depth
                 if url in root_scores:
                     r_score = root_scores[url]
                     priority += 20.0 * r_score if r_score >= 0.20 else 5.0 * r_score
@@ -272,7 +272,7 @@ class IndependentSearch:
                         candidate_slugs.append('_'.join(words))
                         candidate_slugs.append(words[0].capitalize() + '_' + '_'.join(w.lower() for w in words[1:]))
                         for w in words:
-                            if len(w) > 2 and w.lower() not in ('desktop', 'page', 'url', 'official'):
+                            if w.istitle() and len(w) > 2 and w.lower() not in ('desktop', 'page', 'url', 'official'):
                                 candidate_slugs.append(w)
                     else:
                         w = words[0]
