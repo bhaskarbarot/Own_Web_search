@@ -63,6 +63,7 @@ class CrawledPage:
     kind: str = ''
     search_forms: list = field(default_factory=list)
     search_result_links: list = field(default_factory=list)
+    requested_url: str = ''
 
 class WebFetchSession(Fetcher):
     def __init__(self, settings, cancel, origins=None):
@@ -209,7 +210,8 @@ class WebFetchSession(Fetcher):
             links.extend((row[0], '', 'page') for row in ext.sitemap_urls)
         maps = [] if nofollow else list(policy.sitemaps) + [row[0] for row in ext.sitemaps]
         page = CrawledPage(final_url, links=links[:self.settings.max_sitemap_urls],
-                           sitemaps=maps[:self.settings.max_sitemap_urls], kind=ext.kind)
+                           sitemaps=maps[:self.settings.max_sitemap_urls], kind=ext.kind,
+                           requested_url=url)
         if self.settings.native_search_enabled and ext.kind == 'html' and not nofollow:
             page.search_forms = discover_search_forms(decode_text(data, response.content_type), final_url, self.settings.allow_private_hosts)
             if url in self.native_targets:

@@ -6,6 +6,13 @@ from pathlib import Path
 
 DEFAULT_DATA_DIR = 'data'
 
+def _default_sources_file() -> str:
+    repo_file = Path(__file__).resolve().parent.parent / 'sources.txt'
+    if repo_file.is_file():
+        return str(repo_file)
+    pkg_file = Path(__file__).resolve().parent / 'resources' / 'sources.txt'
+    return str(pkg_file)
+
 @dataclass
 class Settings:
     data_dir: Path = Path(DEFAULT_DATA_DIR)
@@ -48,7 +55,7 @@ class Settings:
     cache_entries: int = 128
     cache_max_bytes: int = 16_000_000
     seeds: str = ''
-    sources_file: str = str(Path(__file__).resolve().parent.parent / 'sources.txt')
+    sources_file: str = _default_sources_file()
     timezone: str = 'UTC'
     holiday_country: str = ''
     default_language: str = 'en'

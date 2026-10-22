@@ -64,3 +64,21 @@ class PersistentCacheTests(unittest.TestCase):
             cache=self.cache(tmp,source_memory_entries=1)
             for suffix in ('a','b'):cache.remember([self.page('https://fixture.example/'+suffix).item])
             self.assertEqual(cache.stats()['source_memory_entries'],1);cache.close()
+    def test_query_cache_survives_restart_and_expires(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cache = self.cache(tmp)
+            cache.put_query_result('sample_query', {'results': [{'title': 'Found'}]}, ttl=100)
+            cache.close()
+            cache2 = self.cache(tmp)
+            res = cache2.get_query_result('sample_query')
+            self.assertIsNotNone(res)
+            self.assertEqual(res['results'][0]['title'], 'Found')
+            cache2.close()
+    def test_alias_survives_restart(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cache = self.cache(tmp)
+            cache.put_alias('https://example.org/alias', 'https://example.org/target', ttl=100)
+            cache.close()
+            cache2 = self.cache(tmp)
+            self.assertEqual(cache2.get_alias('https://example.org/alias'), 'https://example.org/target')
+            cache2.close()

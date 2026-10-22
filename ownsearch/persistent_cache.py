@@ -33,6 +33,8 @@ class PersistentPageCache:
         self.db.execute('PRAGMA max_page_count=' + str(pages))
         self.db.execute('CREATE TABLE IF NOT EXISTS pages(url TEXT PRIMARY KEY, payload BLOB NOT NULL, size INTEGER NOT NULL, expires REAL NOT NULL, touched REAL NOT NULL, sha256 TEXT NOT NULL)')
         self.db.execute('CREATE TABLE IF NOT EXISTS memory(url TEXT PRIMARY KEY, description TEXT NOT NULL, seen REAL NOT NULL, expires REAL NOT NULL)')
+        self.db.execute('CREATE TABLE IF NOT EXISTS query_cache(cache_key TEXT PRIMARY KEY, payload BLOB NOT NULL, expires REAL NOT NULL, touched REAL NOT NULL)')
+        self.db.execute('CREATE TABLE IF NOT EXISTS aliases(alias_url TEXT PRIMARY KEY, target_url TEXT NOT NULL, expires REAL NOT NULL)')
         self.db.commit()
         self.index = InvertedIndex()
         self.query_cache = OrderedDict()
@@ -52,6 +54,8 @@ class PersistentPageCache:
         now = time.time()
         self.db.execute('DELETE FROM pages WHERE expires<=?', (now,))
         self.db.execute('DELETE FROM memory WHERE expires<=?', (now,))
+        self.db.execute('DELETE FROM query_cache WHERE expires<=?', (now,))
+        self.db.execute('DELETE FROM aliases WHERE expires<=?', (now,))
 
     def put(self, url, page, ttl=None):
         raw = json.dumps(asdict(page), ensure_ascii=False, separators=(',', ':')).encode()
@@ -109,7 +113,9 @@ class PersistentPageCache:
                     valid_keys = WebCandidate.__dataclass_fields__.keys()
                     filtered = {k: v for k, v in row['item'].items() if k in valid_keys}
                     row['item'] = WebCandidate(**filtered)
-                pages.append(CrawledPage(**row))
+                crawled_keys = CrawledPage.__dataclass_fields__.keys()
+                filtered_page = {k: v for k, v in row.items() if k in crawled_keys}
+                pages.append(CrawledPage(**filtered_page))
             except (ValueError, TypeError, zlib.error):
                 self.errors += 1
         return pages
@@ -125,27 +131,89 @@ class PersistentPageCache:
             self._prune()
             return self.index.search_images(q, limit=limit)
 
+    def _serialize_cache_key(self, cache_key):
+        if isinstance(cache_key, str):
+            return cache_key
+        try:
+            return json.dumps(cache_key, ensure_ascii=False)
+        except Exception:
+            return str(cache_key)
+
     def get_query_result(self, cache_key):
+        key_str = self._serialize_cache_key(cache_key)
         with self.lock:
-            now = time.monotonic()
-            if cache_key in self.query_cache:
-                expires, result = self.query_cache[cache_key]
-                if expires > now:
-                    self.query_cache.move_to_end(cache_key)
+            now_mono = time.monotonic()
+            if key_str in self.query_cache:
+                expires, result = self.query_cache[key_str]
+                if expires > now_mono:
+                    self.query_cache.move_to_end(key_str)
                     return deepcopy(result)
-                del self.query_cache[cache_key]
+                del self.query_cache[key_str]
+            now_wall = time.time()
+            try:
+                row = self.db.execute('SELECT payload, expires FROM query_cache WHERE cache_key=? AND expires>?',
+                                      (key_str, now_wall)).fetchone()
+                if row:
+                    payload, expires_wall = row
+                    raw = zlib.decompress(payload)
+                    res = json.loads(raw.decode('utf-8'))
+                    ttl_remaining = max(1.0, expires_wall - now_wall)
+                    self.query_cache[key_str] = (now_mono + ttl_remaining, res)
+                    return deepcopy(res)
+            except Exception:
+                self.errors += 1
         return None
 
     def put_query_result(self, cache_key, result, ttl=60.0):
         if ttl <= 0:
             return
+        key_str = self._serialize_cache_key(cache_key)
+        now_mono = time.monotonic()
+        now_wall = time.time()
         with self.lock:
-            now = time.monotonic()
-            if cache_key in self.query_cache:
-                del self.query_cache[cache_key]
-            self.query_cache[cache_key] = (now + ttl, deepcopy(result))
+            if key_str in self.query_cache:
+                del self.query_cache[key_str]
+            self.query_cache[key_str] = (now_mono + ttl, deepcopy(result))
             while len(self.query_cache) > self.max_query_cache_entries:
                 self.query_cache.popitem(last=False)
+            try:
+                raw = json.dumps(result, ensure_ascii=False).encode('utf-8')
+                compressed = zlib.compress(raw)
+                with self.db:
+                    self.db.execute('INSERT OR REPLACE INTO query_cache VALUES (?, ?, ?, ?)',
+                                    (key_str, compressed, now_wall + ttl, now_wall))
+                    count = self.db.execute('SELECT COUNT(*) FROM query_cache').fetchone()[0]
+                    if count > 512:
+                        self.db.execute('DELETE FROM query_cache WHERE cache_key NOT IN (SELECT cache_key FROM query_cache ORDER BY touched DESC LIMIT 512)')
+            except sqlite3.Error:
+                self.errors += 1
+
+    def put_alias(self, alias_url, target_url, ttl=None):
+        if not alias_url or not target_url or alias_url == target_url:
+            return
+        effective_ttl = self.settings.cache_ttl if ttl is None else ttl
+        if effective_ttl <= 0:
+            return
+        now = time.time()
+        with self.lock:
+            try:
+                with self.db:
+                    self.db.execute('INSERT OR REPLACE INTO aliases VALUES (?, ?, ?)',
+                                    (alias_url, target_url, now + effective_ttl))
+            except sqlite3.Error:
+                self.errors += 1
+
+    def get_alias(self, alias_url):
+        if not alias_url:
+            return None
+        now = time.time()
+        with self.lock:
+            try:
+                row = self.db.execute('SELECT target_url FROM aliases WHERE alias_url=? AND expires>?',
+                                      (alias_url, now)).fetchone()
+                return row[0] if row else None
+            except sqlite3.Error:
+                return None
 
     def remember(self, items):
         now = time.time()
@@ -174,6 +242,8 @@ class PersistentPageCache:
             with self.db:
                 self.db.execute('DELETE FROM pages')
                 self.db.execute('DELETE FROM memory')
+                self.db.execute('DELETE FROM query_cache')
+                self.db.execute('DELETE FROM aliases')
             self.db.execute('PRAGMA incremental_vacuum')
             self.index.clear()
             self.query_cache.clear()

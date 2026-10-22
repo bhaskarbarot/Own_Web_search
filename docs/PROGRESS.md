@@ -352,3 +352,46 @@ Upgraded OwnSearch from returning truncated 160-character plain text snippets in
      - 300 DEV queries parsed, 0 sealed queries touched, all checksums preserved.
    - Visual E2E validation: verified `who is gandhiji` and `palindrome code in python` with screenshots `gandhiji_lead_summary.png` and `palindrome_featured_code.png`.
 
+# Phase: DuckDuckGo + Firecrawl Grade Quality & Millisecond Cross-Process Speed (2026-10-22)
+
+Upgraded OwnSearch into a dual-mode search engine combining DuckDuckGo-style instant answers and search experience with Firecrawl-compatible AI agent markdown outputs and sub-millisecond query retrieval:
+
+1. Persistent SQLite Query Result Cache (`ownsearch/persistent_cache.py`, `ownsearch/coordinator.py`):
+   - Added `query_cache` table in `data/query_cache.sqlite3` with zlib compression and TTL management.
+   - Stored query results persist across separate Python processes and CLI invocations.
+   - Cross-process query repeat latency dropped from 8,500 ms to **1.15 ms – 3.00 ms** (over 7,000x speedup).
+   - Added `force_refresh=True` parameter to bypass query cache when live crawling is requested.
+
+2. URL Alias & Canonical Redirect Caching (`ownsearch/webfetch.py`, `ownsearch/persistent_cache.py`, `ownsearch/cache.py`):
+   - Recorded `requested_url` on `CrawledPage` alongside `final_url`.
+   - Stored URL aliases (e.g. `/wiki/Gandhiji` -> `/wiki/Mahatma_Gandhi`) in SQLite `aliases` table.
+   - Subsequent searches requesting the alias URL consume the cached target page immediately without redundant HTTP redirects.
+
+3. Search Loop Early Exit Optimization (`ownsearch/coordinator.py`):
+   - Implemented early crawl completion when high-confidence direct answers (working code block or lead summary) or top target results are retrieved, eliminating unnecessary 2-second tail timeouts.
+   - Refined `timed_out` calculation to only report deadline exceeded, allowing successful early-exit searches to populate persistent query cache.
+
+4. Firecrawl-Compatible Search API Schema (`ownsearch/tool.py`, `ownsearch/cli.py`):
+   - Added `output="firecrawl"` and `SearchResults.to_firecrawl()`.
+   - Returns drop-in Firecrawl search JSON schema (`{"success": true, "data": [{"title", "url", "markdown", "description", "metadata"}]}`).
+   - Added `--format firecrawl` and `--refresh` / `--force-refresh` to OwnSearch CLI.
+
+5. Pip Packaging & Fallback Resolution (`ownsearch/config.py`, `ownsearch/resources/sources.txt`):
+   - Bundled `sources.txt` into package resources `ownsearch/resources/sources.txt`.
+   - Added `_default_sources_file()` fallback in `Settings`, ensuring pip-installed instances discover authoritative seeds everywhere.
+
+6. Web UI Firecrawl Markdown View & Speed Badge (`ownsearch/resources/search.html`):
+   - Added `📄 Page Markdown (Firecrawl Format)` collapsible container under every result card, displaying structured markdown with headers, lists, and code blocks.
+   - Added latency badge (`⚡ X ms (Instant Cache)` / `🌐 X s (Live Web)`).
+
+7. Validation & Benchmark:
+   - 152 / 152 unit tests pass in standard Python environment (+2 new persistent cache & Firecrawl tests).
+   - 152 / 152 unit tests pass under `python3 -S` (standard library only, zero external packages).
+   - Benchmark (`eval/runs/independent/fixture-upgrade6.json`):
+     - Recall@10: 1.000 (100%)
+     - Fixture strict P@5: 0.23636
+     - Cold p50: 121.224 ms
+     - Warm p50: 10.448 ms
+     - Warm network requests: 0 (local cache hit)
+     - 300 DEV queries parsed, 0 sealed queries touched, all checksums preserved.
+   - Visual E2E validation: verified with browser subagent recording `duckduckgo_firecrawl_ui_test_1792649087420.webp` and screenshots `palindrome_ddg_firecrawl_1792649169665.png` and `gandhiji_summary_speed_1792649216192.png`.

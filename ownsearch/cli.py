@@ -23,8 +23,10 @@ def main(argv=None):
     search.add_argument('--cache-only', action='store_true')
     search.add_argument('--json', action='store_true')
     search.add_argument('--markdown', action='store_true')
-    search.add_argument('--format', '-f', choices=('text', 'code', 'markdown', 'json'), default=None,
-                        help='Agent output format: text, code (only code snippet), markdown (Firecrawl style), json')
+    search.add_argument('--format', '-f', choices=('text', 'code', 'markdown', 'json', 'firecrawl'), default=None,
+                        help='Agent output format: text, code (only code snippet), markdown, json, firecrawl')
+    search.add_argument('--refresh', '--force-refresh', dest='force_refresh', action='store_true',
+                        help='Bypass query cache and force a live crawl')
     search.add_argument('--pdf', default=None, help='Export results to PDF file')
     serve_parser = sub.add_parser('serve')
     serve_parser.add_argument('--host', default='127.0.0.1')
@@ -89,12 +91,15 @@ def main(argv=None):
         response = engine.search(args.query, seeds=args.seed, limit=args.limit, offset=args.offset,
                                  site=args.site, filetype=args.filetype, lang=args.lang, freshness=args.freshness,
                                  timezone_name=args.timezone, timeout_ms=args.timeout_ms, search_type=args.type,
-                                 answer_mode=args.answer, explain=args.explain, fetch_pages=not args.cache_only)
+                                 answer_mode=args.answer, explain=args.explain, fetch_pages=not args.cache_only,
+                                 force_refresh=args.force_refresh)
         from .tool import SearchResults
         res_obj = SearchResults(response)
         if args.pdf:
             res_obj.to_pdf(args.pdf)
             print(f"Results exported to {args.pdf}")
+        elif args.format == 'firecrawl':
+            print(json.dumps(res_obj.to_firecrawl(), indent=2, ensure_ascii=False))
         elif args.format == 'code':
             print(res_obj.code)
         elif args.format == 'markdown' or args.markdown:

@@ -109,6 +109,18 @@ class ToolApiTests(unittest.TestCase):
         self.assertIsInstance(js, dict)
         self.assertEqual(js['mode'], 'independent')
 
+        # Test output="firecrawl"
+        fc = search_tool('orbital guidance', seeds=[self.site.base + '/guide'], output='firecrawl', engine=engine)
+        self.assertIsInstance(fc, dict)
+        self.assertTrue(fc.get('success'))
+        self.assertTrue(len(fc.get('data', [])) > 0)
+        first = fc['data'][0]
+        self.assertIn('title', first)
+        self.assertIn('url', first)
+        self.assertIn('markdown', first)
+        self.assertIn('metadata', first)
+        self.assertEqual(first['metadata']['sourceURL'], first['url'])
+
     def test_code_and_lead_summary_answer(self):
         from ownsearch.evidence import extract_code_answer, extract_lead_summary
         from ownsearch.webmodels import WebCandidate

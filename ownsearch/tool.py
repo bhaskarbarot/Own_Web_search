@@ -128,6 +128,36 @@ class SearchResults:
     def to_json(self, indent: int = 2) -> str:
         return json.dumps(self.raw, indent=indent, ensure_ascii=False)
 
+    def to_firecrawl(self) -> Dict[str, Any]:
+        """Firecrawl-compatible search response format for AI agents."""
+        data = []
+        for r in self.results:
+            data.append({
+                'title': r.get('title', ''),
+                'url': r.get('url', ''),
+                'markdown': r.get('markdown', '') or r.get('snippet', ''),
+                'description': r.get('snippet', ''),
+                'metadata': {
+                    'title': r.get('title', ''),
+                    'description': r.get('snippet', ''),
+                    'language': r.get('language', 'en'),
+                    'sourceURL': r.get('url', ''),
+                    'statusCode': 200,
+                    'rank': r.get('rank', 1),
+                }
+            })
+        out = {
+            'success': True,
+            'data': data,
+            'query': self.query,
+            'took_ms': self.took_ms,
+            'cached': self.cached,
+        }
+        if self.answer:
+            out['answer'] = self.answer.get('text', '')
+            out['answer_detail'] = self.answer
+        return out
+
     def to_pdf(self, path: Union[str, Path]) -> bytes:
         """Export search results to a PDF file."""
         sections = []
@@ -164,6 +194,7 @@ def search_tool(
     include_passages: bool = True,
     include_images: bool = False,
     export: Optional[str] = None,
+    force_refresh: bool = False,
     engine: Optional[IndependentSearch] = None,
     **extra
 ) -> Union[SearchResults, str, Dict[str, Any]]:
@@ -218,6 +249,7 @@ def search_tool(
         answer_mode=answer_mode,
         explain=False,
         fetch_pages=fetch_pages,
+        force_refresh=force_refresh,
         **extra
     )
 
@@ -231,7 +263,9 @@ def search_tool(
         elif export.lower().endswith('.md'):
             Path(export).write_text(results_obj.to_markdown())
 
-    if output == 'json':
+    if output == 'firecrawl':
+        return results_obj.to_firecrawl()
+    elif output == 'json':
         return results_obj.to_dict()
     elif output == 'markdown':
         return results_obj.to_markdown()

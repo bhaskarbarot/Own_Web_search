@@ -1029,6 +1029,17 @@ function render(data, elapsed, mode) {
       detail.append(node('summary', 'Ranking features & scores'), node('pre', JSON.stringify(result.features, null, 2)));
       article.append(detail);
     }
+    if (result.markdown) {
+      const mdDetail = node('details');
+      mdDetail.className = 'markdown-details';
+      mdDetail.style.cssText = 'margin-top:10px;font-size:13px;';
+      const mdSummary = node('summary', '📄 Page Markdown (Firecrawl Format)');
+      mdSummary.style.cssText = 'cursor:pointer;color:var(--url-color);font-weight:500;padding:4px 0;';
+      const mdPre = node('pre', result.markdown);
+      mdPre.style.cssText = 'white-space:pre-wrap;font-family:JetBrains Mono,monospace;font-size:12px;padding:12px;background:var(--bg-surface-elevated);border-radius:8px;max-height:280px;overflow-y:auto;border:1px solid var(--border-color);margin-top:6px;color:var(--text-primary);';
+      mdDetail.append(mdSummary, mdPre);
+      article.append(mdDetail);
+    }
     $('results').append(article);
   }
 

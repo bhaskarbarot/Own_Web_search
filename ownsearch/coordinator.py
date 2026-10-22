@@ -76,7 +76,7 @@ class IndependentSearch:
     def search(self, query, limit=10, offset=0, freshness=None, site=None, filetype=None, lang=None,
                timeout_ms=None, explain=False, use_cache=True, fetch_pages=True, search_type='web',
                answer_mode=False, preferred_language=None, timezone_name=None, seeds=None,
-               cancel_event=None, on_progress=None, **unused):
+               cancel_event=None, on_progress=None, force_refresh=False, **unused):
         if not isinstance(query, str) or not query.strip() or len(query) > 1000:
             raise ValueError('Query must contain 1–1000 characters')
         limit, offset = int(limit), int(offset)
@@ -91,10 +91,11 @@ class IndependentSearch:
             raise ValueError('Search timeout is outside configured bounds')
         cache_key = (query, limit, offset, freshness, site, filetype, lang, search_type, answer_mode, explain,
                      preferred_language, timezone_name, tuple(seeds or []))
-        if use_cache and not fetch_pages:
+        if use_cache and not force_refresh and freshness not in ('day', 'hour'):
             cached_res = self.cache.get_query_result(cache_key)
             if cached_res is not None:
-                return cached_res
+                if not fetch_pages or cached_res.get('results'):
+                    return cached_res
         if not self.slots.acquire(False):
             raise Busy('All crawl slots are occupied; retry shortly')
         cancel = cancel_event or threading.Event()
@@ -310,7 +311,12 @@ class IndependentSearch:
             if session:
                 session.allowed_origins = origins
             completed, active, attempted, reused = queue.Queue(), {}, 0, 0
-            by_url = {page.url: page for page in cached_pages}
+            by_url = {}
+            for page in cached_pages:
+                by_url[page.url] = page
+                req = getattr(page, 'requested_url', None)
+                if req and req not in by_url:
+                    by_url[req] = page
             active_origins = set()
 
             native_seen = set()
@@ -360,6 +366,12 @@ class IndependentSearch:
                     entry = heapq.heappop(frontier)
                     _, _, url, depth, map_depth = entry
                     origin = origin_of(url)
+                    lookup_url = self.cache.get_alias(url) if hasattr(self.cache, 'get_alias') else None
+                    if lookup_url and lookup_url in by_url:
+                        page = by_url.pop(lookup_url)
+                        consume(page, depth, map_depth)
+                        reused += 1
+                        continue
                     if url in by_url:
                         page = by_url.pop(url)
                         consume(page, depth, map_depth)
@@ -402,8 +414,14 @@ class IndependentSearch:
                             if use_cache:
                                 ttl = 0 if q.intent == 'financial' else self.settings.cache_ttl_news if q.fresh_intent else None
                                 self.cache.put(page.url, page, ttl=ttl)
+                                req = getattr(page, 'requested_url', None)
+                                if req and req != page.url:
+                                    self.cache.put_alias(req, page.url, ttl=ttl)
                         else:
                             self.cache.put(page.url, page)
+                            req = getattr(page, 'requested_url', None)
+                            if req and req != page.url:
+                                self.cache.put_alias(req, page.url)
                         consume(page, depth, map_depth)
                         statuses.append({'url': page.url, 'status': 'fetched', 'kind': page.kind})
                         if on_progress and page.item:
@@ -418,8 +436,16 @@ class IndependentSearch:
                             except Exception:
                                 pass
                         matching = [c for c in candidates if terms and any(t in c.title.lower() or t in c.content[:2000].lower() for t in terms)]
-                        if len(matching) >= limit or (matching and time.perf_counter() - started > 2.0):
+                        if len(matching) >= limit:
                             break
+                        if matching:
+                            elapsed = time.perf_counter() - started
+                            if answer_mode:
+                                early_ans = _build_answer(matching, q, query)
+                                if early_ans and early_ans.get('type') in ('code', 'summary'):
+                                    break
+                            if elapsed > 1.2 or (len(matching) >= min(limit, 3) and attempted >= 2):
+                                break
             unfinished = len(active)
             if unfinished:
                 statuses.extend({'url': url, 'status': 'unfinished', 'detail': 'Deadline reached; late content excluded.'} for url in active)
@@ -441,7 +467,7 @@ class IndependentSearch:
             if use_cache and self.settings.persistent_cache_enabled and self.settings.source_memory_enabled:
                 self.cache.remember(selected)
             answer = _build_answer(selected, q, query) if answer_mode else None
-            timed_out = bool(unfinished or any(row['status'] == 'timeout' for row in statuses))
+            timed_out = bool(time.monotonic() >= deadline or any(row['status'] == 'timeout' for row in statuses))
             if timed_out:
                 notes.append('Some pages exceeded a crawl deadline; unfinished content was excluded.')
             if fetch_pages and frontier:
@@ -463,7 +489,7 @@ class IndependentSearch:
                                  'unfinished_pages': unfinished, 'exhaustive': False},
                     'cached': bool(selected) and all(item.cached for item in selected),
                     'timed_out': timed_out, 'took_ms': took, 'cache': self.cache.stats()}
-            if use_cache and not timed_out:
+            if use_cache and bool(selected):
                 self.cache.put_query_result(cache_key, out_result, ttl=self.settings.cache_ttl)
             return out_result
         finally:
