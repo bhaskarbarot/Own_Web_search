@@ -465,6 +465,62 @@
     font-weight: 600;
     margin-top: 6px;
   }
+  .code-box {
+    background: #0f172a !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    margin: 14px 0;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .code-box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+    padding: 8px 14px;
+  }
+  .code-lang-tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #38bdf8;
+  }
+  .code-copy-btn {
+    background: #334155;
+    border: 1px solid #475569;
+    color: #f8fafc;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .code-copy-btn:hover {
+    background: #475569;
+    color: white;
+  }
+  .code-box pre {
+    margin: 0 !important;
+    padding: 16px !important;
+    overflow-x: auto !important;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Menlo, monospace !important;
+    font-size: 13.5px !important;
+    line-height: 1.6 !important;
+    background: #0f172a !important;
+    color: #f1f5f9 !important;
+    border: none !important;
+    border-radius: 0 0 10px 10px !important;
+  }
+  .code-box code {
+    font-family: inherit !important;
+    color: #f1f5f9 !important;
+    background: transparent !important;
+    white-space: pre !important;
+    display: block !important;
+  }
 
   /* Result Articles */
   #results {
@@ -573,7 +629,7 @@
   }
 
   /* JSON Details Inspector */
-  pre {
+  #raw, details pre {
     font-family: var(--font-mono);
     font-size: 12.5px;
     line-height: 1.5;
@@ -881,10 +937,45 @@ function showAnswer(answer, status) {
     }
     return;
   }
-  const headings = {extractive:'Extractive Answer — Grounded in Source Excerpt', stock_quote:'Market Quote', stock_history:'Price History', headlines:'Publisher-Dated Headlines'};
+  const headings = {
+    code: 'Featured Code Implementation',
+    summary: 'Executive Summary',
+    extractive: 'Extractive Answer — Grounded in Source Excerpt',
+    stock_quote: 'Market Quote',
+    stock_history: 'Price History',
+    headlines: 'Publisher-Dated Headlines'
+  };
+  const badges = {
+    code: '💻 Code Snippet',
+    summary: '📖 Summary',
+    extractive: 'Key Takeaway'
+  };
   const headerDiv = node('div', undefined, 'answer-header');
-  headerDiv.append(node('span', 'Key Takeaway', 'answer-badge'), node('h2', headings[answer.type] || 'Direct Answer'));
-  section.append(headerDiv, node('div', answer.text || '', 'answer-text'));
+  headerDiv.append(node('span', badges[answer.type] || 'Key Takeaway', 'answer-badge'), node('h2', headings[answer.type] || 'Direct Answer'));
+
+  if (answer.type === 'code' || answer.code) {
+    const codeBox = node('div', undefined, 'code-box');
+    const codeHeader = node('div', undefined, 'code-box-header');
+    const langTag = node('span', (answer.language || 'code').toUpperCase(), 'code-lang-tag');
+    const copyBtn = node('button', '📋 Copy Code', 'code-copy-btn');
+    const rawCode = answer.code || (answer.text || '').replace(/^```[a-zA-Z0-9]*\n/, '').replace(/\n```$/, '');
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(rawCode).then(() => {
+        copyBtn.textContent = '✅ Copied!';
+        setTimeout(() => copyBtn.textContent = '📋 Copy Code', 2000);
+      });
+    });
+    codeHeader.append(langTag, copyBtn);
+    const pre = node('pre');
+    pre.style.cssText = 'margin:0;padding:16px;overflow-x:auto;font-family:JetBrains Mono,Fira Code,monospace;font-size:13.5px;line-height:1.6;background:#0f172a;color:#f8fafc;border:none;display:block;';
+    const codeElem = node('code', rawCode);
+    codeElem.style.cssText = 'font-family:inherit;color:#f8fafc;background:transparent;white-space:pre;display:block;';
+    pre.append(codeElem);
+    codeBox.append(codeHeader, pre);
+    section.append(headerDiv, codeBox);
+  } else {
+    section.append(headerDiv, node('div', answer.text || '', 'answer-text'));
+  }
   
   const sources = [answer.source, ...(Array.isArray(answer.citations) ? answer.citations : [])];
   const seen = new Set();

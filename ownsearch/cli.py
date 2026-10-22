@@ -23,6 +23,8 @@ def main(argv=None):
     search.add_argument('--cache-only', action='store_true')
     search.add_argument('--json', action='store_true')
     search.add_argument('--markdown', action='store_true')
+    search.add_argument('--format', '-f', choices=('text', 'code', 'markdown', 'json'), default=None,
+                        help='Agent output format: text, code (only code snippet), markdown (Firecrawl style), json')
     search.add_argument('--pdf', default=None, help='Export results to PDF file')
     serve_parser = sub.add_parser('serve')
     serve_parser.add_argument('--host', default='127.0.0.1')
@@ -93,9 +95,11 @@ def main(argv=None):
         if args.pdf:
             res_obj.to_pdf(args.pdf)
             print(f"Results exported to {args.pdf}")
-        elif args.markdown:
+        elif args.format == 'code':
+            print(res_obj.code)
+        elif args.format == 'markdown' or args.markdown:
             print(res_obj.to_markdown())
-        elif args.json:
+        elif args.format == 'json' or args.json:
             print(res_obj.to_json())
         else:
             print(res_obj.text)

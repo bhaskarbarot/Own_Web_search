@@ -223,7 +223,8 @@ class WebFetchSession(Fetcher):
                             final_url, content=ext.text[:self.settings.max_text_chars],
                             headings=ext.headings[:50], language=ext.lang, fetched_at=utc_now(),
                             content_type=response.content_type, http_status=response.status,
-                            detected_kind=ext.source_type if ext.kind == 'office' else ext.kind)
+                            detected_kind=ext.source_type if ext.kind == 'office' else ext.kind,
+                            markdown=ext.markdown, code_blocks=ext.code_blocks)
         canonical = web_url(ext.canonical, self.settings.allow_private_hosts)
         if canonical and origin_of(canonical) == origin_of(final_url):
             item.canonical = canonical

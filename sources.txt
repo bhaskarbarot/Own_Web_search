@@ -32,4 +32,10 @@ https://www.tomshardware.com/	Computer hardware reviews, desktop PC specificatio
 https://archive.org/	Internet Archive digital library, historical web archives, open books, public domain texts and audio.
 https://plato.stanford.edu/	Stanford Encyclopedia of Philosophy, peer-reviewed academic reference covering logic, philosophy of science, and history.
 https://ocw.mit.edu/	MIT OpenCourseWare free lecture notes, exams, courses, and educational videos across computer science and engineering.
+https://www.geeksforgeeks.org/	Computer science algorithms, data structures, programming language tutorials (Python, C++, Java), and coding problems.
+https://www.programiz.com/	Programming tutorials, Python examples, algorithms, palindrome, fibonacci, and data structures.
+https://realpython.com/	Python programming tutorials, code examples, best practices, and standard library guides.
+https://www.w3schools.com/python/	Python tutorial references, code examples, string methods, and exercises.
+https://www.britannica.com/	Encyclopedia Britannica biographies, history, science, and world knowledge.
 https://data.worldbank.org/	World Bank open global development data, country economic indicators, population statistics and research reports.
+

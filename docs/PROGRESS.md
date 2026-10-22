@@ -312,3 +312,43 @@ Resolved live query search freezes and improved entity path expansion across div
 4. Test Suite:
    - 147 / 147 unit tests pass in standard Python.
    - 147 / 147 unit tests pass under `python3 -S` (standard library only).
+
+# Phase: Firecrawl-Grade Markdown, Direct Code/Answer Extraction & Agent Tool Pipeline (2026-10-22)
+
+Upgraded OwnSearch from returning truncated 160-character plain text snippets into a Firecrawl- and DuckDuckGo-grade AI-agent web search engine that extracts full structured Markdown, dedicated code blocks, and substantive lead summaries:
+
+1. HTML-to-Markdown & Code Block Extractor (`ownsearch/extract/html.py`):
+   - Preserves semantic Markdown headers (`#`, `##`, `###`), lists (`- `), and fenced code blocks (` ```<language>\n...\n``` `) with exact indentation, newlines, and syntax identifiers.
+   - Automated programming language detection (`python`, `javascript`, `typescript`, `sql`, `rust`, `cpp`, etc.) from tag classes and syntax tokens.
+   - Populates `markdown` and structured `code_blocks` on `Extracted` and `WebCandidate` records while maintaining clean unformatted text for BM25F indexing.
+
+2. Direct Code & Substantive Lead Summary Answer Extractor (`ownsearch/evidence.py`, `ownsearch/coordinator.py`):
+   - `extract_code_answer()`: Scores candidate code blocks against query terms and functional code keywords. Directly extracts working code blocks for programming queries into `answer` (`type: 'code'`).
+   - `extract_lead_summary()`: Filters out encyclopedic navigation/infobox boilerplates (`Tools Actions General...`, `From Wikipedia...`, `(Redirected from...)`) to extract clean 2-3 paragraph introductory biographical/definitional summaries for entity queries (`who is gandhiji`, `what is photosynthesis`).
+   - Grounded citations and source attribution links maintained.
+
+3. 80/20 Coding Tutorial Hub Expansion (`sources.txt`, `ownsearch/coordinator.py`):
+   - Added algorithm and programming tutorial authorities: GeeksforGeeks (`geeksforgeeks.org`), Programiz (`programiz.com`), Real Python (`realpython.com`), W3Schools (`w3schools.com`), and Britannica (`britannica.com`).
+   - Integrated algorithmic slug generation for coding solutions (e.g. `/python-programming/examples/palindrome`, `/python-program-check-string-palindrome-not/`).
+
+4. AI Agent Public Tool API & CLI Enhancements (`ownsearch/tool.py`, `ownsearch/cli.py`):
+   - Agent output formats: `output="text"` (answer text/code first, then sources), `output="code"` (only working code block for coding agents), `output="markdown"` (Firecrawl-style structured markdown with headers and code fences), `output="json"`.
+   - `SearchResults.code` property for direct functional code access.
+   - CLI option `--format` / `-f` (`text`, `code`, `markdown`, `json`).
+
+5. Modern Web UI Featured Code Box & Summary Card (`ownsearch/resources/search.html`):
+   - Featured code cards render in a modern dark code editor container (`#0f172a`) with JetBrains Mono typography, language badge (`PYTHON`), and 1-click `📋 Copy Code` button that turns into `✅ Copied!`.
+   - Executive summaries render clean biographical text with source cards.
+
+6. Validation & Benchmark:
+   - 150 / 150 unit tests pass in standard Python environment (`test_markdown_and_code_blocks_extraction`, `test_search_tool_output_formats`, `test_code_and_lead_summary_answer`).
+   - 150 / 150 unit tests pass under `python3 -S` (standard library only, zero external packages).
+   - Benchmark (`eval/runs/independent/fixture-upgrade5.json`):
+     - Recall@10: 1.000 (100%)
+     - Fixture strict P@5: 0.23636
+     - Cold p50: 56.047 ms, Cold p95: 290.521 ms
+     - Warm p50: 5.636 ms, Warm p95: 9.398 ms
+     - Warm network requests: 0 (local-first cache retrieval)
+     - 300 DEV queries parsed, 0 sealed queries touched, all checksums preserved.
+   - Visual E2E validation: verified `who is gandhiji` and `palindrome code in python` with screenshots `gandhiji_lead_summary.png` and `palindrome_featured_code.png`.
+

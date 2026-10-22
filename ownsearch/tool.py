@@ -34,7 +34,14 @@ class SearchResults:
         """Formatted human-readable and LLM-friendly text with links and citations."""
         lines = []
         if self.answer:
-            lines.append(f"Answer: {self.answer.get('text', '')}")
+            ans_type = self.answer.get('type')
+            ans_text = self.answer.get('text', '')
+            if ans_type == 'code':
+                lines.append(f"Answer (Code):\n{ans_text}")
+            elif ans_type == 'summary':
+                lines.append(f"Summary:\n{ans_text}")
+            else:
+                lines.append(f"Answer: {ans_text}")
             citations = self.answer.get('citations', [])
             if citations:
                 c_str = ", ".join(f"[{c.get('title', 'link')}]({c.get('url', '')})" for c in citations)
@@ -66,8 +73,51 @@ class SearchResults:
 
         return "\n".join(lines).strip()
 
+    @property
+    def code(self) -> str:
+        """Extract only the code snippet (ideal for coding agents)."""
+        if self.answer and self.answer.get('type') == 'code':
+            return self.answer.get('code', '') or self.answer.get('text', '')
+        for r in self.results:
+            cbs = r.get('code_blocks', [])
+            if cbs and cbs[0].get('code'):
+                return cbs[0]['code']
+        return ""
+
     def to_markdown(self) -> str:
-        return self.text
+        """Firecrawl-style structured Markdown with headings and code blocks."""
+        lines = []
+        if self.answer:
+            ans_type = self.answer.get('type')
+            ans_text = self.answer.get('text', '')
+            if ans_type == 'code':
+                lines.append(f"## Direct Answer (Code)\n\n{ans_text}\n")
+            elif ans_type == 'summary':
+                lines.append(f"## Direct Answer (Summary)\n\n{ans_text}\n")
+            else:
+                lines.append(f"## Direct Answer\n\n{ans_text}\n")
+            citations = self.answer.get('citations', [])
+            if citations:
+                c_str = ", ".join(f"[{c.get('title', 'Source')}]({c.get('url', '')})" for c in citations)
+                lines.append(f"**Sources**: {c_str}\n")
+            lines.append("--------------------------------------------------------------------------------\n")
+
+        if self.results:
+            for r in self.results:
+                rank = r.get('rank', '')
+                title = r.get('title', '')
+                url = r.get('url', '')
+                md_desc = r.get('markdown', '') or r.get('snippet', '')
+                lines.append(f"Result {rank}")
+                lines.append(f"Title: {title}")
+                lines.append(f"URL: {url}")
+                if md_desc:
+                    lines.append(f"Description:\n{md_desc}\n")
+                lines.append("--------------------------------------------------------------------------------\n")
+        else:
+            lines.append(f"No results found for '{self.query}'.")
+
+        return "\n".join(lines).strip()
 
     def to_dict(self) -> Dict[str, Any]:
         return self.raw
@@ -110,7 +160,7 @@ def search_tool(
     time_budget_s: Optional[float] = None,
     use_cache: bool = True,
     cache_ttl: Optional[Union[str, float]] = None,
-    output: str = "text",
+    output: Optional[str] = None,
     include_passages: bool = True,
     include_images: bool = False,
     export: Optional[str] = None,
@@ -185,6 +235,10 @@ def search_tool(
         return results_obj.to_dict()
     elif output == 'markdown':
         return results_obj.to_markdown()
+    elif output == 'code':
+        return results_obj.code
+    elif output == 'text':
+        return results_obj.text
     return results_obj
 
 

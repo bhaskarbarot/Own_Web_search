@@ -149,3 +149,106 @@ def snippet_from(passage_text, surface, max_len=320):
 
 def surface_words(raw):
     return [w for w in tokenize(raw) if len(w) > 1]
+
+
+def extract_code_answer(candidate, query_terms=(), query=""):
+    """Extract the most relevant functional code snippet for coding/algorithm queries."""
+    if not candidate or getattr(candidate, "injection_risk", False):
+        return None
+    code_blocks = getattr(candidate, "code_blocks", []) or []
+    if not code_blocks and getattr(candidate, "markdown", ""):
+        fences = re.findall(r"```([a-zA-Z0-9_+-]*)\n(.*?)\n```", candidate.markdown, re.DOTALL)
+        code_blocks = [{"language": lang, "code": code.strip(), "heading": ""} for lang, code in fences]
+    
+    if not code_blocks:
+        return None
+
+    query_words = set(surface_words(query)) if query else set()
+    terms = set(t.lower() for t in query_terms) | query_words
+    
+    best_score = -1.0
+    best_block = None
+
+    for block in code_blocks:
+        code = block.get("code", "").strip()
+        if len(code) < 15 or len(code) > 8000:
+            continue
+        heading = (block.get("heading", "") or "").lower()
+        code_lower = code.lower()
+        
+        score = 0.0
+        for t in terms:
+            if not t or len(t) < 2: continue
+            if t in heading:
+                score += 3.0
+            if t in code_lower:
+                score += 1.5
+        
+        if any(k in code_lower for k in ("def ", "return ", "function ", "class ", "print(", "for ", "while ")):
+            score += 2.0
+        if "python" in terms and block.get("language") == "python":
+            score += 2.0
+
+        if score > best_score:
+            best_score = score
+            best_block = block
+
+    if best_block and (best_score >= 2.0 or len(code_blocks) == 1):
+        lang = best_block.get("language") or ("python" if ("python" in terms or "def " in best_block["code"]) else "")
+        return {
+            "type": "code",
+            "language": lang,
+            "code": best_block["code"],
+            "text": f"```{lang}\n{best_block['code']}\n```",
+            "heading": best_block.get("heading", ""),
+            "citations": [{"url": candidate.url, "title": candidate.title, "fetched_at": candidate.fetched_at}],
+            "disclaimer": "Extracted code snippet from verified source."
+        }
+    return None
+
+
+def extract_lead_summary(candidate, query_terms=(), max_chars=750):
+    """Extract a multi-paragraph, fluent lead summary from an authoritative page."""
+    if not candidate or getattr(candidate, "injection_risk", False):
+        return None
+    text = candidate.content or ""
+    if not text or len(text) < 100:
+        return None
+
+    # Try finding the substantive lead introductory paragraph
+    lines = [line.strip() for line in text.split("\n") if len(line.strip()) > 50]
+    lead_para = None
+    for line in lines[:30]:
+        line_low = line.lower()
+        if any(b in line_low for b in ("this is a good article", "redirects here", "click here", "from wikipedia", "disambiguation")):
+            continue
+        if re.search(r"\b(?:was|is|are|were)\s+(?:an?|the|one of|widely|considered|known|defined|located|situated|regarded)\b", line, re.I):
+            lead_para = line
+            break
+
+    candidate_text = lead_para if lead_para else text
+    cleaned = re.sub(r"\[(?:\d+|[A-Za-z0-9\s,.-]{1,20})\]", "", candidate_text)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+
+    if len(cleaned) <= max_chars:
+        summary = cleaned
+    else:
+        cut = cleaned.rfind(". ", 200, max_chars)
+        if cut > 180:
+            summary = cleaned[:cut + 1].strip()
+        else:
+            cut2 = cleaned.rfind(". ", max_chars, max_chars + 150)
+            if cut2 > 0:
+                summary = cleaned[:cut2 + 1].strip()
+            else:
+                summary = cleaned[:max_chars].rsplit(" ", 1)[0] + "…"
+
+    if len(summary) >= 80:
+        return {
+            "type": "summary",
+            "text": summary,
+            "citations": [{"url": candidate.url, "title": candidate.title, "fetched_at": candidate.fetched_at}],
+            "disclaimer": "Extracted lead summary; grounded in primary article."
+        }
+    return None
+

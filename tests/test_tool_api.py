@@ -90,5 +90,59 @@ class ToolApiTests(unittest.TestCase):
         tools = lines[1]['result']['tools']
         self.assertEqual(tools[0]['name'], 'search')
 
+    def test_search_tool_output_formats(self):
+        engine = IndependentSearch(settings(max_pages_per_query=1))
+        # Test output="markdown" (Firecrawl style)
+        md = search_tool('orbital guidance', seeds=[self.site.base + '/guide'], output='markdown', engine=engine)
+        self.assertIsInstance(md, str)
+        self.assertIn("Title:", md)
+        self.assertIn("URL:", md)
+        self.assertIn(self.site.base + '/guide', md)
+
+        # Test output="text"
+        txt = search_tool('orbital guidance', seeds=[self.site.base + '/guide'], output='text', engine=engine)
+        self.assertIsInstance(txt, str)
+        self.assertIn(self.site.base + '/guide', txt)
+
+        # Test output="json"
+        js = search_tool('orbital guidance', seeds=[self.site.base + '/guide'], output='json', engine=engine)
+        self.assertIsInstance(js, dict)
+        self.assertEqual(js['mode'], 'independent')
+
+    def test_code_and_lead_summary_answer(self):
+        from ownsearch.evidence import extract_code_answer, extract_lead_summary
+        from ownsearch.webmodels import WebCandidate
+
+        cand = WebCandidate(
+            title="Python Palindrome Program",
+            url="https://example.org/palindrome",
+            content="A palindrome string is a string that reads the same backwards and forwards. For example, radar or noon are palindromes. In Python, checking a palindrome can be done using slicing or reversed string functions.",
+            code_blocks=[{
+                "code": "def is_palindrome(s):\n    return s == s[::-1]",
+                "language": "python",
+                "heading": "Using Slicing"
+            }]
+        )
+
+        code_ans = extract_code_answer(cand, query_terms=["palindrome", "code", "python"], query="how to write palindrome code in python")
+        self.assertIsNotNone(code_ans)
+        self.assertEqual(code_ans["type"], "code")
+        self.assertEqual(code_ans["language"], "python")
+        self.assertIn("return s == s[::-1]", code_ans["code"])
+        self.assertEqual(code_ans["citations"][0]["url"], "https://example.org/palindrome")
+
+        # Knowledge / Lead Summary test
+        gandhi_cand = WebCandidate(
+            title="Mahatma Gandhi - Wikipedia",
+            url="https://en.wikipedia.org/wiki/Mahatma_Gandhi",
+            content="Mohandas Karamchand Gandhi was an Indian lawyer, anti-colonial nationalist and political ethicist who employed nonviolent resistance to lead the successful campaign for India's independence from British rule. He inspired movements for civil rights and freedom across the world."
+        )
+        lead_ans = extract_lead_summary(gandhi_cand, query_terms=["gandhiji", "who"])
+        self.assertIsNotNone(lead_ans)
+        self.assertEqual(lead_ans["type"], "summary")
+        self.assertIn("Mohandas Karamchand Gandhi was an Indian lawyer", lead_ans["text"])
+        self.assertIn("anti-colonial nationalist", lead_ans["text"])
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -34,6 +34,26 @@ MODIFIED_META = ("article:modified_time", "og:updated_time", "datemodified", "dc
                  "dc.date.modified")
 
 
+def _detect_code_lang(attrs_str, code):
+    m = re.search(r"\b(?:language|lang)-([a-zA-Z0-9_+-]+)", attrs_str, re.I)
+    if m:
+        lang = m.group(1).lower()
+        if lang in ("python", "py"): return "python"
+        if lang in ("javascript", "js"): return "javascript"
+        if lang in ("typescript", "ts"): return "typescript"
+        return lang
+    for l in ("python", "javascript", "typescript", "bash", "sql", "rust", "cpp", "c", "html", "css", "json"):
+        if re.search(rf"\b{l}\b", attrs_str, re.I):
+            return l
+    if re.search(r"(?:^\s*def\s+\w+|^\s*import\s+\w+|^\s*from\s+\w+\s+import|class\s+\w+:|print\()", code, re.M):
+        return "python"
+    if re.search(r"(?:^\s*function\s+\w+|^\s*const\s+\w+\s*=|^\s*let\s+\w+\s*=|console\.log\()", code, re.M):
+        return "javascript"
+    if re.search(r"^\s*(?:SELECT\s+|INSERT\s+INTO|CREATE\s+TABLE)", code, re.I | re.M):
+        return "sql"
+    return ""
+
+
 class _Parser(HTMLParser):
     def __init__(self, base_url):
         super().__init__(convert_charrefs=True)
@@ -47,6 +67,12 @@ class _Parser(HTMLParser):
         self.cur_zone = "normal"
         self.headings = []
         self.heading_buf = None
+        self.current_heading = ""
+        self.markdown_blocks = []
+        self.code_blocks = []
+        self.in_pre = 0
+        self.code_buf = []
+        self.code_lang = ""
         self.links = []
         self.link_buf = None
         self.meta = {}
@@ -78,6 +104,8 @@ class _Parser(HTMLParser):
                         and self.cur_link_chars > 0.6 * len(text.replace(" ", ""))):
                     zone = "boiler"
                 self.blocks[zone].append(text)
+                if not self.in_pre and self.heading_buf is None:
+                    self.markdown_blocks.append((zone, text))
             self.cur = []
         self.cur_link_chars = 0
 
@@ -148,6 +176,15 @@ class _Parser(HTMLParser):
             self.in_title = True
         elif tag in HEADINGS and not (self.skip or self.hidden):
             self.heading_buf = []
+        elif tag == "pre" and not (self.skip or self.hidden):
+            self.in_pre += 1
+            attrs_str = " ".join(f"{k} {v}" for k, v in attrs)
+            self.code_lang = _detect_code_lang(attrs_str, "")
+            self.code_buf = []
+        elif tag == "code" and self.in_pre and not (self.skip or self.hidden):
+            if not self.code_lang:
+                attrs_str = " ".join(f"{k} {v}" for k, v in attrs)
+                self.code_lang = _detect_code_lang(attrs_str, "")
         elif tag == "a":
             href = self._abs(a.get("href"))
             if href:
@@ -187,8 +224,33 @@ class _Parser(HTMLParser):
         elif tag in HEADINGS and self.heading_buf is not None:
             text = normalize_text(" ".join(self.heading_buf))
             if text:
-                self.headings.append((HEADINGS[tag], text[:300]))
+                level = HEADINGS.get(tag, 2)
+                self.headings.append((level, text[:300]))
+                self.current_heading = text[:300]
+                self.markdown_blocks.append((self.cur_zone, f"{'#' * level} {text[:300]}"))
             self.heading_buf = None
+        elif tag == "pre":
+            if self.in_pre > 0:
+                self.in_pre -= 1
+            code_text = "".join(self.code_buf).rstrip()
+            lines = code_text.splitlines()
+            while lines and not lines[0].strip():
+                lines.pop(0)
+            clean_code = "\n".join(lines).rstrip()
+            if len(clean_code) >= 10:
+                lang = self.code_lang or _detect_code_lang("", clean_code)
+                self.code_blocks.append({
+                    "code": clean_code,
+                    "language": lang or ("python" if any(k in clean_code for k in ("def ", "import ", "print(")) else ""),
+                    "heading": self.current_heading
+                })
+                self.markdown_blocks.append((self.cur_zone, f"```{lang}\n{clean_code}\n```"))
+            self.code_buf = []
+            self.code_lang = ""
+        elif tag == "li" and self.markdown_blocks:
+            z, t = self.markdown_blocks[-1]
+            if not t.startswith(("- ", "#", "```")):
+                self.markdown_blocks[-1] = (z, f"- {t}")
         elif tag == "a" and self.link_buf is not None:
             href, parts, nofollow = self.link_buf
             if len(self.links) < 5000:
@@ -207,6 +269,8 @@ class _Parser(HTMLParser):
             return
         if self.skip:
             return
+        if self.in_pre > 0 and not self.hidden:
+            self.code_buf.append(data)
         text = data.strip()
         if not text:
             if self.cur:
@@ -282,6 +346,21 @@ def extract_html(html, base_url=""):
         body = "\n".join(x for x in (main_text, normal_text) if x)
         if len(body) < 80:
             body = "\n".join(x for x in (body, "\n".join(p.blocks["boiler"])) if x)
+
+    main_md = [text for zone, text in p.markdown_blocks if zone == "main"]
+    if len("\n\n".join(main_md)) >= 200:
+        md_body = "\n\n".join(main_md)
+    else:
+        normal_md = [text for zone, text in p.markdown_blocks if zone != "boiler"]
+        md_body = "\n\n".join(normal_md)
+        if len(md_body) < 80:
+            md_body = "\n\n".join(text for zone, text in p.markdown_blocks)
+
+    if title and not md_body.startswith(f"# {title}"):
+        markdown_output = f"# {title}\n\n{md_body}".strip()
+    else:
+        markdown_output = md_body.strip()
+
     robots = (meta.get("robots", "") + "," + meta.get("ownsearchbot", "")).lower()
     published = None
     for key in DATE_META:
@@ -309,6 +388,8 @@ def extract_html(html, base_url=""):
     return {
         "title": title[:1000],
         "text": clean_multiline(body),
+        "markdown": markdown_output,
+        "code_blocks": p.code_blocks,
         "headings": [h for _, h in p.headings[:100]],
         "description": description[:2000],
         "links": p.links,

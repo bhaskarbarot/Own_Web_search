@@ -47,6 +47,33 @@ class HtmlTests(unittest.TestCase):
         r = extract_html("<html><body><p>unclosed <b>bold <i>italic</p> text</div></span><p>after</body>")
         self.assertIn("after", r["text"])
 
+    def test_markdown_and_code_blocks_extraction(self):
+        html = """
+        <html><head><title>Python Palindrome Guide</title></head>
+        <body>
+        <h1>Python Program to Check Palindrome</h1>
+        <p>A palindrome is a string that reads the same backward as forward.</p>
+        <h2>Using Slicing</h2>
+        <pre><code class="language-python">
+def is_palindrome(s):
+    return s == s[::-1]
+
+print(is_palindrome("radar"))
+        </code></pre>
+        <ul><li>Time Complexity: O(n)<li>Space Complexity: O(1)</ul>
+        </body></html>
+        """
+        r = extract_html(html, "https://example.org/palindrome")
+        self.assertIn("# Python Program to Check Palindrome", r["markdown"])
+        self.assertIn("## Using Slicing", r["markdown"])
+        self.assertIn("```python", r["markdown"])
+        self.assertIn("def is_palindrome(s):", r["markdown"])
+        self.assertEqual(len(r["code_blocks"]), 1)
+        cb = r["code_blocks"][0]
+        self.assertEqual(cb["language"], "python")
+        self.assertIn("return s == s[::-1]", cb["code"])
+        self.assertEqual(cb["heading"], "Using Slicing")
+
 
 class PdfTests(unittest.TestCase):
     def test_pdf_pages_and_metadata(self):

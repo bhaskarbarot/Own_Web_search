@@ -47,6 +47,8 @@ class WebCandidate:
     http_status: int = None
     language: str = None
     content: str = ''
+    markdown: str = ''
+    code_blocks: list = field(default_factory=list)
     headings: list = field(default_factory=list)
     links: list = field(default_factory=list)
     feeds: list = field(default_factory=list)
@@ -66,6 +68,8 @@ class WebCandidate:
         result = {'rank': rank, 'title': self.title, 'url': self.url, 'display_url': self.url,
                   'host': urlsplit(self.url).hostname,
                   'snippet': sentence_excerpt(self.evidence[0]['text'], query_terms=query_terms) if self.evidence else (sentence_excerpt(self.content, query_terms=query_terms) if self.content else self.snippet),
+                  'markdown': self.markdown,
+                  'code_blocks': self.code_blocks,
                   'score': round(self.score, 6), 'source_provider': self.provider,
                   'source_type': self.source_type, 'published_at': self.published_at,
                   'fetched_at': self.fetched_at, 'lang': self.language,

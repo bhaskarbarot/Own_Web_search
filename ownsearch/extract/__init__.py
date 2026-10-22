@@ -25,6 +25,8 @@ class Extracted:
     title: str = ""
     text: str = ""
     headings: list = field(default_factory=list)
+    markdown: str = ""
+    code_blocks: list = field(default_factory=list)
     description: str = ""
     lang: str = ""
     published_at: str = None
@@ -163,6 +165,7 @@ def extract(data, url, content_type="", settings=None, depth=0):
         from .html import extract_html
         r = extract_html(decode_text(data, content_type), url)
         return Extracted(kind="html", title=r["title"], text=r["text"], headings=r["headings"],
+                         markdown=r.get("markdown", ""), code_blocks=r.get("code_blocks", []),
                          description=r["description"], lang=r["lang"],
                          published_at=r["published_at"] or date_from_url(url), modified_at=r["modified_at"],
                          canonical=r["canonical"], links=r["links"], feeds=r["feeds"], noindex=r["noindex"],

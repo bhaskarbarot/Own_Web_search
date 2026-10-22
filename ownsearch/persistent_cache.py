@@ -106,7 +106,9 @@ class PersistentPageCache:
                     raise ValueError('Cache payload changed')
                 row = json.loads(raw)
                 if row.get('item'):
-                    row['item'] = WebCandidate(**row['item'])
+                    valid_keys = WebCandidate.__dataclass_fields__.keys()
+                    filtered = {k: v for k, v in row['item'].items() if k in valid_keys}
+                    row['item'] = WebCandidate(**filtered)
                 pages.append(CrawledPage(**row))
             except (ValueError, TypeError, zlib.error):
                 self.errors += 1
