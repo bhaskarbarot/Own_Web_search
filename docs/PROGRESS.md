@@ -426,3 +426,25 @@ Evaluated OwnSearch against the standardized Top 100 AI Agent Web Search Queries
 3. Unit Test Verification:
    - 152 / 152 tests pass in 16.9s.
    - Zero hardcoded queries, answers, or benchmark domains.
+
+# Phase: Curated Authority Hub Expansion & Deduplication (2026-10-22)
+
+Integrated user-curated authoritative sources across 26 domains (AI models, agent orchestration, search & IR evaluation, web archives, open data, government & law, developer tools, cloud infrastructure, hardware, and reference repositories).
+
+1. TSV Registry Expansion & Deduplication (`sources.txt`, `ownsearch/resources/sources.txt`):
+   - Integrated all recommended source seeds into the TSV registry (`<URL>\t<Description>`).
+   - Cleanly eliminated all duplicate canonical URLs while fusing multi-domain semantic descriptions into unified, high-density keyword profiles for source planning.
+   - Maintained strict structural synchronization between root `sources.txt` and packaged `ownsearch/resources/sources.txt`.
+   - Seed count expanded from 51 to 369 distinct, verified authority hubs.
+
+2. Source Planning & Routing Validation:
+   - Verified that `plan_sources` statistical TF-IDF routes queries to the correct domain seeds without any hardcoding:
+     - `Compare LangGraph, CrewAI, and AutoGen multi-agent architectures` -> `microsoft.github.io/autogen`, `docs.crewai.com`, `python.langchain.com`.
+     - `Find GST e-invoice portal tutorials` -> `einvoice.gst.gov.in`, `tutorial.gst.gov.in`, `gst.gov.in`.
+     - `PyTorch neural network training GPU memory optimization` -> `docs.pytorch.org/docs/stable/`, `keras.io`, `onnx.ai`.
+     - `Playwright browser automation session storage` -> `playwright.dev`, `selenium.dev`, `pptr.dev`.
+     - `Common Crawl URL index archived captures` -> `index.commoncrawl.org`, `data.commoncrawl.org`, `commoncrawl.org`.
+
+3. Unit Test Verification:
+   - 152 / 152 unit tests pass in 16.7s.
+

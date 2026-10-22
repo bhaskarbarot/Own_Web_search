@@ -1,52 +1,423 @@
 # User-editable TSV: starting URL<TAB>description. No query-specific URL/answer rules.
 # Sources remain eligible when similarity is uncertain. Website denials stay binding.
-https://en.wikipedia.org/	General encyclopedia: people, biographies, history, geography, science, definitions, products and concepts.
-https://docs.python.org/3/	Python programming language documentation, standard library modules, functions, reference manuals and tutorials.
-https://react.dev/	React official documentation, hooks, useEffect, state management, components and frontend architecture.
-https://www.postgresql.org/docs/	PostgreSQL relational database official documentation, connection pooling, SQL, administration and performance.
-https://docs.docker.com/	Docker container documentation, Docker Desktop troubleshooting, networking, Dockerfile, engine and compose.
-https://developer.mozilla.org/	MDN Web Docs: HTML, CSS, JavaScript, Web APIs, browser standards, and web development references.
-https://help.ubuntu.com/	Ubuntu Linux official community and server documentation, package management, administration and troubleshooting.
-https://askubuntu.com/	Ubuntu Linux community questions, command troubleshooting, nvidia-smi, git credentials, and system administration.
-https://stackoverflow.com/questions	Programming questions, code errors, debugging, language libraries, and developer explanations.
-https://doc.rust-lang.org/	Rust programming language official book, standard library reference, cargo documentation, and error indices.
-https://python.langchain.com/	LangChain and LangGraph official documentation, multi-agent systems, state persistence, human-in-the-loop and tool calling.
-https://huggingface.co/docs	Hugging Face machine learning models, transformers, datasets, model cards, CPU inference and open-weight LLMs.
-https://arxiv.org/	Scientific research preprints, computer science, machine learning, information retrieval, physics, mathematics, and RAG studies.
-https://paperswithcode.com/	Machine learning papers, open-source code implementations, benchmark evaluation leaderboards, and MTEB datasets.
-https://www.semanticscholar.org/	Scientific research literature search, academic citations, information retrieval evaluation, and author indices.
-https://feeds.bbci.co.uk/news/rss.xml	BBC publisher feed with dated world news, reporting, international events, and business journalism.
-https://www.bbc.com/news	BBC world news reporting, current events, politics, business, technology and science journalism.
-https://www.theguardian.com/world/rss	Guardian publisher feed with world news, current events, international reporting and opinion.
-https://news.ycombinator.com/rss	Hacker News technology links, software development discussions, startup announcements, and technical news.
-https://techcrunch.com/feed/	TechCrunch technology news feed, startup developments, AI model releases, venture funding and industry analysis.
-https://blog.python.org/feeds/posts/default	Python Software Foundation official blog and release announcements for Python versions and security updates.
-https://ubuntu.com/security/notices/rss.xml	Ubuntu Security Notices (USN) official advisory feed, package vulnerabilities, CVE identifiers and security patches.
-https://cve.mitre.org/	Common Vulnerabilities and Exposures (CVE) database, security advisory IDs, vulnerability summaries and affected software versions.
-https://www.gst.gov.in/	Goods and Services Tax (GST) India official portal, e-invoicing requirements, GST rules, returns and business compliance.
-https://www.cbic.gov.in/	Central Board of Indirect Taxes and Customs India official regulations, circulars, notifications and trade guidance.
-https://docs.erpnext.com/	ERPNext open-source enterprise resource planning documentation, accounting, inventory, GST compliance and invoicing.
-https://www.odoo.com/documentation/	Odoo open-source ERP and business applications official documentation, accounting, POS, inventory and sales.
-https://www.notebookcheck.net/	Laptop and mobile hardware reviews, notebook benchmarks, processor specs, RAM configurations, and GPU performance.
-https://www.tomshardware.com/	Computer hardware reviews, desktop PC specifications, SSD storage tests, RAM benchmarks, and PC build guides.
-https://archive.org/	Internet Archive digital library, historical web archives, open books, public domain texts and audio.
-https://plato.stanford.edu/	Stanford Encyclopedia of Philosophy, peer-reviewed academic reference covering logic, philosophy of science, and history.
-https://ocw.mit.edu/	MIT OpenCourseWare free lecture notes, exams, courses, and educational videos across computer science and engineering.
-https://www.geeksforgeeks.org/	Computer science algorithms, data structures, programming language tutorials (Python, C++, Java), and coding problems.
-https://www.programiz.com/	Programming tutorials, Python examples, algorithms, palindrome, fibonacci, and data structures.
-https://realpython.com/	Python programming tutorials, code examples, best practices, and standard library guides.
-https://www.w3schools.com/python/	Python tutorial references, code examples, string methods, and exercises.
-https://www.britannica.com/	Encyclopedia Britannica biographies, history, science, and world knowledge.
-https://data.worldbank.org/	World Bank open global development data, country economic indicators, population statistics and research reports.
-https://fastapi.tiangolo.com/	FastAPI official documentation, OAuth2 authentication, async SQL databases, dependency injection, and background tasks.
-https://docs.djangoproject.com/	Django web framework official documentation, models, REST framework, JWT authentication, and security.
-https://playwright.dev/	Playwright browser automation official documentation, session state, authentication, selectors, and API reference.
-https://nextjs.org/docs	Next.js React framework official documentation, server components, hydration error troubleshooting, routing, and deployment.
-https://redis.io/docs/	Redis database official documentation, distributed locking, in-memory caching, task queues, and data structures.
-https://supabase.com/docs	Supabase open-source backend platform official documentation, PostgreSQL database backups, authentication, and connection pooling.
-https://modelcontextprotocol.io/	Model Context Protocol (MCP) open standard specification, agent tool servers, clients, and integrations.
-https://owasp.org/	Open Web Application Security Project (OWASP) official guidance, SQL injection prevention, API security, and vulnerability mitigations.
-https://github.com/	GitHub open-source software repositories, developer code, issue discussions, Actions workflows, and security advisories.
-https://rbi.org.in/	Reserve Bank of India (RBI) official portal, monetary policy announcements, repo rate circulars, and banking regulations.
-https://pib.gov.in/	Press Information Bureau Government of India official releases, GDP growth statistics, technology policy announcements, and economic data.
 
+# Broad web archives and search infrastructure
+https://commoncrawl.org/	Large-scale open web crawl archive for discovering public webpages, historical captures, extracted text and metadata.
+https://index.commoncrawl.org/	Common Crawl URL index for discovering archived captures of webpages, finding archived web captures.
+https://data.commoncrawl.org/	Common Crawl crawl datasets, raw web data, extracted text and crawl metadata.
+https://www.openwebindex.eu/	Open Web Index project for web-index data, search infrastructure and open-web discovery.
+https://archive.org/	Internet Archive digital library for books, historical documents, websites, audio, video, software, historical web archives, open books, public domain texts.
+https://web.archive.org/	Wayback Machine for historical website captures and archived webpages.
+https://archive.org/advancedsearch.php	Internet Archive advanced search endpoint for discovering books, media and archived digital objects.
+https://archive.org/developers/	Internet Archive developer documentation, APIs, metadata and digital collection access.
+
+# Encyclopedias and general knowledge
+https://www.wikipedia.org/	General encyclopedia covering people, history, geography, science, technology and world knowledge.
+https://dumps.wikimedia.org/	Wikimedia data dumps for offline indexing of encyclopedia articles and related content.
+https://www.mediawiki.org/wiki/API:Main_page	MediaWiki API documentation for retrieving structured information from supported Wikimedia websites, structured queries, page retrieval.
+https://www.wikidata.org/	Wikidata structured knowledge graph containing entities, relationships, identifiers, multilingual facts, Structured facts about geographical entities, locations, related information, people, places, organizations, concepts.
+https://commons.wikimedia.org/	Wikimedia Commons images, illustrations, diagrams, maps, audio, video, other media, photographs, multimedia, other media files.
+https://wikisource.org/	Wikisource digital library of source texts, historical documents and public-domain publications.
+https://www.wikibooks.org/	Wikibooks educational books, manuals and learning resources.
+https://www.wikiversity.org/	Wikiversity learning resources, educational projects and study materials.
+https://www.wiktionary.org/	Wiktionary multilingual dictionary, definitions, etymology and language information.
+https://www.wikiquote.org/	Wikiquote quotations and attributed statements from historical and contemporary sources.
+https://www.wikivoyage.org/	Wikivoyage travel guides, destination information and geographical knowledge.
+https://www.britannica.com/	Encyclopedia Britannica reference articles on history, science, geography, general knowledge, biographies, world knowledge.
+https://www.encyclopedia.com/	Reference articles, biographies and general educational knowledge.
+https://www.loc.gov/	Library of Congress collections containing historical documents, books, photographs, maps, recordings, digital collections, reference materials.
+https://www.europeana.eu/	European cultural heritage collections, historical documents, photographs, digitized objects, historical records, digitized material, illustrations, digitized media.
+https://en.wikipedia.org/	General encyclopedia: people, biographies, history, geography, science, definitions, products and concepts.
+
+# Historical records and digital libraries
+https://www.gutenberg.org/	Project Gutenberg public-domain books and literary works.
+https://openlibrary.org/	Open Library book catalog, bibliographic metadata and book discovery.
+https://archive.org/details/texts	Internet Archive text collections, digitized books and documents.
+https://www.loc.gov/collections/	Library of Congress digital collections, manuscripts, photographs, newspapers and historical records.
+https://www.archives.gov/	US National Archives historical records, government documents and archival collections.
+https://www.nationalarchives.gov.uk/	UK National Archives historical records, government documents and archival research resources.
+https://www.si.edu/openaccess	Smithsonian Open Access collection of cultural objects, images, digitized materials, collection metadata.
+https://www.flickr.com/commons	Historical photographs from participating cultural institutions.
+https://www.bl.uk/	British Library collections, historical publications and digital research resources.
+https://www.digitallibrary.io/	Digital library discovery resource; verify current availability and collection access before integration.
+
+# PDFs, academic documents and open-access publications
+https://arxiv.org/	Scientific research preprints, computer science, machine learning, information retrieval, physics, mathematics, RAG studies, Scientific preprints covering computer science, AI, related research.
+https://export.arxiv.org/api/query	Official arXiv API endpoint for searching scholarly preprints and metadata.
+https://pmc.ncbi.nlm.nih.gov/	PubMed Central biomedical and life-sciences articles, including open-access full text.
+https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/	BioNLP API resources for biomedical text and related research services.
+https://pubmed.ncbi.nlm.nih.gov/	PubMed biomedical literature search, abstracts, publication metadata, citations, research abstracts.
+https://doaj.org/	Directory of Open Access Journals for discovering open-access scholarly publications.
+https://core.ac.uk/	CORE open-access research discovery service and scholarly content metadata.
+https://openalex.org/	Open catalog of scholarly works, authors, institutions, sources and research relationships.
+https://docs.openalex.org/	OpenAlex API documentation for scholarly metadata retrieval and research discovery.
+https://explore.openalex.org/	OpenAlex scholarly research explorer for finding publications, authors and institutions.
+https://www.semanticscholar.org/	Scientific research literature search, academic citations, information retrieval evaluation, author indices, academic search, research papers, citation relationships, author profiles.
+https://www.crossref.org/	Crossref scholarly metadata, publication identifiers, DOI information, DOI registration, publication records.
+https://api.crossref.org/	Crossref REST API for querying scholarly publication metadata, identifiers, API for DOI.
+https://www.doi.org/	DOI Foundation, digital object identifiers, persistent scholarly references, DOI Foundation information.
+https://zenodo.org/	Research publications, reports, datasets, software and supplementary research files.
+https://hal.science/	Research repository containing academic publications and scientific documents.
+https://explore.openaire.eu/	OpenAIRE discovery of research publications, datasets, projects and research outputs.
+https://dl.acm.org/	ACM Digital Library computer science research papers, conference publications, computing research.
+https://ieeexplore.ieee.org/	IEEE research papers, engineering publications, computer science literature, IEEE Xplore technical papers.
+https://proceedings.neurips.cc/	NeurIPS conference papers, machine learning research.
+https://proceedings.mlr.press/	Machine Learning Research conference proceedings, scientific papers.
+https://openreview.net/	Research paper submissions, reviews, publications across AI, machine learning, Research papers, peer reviews.
+https://www.nature.com/	Nature research publications, scientific articles, research reporting.
+https://www.science.org/	Science journal publications, scientific research, science news.
+https://plato.stanford.edu/	Stanford Encyclopedia of Philosophy, peer-reviewed academic reference covering logic, philosophy of science, history, scholarly articles on philosophy.
+https://iep.utm.edu/	Internet Encyclopedia of Philosophy reference articles and academic philosophy resources.
+https://unesdoc.unesco.org/	UNESCO digital library for education, science, culture and international policy documents.
+https://documents.worldbank.org/	World Bank reports, research papers, development documents and policy publications.
+https://ntrs.nasa.gov/	NASA Technical Reports Server for aerospace research, engineering documents and technical publications.
+https://patents.google.com/	Patent search and technical disclosures from patent offices around the world.
+https://worldwide.espacenet.com/	European Patent Office patent search and international patent documents.
+https://scholar.google.com/	Google Scholar academic literature search, citations and research publications.
+
+# Open educational resources and learning
+https://ocw.mit.edu/	MIT OpenCourseWare free lecture notes, exams, courses, educational videos across computer science, engineering, educational material, course materials, educational resources, lectures, technical instruction.
+https://openstax.org/	Open educational textbooks for science, mathematics, computing and other subjects.
+https://www.khanacademy.org/	Free educational resources in mathematics, science, computing, economics, Free educational lessons in mathematics, Educational videos, lessons across science.
+https://www.coursera.org/	Course discovery and educational resources; access and reuse vary by course.
+https://www.edx.org/	Online courses and educational materials from universities and institutions.
+https://www.oercommons.org/	Open educational resources, lesson plans and teaching materials.
+https://www.merlot.org/	Teaching and learning materials, educational resources and course content.
+https://www.ck12.org/	Free educational content, textbooks and interactive learning resources.
+https://www.freecodecamp.org/	Programming tutorials, coding exercises, software development learning materials, Free coding tutorials, software development education.
+https://developer.mozilla.org/	MDN Web Docs: HTML, CSS, JavaScript, Web APIs, browser standards, web development references, MDN documentation, MDN web development reference for HTML.
+https://web.dev/	Web development education, browser performance, accessibility, modern web standards, Web development guidance, browser compatibility, Core Web Vitals.
+
+# AI models, AI agents and machine learning
+https://platform.openai.com/docs	OpenAI API documentation, models, tools, function calling, integrations.
+https://developers.openai.com/	Official OpenAI developer documentation, APIs, agent development, platform guides.
+https://openai.com/news/	OpenAI official announcements, product releases, research updates, company news.
+https://docs.anthropic.com/	Anthropic API documentation, Claude models, tool use, agent development.
+https://www.anthropic.com/news	Anthropic official announcements, research, product updates, Anthropic official company announcements, research news.
+https://ai.google.dev/	Gemini API documentation, multimodal models, AI applications, developer tools, agent development.
+https://blog.google/	Google official announcements, products, research, technology updates, AI products, research news.
+https://deepmind.google/discover/blog/	Google DeepMind research, scientific publications, AI announcements.
+https://cloud.google.com/vertex-ai/docs	Google Cloud Vertex AI documentation, model deployment, AI applications.
+https://console.groq.com/docs	Groq API documentation, inference, supported models, tool calling.
+https://docs.together.ai/	Together AI documentation for hosted open models, inference, deployment, Together AI API documentation.
+https://docs.fireworks.ai/	Fireworks AI documentation for model inference, deployment, AI applications.
+https://docs.perplexity.ai/	Perplexity API documentation, online search, AI-powered research.
+https://docs.tavily.com/	Tavily API documentation, search, content extraction, AI-agent research, Tavily search API documentation for AI agents, web research, content retrieval.
+https://docs.exa.ai/	Exa API documentation, neural search, content retrieval, research workflows, semantic search, research applications.
+https://docs.crewai.com/	CrewAI documentation, multi-agent collaboration, tasks, workflows.
+https://microsoft.github.io/autogen/	AutoGen documentation, resources for multi-agent application development, AutoGen framework documentation.
+https://docs.llamaindex.ai/	LlamaIndex documentation, data ingestion, retrieval, agent workflows.
+https://python.langchain.com/	LangChain, LangGraph official documentation, multi-agent systems, state persistence, human-in-the-loop, tool calling, agent orchestration, memory.
+https://huggingface.co/docs	Hugging Face machine learning models, transformers, datasets, model cards, CPU inference, open-weight LLMs, Hugging Face documentation for models.
+https://huggingface.co/models	AI model discovery, model cards, model files and supported tasks.
+https://huggingface.co/datasets	Hugging Face datasets, machine learning training data, evaluation benchmarks, AI training datasets, machine learning data discovery.
+https://docs.vllm.ai/	vLLM documentation for model serving, inference optimization, deployment.
+https://docs.unsloth.ai/	Unsloth documentation for model fine-tuning, quantization, efficient training.
+https://docs.pytorch.org/docs/stable/	PyTorch documentation, tensors, neural networks, training, inference.
+https://www.tensorflow.org/api_docs	Official TensorFlow API reference, machine learning development documentation, deep learning.
+https://scikit-learn.org/stable/	Scikit-learn documentation, machine learning algorithms, preprocessing, evaluation.
+https://mlflow.org/docs/latest/	MLflow documentation for model tracking, evaluation, deployment.
+https://www.tensorflow.org/	Open-source machine learning framework documentation and tutorials.
+https://keras.io/	Keras documentation, neural networks and deep learning APIs.
+https://jax.readthedocs.io/	JAX documentation for accelerated numerical computing and machine learning.
+https://onnx.ai/	Open Neural Network Exchange format documentation and model interoperability resources.
+https://www.bigcode-project.org/	BigCode research and resources for code-focused language models.
+https://paperswithcode.com/	Machine learning papers, open-source code implementations, benchmark evaluation leaderboards, and MTEB datasets.
+https://modelcontextprotocol.io/	Model Context Protocol (MCP) open standard specification, agent tool servers, clients, and integrations.
+
+# Search engines, web search APIs and crawling
+https://brave.com/search/api/	Brave Search API overview, independent web index, search capabilities.
+https://api-dashboard.search.brave.com/documentation	Brave Search API documentation, web search, news, freshness filters, AI context retrieval.
+https://docs.firecrawl.dev/	Firecrawl documentation, web crawling, search, scraping, structured content extraction.
+https://serpapi.com/	SerpApi documentation for search engine result APIs, structured search results.
+https://developers.google.com/custom-search/v1/	Google Custom Search JSON API documentation, search integration.
+https://commoncrawl.org/get-started	Common Crawl access instructions for large-scale web archive processing.
+https://www.elastic.co/guide/index.html	Elasticsearch documentation, full-text search, ranking, hybrid retrieval, indexing.
+https://opensearch.org/docs/latest/	OpenSearch documentation, search infrastructure, ranking, vector search, OpenSearch search engine, indexing documentation.
+https://solr.apache.org/guide/	Solr documentation, indexing, relevance scoring, filtering, query processing, Apache Solr documentation, index management.
+https://www.meilisearch.com/docs	Meilisearch documentation, full-text search, typo tolerance, ranking.
+https://typesense.org/docs/	Typesense documentation, fast search, filtering, faceting, typo tolerance.
+https://qdrant.tech/documentation/	Qdrant vector database documentation, similarity search, hybrid retrieval.
+https://docs.weaviate.io/	Weaviate documentation, vector search, hybrid search, semantic retrieval.
+https://milvus.io/docs	Milvus documentation, vector indexing, similarity search, large-scale retrieval, Milvus vector database documentation.
+https://www.sbert.net/	Sentence Transformers documentation, semantic embeddings, reranking, similarity search.
+https://trec.nist.gov/	Text REtrieval Conference (TREC), information retrieval benchmarks, evaluation datasets, benchmark datasets, Information retrieval benchmark tasks, research proceedings.
+https://mteb.github.io/	Massive Text Embedding Benchmark (MTEB), embedding model evaluation, benchmark results, Text embedding evaluation benchmark documentation.
+https://github.com/beir-cellar/beir	BEIR benchmark repository for evaluating information retrieval systems, BEIR retrieval benchmark code, datasets.
+https://github.com/embeddings-benchmark/mteb	MTEB benchmark code, evaluation resources for text embeddings, MTEB benchmark code for evaluating embedding models.
+https://research.google/pubs/	Google Research publications, search, ranking, information retrieval, machine learning research, Google Research publications covering search.
+
+# Programming languages and official documentation
+https://docs.python.org/3/	Python programming language documentation, standard library modules, functions, reference manuals, tutorials.
+https://www.python.org/	Python programming language website, releases and community resources.
+https://blog.python.org/feeds/posts/default	Python Software Foundation official blog, release announcements for Python versions, security updates, Python official blog feed for releases.
+https://doc.rust-lang.org/	Rust programming language official book, standard library reference, cargo documentation, error indices, compiler resources.
+https://www.rust-lang.org/	Rust programming language, tools and official announcements.
+https://nodejs.org/docs/latest/api/	Node.js official API documentation, modules, runtime behavior, JavaScript development.
+https://www.typescriptlang.org/docs/	TypeScript official documentation, language reference, compiler configuration, compiler options, reference guides.
+https://go.dev/doc/	Go official documentation, language guides, standard library, tools, Go programming language documentation, tutorials.
+https://kotlinlang.org/docs/home.html	Kotlin documentation, language reference, application development, application development guides.
+https://www.php.net/docs.php	PHP official documentation, language reference and function manuals.
+https://www.ruby-lang.org/en/documentation/	Ruby language documentation, tutorials and reference materials.
+https://guides.rubyonrails.org/	Ruby on Rails guides, application architecture, Active Record, security, Ruby on Rails guides for application development, databases.
+https://rubyonrails.org/	Ruby on Rails official website, framework releases, development resources, ecosystem resources.
+https://www.java.com/	Java platform information and developer resources.
+https://dev.java/	Java language tutorials, developer documentation and programming resources.
+https://learn.microsoft.com/dotnet/	DotNET documentation, C#, ASP.NET Core and application development.
+https://learn.microsoft.com/cpp/	C++ documentation, compiler references and Microsoft development tools.
+https://en.cppreference.com/	C++ language and standard library reference.
+https://www.lua.org/manual/	Lua programming language reference manual.
+https://www.swift.org/documentation/	Swift programming language documentation and development resources.
+https://developer.apple.com/documentation/	Apple developer documentation, frameworks, APIs and application development.
+https://developer.android.com/docs	Android developer documentation, APIs and application development.
+https://developer.mozilla.org/en-US/docs/Web/JavaScript	JavaScript language and browser API documentation.
+https://www.w3.org/TR/	W3C technical standards for web technologies, browser interoperability.
+https://whatwg.org/	WHATWG web standards, including HTML, browser APIs.
+
+# Web frameworks, APIs and browser automation
+https://fastapi.tiangolo.com/	FastAPI official documentation, OAuth2 authentication, async SQL databases, dependency injection, background tasks, asynchronous APIs.
+https://docs.djangoproject.com/	Django web framework official documentation, models, REST framework, JWT authentication, security.
+https://react.dev/	React official documentation, hooks, useEffect, state management, components, frontend architecture.
+https://nextjs.org/docs	Next.js React framework official documentation, server components, hydration error troubleshooting, routing, deployment.
+https://playwright.dev/	Playwright browser automation official documentation, session state, authentication, selectors, API reference, sessions.
+https://pptr.dev/	Puppeteer official documentation, Chrome browser automation, page interaction.
+https://www.selenium.dev/documentation/	Selenium documentation, browser automation, WebDriver.
+https://developer.chrome.com/docs/devtools/	Chrome DevTools documentation, debugging, performance, browser inspection.
+https://chromedevtools.github.io/devtools-protocol/	Chrome DevTools Protocol specification for browser automation, debugging.
+https://docs.scrapy.org/	Scrapy web crawling framework documentation, extraction pipelines, crawler configuration.
+https://docs.zyte.com/	Zyte documentation for web data extraction, crawling services.
+https://developer.mozilla.org/en-US/docs/Web/HTTP	MDN HTTP documentation, request methods, status codes, caching, security.
+https://developer.mozilla.org/en-US/docs/Web/API	Browser Web APIs, DOM manipulation, networking and web application features.
+https://www.w3.org/	W3C web standards, accessibility, document formats and browser interoperability.
+
+# Git repositories, issues and open-source code
+https://github.com/	GitHub open-source software repositories, developer code, issue discussions, Actions workflows, security advisories, issues, releases.
+https://docs.github.com/	GitHub official documentation for repositories, issues, pull requests, Actions.
+https://docs.github.com/en/rest	GitHub REST API documentation, repository search, issues, releases, pull requests.
+https://docs.github.com/en/graphql	GitHub GraphQL API documentation, structured repository, issue queries.
+https://github.blog/changelog/	GitHub product announcements, API changes, feature releases.
+https://github.com/trending	GitHub trending repositories, popular open-source projects.
+https://github.com/advisories	GitHub Security Advisories, vulnerable packages, security updates, vulnerable software packages.
+https://gitlab.com/explore	GitLab public repositories, open-source projects, code discovery.
+https://docs.gitlab.com/	GitLab documentation, repositories, merge requests, CI/CD.
+https://bitbucket.org/product/guides/	Bitbucket guides for repositories, pull requests, development workflows.
+https://git-scm.com/doc	Git documentation, commands, branching, merging, troubleshooting, commits.
+https://codeberg.org/	Codeberg open-source software repositories and development projects.
+https://sr.ht/	SourceHut software development services, projects and developer tools.
+https://www.npmjs.com/	NPM package registry, package metadata, versions, dependencies.
+https://pypi.org/	Python Package Index, package releases, dependencies, project metadata.
+https://rubygems.org/	RubyGems package registry, libraries, versions and dependencies.
+https://crates.io/	Rust package registry, crate metadata, versions and dependencies.
+https://pkg.go.dev/	Go package documentation, libraries and module discovery.
+https://mvnrepository.com/	Maven package metadata and Java dependency discovery.
+https://central.sonatype.com/	Maven Central package registry and Java dependency metadata.
+https://packagist.org/	PHP Composer package registry and library metadata.
+
+# Cloud, DevOps, infrastructure and databases
+https://docs.docker.com/	Docker container documentation, Docker Desktop troubleshooting, networking, Dockerfile, engine, compose, containers, image management.
+https://kubernetes.io/docs/	Kubernetes official documentation, deployments, networking, storage, troubleshooting, orchestration.
+https://docs.aws.amazon.com/	AWS official documentation for cloud services, infrastructure, security.
+https://learn.microsoft.com/azure/	Azure documentation, cloud computing, application deployment, infrastructure, Microsoft Azure cloud documentation, infrastructure services.
+https://docs.cloud.google.com/	Google Cloud documentation, cloud infrastructure, deployment, operations.
+https://developer.hashicorp.com/terraform/docs	Terraform documentation, infrastructure as code, resource management.
+https://developer.hashicorp.com/vault/docs	HashiCorp Vault documentation, secrets management, access control.
+https://docs.github.com/en/actions	GitHub Actions documentation, CI/CD, workflow configuration, automation, Actions documentation for CI/CD workflows.
+https://nginx.org/en/docs/	NGINX documentation, reverse proxies, web servers, load balancing, NGINX web server, reverse proxy.
+https://docs.celeryq.dev/	Celery documentation, distributed task queues, background processing, Celery distributed task queue.
+https://docs.sqlalchemy.org/	SQLAlchemy documentation, ORM, database sessions, connection pooling.
+https://alembic.sqlalchemy.org/	Database migration documentation for SQLAlchemy applications, Database migrations, schema versioning for SQLAlchemy.
+https://docs.sentry.io/	Sentry documentation, error tracking, performance monitoring, debugging.
+https://opentelemetry.io/docs/	OpenTelemetry documentation, distributed tracing, metrics, logs.
+https://prometheus.io/docs/	Prometheus monitoring, metrics collection, alerting documentation.
+https://www.postgresql.org/docs/	PostgreSQL relational database official documentation, connection pooling, SQL, administration, performance.
+https://redis.io/docs/	Redis database official documentation, distributed locking, in-memory caching, task queues, data structures, distributed applications.
+https://supabase.com/docs	Supabase open-source backend platform official documentation, PostgreSQL database backups, authentication, connection pooling, storage, APIs.
+https://www.mongodb.com/docs/	MongoDB database documentation, queries, indexing and administration.
+https://dev.mysql.com/doc/	MySQL official documentation, SQL, administration and optimization.
+https://mariadb.com/kb/en/	MariaDB database documentation, SQL and database administration.
+https://sqlite.org/docs.html	SQLite documentation, SQL, embedded databases and file-based storage.
+https://clickhouse.com/docs	ClickHouse analytical database documentation and query optimization.
+https://duckdb.org/docs/	DuckDB analytical database documentation and SQL resources.
+https://www.mongodb.com/docs/atlas/	MongoDB Atlas cloud database documentation and deployment guides.
+https://docs.oracle.com/en/database/	Oracle database documentation and technical references.
+
+# Security, vulnerabilities and compliance
+https://owasp.org/	Open Web Application Security Project (OWASP) official guidance, SQL injection prevention, API security, vulnerability mitigations, web application risks, secure development.
+https://owasp.org/www-project-top-ten/	OWASP Top 10 web application security risks, prevention guidance.
+https://cheatsheetseries.owasp.org/	OWASP Cheat Sheet Series, secure coding, application security practices.
+https://nvd.nist.gov/	NIST National Vulnerability Database, CVEs, vulnerability severity, affected products, vulnerability severity information.
+https://www.cve.org/	Official CVE Program, vulnerability identifiers, records.
+https://cve.mitre.org/	Common Vulnerabilities, Exposures (CVE) database, security advisory IDs, vulnerability summaries, affected software versions, CVE vulnerability reference, historical vulnerability information.
+https://www.cisa.gov/known-exploited-vulnerabilities-catalog	CISA Known Exploited Vulnerabilities Catalog, actively exploited vulnerabilities.
+https://www.cisa.gov/news-events/cybersecurity-advisories	CISA cybersecurity advisories, threat intelligence, mitigation guidance.
+https://www.first.org/cvss/	Common Vulnerability Scoring System, severity assessment, scoring documentation.
+https://osv.dev/	Open Source Vulnerabilities database, package vulnerabilities, affected versions, Open Source Vulnerabilities database for packages.
+https://www.ncsc.gov.uk/collection/cyber-security-guidance	Cybersecurity guidance from the UK's National Cyber Security Centre.
+https://www.zaproxy.org/docs/	OWASP ZAP documentation, web application security testing.
+https://semgrep.dev/docs/	Semgrep documentation, static analysis, code security scanning.
+https://www.virustotal.com/	VirusTotal threat intelligence, file, URL analysis services.
+https://ubuntu.com/security/notices/rss.xml	Ubuntu Security Notices (USN) official advisory feed, package vulnerabilities, CVE identifiers, security patches.
+
+# Current news and technology updates
+https://www.reuters.com/	Reuters reporting on international news, business, technology, financial markets.
+https://apnews.com/	Associated Press reporting on world events, politics, science, business, Associated Press world news.
+https://www.bbc.com/news	BBC world news reporting, current events, politics, business, technology, science journalism.
+https://feeds.bbci.co.uk/news/rss.xml	BBC publisher feed with dated world news, reporting, international events, business journalism, BBC news RSS feed for dated reporting, current events.
+https://www.theguardian.com/world/rss	Guardian publisher feed with world news, current events, international reporting, opinion, Guardian world news RSS feed, commentary.
+https://www.theverge.com/	Verge technology news, consumer products, software, AI developments, consumer technology reporting.
+https://arstechnica.com/	Ars Technica reporting on technology, software, science, cybersecurity.
+https://www.wired.com/	Wired reporting on technology, AI, cybersecurity, digital culture.
+https://techcrunch.com/feed/	TechCrunch technology news feed, startup developments, AI model releases, venture funding, industry analysis, TechCrunch RSS feed, technology companies, startups, AI announcements.
+https://news.ycombinator.com/rss	Hacker News technology links, software development discussions, startup announcements, technical news, Hacker News RSS feed, technology stories, developer discussions.
+https://www.bleepingcomputer.com/feed/	BleepingComputer RSS feed, cybersecurity incidents, vulnerabilities, technology news, security incidents.
+https://www.darkreading.com/	Dark Reading cybersecurity reporting, threats, vulnerabilities, enterprise security, Dark Reading cybersecurity news.
+https://www.theregister.com/headlines.atom	Register technology news feed, enterprise IT, software, infrastructure, Register technology news feed covering enterprise IT.
+https://nvidianews.nvidia.com/	NVIDIA official news, AI hardware, technology announcements.
+
+# Open data and public datasets
+https://www.kaggle.com/datasets	Kaggle datasets for data science, analytics, machine learning, data science resources, public datasets.
+https://datasetsearch.research.google.com/	Google Dataset Search, discovery of datasets published across the web, Google Dataset Search for discovering datasets across the web.
+https://data.gov.in/	Open Government Data Platform India, public datasets from Indian government departments, public-sector information.
+https://data.europa.eu/	European Union open data portal, public datasets.
+https://ourworldindata.org/	Research, datasets covering health, population, energy, climate, global development.
+https://github.com/awesomedata/awesome-public-datasets	Public dataset directory covering multiple research, application domains.
+https://registry.opendata.aws/	AWS Open Data Registry for publicly available datasets hosted on AWS.
+https://archive.ics.uci.edu/	UCI Machine Learning Repository and research datasets.
+https://www.openml.org/	OpenML datasets, experiments and machine learning research resources.
+https://www.nature.com/sdata/	Scientific Data journal publications describing research datasets.
+https://data.worldbank.org/	World Bank open global development data, country economic indicators, population statistics, research reports.
+https://data.un.org/	United Nations statistics and international datasets.
+https://www.imf.org/en/Data	International Monetary Fund economic data, global financial statistics.
+https://www.oecd.org/en/data.html	OECD economic, social, international development datasets, OECD international statistics, economic data.
+https://fred.stlouisfed.org/	Federal Reserve Economic Data for economic indicators, historical time series, historical financial data.
+
+# Images, illustrations and visual media
+https://openverse.org/	Search for openly licensed images and audio from multiple sources.
+https://images.nasa.gov/	NASA image and video collections for space, astronomy and Earth science.
+https://www.loc.gov/pictures/	Library of Congress photographs, historical images and visual collections.
+https://unsplash.com/	Photography discovery; verify license and reuse terms for each use.
+https://www.pexels.com/	Photography and video discovery; verify applicable licensing terms.
+https://pixabay.com/	Images, illustrations and media discovery; verify license and reuse conditions.
+https://www.nasa.gov/	NASA official space exploration, research, missions, science information, astronomy, NASA images, mission photography, scientific visuals, educational media, NASA educational videos, mission broadcasts, scientific presentations.
+https://www.naturalearthdata.com/	Public-domain geographic datasets, maps, cartographic data, cartographic resources.
+
+# Audio, video and educational media
+https://archive.org/details/movies	Internet Archive video collections and historical moving images.
+https://archive.org/details/audio	Internet Archive audio collections, recordings and spoken-word media.
+https://librivox.org/	Volunteer-recorded public-domain audiobooks.
+https://www.youtube.com/	Video discovery, tutorials, lectures and demonstrations; respect platform terms and content rights.
+https://www.ted.com/	Talks and presentations; verify access and reuse rights.
+https://www.si.edu/	Smithsonian museum collections, educational media and cultural resources.
+
+# Maps, geography and Earth science
+https://www.openstreetmap.org/	OpenStreetMap geographic data, roads, buildings and place information.
+https://wiki.openstreetmap.org/	OpenStreetMap data model, mapping documentation and technical resources.
+https://www.geonames.org/	Geographical names, place identifiers, geographical metadata, Geographic names.
+https://www.earthdata.nasa.gov/	NASA Earth observation data and environmental science datasets.
+https://www.usgs.gov/	US Geological Survey science, geology, water resources and Earth data.
+https://dataspace.copernicus.eu/	Copernicus Earth observation imagery and environmental datasets.
+https://www.noaa.gov/	NOAA official weather, climate, ocean, environmental information, oceans.
+https://science.nasa.gov/	NASA science resources covering astronomy, planetary science, Earth science, NASA science research, space exploration.
+
+# Indian government, law, GST and accounting
+https://www.gst.gov.in/	Goods, Services Tax (GST) India official portal, e-invoicing requirements, GST rules, returns, business compliance, registration.
+https://tutorial.gst.gov.in/	GST portal tutorials for registration, returns, e-invoicing, tax services, e-invoicing help.
+https://einvoice.gst.gov.in/	Official GST e-invoicing portal, e-invoicing services, GST e-invoice portal.
+https://www.cbic.gov.in/	Central Board of Indirect Taxes, Customs India official regulations, circulars, notifications, trade guidance.
+https://www.incometax.gov.in/	Income Tax Department India, tax rules, filing information, official services.
+https://www.mca.gov.in/	Ministry of Corporate Affairs India company information, corporate filing services, corporate filings, company-related services, Indian corporate filings, company compliance.
+https://www.indiacode.nic.in/	India Code official repository of central legislation, Acts of Parliament, Acts of the Indian Parliament.
+https://legislative.gov.in/	Ministry of Law, Justice legislative resources, official legal publications, Indian legislative resources.
+https://egazette.gov.in/	e-Gazette of India, official government notifications, statutory publications.
+https://www.sci.gov.in/	Supreme Court of India, judgments, court information, official notices, Supreme Court of India official website.
+https://services.ecourts.gov.in/	eCourts services, court case information, judicial records.
+https://www.rbi.org.in/	Reserve Bank of India, monetary policy, banking regulations, official circulars.
+https://www.sebi.gov.in/	Securities, Exchange Board of India, market regulations, official notifications.
+https://pib.gov.in/	Press Information Bureau Government of India official releases, GDP growth statistics, technology policy announcements, economic data, policies.
+https://mospi.gov.in/	Ministry of Statistics, Programme Implementation, official statistics, national accounts.
+https://www.niti.gov.in/	NITI Aayog reports, government policy research, development initiatives.
+https://www.icegate.gov.in/	Indian Customs Electronic Gateway, customs services, trade information, trade-related information.
+https://www.nseindia.com/	National Stock Exchange of India, market information, official announcements, corporate announcements.
+https://www.bseindia.com/	BSE India, listed company disclosures, market information, corporate announcements, official market data.
+https://www.erpnext.com/	ERPNext open-source ERP software, accounting, inventory and business workflows.
+https://docs.erpnext.com/	ERPNext open-source enterprise resource planning documentation, accounting, inventory, GST compliance, invoicing, business operations.
+https://www.odoo.com/documentation/	Odoo open-source ERP, business applications official documentation, accounting, POS, inventory, sales.
+https://rbi.org.in/	Reserve Bank of India (RBI) official portal, monetary policy announcements, repo rate circulars, and banking regulations.
+https://www.mca.gov.in/content/mca/global/en/home.html	Ministry of Corporate Affairs, company compliance and corporate filing information.
+
+# Finance, economics and corporate disclosures
+https://www.sec.gov/edgar	US Securities, Exchange Commission filings, annual reports, company disclosures, US SEC company filings, corporate disclosures.
+https://www.sec.gov/edgar/search/	SEC company filing search, financial statements, regulatory disclosures.
+https://www.moneycontrol.com/	Indian financial news, market data, company information.
+
+# Hardware, laptops and consumer technology
+https://www.intel.com/content/www/us/en/products/details/processors.html	Intel processor specifications, product families, technical information.
+https://www.amd.com/en/products/processors.html	AMD processor specifications, Ryzen product information, technical details.
+https://www.nvidia.com/en-us/	Official NVIDIA GPU products, AI hardware, graphics technology.
+https://www.notebookcheck.net/	Laptop, mobile hardware reviews, notebook benchmarks, processor specs, RAM configurations, GPU performance, GPU testing, mobile hardware analysis.
+https://www.tomshardware.com/	Computer hardware reviews, desktop PC specifications, SSD storage tests, RAM benchmarks, PC build guides, component benchmarks, SSD testing, buying guides, processor benchmarks.
+https://www.anandtech.com/	Computer hardware analysis, processors, GPUs, technology reviews.
+https://www.techpowerup.com/	GPU specifications, hardware databases, graphics card reviews.
+https://www.gsmarena.com/	Mobile device specifications, smartphone comparisons, reviews, phone comparisons.
+https://www.rtings.com/	Consumer electronics testing, comparative product reviews.
+https://www.cpubenchmark.net/	CPU benchmark comparisons, processor performance data.
+
+# Science, health and international organizations
+https://www.who.int/	World Health Organization health information, reports, public health guidance.
+https://www.un.org/	United Nations official information, international affairs, global development.
+https://www.unesco.org/	UNESCO education, culture, science, research resources.
+https://www.nih.gov/	US National Institutes of Health medical research and health information.
+https://medlineplus.gov/	Consumer health information from the US National Library of Medicine.
+https://www.cdc.gov/	US Centers for Disease Control and Prevention health and public health guidance.
+https://www.fda.gov/	US Food and Drug Administration safety information, product regulation and public health resources.
+
+# Open-source software and developer communities
+https://www.gnu.org/	GNU Project free software, licensing and open-source software resources.
+https://www.fsf.org/	Free Software Foundation resources about software freedom and licensing.
+https://opensource.org/	Open Source Initiative information about open-source licenses and definitions.
+https://opensource.guide/	GitHub open-source guides for contributors and maintainers.
+https://www.linuxfoundation.org/	Linux Foundation open-source projects, ecosystem information and technical resources.
+https://www.kernel.org/	Linux kernel source, releases and development resources.
+https://docs.kernel.org/	Linux kernel documentation, internals, drivers and configuration.
+https://www.debian.org/doc/	Debian operating system documentation, installation and administration.
+https://wiki.archlinux.org/	Arch Linux Wiki setup guides, configuration and troubleshooting.
+https://wiki.gentoo.org/	Gentoo Linux Wiki, system configuration and administration.
+https://docs.freebsd.org/en/books/handbook/	FreeBSD Handbook system administration and operating system documentation.
+https://www.freebsd.org/	FreeBSD operating system, documentation and releases.
+https://www.apache.org/	Apache Software Foundation projects and open-source software resources.
+https://www.eclipse.org/	Eclipse Foundation open-source projects and developer tools.
+https://help.ubuntu.com/	Ubuntu Linux official community and server documentation, package management, administration and troubleshooting.
+
+# General technical tutorials and programming learning
+https://stackoverflow.com/questions	Programming questions, code errors, debugging, language libraries, developer explanations, debugging discussions.
+https://askubuntu.com/	Ubuntu Linux community questions, command troubleshooting, nvidia-smi, git credentials, system administration, package management.
+https://serverfault.com/	System administration, infrastructure troubleshooting and operations questions.
+https://superuser.com/	Computer configuration, operating system support and technical troubleshooting.
+https://www.geeksforgeeks.org/	Computer science algorithms, data structures, programming language tutorials (Python, C++, Java), coding problems.
+https://www.programiz.com/	Programming tutorials, Python examples, algorithms, palindrome, fibonacci, data structures.
+https://realpython.com/	Python programming tutorials, code examples, best practices, standard library guides.
+https://www.w3schools.com/	Programming tutorials, web development references and code examples.
+https://roadmap.sh/	Developer learning roadmaps, skills guides and software engineering learning paths.
+https://www.w3schools.com/python/	Python tutorial references, code examples, string methods, and exercises.
+
+# Structured knowledge and reference APIs
+https://query.wikidata.org/	Wikidata SPARQL query service for structured entity and relationship retrieval.
+https://api.openalex.org/	OpenAlex scholarly metadata API for works, authors, research relationships, institutions.
+https://www.wikidata.org/wiki/Wikidata:Data_access	Wikidata data access documentation, APIs and downloadable datasets.
+https://www.loc.gov/apis/	Library of Congress API documentation for searching digitized collections and metadata.
+https://www.nasa.gov/nasa-data/	NASA data resources and information about accessing scientific datasets.
+https://www.federalregister.gov/developers/documentation/api/v1	US Federal Register API documentation for official rules and government notices.
+
+# Weather and environmental data
+https://www.weather.gov/documentation/services-web-api	US National Weather Service API documentation for forecasts, alerts and observations.
+https://open-meteo.com/en/docs	Open-Meteo weather API documentation for forecasts and historical weather data.
+https://www.ncei.noaa.gov/	NOAA National Centers for Environmental Information climate and weather datasets.
+https://climate.nasa.gov/	NASA climate science information and educational resources.
+https://www.ipcc.ch/reports/	Intergovernmental Panel on Climate Change assessment reports and climate research.
+https://ourworldindata.org/climate-change	Research and datasets on climate change, emissions and energy.
+
+# Search quality and information retrieval research
+https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html	Elasticsearch indexing, query execution, ranking and relevance configuration.
+https://opensearch.org/docs/latest/search-plugins/	OpenSearch search plugins, vector retrieval and search functionality.
+https://www.sbert.net/examples/applications/retrieve_rerank/README.html	Sentence Transformers retrieve-and-rerank examples for semantic search.
+https://ir-measur.es/en/latest/	Information retrieval evaluation documentation and tools for measuring search quality.
