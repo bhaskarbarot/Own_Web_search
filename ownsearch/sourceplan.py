@@ -5,7 +5,7 @@ import math
 from pathlib import Path
 from urllib.parse import urlsplit
 from .intent import get_model
-from .textproc import analyze
+from .textproc import analyze, tokenize, stem, ALL_STOPWORDS
 from .webmodels import web_url
 
 @dataclass(frozen=True)
@@ -44,8 +44,11 @@ def plan_sources(query, sources):
     never appear as code branches or a query-to-domain lookup table.
     """
     texts = [source.description or urlsplit(source.url).hostname or '' for source in sources]
-    docs = [Counter(analyze(text)) for text in texts]
-    query_terms = Counter(analyze(query))
+    docs = [Counter(stem(t) for t in tokenize(text) if t.lower() not in ALL_STOPWORDS) for text in texts]
+    query_terms = Counter(stem(t) for t in tokenize(query) if t.lower() not in ALL_STOPWORDS)
+    if not query_terms:
+        docs = [Counter(analyze(text)) for text in texts]
+        query_terms = Counter(analyze(query))
     df = Counter(term for doc in docs for term in doc)
     weights = {term: 1 + math.log((1+len(docs))/(1+df[term])) for term in set(query_terms) | set(df)}
     vector = {term: count*weights[term] for term,count in query_terms.items()}
@@ -61,7 +64,7 @@ def plan_sources(query, sources):
         _, probabilities = model.classify(text)
         latent = _cosine(query_latent, {k:max(0,v-prior) for k,v in probabilities.items()})
         # Uncalibrated learned similarity is a small scheduling preference only.
-        score = lexical + .10*latent if source.description else lexical
+        score = lexical + .10*latent if (source.description and lexical > 0) else (0.02 * latent if source.description else lexical)
         rows.append({'url':source.url, 'description':source.description,'score':score,
                      'lexical_similarity':lexical,'learned_similarity':latent,
                      'position':position,'selection':'eligible'})

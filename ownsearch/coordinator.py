@@ -226,15 +226,17 @@ class IndependentSearch:
                 anchor_terms = set(analyze(anchor))
                 path_terms = set(analyze(unquote(urlsplit(url).netloc + ' ' + urlsplit(url).path)))
                 def match(tokens):
-                    return len(terms & tokens) + .75*len(qualifiers & tokens)
+                    exact_m = len(terms & tokens)
+                    prefix_m = sum(1 for tok in tokens if any(t.startswith(tok) or tok.startswith(t) for t in terms if len(tok) >= 3 and len(t) >= 3 and tok != t))
+                    return exact_m + 0.5 * prefix_m + .75*len(qualifiers & tokens)
                 anchor_match = match(anchor_terms)
                 path_match = match(path_terms)
                 priority = 3.0 * anchor_match + 4.5 * path_match - 0.2 * depth
                 if url in root_scores:
                     r_score = root_scores[url]
-                    priority += 15.0 * r_score if r_score >= 0.25 else 5.0 * r_score
+                    priority += 20.0 * r_score if r_score >= 0.20 else 5.0 * r_score
                 if kind == 'entity_path':
-                    priority += 5.0
+                    priority += 10.0
                 if kind == 'native_search':
                     priority += 20
                 if kind == 'native_result':
@@ -247,22 +249,25 @@ class IndependentSearch:
                 heapq.heappush(frontier, (-priority, sequence, url, depth, map_depth))
 
             candidate_slugs = []
-            if getattr(q, 'intent', '') in ('reference', 'company'):
-                clean_words = [w for w in (q.entity or q.surface) if w.lower() not in ALL_STOPWORDS and len(w) > 1]
+            clean_words = [w for w in (q.entity or q.surface) if w.lower() not in ALL_STOPWORDS and len(w) > 1]
+            if getattr(q, 'intent', '') in ('reference', 'company', 'general'):
                 if clean_words and len(clean_words) <= 3:
                     candidate_slugs.append('_'.join(w.capitalize() for w in clean_words))
-                    if len(clean_words) > 1:
-                        candidate_slugs.append(clean_words[0].capitalize())
 
             for url in valid:
                 enqueue(url)
                 if fetch_pages and candidate_slugs:
                     origin = origin_of(url)
                     if 'wikipedia.org' in origin:
-                        for s in candidate_slugs[:2]:
+                        for s in candidate_slugs:
                             cand = independent_url(urljoin(origin, f"/wiki/{s}"), self.settings.allow_private_hosts)
                             if cand:
                                 enqueue(cand, anchor=s.replace('_', ' '), depth=0, kind='entity_path')
+                    elif 'github.com' in origin and clean_words and len(clean_words) <= 3:
+                        gh_slug = ''.join(clean_words).lower()
+                        cand = independent_url(urljoin(origin, f"/{gh_slug}"), self.settings.allow_private_hosts)
+                        if cand:
+                            enqueue(cand, anchor=gh_slug, depth=0, kind='entity_path')
             if self.settings.cdx_discovery_enabled and q.sites and fetch_pages:
                 try:
                     from .commoncrawl import query_cdx

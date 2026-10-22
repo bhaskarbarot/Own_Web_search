@@ -57,7 +57,7 @@ def live_dates(q, now=None):
             end = midnight.replace(year=max(years)+1, month=1, day=1)
     if begin is not None:
         q.after, q.before = begin.timestamp(), end.timestamp()-.001
-        q.explicit_date_filter = q.fresh_intent = True
+        q.fresh_intent = True
         q.freshness = 'recent'
         q.temporal = {'windows': [{'after': q.after, 'before': q.before}], 'timezone': str(zone),
                       'ambiguous': False, 'parser': 'live_calendar_grammar'}

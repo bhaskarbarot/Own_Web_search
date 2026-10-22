@@ -110,9 +110,11 @@ class Settings:
         if self.sources_file:
             path = Path(self.sources_file).expanduser()
             if not path.is_absolute():
-                path = self.data_dir / path
-            for line in path.read_text(encoding='utf-8').splitlines():
-                line = line.strip()
-                if line and not line.startswith('#'):
-                    urls.append(line.split()[0])
+                repo_file = Path(__file__).resolve().parent.parent / path
+                path = repo_file if repo_file.is_file() else (self.data_dir / path)
+            if path.is_file():
+                for line in path.read_text(encoding='utf-8').splitlines():
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        urls.append(line.split()[0])
         return list(dict.fromkeys(urls))[:self.max_frontier_urls]

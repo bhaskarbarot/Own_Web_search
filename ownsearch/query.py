@@ -24,6 +24,14 @@ MODEL_LABELS = {"finance_quote": "financial", "finance_history": "financial"}   
 MIN_INTENT_CONFIDENCE = 0.12
 
 
+CONVERSATIONAL_MODIFIERS = frozenset({
+    "popular", "completely", "exact", "detailed", "specific", "best", "top",
+    "various", "several", "latest", "recent", "different", "main", "basic",
+    "common", "overview", "summary", "guide", "tutorial", "information",
+    "requirements", "requirement", "version", "versions"
+})
+
+
 @dataclass
 class ParsedQuery:
     raw: str
@@ -66,7 +74,7 @@ class ParsedQuery:
     def scoring_terms(self):
         seen, out = set(), []
         aliases = [t for group in self.entity_groups for name in group for t in name]
-        for t in self.required + self.alternatives + aliases + [t for p in self.phrases for t in p] + self.intitle:
+        for t in self.required + self.alternatives + aliases + [t for p in self.phrases for t in p] + self.intitle + [t for t in self.optional if t not in ALL_STOPWORDS]:
             if t not in seen:
                 seen.add(t)
                 out.append(t)
@@ -116,7 +124,19 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
     q.language_info = identify(raw, preferred_language)
     model = get_model(data_dir)
     keyword_stopwords = ALL_STOPWORDS | stopwords(q.language_info.get("language", "en"))
-    tokens = list(_LEX.finditer(raw or ""))
+    excl_pattern = r'\b(?:completely\s+)?(?:excluding|exclude|without|except|not\s+including)\s+(?:any\s+)?(?:models?\s+)?(?:created\s+by\s+|from\s+)?([^,.;]+)'
+    input_text = raw or ""
+    for match in re.finditer(excl_pattern, input_text, flags=re.I):
+        clause = match.group(1)
+        for t in tokenize(clause):
+            if t.lower() not in keyword_stopwords and t.lower() not in ('ai', 'model', 'models', 'any'):
+                st = stem(t)
+                if st not in q.excluded:
+                    q.excluded.append(st)
+    if q.excluded:
+        input_text = re.sub(excl_pattern, '', input_text, flags=re.I)
+
+    tokens = list(_LEX.finditer(input_text))
     words = []                         # (term, surface, is_stop, or_group)
     or_next = False
     for i, m in enumerate(tokens):
@@ -189,7 +209,7 @@ def parse_query(raw, freshness=None, site=None, filetype=None, lang=None, data_d
         seen.add(term)
         # intent words ("latest", "current", "news") steer freshness; they are scored but never required
         # learned phrasing words ("give", "latest", "documentation", "price") are scored but never required
-        soft = model.is_query_language(surf) or (surf.isdigit() and len(surf) <= 2)
+        soft = model.is_query_language(surf) or (surf.isdigit() and len(surf) <= 2) or (surf.lower() in CONVERSATIONAL_MODIFIERS)
         if (term, surf, is_stop, in_or) in content and not in_or and (not soft or len(content) == 1):
             q.required.append(term)
         else:

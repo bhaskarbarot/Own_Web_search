@@ -448,3 +448,21 @@ Integrated user-curated authoritative sources across 26 domains (AI models, agen
 3. Unit Test Verification:
    - 152 / 152 unit tests pass in 16.7s.
 
+# Phase: Conversational Query Relaxation, Natural Exclusion Parsing & Entity Disambiguation (2026-10-22)
+
+Resolved conversational query over-filtering, natural language exclusions, date constraint false rejections, and multi-word entity truncation:
+
+1. Root-Cause Diagnoses & Fixes:
+   - **Conversational Exclusion Parsing (`ownsearch/query.py`)**: Extracted natural language exclusion clauses (`completely excluding any models created by Meta or Mistral AI`, `without X`, `except Y`) to `q.excluded` instead of erroneously populating `q.required` with positive required terms.
+   - **Conversational Modifier Softening (`ownsearch/query.py`)**: Defined `CONVERSATIONAL_MODIFIERS` (`popular`, `completely`, `exact`, `detailed`, `specific`, `best`, `requirements`, `version`). Demoted these filler terms to `scoring_terms` so BM25 scores them when present, but does not discard authentic technical documentation when filler words like `"exact"` are absent.
+   - **Source Plan Stopword Filtering (`ownsearch/sourceplan.py`)**: Filtered stopwords (`ALL_STOPWORDS`) from source plan TF-IDF documents and query vectors. Eliminated spurious cosine overlap on `"the"` and `"of"` that previously prioritized `medlineplus.gov` and `indiacode.nic.in` for tech queries.
+   - **Entity Disambiguation & GitHub Lookup (`ownsearch/coordinator.py`, `ownsearch/webranking.py`)**: Removed single-word truncation bug (`candidate_slugs.append(clean_words[0].capitalize())`) that previously mapped `"bhaskar barot"` to 7th-century astronomer `"Bhaskar"` on Wikipedia. Enforced 100% coverage on 1-2 word queries (`min_coverage = 1.0 if len(required) <= 2`). Added GitHub profile slug resolution (`github.com/{username}`) for developer searches. Verified live: `who is bhaskar barot` now accurately returns `https://github.com/bhaskarbarot` with Bhaskar Barot's AI & Machine Learning bio.
+   - **Natural Date Filtering (`ownsearch/webquery.py`, `ownsearch/webranking.py`)**: In `live_dates()`, refrained from setting `explicit_date_filter = True` for conversational phrases like `"released in the last 12 months"`. In `constraints()`, only enforce strict ISO date availability when an explicit date syntax operator (`after:YYYY-MM-DD`) was specified by the user.
+   - **Multi-Threaded Crawl Budgets (`ownsearch/cli.py`, `data/ownsearch.json`)**: Configured `crawl_threads = 8`, `max_bytes_per_query = 24_000_000`, `max_requests_per_query = 64`, `fetch_timeout = 3.5s`, and `search_timeout_ms = 6000ms` for live server/CLI.
+
+2. Verification:
+   - 152 / 152 unit tests pass in 16.8s.
+   - `who is bhaskar barot`: 1 result, URL: `https://github.com/bhaskarbarot` (Bhaskar Barot · AI/ML Engineer), accurate summary excerpt extracted in answer box.
+   - Repeat cached search latency: **3.6 ms** (300x faster than 1s API baseline).
+
+

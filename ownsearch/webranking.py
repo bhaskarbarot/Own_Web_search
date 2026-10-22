@@ -80,7 +80,7 @@ def constraints(item, q, final=True):
         return False
     if q.after is not None or q.before is not None:
         if stamp is None:
-            if final:
+            if final and q.explicit_date_filter:
                 return False
         elif (q.after is not None and stamp < q.after) or (q.before is not None and stamp > q.before):
             return False
@@ -130,8 +130,8 @@ def rank(candidates, q, final=True):
         coverage = len(required & present)/max(1, len(required))
         title = len(required & set(f[0]))/max(1, len(required))
         header_match = len(required & set(f[0] + f[1] + f[2]))/max(1, len(required))
-        min_coverage = .5 if len(required) <= 4 else max(.3, 2.0 / len(required))
-        min_no_header = .75 if len(required) <= 4 else max(.4, 2.5 / len(required))
+        min_coverage = 1.0 if len(required) <= 2 else (.66 if len(required) <= 4 else max(.35, 2.0 / len(required)))
+        min_no_header = 1.0 if len(required) <= 2 else (.75 if len(required) <= 4 else max(.4, 2.5 / len(required)))
         if not bm25 or coverage < min_coverage or (not header_match and coverage < min_no_header):
             continue
         focus = ' '+' '.join(exact_tokens(item.title+' '+' '.join(item.headings)))+' '

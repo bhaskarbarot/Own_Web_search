@@ -58,6 +58,14 @@ def main(argv=None):
     if args.command in ('serve', 'search', 'crawl'):
         settings.persistent_cache_enabled = True
         settings.source_planning_enabled = True
+        settings.focused_links_enabled = True
+        settings.native_search_enabled = True
+        settings.source_memory_enabled = True
+        settings.crawl_threads = 8
+        settings.max_bytes_per_query = 24_000_000
+        settings.max_requests_per_query = 64
+        settings.fetch_timeout = 3.5
+        settings.search_timeout_ms = 7000
     engine = IndependentSearch(settings)
     if args.command == 'crawl':
         from .crawler import BackgroundCrawler
